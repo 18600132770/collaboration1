@@ -19,9 +19,9 @@ public class Project {
     private String designPhase;//设计阶段
     private Date startTime;//开始时间
     private Date stopTime;//截止时间
-    private String deltag;//删除标志
     private String leftTime;//剩余时间 XX天hh小时
     private Integer currentProcess;//目前进度
     private String emergencyLevel;//紧急程度
+    private String deltag;//删除标志
 
 }
