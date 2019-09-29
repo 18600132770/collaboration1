@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huag.collaboration.mapper.ProjectMapper">
+
+    <select id="findAll" resultType="com.huag.collaboration.entities.Project">
+        SELECT * FROM project
+    </select>
+
+    <select id="findById" resultType="com.huag.collaboration.entities.Project">
+        SELECT * FROM project WHERE id=#{id}
+    </select>
+
+    <insert id="deleteById">
+        update project set deltag = 1 where id = #{id}
+    </insert>
+
+    <insert id="insert">
+        INSERT INTO project(projectName, designPhase, startTime, stopTime, leftTime, currentProcess, emergencyLevel, deltag)
+         VALUES (#{projectName}, #{designPhase}, #{startTime}, #{stopTime}, #{leftTime}, #{currentProcess}, #{emergencyLevel}, #{deltag})
+    </insert>
+
+    <insert id="update">
+        update project set projectName = #{projectName}, designPhase = #{designPhase},
+        startTime = #{startTime}, stopTime = #{stopTime}, leftTime = #{leftTime}, currentProcess = #{currentProcess},
+         emergencyLevel = #{emergencyLevel}, deltag = #{deltag} where id = #{id}
+    </insert>
+
+</mapper>
