@@ -4,6 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.huag.collaboration.mapper.ProjectMapper">
 
+    <!--嵌套结果集的方式，使用collection标签定义关联的集合类型的属性封装规则  -->
+    <resultMap type="com.huag.collaboration.entities.Project" id="myProject">
+        <id column="id" property="id"/>
+        <!--
+            collection定义关联集合类型的属性的封装规则
+            ofType:指定集合里面元素的类型
+        -->
+        <collection property="projectSubitems" ofType="com.huag.collaboration.entities.ProjectSubitem">
+            <!-- 定义这个集合中元素的封装规则 -->
+            <id column="id" property="id"/>
+            <!--<result column="last_name" property="lastName"/>-->
+        </collection>
+    </resultMap>
+
+    <resultMap type="com.huag.collaboration.entities.Project" id="myProject">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+    </resultMap>
+
     <select id="findAll" resultType="com.huag.collaboration.entities.Project">
         SELECT * FROM project
     </select>

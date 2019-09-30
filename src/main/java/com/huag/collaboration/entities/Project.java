@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * 项目信息
@@ -23,5 +24,7 @@ public class Project {
     private Integer currentProcess;//目前进度
     private String emergencyLevel;//紧急程度
     private String deltag;//删除标志
+
+    private List<ProjectSubitem> projectSubitems;
 
 }
