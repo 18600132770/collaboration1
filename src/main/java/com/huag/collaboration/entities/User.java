@@ -12,6 +12,7 @@ import java.sql.Date;
 public class User {
 
     private Integer id;
+    private String cardId;//员工编号
     private String name;
     private String nationality;//民族
     private Date birthday;
@@ -35,6 +36,6 @@ public class User {
     private String graduateSchool;//毕业学校
     private Date graduateDate;//毕业时间
     private String major;//专业
-
+    private String undertakeJobs;//可以承担的职务：设计、复核、审核、审定
 
 }
