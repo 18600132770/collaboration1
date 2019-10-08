@@ -17,7 +17,6 @@ public class ProjectSubitem {
     private String stopTime;
     private Integer currentProcess;//目前进度
     private String totalWorkload;//总工作量
-    private Integer project_id;
     private Integer user_id;
     private String deltag;
 

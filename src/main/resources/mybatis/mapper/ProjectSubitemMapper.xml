@@ -8,4 +8,8 @@
         SELECT * FROM projectSubitem where projectId = #{projectId} and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
 
+    <insert id="deleteById">
+        update projectSubitem set deltag = 1 where id = #{id}
+    </insert>
+
 </mapper>
