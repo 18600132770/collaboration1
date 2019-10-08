@@ -87,7 +87,7 @@
 									<th><input type="checkbox" onclick="checkboxOnclick(this)"></th>
 									<td th:text="${project.id}"></td>
 									<td>
-										<a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+										<a data-toggle="collapse" th:href="@{/project/}" role="button" aria-expanded="false" aria-controls="collapseExample">
 											[[${project.projectName}]]
 										</a>
 									</td>
@@ -113,10 +113,23 @@
 							</tbody>
 						</table>
 
+						<!--<div style="margin-left: 200px;margin-top: 30px">-->
+							<!--<nav aria-label="Page navigation example">-->
+								<!--<ul class="pagination">-->
+									<!--<li class="page-item"><a class="page-link" href="#">Previous</a></li>-->
+									<!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
+									<!--<li class="page-item"><a class="page-link" href="#">2</a></li>-->
+									<!--<li class="page-item"><a class="page-link" href="#">3</a></li>-->
+									<!--<li class="page-item"><a class="page-link" href="#">Next</a></li>-->
+								<!--</ul>-->
+							<!--</nav>-->
+						<!--</div>-->
+
 
 
 
 					</div>
+
 				</main>
 				<form id="deleteEmpForm"  method="post">
 					<input type="hidden" name="_method" value="delete"/>

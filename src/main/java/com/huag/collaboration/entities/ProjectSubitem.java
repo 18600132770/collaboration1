@@ -21,6 +21,8 @@ public class ProjectSubitem {
     private Integer user_id;
     private String deltag;
 
-    private Project project;
+    private Integer projectId;//项目id
+
+//    private Project project;
 
 }

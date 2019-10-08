@@ -1,13 +1,16 @@
 package com.huag.collaboration.controller;
 
 import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.ProjectSubitem;
 import com.huag.collaboration.mapper.ProjectMapper;
+import com.huag.collaboration.mapper.ProjectSubitemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author huag
@@ -20,13 +23,18 @@ public class ProjectController {
     @Autowired
     ProjectMapper projectMapper;
 
+    @Autowired
+    ProjectSubitemMapper projectSubitemMapper;
+
     @GetMapping("/projects")
     public String  list(Model model){
         Collection<Project> projects = projectMapper.findAll();
 
         projects.forEach(project ->{
-            long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
-            project.setLeftTime(timeLength/1000/60/60/24 + "");
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
+                project.setLeftTime(timeLength/1000/60/60/24 + "");
+            }
         });
 
         System.out.println(projects);
@@ -43,6 +51,7 @@ public class ProjectController {
      */
     @GetMapping("/project")
     public String toAddPage(Model model){
+
         return "/project/add";
     }
 
@@ -67,6 +76,8 @@ public class ProjectController {
     public String toEditProject(@PathVariable("id") Integer id, Model model){
         Project project = projectMapper.findById(id);
         model.addAttribute("project", project);
+        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(id);
+        model.addAttribute("projectSubitemList", projectSubitemList);
         return "/project/add";
     }
 

@@ -25,6 +25,6 @@ public class Project {
     private String emergencyLevel;//紧急程度
     private String deltag;//删除标志
 
-    private List<ProjectSubitem> projectSubitems;
+//    private List<ProjectSubitem> projectSubitems;
 
 }

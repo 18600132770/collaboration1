@@ -18,17 +18,25 @@
         </collection>
     </resultMap>
 
-    <resultMap type="com.huag.collaboration.entities.Project" id="myProject">
+    <resultMap type="com.huag.collaboration.entities.Project" id="myProject1">
         <id column="id" property="id"/>
-        <result column="last_name" property="lastName"/>
+        <result column="projectName"  property="projectName"/>
+        <result column="designPhase"  property="designPhase"/>
+        <result column="startTime" property="startTime"/>
+        <result column="stopTime" property="stopTime"/>
+        <result column="leftTime" property="leftTime"/>
+        <result column="currentProcess" property="currentProcess"/>
+        <result column="emergencyLevel" property="emergencyLevel"/>
+        <result column="deltag" property="deltag"/>
     </resultMap>
 
+
     <select id="findAll" resultType="com.huag.collaboration.entities.Project">
-        SELECT * FROM project WHERE deltag <> '1' OR deltag IS NULL
+        SELECT * FROM project where deltag <![CDATA[ <> ]]> '1' or deltag is null
     </select>
 
     <select id="findById" resultType="com.huag.collaboration.entities.Project">
-        SELECT * FROM project WHERE id=#{id} and (deltag <> '1' OR deltag IS NULL)
+        SELECT * FROM project WHERE id=#{id} and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
 
     <insert id="deleteById">
