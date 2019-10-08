@@ -24,11 +24,11 @@
     </resultMap>
 
     <select id="findAll" resultType="com.huag.collaboration.entities.Project">
-        SELECT * FROM project
+        SELECT * FROM project WHERE deltag <> '1' OR deltag IS NULL
     </select>
 
     <select id="findById" resultType="com.huag.collaboration.entities.Project">
-        SELECT * FROM project WHERE id=#{id}
+        SELECT * FROM project WHERE id=#{id} and (deltag <> '1' OR deltag IS NULL)
     </select>
 
     <insert id="deleteById">
