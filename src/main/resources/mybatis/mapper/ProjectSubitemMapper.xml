@@ -16,4 +16,10 @@
         SELECT * FROM projectSubitem where id = #{id} and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
 
+    <insert id="insert">
+        INSERT INTO projectSubitem(professionalSubOption, taskLevel, startTime, stopTime, currentProcess, totalWorkload, user_id, deltag, projectId)
+         VALUES (#{professionalSubOption}, #{taskLevel}, #{startTime}, #{stopTime}, #{currentProcess}, #{totalWorkload}, #{user_id}, #{deltag}, #{projectId})
+    </insert>
+
+
 </mapper>

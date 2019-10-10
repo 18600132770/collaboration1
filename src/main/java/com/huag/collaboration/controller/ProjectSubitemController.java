@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.Collection;
 
@@ -32,8 +34,16 @@ public class ProjectSubitemController {
     @GetMapping("/project/projectSubitem/{id}")
     public String toEditPage(@PathVariable("id") Integer id, Model model){
         ProjectSubitem projectSubitem = projectSubitemMapper.findById(id);
+        System.out.println(projectSubitem);
         model.addAttribute("editProjectSubitem", projectSubitem);
         return "project/add";
+    }
+
+    @PostMapping("/projectSubitem")
+    public String addEmp(ProjectSubitem projectSubitem){
+        System.out.println(projectSubitem);
+        projectSubitemMapper.insert(projectSubitem);
+        return "redirect:/project/add";
     }
 
 
