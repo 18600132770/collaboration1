@@ -12,4 +12,8 @@
         update projectSubitem set deltag = 1 where id = #{id}
     </insert>
 
+    <select id="findById" resultType="com.huag.collaboration.entities.ProjectSubitem">
+        SELECT * FROM projectSubitem where id = #{id} and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+    </select>
+
 </mapper>

@@ -52,7 +52,7 @@ public class ProjectController {
     @GetMapping("/project")
     public String toAddPage(Model model){
 
-        return "/project/add";
+        return "project/add";
     }
 
     /**
@@ -78,7 +78,7 @@ public class ProjectController {
         model.addAttribute("project", project);
         List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(id);
         model.addAttribute("projectSubitemList", projectSubitemList);
-        return "/project/add";
+        return "project/add";
     }
 
     @DeleteMapping("project/{id}")

@@ -67,7 +67,7 @@
 							<label style="margin-left: 50px; display: inline">结束时间：</label>
 							<input name="stopTime" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.stopTime}">
 
-							<button type="submit" class="btn btn-primary" th:text="${project!=null}?'修改':'添加'" style="margin-left: 200px">添加</button>
+							<button type="submit" class="btn btn-primary" th:text="${project!=null}?'修改':'添加'" style="margin-left: 200px" id="bt_addClick">添加</button>
 						</div>
 
 						<div class="table-responsive" style="margin-top: 10px">
@@ -104,9 +104,7 @@
 									</td>
 									<td>
 										<!--<a class="btn btn-sm btn-primary" th:href="@{/projectSubitem/}+${projectSubitem.id}">编辑</a>-->
-										<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#projectSubitemEditModel">
-											编辑
-										</button>
+										<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#projectSubitemEditModel" id="id_editProjectSubitemButton" value="${projectSubitem.id}">编辑</button>
 										<button th:attr="del_uri=@{/projectSubitem/}+${projectSubitem.id}" class="btn btn-sm btn-danger deleteBtn">删除</button>
 									</td>
 								</tr>
@@ -130,11 +128,31 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						...
+						<form th:action="@{/projectSubitem}" method="post">
+							<input type="hidden" name="_method" value="put" th:if="${editProjectSubitem!=null}"/>
+							<input type="hidden" name="id" th:if="${editProjectSubitem!=null}" th:value="${editProjectSubitem.id}">
+							<div class="form-group">
+								<label>专业分项</label>
+								<input name="professionalSubOption" type="text" class="form-control" placeholder="" th:value="${editProjectSubitem!=null}?${editProjectSubitem.professionalSubOption}">
+							</div>
+							<div class="form-group">
+								<label>任务级别</label>
+								<input name="taskLevel" type="text" class="form-control" placeholder="" th:value="${editProjectSubitem!=null}?${editProjectSubitem.taskLevel}">
+							</div>
+							<div class="form-group">
+								<label>开始时间</label>
+								<input name="startTime" type="text" class="form-control" placeholder="" th:value="${editProjectSubitem!=null}?${#dates.format(editProjectSubitem.startTime, 'yyyy-MM-dd HH:mm')}">
+							</div>
+							<div class="form-group">
+								<label>截止时间</label>
+								<input name="stopTime" type="text" class="form-control" placeholder="" th:value="${editProjectSubitem!=null}?${#dates.format(editProjectSubitem.stopTime, 'yyyy-MM-dd HH:mm')}">
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary" th:text="${editProjectSubitem!=null}?'修改':'添加'">添加</button>
+							</div>
+						</form>
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary">Save changes</button>
-					</div>
+
 				</div>
 			</div>
 		</div>
@@ -151,6 +169,33 @@
 		<script>
 			feather.replace()
 		</script>
+
+	<script type="text/javascript">
+		$("#bt_addClick").click(function(){
+			alert(1)
+		});
+		$("#id_editProjectSubitemButton").click(function(){
+			var id =document.getElementById("id_editProjectSubitemButton").value
+
+			$.ajax({
+				data: 1,
+				type: "GET",
+				url: "projectSubitem/1",
+				success: function (result) {
+					console.log(result)
+					if(result.code == 200){
+						console.log(result.data)
+					}else{
+						console.log("返回值失败")
+					}
+
+				}
+			})
+		});
+
+
+
+	</script>
 
 	</body>
 
