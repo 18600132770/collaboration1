@@ -2,6 +2,7 @@ package com.huag.collaboration.controller;
 
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectSubitem;
+import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.ProjectSubitemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,21 +28,13 @@ public class ProjectController {
     @Autowired
     ProjectSubitemMapper projectSubitemMapper;
 
+    /**
+     * 页面跳转
+     * @param model
+     * @return
+     */
     @GetMapping("/projects")
     public String  list(Model model){
-        Collection<Project> projects = projectMapper.findAll();
-
-        projects.forEach(project ->{
-            if(project.getStopTime() != null && project.getStartTime() != null){
-                long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
-                project.setLeftTime(timeLength/1000/60/60/24 + "");
-            }
-        });
-
-        System.out.println(projects);
-
-        //放在请求域中
-        model.addAttribute("projects",projects);
         return "project/list";
     }
 
@@ -51,7 +45,6 @@ public class ProjectController {
      */
     @GetMapping("/project")
     public String toAddPage(Model model){
-
         return "project/add";
     }
 
@@ -85,6 +78,28 @@ public class ProjectController {
     public String deleteProject(@PathVariable("id") Integer id){
         projectMapper.deleteById(id);
         return "redirect:/projects";
+    }
+
+    /**
+     * ajax请求，查询所有数据
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/findAll")
+    public BaseResponse<List<Project>> findAll(HttpServletRequest request){
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        List<Project> projects = projectMapper.findAll();
+        projects.forEach(project ->{
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
+                project.setLeftTime(timeLength/1000/60/60/24 + "");
+            }
+        });
+        System.out.println(projects);
+        result.code = 200;
+        result.setData(projects);
+        return result;
     }
 
 

@@ -1,0 +1,366 @@
+.mb40{
+    margin-bottom: 40px;
+}
+.el-table tbody .el-table__row:first-child td:first-child .cell{
+    text-overflow: initial;
+}
+.select-group .el-select .el-input__icon{
+    line-height: 32px;
+}
+.notPoint{
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px !important;
+}
+.el-checkbox__inner,.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    width: 16px;
+    height: 16px;
+}
+.upload-demo .el-button,.separateWord .btn-line{
+    font-size: 14px;
+}
+.el-checkbox-group .el-checkbox__label{
+    padding-left: 5px;
+}
+.el-pager .el-icon-d-arrow-right:before {
+    content: "\e6dc" !important;
+}
+.myselfDialog .el-tabs__header{
+    margin-left: 111px;
+}
+.myselfDialog .el-tabs__nav-wrap::after,
+.myselfDialog .el-tabs__active-bar{
+    display: none;
+}
+.relationshipsTags{
+    width: 100%;
+    border:1px solid #ededed;
+    border-radius: 2px;
+    box-shadow: 0 0 8px #ededed;
+    padding: 10px 34px;
+    margin-bottom: 20px;
+    position: relative;
+    box-sizing: border-box;
+}
+.relationshipsTags>.icon{
+    color:#156498;
+    font-size: 18px;
+    position: absolute;
+    top: 17px;
+    left: 10px;
+}
+.relationshipsTags a{
+    display: inline-block;
+    padding: 5px 2px;
+    border: 1px solid transparent;
+}
+.relationshipsTags a:hover,.relationshipsTags a:focus{
+    border: 1px solid #156498;
+    border-radius: 2px;
+    color: #156498;
+}
+.labelSpan {
+    position: absolute;
+    width: 99px;
+    line-height: 40px;
+    text-align: right;
+}
+.separateWord{
+    background-color: #f9f9f9;
+    min-height: 500px;
+    margin: 10px 80px 50px;
+    padding: 10px 15px 20px;
+}
+.mb10{
+    margin-bottom: 15px;
+}
+.ml15{
+    margin-left: 15px;
+}
+.separateWord p.labels{
+    margin-bottom: 5px;
+}
+.separateWord .el-upload__tip{
+    font-size: 14px;
+    color: #999;
+}
+.lightButton .x-button-group .el-button{
+    color: #156498;
+}
+.lightButton .x-button-group,.normal-btn .x-button-group{
+    margin-bottom: 5px;
+}
+.openandClose{
+    position: absolute;
+    top: 25px;
+    right: 0px;
+    cursor: pointer;
+}
+.openandClose>.icon{
+    font-size: 16px;
+    color: #156498;
+}
+.separateWordStart{
+    margin: 10px 80px;
+    padding: 0 15px;
+}
+.checkedBoxGroup{
+    border: 1px solid #ededed;
+    height: 200px;
+}
+.checkedList{
+    width: calc(33% - 30px);
+    margin:15px;
+}
+.theName{
+    float: left;
+    margin-left: 30px;
+    margin-top: 20px;
+    color: #666;
+}
+.theName span{
+    display: block;
+    max-width: 100px;
+}
+.checkedList .theName.active{
+    color: #156498;
+}
+.el-tree .el-icon-caret-right:before{
+    content: "\e6e0";
+}
+.top-operation{
+    border-bottom: 1px solid #ededed;
+    height: 55px;
+    line-height: 55px;
+    vertical-align: middle;
+}
+.rela-mind.mind-l{
+    background-color: #fcfdfd;
+}
+.rela-mind .ml-ht{
+    font-size: 15px;
+}
+.rela-mind .ml-a{
+    color: #777;
+    font-size: 12px;
+}
+.mind-tupu-rela{
+    height: calc(100vh - 140px);
+}
+.back-a{
+    display: block;
+    margin: -10px 0 15px 0;
+    color: #156498;
+    cursor: pointer;
+}
+.x-button-group .el-button.cur{
+    color: #fff;
+    background: var(--c);
+    border-color: var(--c);
+}
+.x-button-group .el-button.cur:hover{
+    color: #fff;
+    background: #135079;
+    border: 1px solid#135079;
+}
+.label-p{
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.label-p .upload-demo{
+    display: inline-block;
+}
+.bx-text{
+    margin-top: 15px;
+    height: calc(100vh - 255px);
+}
+.bx-text .bx-label{
+    color: #333;
+    font-size: 14px;
+    width: 110px;
+    display: inline-block;
+    text-align: right;
+    vertical-align: top;
+}
+.bx-text .text-box{
+    background-color: #F8F8F8;
+    padding: 10px;
+    width: calc(100% - 190px);
+}
+.text-box .text-span{
+    display: inline-block;
+    padding: 3px 12px;
+    border: 1px solid #E5E5E5;
+    border-radius: 2px;
+    margin: 10px 15px;
+    background-color: #fff;
+    cursor: grab;
+}
+/*.text-box .text-span:hover,*/
+.text-box .text-span:focus{
+    border: 1px dashed #E5E5E5;
+    color: #B5B5B5;
+}
+.treeCompare1{
+    width: calc(50% - 21px);
+    border: 1px solid #deecf5;
+    background-color: #f9fafc;
+    border-radius: 2px;
+    margin-right: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.treeCompare2{
+    width: calc(50% - 1px);
+    background-color: #f8f8f8;
+    border-radius: 2px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.treeCompare1 .el-tree{
+    background-color: #f9fafc;
+    height: 100%;
+    color: #333;
+}
+.treeCompare2 .el-tree{
+    background-color: #f8f8f8;
+    height: 100%;
+    color: #777;
+}
+.treeCompare2 .date-tree .custom-tree-node:hover {
+    background: transparent;
+}
+.compareBtn{
+    position: absolute;
+    top: -26px;
+    left: 47.5%;
+    width: 53px;
+    height: 53px;
+    border: 2px solid #156498;
+    background-color: #fff;
+    border-radius: 50%;
+    color: #156498;
+    font-size: 18px;
+    line-height: 53px;
+    text-align: center;
+    font-weight: 600;
+}
+.wordFrequency{
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+.wordFrequency.wordFrequency-bck{
+    background-color: #fff;
+}
+.wordFrequency .chart1{
+    width: calc(100% - 480px);
+    height: 510px;
+    box-shadow: 0 0 8px #e6e6e6;
+}
+.wordFrequency .table1{
+    margin-left: 30px;
+    width: 400px;
+}
+.chart1 .el-slider{
+    float: left;
+    width: 340px;
+    margin-left: 30px;
+    display: inline-block;
+}
+.chart1 .el-slider__marks-text{
+    font-size: 12px;
+}
+.chart1 .el-slider__bar{
+    background-color: #429fd5;
+}
+.el-slider__stop{
+    background-color: transparent;
+}
+.chart1 .el-slider__button{
+    width: 12px;
+    height: 12px;
+    border: 2px solid #1f7cb7;
+}
+.chart1 .el-button{
+    margin: 10px 30px 0 0;
+}
+.chart1 .mainChart{
+    width: 100%;
+}
+.select-btn.cur{
+    background-color: var(--c);
+    color: #fff;
+}
+.short-select .el-select{
+    width: 120px;
+}
+.tabBtn-0{
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    margin-left: 20px;
+}
+.tabBtn-0 a{
+    display: inline-block;
+    width: 40px;
+    height: 35px;
+    border-right: 1px solid #e2e2e2;
+    line-height: 35px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+.tabBtn-0 a:last-child{
+    border-right: none;
+}
+.tabBtn-0 a .icon{
+    font-size: 18px;
+    color: #666;
+}
+.tabBtn-0 a.cur{
+    background-color: #fff;
+}
+.tabBtn-0 a.cur .icon{
+    color: #156498;
+}
+.el-message-box__message{
+    text-align: left;
+}
+.newWord{
+    padding: 10px;
+}
+.newWord span{
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 2px;
+    margin: 10px 15px;
+    background-color: #fff;
+}
+.newWordDetail{
+    margin: 10px 80px 10px;
+    padding: 10px 15px 20px;
+}
+.newWordSpan{
+    background-color: #f2f2f4;
+    padding: 10px 15px 20px;
+
+}
+.back-topic-a{
+    height: 30px;
+    line-height: 30px;
+    margin-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,32 @@
+html, body, #app {
+    height: auto;
+}
+.color77{color: #777;}
+.mb5{margin-bottom: 5px;}
+.linkColor{color: #156498;}
+.btn-save{background-color: #156498;color: #fff;}
+.btn-save:hover{background-color: #135079;color: #fff;}
+.hasMark{background-color: #fff;box-sizing: border-box;}
+.docParag{margin: 0 20px;border-bottom: 1px dashed #eeeded;color: #777;letter-spacing: 3px;}
+.insidedocParag{margin: 15px 0;line-height: 25px;}
+.insidedocParag.active{background-color: #f0f5f9;}
+.marksLabel.hadEdit{color: #ff8a00;}
+.docsList{}
+.markWords{display: inline-block;width: 30px;text-align: center;position: relative;}
+.marksLabel{display: inline-block;color:#156498;border:1px dashed #156498;position: absolute;top: 27px;left: 0;height: 20px;line-height: 20px;width: 30px;overflow: hidden;}
+.chooseWord{display: inline-block;margin-bottom: 25px;}
+.dropdown_list{position: absolute;top: 55px;background-color: #fff;}
+.cornerList{border: 1px solid #f5f5f5;box-shadow:  0 0 4px #e2e2e2;background-color: #fff;padding: 5px 0;z-index: 999;    position: absolute;top: 60px;left: 0;}
+.cornerList:before{content: '';position: absolute;display: block;width: 0;height: 0;border-color: transparent;border-style: solid;top: -16px;left: 11px;margin-left: -6px;border-top-width: 0;border-bottom-color: #fff;border-width: 10px;filter: drop-shadow(0 2px 12px rgba(0,0,0,.03));}
+.cornerList li{height: 30px;line-height: 30px;padding: 0 10px;text-align: left;cursor: default;white-space: nowrap;}
+.cornerList li:hover,.cornerList li.active{background-color: #f5f7fa;}
+.toAddLabel{display:inline-block;border:1px dashed #156498;padding-bottom: 25px;box-sizing: border-box;text-align: center;width: 24px;letter-spacing: 0px;}
+/*checkbox part*/
+.allCheckedBox{margin-left: 30px;margin-bottom: 15px;}
+.entryList{margin: 0 30px;}
+.entryList .docParag{margin: 0; display: inline-block;width: calc(100% - 80px);}
+.entryList .el-checkbox{margin-top: 18px;vertical-align: top;}
+/*textarea*/
+.textAssay{border: 1px solid #e2e2e2;box-shadow: 0 0 4px #e2e2e2;height: 900px;overflow-y: auto;background-color: #fff;}
+.textTitle{font-weight: 500;font-size: 16px;text-align: center;color: #000;margin: 20px 0;}
+.sectionArea{margin: 0 20px;text-indent: 2em;line-height: 25px;}
