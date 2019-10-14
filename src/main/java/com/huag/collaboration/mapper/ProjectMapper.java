@@ -13,9 +13,11 @@ import java.util.List;
 public interface ProjectMapper {
 
     public List<Project> findAll();
+    public List<Project> findByProjectName(String projectName);
     public Project findById(Integer id);
     public int deleteById(Integer id);
     public int insert(Project project);
     public int update(Project project);
+
 
 }

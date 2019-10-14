@@ -8,192 +8,180 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>Dashboard Template for Bootstrap</title>
-		<!-- Bootstrap core CSS -->
+		<title>协同五影办公平台</title>
+
 		<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
-
-		<!-- Custom styles for this template -->
 		<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
-
 		<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
-
-		<!--<link href="asserts/css/x-index.css" th:href="@{/asserts/css/x-index.css}" rel="stylesheet">-->
-		<!--<link href="asserts/css/manager.css" th:href="@{/asserts/css/manager.css}" rel="stylesheet">-->
-		<!--<link href="asserts/css/cutWord.css" th:href="@{/asserts/css/cutWord.css}" rel="stylesheet">-->
-
-		<!--<link href="asserts/css/x-index.css" th:href="@{/asserts/css/x-index.css}" rel="stylesheet">-->
 		<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
 		<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
 		<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
-
-		<style type="text/css">
-			/* Chart.js */
-			
-			@-webkit-keyframes chartjs-render-animation {
-				from {
-					opacity: 0.99
-				}
-				to {
-					opacity: 1
-				}
-			}
-			
-			@keyframes chartjs-render-animation {
-				from {
-					opacity: 0.99
-				}
-				to {
-					opacity: 1
-				}
-			}
-			
-			.chartjs-render-monitor {
-				-webkit-animation: chartjs-render-animation 0.001s;
-				animation: chartjs-render-animation 0.001s;
-			}
-		</style>
 	</head>
 
 	<body>
-		<!--引入抽取的topbar-->
-		<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
-		<div th:replace="commons/bar::topbar"></div>
-
-		<div class="container-fluid">
-			<div class="row">
-				<!--引入侧边栏-->
-				<div th:replace="commons/bar::#sidebar(activeUri='projects')"></div>
-
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-
-
-					<nav class="navbar navbar-light bg-light">
-						<h2><a class="btn btn-sm alert-info" href="project" th:href="@{/project}">添加项目</a></h2>
-
-						<div>
-							<input class="form-control mr-sm-2" type="search" placeholder="输入查询内容" aria-label="Search" v-model="searchKey">
-							<button class="btn btn-sm alert-info" @click="searchClick">搜索</button>
-						</div>
-
-					</nav>
-
-
-					<div class="ds-table-wrap" id="app">
-						<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
-							<el-table-column type="selection" width="55"></el-table-column>
-							<el-table-column label="序号" width="60" type="index">
-								<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>
-							</el-table-column>
-							<el-table-column label="项目名称">
-								<template slot-scope="scope"><a href="新词词条（一审账号）.html" target="_blank">{{ scope.row.projectName }} </a></template>
-							</el-table-column>
-							<el-table-column label="设计阶段">
-								<template slot-scope="scope"><span>{{ scope.row.designPhase }}</span></template>
-							</el-table-column>
-							<el-table-column label="开始时间">
-								<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
-							</el-table-column>
-							<el-table-column  label="截止时间">
-								<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
-							</el-table-column>
-							<el-table-column  label="剩余天数">
-								<template slot-scope="scope"><span>{{ scope.row.leftTime }}</span></template>
-							</el-table-column>
-							<el-table-column  label="目前进度">
-								<template slot-scope="scope"><span>{{ scope.row.currentProcess }}</span></template>
-							</el-table-column>
-							<el-table-column  label="紧急程度">
-								<template slot-scope="scope"><span>{{ scope.row.emergencyLevel }}</span></template>
-							</el-table-column>
-							<el-table-column label="操作" min-width="100">
-								<template slot-scope="scope">
-									<el-button class="btn-line btn-0 cur" size="mini">编辑</el-button>
-									<el-button class="btn-line btn-0" size="mini">删除</el-button>
-								</template>
-							</el-table-column>
-						</el-table>
-						<el-pagination class="txtCenter"
-									   @size-change="handleSizeChange"
-									   @current-change="handleCurrentChange"
-									   :current-page.sync="currentPage"
-									   :page-sizes="[10,20,30,50]"
-									   :page-size="100"
-									   layout=" sizes, prev, pager, next"
-									   :total="1000">
-						</el-pagination>
-					</div>
-
-
-				</main>
-				<form id="deleteEmpForm"  method="post">
-					<input type="hidden" name="_method" value="delete"/>
-				</form>
+		<div id="flw">
+			<div id="appheader">
+				<div class="top">
+					<!--<h1 class="top-t">协同五影办公平台</h1>-->
+					<h1  style="color: #ffffff; margin-left: 10px; margin-top: 20px" class="top-t" >协同五影办公平台</h1>
+				</div>
 			</div>
+
+			<div id="app">
+				<div class="dsource-wrap">
+					<!-- 左侧  -->
+					<el-scrollbar class="dictionary-l">
+						<ul class="manager-nav dictionary-nav">
+							<li class="m-a">
+								<svg class="icon" aria-hidden="true">
+									<use xlink:href="#icon-hh2"></use>
+								</svg>
+								<ul class="manager-sec">
+									<li><a class="m-a cur" href="javascript:;">项目信息</a></li>
+									<li><a href="dictionaryManage.html">人员信息</a></li>
+								</ul>
+							</li>
+						</ul>
+					</el-scrollbar>
+
+					<el-scrollbar class="dsource-r">
+						<nav class="navbar navbar-light bg-light">
+							<h2><a class="btn btn-sm alert-info" href="project" th:href="@{/project}">添加项目</a></h2>
+
+							<div class="select-group">
+								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
+								<el-button class="select-btn" @click="searchClick">查找</el-button>
+							</div>
+
+						</nav>
+						<div class="ds-table-wrap" >
+							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
+								<el-table-column type="selection" width="55"></el-table-column>
+								<!--<el-table-column label="序号" width="60" type="index">-->
+								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
+								<!--</el-table-column>-->
+								<el-table-column label="项目名称">
+									<template slot-scope="scope"><a href="新词词条（一审账号）.html" target="_blank">{{ scope.row.projectName }} </a></template>
+								</el-table-column>
+								<el-table-column label="设计阶段">
+									<template slot-scope="scope"><span>{{ scope.row.designPhase }}</span></template>
+								</el-table-column>
+								<el-table-column label="开始时间">
+									<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
+								</el-table-column>
+								<el-table-column  label="截止时间">
+									<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
+								</el-table-column>
+								<el-table-column  label="剩余天数">
+									<template slot-scope="scope"><span>{{ scope.row.leftTime }}</span></template>
+								</el-table-column>
+								<el-table-column  label="目前进度">
+									<template slot-scope="scope"><span>{{ scope.row.currentProcess }}</span></template>
+								</el-table-column>
+								<el-table-column  label="紧急程度">
+									<template slot-scope="scope"><span>{{ scope.row.emergencyLevel }}</span></template>
+								</el-table-column>
+								<el-table-column label="操作" min-width="100">
+									<template slot-scope="scope">
+										<el-button class="btn-line btn-0 cur" size="mini">编辑</el-button>
+										<el-button class="btn-line btn-0" size="mini">删除</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+							<el-pagination class="txtCenter"
+										   @size-change="handleSizeChange"
+										   @current-change="handleCurrentChange"
+										   :current-page.sync="currentPage"
+										   :page-sizes="[10,20,30,50]"
+										   :page-size="100"
+										   layout=" sizes, prev, pager, next"
+										   :total="1000">
+							</el-pagination>
+						</div>
+					</el-scrollbar>
+				</div>
+			</div>
+
+			<!-- Bootstrap core JavaScript
+		================================================== -->
+			<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+			<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
+			<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+
+			<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+			<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
+			<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
+			<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
+
+			<!--<script type="text/javascript" src="../../static/asserts/js/vue.js"></script>-->
+
+			<script>
+				feather.replace()
+			</script>
+
+			<script type="text/javascript">
+
+				var app = new Vue({
+					el: '#app',
+					data: {
+							dialogFormVisible: false,
+							currentPage: 5,
+							tableData: null,
+							searchKey: null
+						},
+					methods: {
+						handleSizeChange(val) {
+							console.log(`每页 ${val} 条`);
+						},
+						handleCurrentChange(val) {
+							console.log(`当前页: ${val}`);
+						},
+						searchClick :function () {
+							var ajaxData = {}
+							ajaxData.projectName = encodeURI(app.searchKey);
+							console.log(ajaxData)
+							var type = "GET"
+							var url = "project/findByProjectName"
+							sendAjax(ajaxData, type, url)
+						}
+					}
+
+				})
+
+				var ajaxData = {}
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "project/findAll",
+					success: function (result) {
+						if(result.code == 200){
+							app.$data.tableData=result.data
+						}else{
+							console.log("返回值失败")
+						}
+
+					}
+				})
+
+				function sendAjax(ajaxData, type, url) {
+					$.ajax({
+						data: ajaxData,
+						type: type,
+						url: url,
+						success: function (result) {
+							if(result.code == 200){
+								app.$data.tableData=result.data
+							}else{
+								console.log("返回值失败")
+							}
+
+						}
+					})
+				}
+
+
+
+			</script>
 		</div>
-
-
-
-		<!-- Bootstrap core JavaScript
-    ================================================== -->
-		<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
-		<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
-		<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
-
-		<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
-		<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
-		<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
-		<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
-
-		<!--<script type="text/javascript" src="../../static/asserts/js/vue.js"></script>-->
-
-		<script>
-			feather.replace()
-		</script>
-
-		<script type="text/javascript">
-
-			var app = new Vue({
-				el: '#app',
-				data: {
-						dialogFormVisible: false,
-						currentPage: 5,
-						tableData: null,
-						searchKey: null
-					},
-				methods: {
-					handleSizeChange(val) {
-						console.log(`每页 ${val} 条`);
-					},
-					handleCurrentChange(val) {
-						console.log(`当前页: ${val}`);
-					},
-					searchClick :function () {
-						console.log(app.inputValue)
-					}
-				}
-
-			})
-
-			var ajaxData = {}
-			ajaxData.id = 1;
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "project/findAll",
-				success: function (result) {
-					if(result.code == 200){
-						console.log(result.data)
-						app.$data.tableData=result.data
-					}else{
-						console.log("返回值失败")
-					}
-
-				}
-			})
-
-
-
-		</script>
-
 	</body>
 </html>

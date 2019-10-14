@@ -11,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -90,6 +92,31 @@ public class ProjectController {
     public BaseResponse<List<Project>> findAll(HttpServletRequest request){
         BaseResponse<List<Project>> result = new BaseResponse<>();
         List<Project> projects = projectMapper.findAll();
+        int serialNumber = 1;
+        projects.forEach(project ->{
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
+                project.setLeftTime(timeLength/1000/60/60/24 + "");
+            }
+        });
+        System.out.println(projects);
+        result.code = 200;
+        result.setData(projects);
+        return result;
+    }
+
+    /**
+     * ajax请求
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/findByProjectName")
+    public BaseResponse<List<Project>> findByProjectName(HttpServletRequest request) throws Exception{
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String projectName = String.valueOf(request.getParameter("projectName"));
+        projectName = URLDecoder.decode(projectName, "UTF-8");
+        List<Project> projects = projectMapper.findByProjectName(projectName);
         projects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
                 long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();

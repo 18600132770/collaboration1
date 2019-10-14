@@ -31,6 +31,10 @@
     </resultMap>
 
 
+    <select id="findByProjectName" resultType="com.huag.collaboration.entities.Project">
+        SELECT * FROM project where projectName like "%"#{projectName}"%" and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+    </select>
+
     <select id="findAll" resultType="com.huag.collaboration.entities.Project">
         SELECT * FROM project where deltag <![CDATA[ <> ]]> '1' or deltag is null
     </select>
