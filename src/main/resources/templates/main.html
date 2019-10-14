@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard Template for Bootstrap</title>
+    <title>协同五影办公平台</title>
     <!-- Bootstrap core CSS -->
     <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
 
@@ -20,8 +20,14 @@
 <div th:replace="commons/bar::topbar"></div>
 
 <div>
-    <a type="button" class="btn btn-primary" style="margin-left: 200px;margin-top: 500px; width: 250px; height: 100px"  th:href="@{/projects}">生产处协同</a>
-    <button type="button" class="btn btn-primary" style="margin-left: 200px;margin-top: 500px; width: 250px; height: 100px">专业协同</button>
+    <a th:href="@{/projects}">
+        <button type="button" class="btn btn-primary" style="margin-left: 200px;margin-top: 500px; width: 250px; height: 100px">生产处协同</button>
+    </a>
+
+    <a th:href="@{/projects}">
+        <button type="button" class="btn btn-primary" style="margin-left: 200px;margin-top: 500px; width: 250px; height: 100px">专业协同</button>
+    </a>
+
 </div>
 
 <div>

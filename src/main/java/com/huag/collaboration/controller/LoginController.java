@@ -32,5 +32,10 @@ public class LoginController {
         }
     }
 
+    @GetMapping("/redirectToMain")
+    public String redirectToMain(){
+        return "redirect:/main.html";
+    }
+
 }
 
