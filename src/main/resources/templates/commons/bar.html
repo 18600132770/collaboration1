@@ -3,16 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+    <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
+    <link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
+    <link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
+    <link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
+    <link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
 </head>
 <body>
 <!--topbar-->
 <nav class="top" th:fragment="topbar" style="height: 80px">
 
-    <div class="top">
-        <h1 class="top-t">中国知网大数据融合应用平台</h1>
-    </div>
+
+    <!--<a  th:href="@{/redirectToMain}">-->
+        <!--<div class="top">-->
+            <!--<h1 class="top-t">中国知网大数据融合应用平台</h1>-->
+        <!--</div>-->
+    <!--</a>-->
+
+    <!--<div id="appheader">-->
+        <!--<div class="top">-->
+            <!--&lt;!&ndash;<h1 class="top-t">协同五影办公平台</h1>&ndash;&gt;-->
+           <!---->
+        <!--</div>-->
+    <!--</div>-->
+
     <a  th:href="@{/redirectToMain}">
-        <h3 style="color: #ffffff; margin-left: 10px" >协同五影办公平台</h3>
+        <h1   class="top-t" >协同五影办公平台</h1>
     </a>
 
     <a class="nav-link active" href="#" style="font-size: 25px;margin-right: 5px">[[${session.loginUser}]]</a>

@@ -91,7 +91,10 @@ public class ProjectController {
     @RequestMapping(value = "/project/findAll")
     public BaseResponse<List<Project>> findAll(HttpServletRequest request){
         BaseResponse<List<Project>> result = new BaseResponse<>();
-        List<Project> projects = projectMapper.findAll();
+        List<Project> projects = projectMapper.findAllIn(new String[]{"马东铁路", "长江大桥"});
+//        List<Project> projects = projectMapper.findAll();
+        System.out.println("------------");
+        System.out.println(projects);
         int serialNumber = 1;
         projects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){

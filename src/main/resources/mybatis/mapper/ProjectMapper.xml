@@ -39,6 +39,15 @@
         SELECT * FROM project where deltag <![CDATA[ <> ]]> '1' or deltag is null
     </select>
 
+    <resultMap id="findAllInMap" type="com.huag.collaboration.entities.Project" >
+        <result column="projectName" property="projectName" jdbcType="VARCHAR" />
+        <result column="currentProcess" property="currentProcess" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="findAllIn" resultMap="findAllInMap" statementType="STATEMENT">
+        SELECT projectName, currentProcess as currentProcess FROM project
+    </select>
+
     <select id="findById" resultType="com.huag.collaboration.entities.Project">
         SELECT * FROM project WHERE id=#{id} and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
