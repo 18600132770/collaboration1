@@ -2,129 +2,116 @@
 <!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="">
-		<meta name="author" content="">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-		<title>Dashboard Tprojectlate for Bootstrap</title>
-		<!-- Bootstrap core CSS -->
-		<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+	<title>中国知网大数据融合应用平台</title>
 
-		<!-- Custom styles for this tprojectlate -->
-		<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
-		<style type="text/css">
-			/* Chart.js */
-			
-			@-webkit-keyframes chartjs-render-animation {
-				from {
-					opacity: 0.99
-				}
-				to {
-					opacity: 1
-				}
-			}
-			
-			@keyframes chartjs-render-animation {
-				from {
-					opacity: 0.99
-				}
-				to {
-					opacity: 1
-				}
-			}
-			
-			.chartjs-render-monitor {
-				-webkit-animation: chartjs-render-animation 0.001s;
-				animation: chartjs-render-animation 0.001s;
-			}
-		</style>
-	</head>
+	<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+	<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
+	<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
+	<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
+	<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
+	<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
+</head>
 
-	<body>
-		<!--引入抽取的topbar-->
-		<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
-		<div th:replace="commons/bar::topbar"></div>
+<body>
+	<div id="flw">
 
-		<div class="container-fluid">
-			<div class="row">
-				<!--引入侧边栏-->
-				<div th:replace="commons/bar::#sidebar(activeUri='projects')"></div>
-
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-					<form th:action="@{/project}" method="post">
-						<div class="form-group">
-							<label style="display: inline">项目名称：</label>
-							<input name="projectName" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.projectName}">
-
-							<label style="margin-left: 50px; display: inline">设计阶段：</label>
-							<input name="designPhase" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.designPhase}">
-
-							<label style="margin-left: 50px; display: inline">开始时间：</label>
-							<input name="startTime" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.startTime}">
-
-							<label style="margin-left: 50px; display: inline">结束时间：</label>
-							<input name="stopTime" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.stopTime}">
-
-							<button type="submit" class="btn btn-primary" th:text="${project!=null}?'修改':'添加'" style="margin-left: 200px" id="bt_addClick">添加</button>
-						</div>
-					</form>
-
-						<button type="button" class="btn btn-sm alert-info" data-toggle="modal" data-target="#projectSubitemEditModel">添加</button>
-
-						<div class="table-responsive" style="margin-top: 10px">
-							<table class="table table-striped table-sm" id="id_table">
-								<thead>
-								<tr>
-									<th><input type="checkbox" id="id_checkbox"></th>
-									<th>序号</th>
-									<th>专业分项</th>
-									<th>任务级别</th>
-									<th>开始时间</th>
-									<th>截止时间</th>
-									<th>目前进度</th>
-									<th>操作</th>
-								</tr>
-								</thead>
-								<tbody>
-
-								<tr th:each="projectSubitem:${projectSubitemList}">
-									<th><input type="checkbox" onclick="checkboxOnclick(this)"></th>
-									<td id="id_projectSubitemId" th:text="${projectSubitem.id}"></td>
-									<td>
-										<a data-toggle="collapse" th:href="@{/project/}" role="button" aria-expanded="false" aria-controls="collapseExample">
-											[[${projectSubitem.professionalSubOption}]]
-										</a>
-									</td>
-									<td th:text="${projectSubitem.taskLevel}"></td>
-									<td th:text="${#dates.format(projectSubitem.startTime, 'yyyy-MM-dd HH:mm')}"></td>
-									<td th:text="${#dates.format(projectSubitem.stopTime, 'yyyy-MM-dd HH:mm')}"></td>
-									<td>
-										<div class="progress">
-											<div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="${projectSubitem.currentProcess}" aria-valuemin="0" aria-valuemax="100">[[${projectSubitem.currentProcess}]]%</div>
-										</div>
-									</td>
-									<td>
-										<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#projectSubitemEditModel" id="id_editProjectSubitemButton" >编辑</button>
-										<button th:attr="del_uri=@{/project/projectSubitem/}+${projectSubitem.id}" class="btn btn-sm btn-danger deleteBtn">删除</button>
-									</td>
-
-									<!--<td>-->
-										<!--<a class="btn btn-sm btn-primary" th:href="@{/project/}+${project.id}">编辑</a>-->
-										<!--<button th:attr="del_uri=@{/project/}+${project.id}" class="btn btn-sm btn-danger deleteBtn">删除</button>-->
-									<!--</td>-->
-
-								</tr>
-								</tbody>
-							</table>
-						</div>
-
-
-
-				</main>
+		<div id="appheader">
+			<div class="top">
+				<a  th:href="@{/redirectToMain}">
+					<h1  style="color: #ffffff; margin-left: 10px; margin-top: 20px" class="top-t" >中国知网大数据融合应用平台</h1>
+				</a>
 			</div>
 		</div>
+
+		<div id="app" >
+			<div class="dsource-wrap" style="margin-top: 5px">
+				<!-- 左侧  -->
+				<el-scrollbar class="dictionary-l">
+					<ul class="manager-nav dictionary-nav">
+						<li class="m-a">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-hh2"></use>
+							</svg>
+							<ul class="manager-sec">
+								<li><a class="m-a cur" href="javascript:;">项目信息</a></li>
+								<li><a href="dictionaryManage.html">人员信息</a></li>
+							</ul>
+						</li>
+					</ul>
+				</el-scrollbar>
+
+				<el-scrollbar class="dsource-r">
+					<div class="form-group">
+						<label style="display: inline">项目名称：</label>
+						<input name="projectName" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.projectName}">
+
+						<label style="margin-left: 50px; display: inline">设计阶段：</label>
+						<input name="designPhase" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.designPhase}">
+
+						<label style="margin-left: 50px; display: inline">开始时间：</label>
+						<input name="startTime" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.startTime}">
+
+						<label style="margin-left: 50px; display: inline">结束时间：</label>
+						<input name="stopTime" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.stopTime}">
+
+						<button type="submit" class="btn btn-primary" th:text="${project!=null}?'修改':'添加'" style="margin-left: 200px" id="bt_addClick">添加</button>
+					</div>
+
+					<button type="button" class="btn btn-sm alert-info" data-toggle="modal" data-target="#projectSubitemEditModel">添加</button>
+
+					<div class="table-responsive" style="margin-top: 10px">
+						<div class="ds-table-wrap" >
+							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
+								<el-table-column type="selection" width="55"></el-table-column>
+								<!--<el-table-column label="序号" width="60" type="index">-->
+								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
+								<!--</el-table-column>-->
+								<el-table-column label="专业分项">
+									<template slot-scope="scope"><a  target="_blank">{{ scope.row.professionalSubOption }} </a></template>
+								</el-table-column>
+								<el-table-column label="任务级别">
+									<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
+								</el-table-column>
+								<el-table-column label="开始时间">
+									<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
+								</el-table-column>
+								<el-table-column  label="截止时间">
+									<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
+								</el-table-column>
+								<el-table-column  label="目前进度">
+									<template slot-scope="scope"><span>{{ scope.row.currentProcess }}</span></template>
+								</el-table-column>
+								<el-table-column label="操作" min-width="100">
+									<template slot-scope="scope">
+										<el-button class="btn-line btn-0 cur" size="mini">编辑</el-button>
+										<el-button class="btn-line btn-0" size="mini">删除</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+							<el-pagination class="txtCenter"
+										   @size-change="handleSizeChange"
+										   @current-change="handleCurrentChange"
+										   :current-page.sync="currentPage"
+										   :page-sizes="[10,20,30,50]"
+										   :page-size="100"
+										   layout=" sizes, prev, pager, next"
+										   :total="1000">
+							</el-pagination>
+						</div>
+					</div>
+				</el-scrollbar>
+			</div>
+		</div>
+
+	</div>
+</body>
+
 
 		<!-- Modal -->
 		<div class="modal fade" id="projectSubitemEditModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -169,51 +156,85 @@
 			</div>
 		</div>
 
-		<form id="deleteEmpForm"  method="post">
-			<input type="hidden" name="_method" value="delete"/>
-		</form>
 
-		<!-- Bootstrap core JavaScript
-    ================================================== -->
-		<!-- Placed at the end of the document so the pages load faster -->
 		<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
 		<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
 		<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
 
-		<!-- Icons -->
 		<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+		<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
+		<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
+		<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
+
 		<script>
 			feather.replace()
 		</script>
 
-		<script>
-			//删除数据
-			$(".deleteBtn").click(function(){
-				$("#deleteEmpForm").attr("action",$(this).attr("del_uri")).submit();
-				return false;
-			});
+		<script type="text/javascript">
 
-			$("#id_table").bootstrapTable({
-				search: true,
-				pagination: false,
-				pageSize: 15,
-				pageList: [5, 10, 15, 20],
-				showColumns: true,
-				showRefresh: false,
-				showToggle: true,
-				locale: "zh-CN",
-				striped: true
-			});
+			var app = new Vue({
+				el: '#app',
+				data: {
+					dialogFormVisible: false,
+					currentPage: 1,
+					tableData: null,
+					searchKey: null
+				},
+				methods: {
+					handleSizeChange(val) {
+						console.log(`每页 ${val} 条`);
+					},
+					handleCurrentChange(val) {
+						console.log(`当前页: ${val}`);
+					},
+					searchClick :function () {
+						var ajaxData = {}
+						ajaxData.projectName = encodeURI(app.searchKey);
+						console.log(ajaxData)
+						var type = "GET"
+						var url = "project/findByProjectName"
+						sendAjax(ajaxData, type, url)
+					}
+				}
+
+			})
+
+			var ajaxData = {}
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "project/findAll",
+				success: function (result) {
+					if(result.code == 200){
+						app.$data.tableData=result.data
+					}else{
+						console.log("返回值失败")
+					}
+
+				}
+			})
+
+			function sendAjax(ajaxData, type, url) {
+				$.ajax({
+					data: ajaxData,
+					type: type,
+					url: url,
+					success: function (result) {
+						if(result.code == 200){
+							app.$data.tableData=result.data
+						}else{
+							console.log("返回值失败")
+						}
+
+					}
+				})
+			}
+
+
 
 		</script>
 
 	<script type="text/javascript">
-
-		$("#id_table").bootstrapTable('refresh',data);
-
-
-
-
 		$("#bt_addClick").click(function(){
 			alert(1)
 		});
