@@ -8,5 +8,8 @@
         SELECT * FROM userProject where deltag <![CDATA[ <> ]]> '1' or deltag is null
     </select>
 
+    <select id="findByUsername" resultType="com.huag.collaboration.entities.UserProject">
+        SELECT * FROM userProject where username like "%"#{username}"%" and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+    </select>
 
 </mapper>

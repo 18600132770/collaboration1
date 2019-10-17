@@ -11,5 +11,6 @@ import java.util.List;
 public interface UserProjectMapper {
 
     public List<UserProject> findAll();
+    public List<UserProject> findByUsername(String username);
 
 }

@@ -50,7 +50,6 @@
 
 					<el-scrollbar class="dsource-r">
 						<nav class="navbar navbar-light bg-light">
-							<h2><a class="btn btn-sm alert-info" href="project" th:href="@{/project}">添加项目</a></h2>
 
 							<div class="select-group">
 								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
@@ -64,11 +63,23 @@
 								<!--<el-table-column label="序号" width="60" type="index">-->
 								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
 								<!--</el-table-column>-->
+								<el-table-column label="姓名">
+									<template slot-scope="scope"><a  target="_blank">{{ scope.row.username }} </a></template>
+								</el-table-column>
+								<el-table-column label="状态">
+									<template slot-scope="scope"><a  target="_blank">{{ scope.row.state }} </a></template>
+								</el-table-column>
 								<el-table-column label="项目名称">
-									<template slot-scope="scope"><a href="新词词条（一审账号）.html" target="_blank">{{ scope.row.projectName }} </a></template>
+									<template slot-scope="scope"><a  target="_blank">{{ scope.row.projectName }} </a></template>
 								</el-table-column>
 								<el-table-column label="设计阶段">
 									<template slot-scope="scope"><span>{{ scope.row.designPhase }}</span></template>
+								</el-table-column>
+								<el-table-column label="专业分项">
+									<template slot-scope="scope"><span>{{ scope.row.professionalSubOption }}</span></template>
+								</el-table-column>
+								<el-table-column label="任务级别">
+									<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
 								</el-table-column>
 								<el-table-column label="开始时间">
 									<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
@@ -82,8 +93,8 @@
 								<el-table-column  label="目前进度">
 									<template slot-scope="scope"><span>{{ scope.row.currentProcess }}</span></template>
 								</el-table-column>
-								<el-table-column  label="紧急程度">
-									<template slot-scope="scope"><span>{{ scope.row.emergencyLevel }}</span></template>
+								<el-table-column  label="总工作量">
+									<template slot-scope="scope"><span>{{ scope.row.totalWork }}</span></template>
 								</el-table-column>
 								<el-table-column label="操作" min-width="100">
 									<template slot-scope="scope">
@@ -139,10 +150,10 @@
 						},
 						searchClick :function () {
 							var ajaxData = {}
-							ajaxData.projectName = encodeURI(app.searchKey);
+							ajaxData.username = encodeURI(app.searchKey);
 							console.log(ajaxData)
 							var type = "GET"
-							var url = "project/findByProjectName"
+							var url = "userProject/findByUsername"
 							sendAjax(ajaxData, type, url)
 						}
 					}
@@ -153,7 +164,7 @@
 				$.ajax({
 					data: ajaxData,
 					type: "GET",
-					url: "project/findAll",
+					url: "userProject/findAll",
 					success: function (result) {
 						if(result.code == 200){
 							app.$data.tableData=result.data

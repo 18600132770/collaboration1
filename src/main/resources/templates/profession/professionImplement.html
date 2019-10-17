@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml"
+	  xmlns:v-bind="http://www.w3.org/1999/xhtml">
 
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -41,8 +42,12 @@
 									<use xlink:href="#icon-hh2"></use>
 								</svg>
 								<ul class="manager-sec">
-									<li><a class="m-a cur" th:href="@{/projects}">项目信息</a></li>
-									<li><a th:href="@{/userProjects}">人员项目信息</a></li>
+									<li><a class="m-a cur" >马东铁路</a></li>
+									<li><a >阿尔卑斯公路</a></li>
+									<li><a >埃菲尔铁塔</a></li>
+									<li><a >青藏高原</a></li>
+									<li><a >长江大桥</a></li>
+									<li><a >南京大桥</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -50,57 +55,18 @@
 
 					<el-scrollbar class="dsource-r">
 						<nav class="navbar navbar-light bg-light">
-							<h2><a class="btn btn-sm alert-info" href="project" th:href="@{/project}">添加项目</a></h2>
 
-							<div class="select-group">
-								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
-								<el-button class="select-btn" @click="searchClick">查找</el-button>
-							</div>
+							<label style="display: inline">项目编号：{{project.projectNum}}</label>
+							<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
+							<label style="margin-left: 50px; display: inline">项目阶段：{{project.designPhase}}</label>
+							<label style="margin-left: 50px; display: inline">总体：张三</label>
+							<label style="margin-left: 50px; display: inline">院总（审定）：刘备</label>
 
 						</nav>
 						<div class="ds-table-wrap" >
-							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
-								<el-table-column type="selection" width="55"></el-table-column>
-								<!--<el-table-column label="序号" width="60" type="index">-->
-								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
-								<!--</el-table-column>-->
-								<el-table-column label="项目名称">
-									<template slot-scope="scope"><a  target="_blank">{{ scope.row.projectName }} </a></template>
-								</el-table-column>
-								<el-table-column label="设计阶段">
-									<template slot-scope="scope"><span>{{ scope.row.designPhase }}</span></template>
-								</el-table-column>
-								<el-table-column label="开始时间">
-									<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
-								</el-table-column>
-								<el-table-column  label="截止时间">
-									<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
-								</el-table-column>
-								<el-table-column  label="剩余天数">
-									<template slot-scope="scope"><span>{{ scope.row.leftTime }}</span></template>
-								</el-table-column>
-								<el-table-column  label="目前进度">
-									<template slot-scope="scope"><span>{{ scope.row.currentProcess }}</span></template>
-								</el-table-column>
-								<el-table-column  label="紧急程度">
-									<template slot-scope="scope"><span>{{ scope.row.emergencyLevel }}</span></template>
-								</el-table-column>
-								<el-table-column label="操作" min-width="100">
-									<template slot-scope="scope">
-										<el-button class="btn-line btn-0 cur" size="mini"><a th:href="@{/project/1}">编辑</a></el-button>
-										<el-button class="btn-line btn-0" size="mini">删除</el-button>
-									</template>
-								</el-table-column>
-							</el-table>
-							<el-pagination class="txtCenter"
-										   @size-change="handleSizeChange"
-										   @current-change="handleCurrentChange"
-										   :current-page.sync="currentPage"
-										   :page-sizes="[10,20,30,50]"
-										   :page-size="100"
-										   layout=" sizes, prev, pager, next"
-										   :total="1000">
-							</el-pagination>
+
+
+
 						</div>
 					</el-scrollbar>
 				</div>
@@ -128,7 +94,14 @@
 							dialogFormVisible: false,
 							currentPage: 1,
 							tableData: null,
-							searchKey: null
+							searchKey: null,
+							project: {
+								projectNum: "XM-20190101A",
+								projectName: "马东铁路",
+								designPhase: "设计",
+							},
+							isActive: true,
+							projectClass1: ""
 						},
 					methods: {
 						handleSizeChange(val) {
@@ -137,26 +110,34 @@
 						handleCurrentChange(val) {
 							console.log(`当前页: ${val}`);
 						},
-						searchClick :function () {
-							var ajaxData = {}
-							ajaxData.projectName = encodeURI(app.searchKey);
-							console.log(ajaxData)
-							var type = "GET"
-							var url = "project/findByProjectName"
-							sendAjax(ajaxData, type, url)
-						}
 					}
 
 				})
 
 				var ajaxData = {}
+				ajaxData.projectId = 1
 				$.ajax({
 					data: ajaxData,
 					type: "GET",
-					url: "project/findAll",
+					url: "profession/findByProjectId/",
 					success: function (result) {
 						if(result.code == 200){
 							app.$data.tableData=result.data
+						}else{
+							console.log("返回值失败")
+						}
+
+					}
+				})
+
+
+				$.ajax({
+					data: null,
+					type: "GET",
+					url: "project/" + ajaxData.projectId,
+					success: function (result) {
+						if(result.code == 200){
+							app.$data.project=result.data
 						}else{
 							console.log("返回值失败")
 						}

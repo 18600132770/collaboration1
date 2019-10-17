@@ -16,6 +16,7 @@ import java.util.List;
 public class Project {
 
     private Integer id;
+    private String projectNum;//项目编号
     private String projectName;//项目名称
     private String designPhase;//设计阶段
     private Date startTime;//开始时间
