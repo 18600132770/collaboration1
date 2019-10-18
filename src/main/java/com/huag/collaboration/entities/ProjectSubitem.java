@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProjectSubitem {
 
-    private Integer id;
+    private String id;
     private String professionalSubOption;//专业分项
     private String taskLevel;
     private String startTime;
@@ -24,7 +24,7 @@ public class ProjectSubitem {
     private Integer user_id;
     private String deltag;
 
-    private Integer projectId;//项目id
+    private String projectId;//项目id
 
 //    private Project project;
 

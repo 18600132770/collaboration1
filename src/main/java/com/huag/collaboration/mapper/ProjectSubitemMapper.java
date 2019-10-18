@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface ProjectSubitemMapper {
 
-    public List<ProjectSubitem> findByProjectId(Integer projectId);
-    public int deleteById(Integer id);
-    public ProjectSubitem findById(Integer id);
+    public List<ProjectSubitem> findByProjectId(String projectId);
+    public int deleteById(String id);
+    public ProjectSubitem findById(String id);
     public int insert(ProjectSubitem projectSubitem);
 
 }

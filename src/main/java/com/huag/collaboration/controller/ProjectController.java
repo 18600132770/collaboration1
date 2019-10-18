@@ -3,9 +3,12 @@ package com.huag.collaboration.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.ProjectSubitem;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.ProjectSubitemMapper;
+import com.huag.collaboration.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author huag
@@ -80,7 +85,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("project/{id}")
-    public String deleteProject(@PathVariable("id") Integer id){
+    public String deleteProject(@PathVariable("id") String id){
         projectMapper.deleteById(id);
         return "redirect:/projects";
     }
@@ -95,7 +100,7 @@ public class ProjectController {
     public BaseResponse<Project> findByProjectId(HttpServletRequest request){
         BaseResponse<Project> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));
-        Project project = projectMapper.findById(Integer.valueOf(projectId));
+        Project project = projectMapper.findById(projectId);
         result.code = 200;
         result.setData(project);
         return result;
@@ -114,8 +119,8 @@ public class ProjectController {
         List<Project> projects = projectMapper.findAll();
         projects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
-                long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
-                project.setLeftTime(timeLength/1000/60/60/24 + "");
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
             }
         });
         System.out.println(projects);
@@ -135,11 +140,16 @@ public class ProjectController {
         BaseResponse<List<Project>> result = new BaseResponse<>();
         String projectName = String.valueOf(request.getParameter("projectName"));
         projectName = URLDecoder.decode(projectName, "UTF-8");
-        List<Project> projects = projectMapper.findByProjectName(projectName);
+        List<Project> projects = new ArrayList<>();
+        if(StringUtils.isNotBlank(projectName)){
+            projects = projectMapper.findByProjectName(projectName);
+        }else{
+            projects = projectMapper.findAll();
+        }
         projects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
-                long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
-                project.setLeftTime(timeLength/1000/60/60/24 + "");
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
             }
         });
         System.out.println(projects);
@@ -155,13 +165,29 @@ public class ProjectController {
      */
     @ResponseBody
     @RequestMapping(value = "/project/save")
-    public BaseResponse<List<Project>> save(HttpServletRequest request) throws Exception{
-        BaseResponse<List<Project>> result = new BaseResponse<>();
+    public BaseResponse<Project> save(HttpServletRequest request) throws Exception{
+        BaseResponse<Project> result = new BaseResponse<>();
         String projectStr = URLDecoder.decode(String.valueOf(request.getParameter("project")), "UTF-8");
         Project project = JSONObject.toJavaObject(JSON.parseObject(projectStr), Project.class);
-        System.out.println(project);
+        if(project.getId() == null || "".equals(project.getId())){
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            project.setId(uuid);
+            projectMapper.insert(project);
+        }else{
+            projectMapper.update(project);
+        }
         result.code = 200;
-        result.setData(null);
+        result.setData(project);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/project/delete")
+    public BaseResponse<List<Project>> delete(HttpServletRequest request) throws Exception{
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        projectMapper.deleteById(id);
+        result.code = 200;
         return result;
     }
 

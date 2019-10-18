@@ -54,7 +54,7 @@
 
 							<div class="select-group">
 								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
-								<el-button class="select-btn" @click="searchClick">查找</el-button>
+								<el-button class="select-btn" @click="searchClick" >查找</el-button>
 							</div>
 
 						</nav>
@@ -88,7 +88,7 @@
 								<el-table-column label="操作" min-width="100">
 									<template slot-scope="scope">
 										<el-button class="btn-line btn-0 cur" size="mini"><a :href="'/crud/project/'+scope.row.id">编辑</a></el-button>
-										<el-button class="btn-line btn-0" size="mini">删除</el-button>
+										<el-button class="btn-line btn-0" size="mini" @click="deleteProjectClick(scope.row.id)">删除</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -139,12 +139,24 @@
 							console.log(`当前页: ${val}`);
 						},
 						searchClick :function () {
+							findProjectBySearchKeyWord()
+						},
+						deleteProjectClick: function (projectId) {
 							var ajaxData = {}
-							ajaxData.projectName = encodeURI(app.searchKey);
-							console.log(ajaxData)
-							var type = "GET"
-							var url = "project/findByProjectName"
-							sendAjax(ajaxData, type, url)
+							ajaxData.id = projectId
+							$.ajax({
+								data: ajaxData,
+								type: "GET",
+								url: "project/delete",
+								success: function (result) {
+									if(result.code == 200){
+										findProjectBySearchKeyWord()
+									}else{
+										console.log("返回值失败")
+									}
+
+								}
+							})
 						}
 					}
 
@@ -164,6 +176,18 @@
 
 					}
 				})
+
+				function findProjectBySearchKeyWord(){
+					var ajaxData = {}
+					if(app.searchKey != null){
+						ajaxData.projectName = encodeURI(app.searchKey);
+					}else{
+						ajaxData.projectName = encodeURI("");
+					}
+					var type = "GET"
+					var url = "project/findByProjectName"
+					sendAjax(ajaxData, type, url)
+				}
 
 				function sendAjax(ajaxData, type, url) {
 					$.ajax({

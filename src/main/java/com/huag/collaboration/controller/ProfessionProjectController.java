@@ -46,7 +46,7 @@ public class ProfessionProjectController {
         BaseResponse<List<ProfessionProject>> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));
         projectId = URLDecoder.decode(projectId, "UTF-8");
-        List<ProfessionProject> professionProjectList = professionProjectMapper.findByProjectId(Integer.valueOf(projectId));
+        List<ProfessionProject> professionProjectList = professionProjectMapper.findByProjectId(projectId);
         System.out.println(professionProjectList);
         result.code = 200;
         result.setData(professionProjectList);

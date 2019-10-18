@@ -17,8 +17,8 @@
     </select>
 
     <insert id="insert">
-        INSERT INTO projectSubitem(professionalSubOption, taskLevel, startTime, stopTime, currentProcess, totalWorkload, user_id, deltag, projectId)
-         VALUES (#{professionalSubOption}, #{taskLevel}, #{startTime}, #{stopTime}, #{currentProcess}, #{totalWorkload}, #{user_id}, #{deltag}, #{projectId})
+        INSERT INTO projectSubitem(id, professionalSubOption, taskLevel, startTime, stopTime, currentProcess, totalWorkload, user_id, deltag, projectId)
+         VALUES (#{id}, #{professionalSubOption}, #{taskLevel}, #{startTime}, #{stopTime}, #{currentProcess}, #{totalWorkload}, #{user_id}, #{deltag}, #{projectId})
     </insert>
 
 

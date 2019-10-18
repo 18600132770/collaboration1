@@ -58,8 +58,8 @@
     </insert>
 
     <insert id="insert">
-        INSERT INTO project(projectNum, projectName, designPhase, startTime, stopTime, leftTime, currentProcess, emergencyLevel, deltag)
-         VALUES (#{projectNum}, #{projectName}, #{designPhase}, #{startTime}, #{stopTime}, #{leftTime}, #{currentProcess}, #{emergencyLevel}, #{deltag})
+        INSERT INTO project(id, projectNum, projectName, designPhase, startTime, stopTime, leftTime, currentProcess, emergencyLevel, deltag)
+         VALUES (#{id}, #{projectNum}, #{projectName}, #{designPhase}, #{startTime}, #{stopTime}, #{leftTime}, #{currentProcess}, #{emergencyLevel}, #{deltag})
     </insert>
 
     <insert id="update">

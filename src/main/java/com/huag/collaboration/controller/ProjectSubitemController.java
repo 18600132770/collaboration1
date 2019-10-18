@@ -28,12 +28,12 @@ public class ProjectSubitemController {
 
 
     @DeleteMapping("/project/projectSubitem/{id}")
-    public String deleteProjectSubitem(@PathVariable("id") Integer id, Model model){
+    public String deleteProjectSubitem(@PathVariable("id") String id, Model model){
         ProjectSubitem projectSubitem = projectSubitemMapper.findById(id);
 
         System.out.println("id: " + id);
 
-        Integer projectId = projectSubitem.getProjectId();
+        String projectId = projectSubitem.getProjectId();
 
         System.out.println("projectId: " + projectId);
 
@@ -51,7 +51,7 @@ public class ProjectSubitemController {
     @RequestMapping(value = "/project/projectSubitem/edit")
     public BaseResponse<ProjectSubitem> toEditPage(HttpServletRequest request){
         BaseResponse<ProjectSubitem> result = new BaseResponse<ProjectSubitem>();
-        Integer id = Integer.valueOf(request.getParameter("id"));
+        String id = String.valueOf(request.getParameter("id"));
         ProjectSubitem projectSubitem = projectSubitemMapper.findById(id);
         System.out.println(projectSubitem);
         result.code = 200;
@@ -76,10 +76,20 @@ public class ProjectSubitemController {
     public BaseResponse<List<ProjectSubitem>> findByProjectId(HttpServletRequest request){
         BaseResponse<List<ProjectSubitem>> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));
-        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(Integer.valueOf(projectId));
+        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(projectId);
         System.out.println(projectSubitemList);
         result.code = 200;
         result.setData(projectSubitemList);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/project/projectSubitem/delete")
+    public BaseResponse<List<ProjectSubitem>> delete(HttpServletRequest request){
+        BaseResponse<List<ProjectSubitem>> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        projectSubitemMapper.deleteById(id);
+        result.code = 200;
         return result;
     }
 

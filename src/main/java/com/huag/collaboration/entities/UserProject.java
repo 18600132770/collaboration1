@@ -15,7 +15,7 @@ import java.sql.Date;
 @AllArgsConstructor
 public class UserProject {
 
-    private Integer id;
+    private String id;
     private String username;
     private String state;
     private String projectName;//项目名称

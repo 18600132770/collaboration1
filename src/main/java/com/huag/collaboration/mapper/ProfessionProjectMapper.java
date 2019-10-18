@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface ProfessionProjectMapper {
 
-    public List<ProfessionProject> findByProjectId(Integer projectId);
+    public List<ProfessionProject> findByProjectId(String projectId);
 
 }

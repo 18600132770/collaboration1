@@ -39,8 +39,8 @@
 								<use xlink:href="#icon-hh2"></use>
 							</svg>
 							<ul class="manager-sec">
-								<li><a class="m-a cur" href="javascript:;">项目信息</a></li>
-								<li><a th:href="@{/userProjects}">人员信息</a></li>
+								<li><a class="m-a cur" th:href="@{/projects}">项目信息</a></li>
+								<li><a th:href="@{/userProjects}">人员项目信息</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -70,7 +70,7 @@
 							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
 								<el-table-column type="selection" width="55"></el-table-column>
 								<!--<el-table-column label="序号" width="60" type="index">-->
-								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
+								<!--<template slot-scope="scope"><span>{{ scope.row.id }}</span></template>-->
 								<!--</el-table-column>-->
 								<el-table-column label="专业分项">
 									<template slot-scope="scope"><a  target="_blank">{{ scope.row.professionalSubOption }} </a></template>
@@ -89,8 +89,8 @@
 								</el-table-column>
 								<el-table-column label="操作" min-width="100">
 									<template slot-scope="scope">
-										<el-button class="btn-line btn-0 cur" size="mini">编辑</el-button>
-										<el-button class="btn-line btn-0" size="mini">删除</el-button>
+										<el-button class="btn-line btn-0 cur" size="mini" @click="editProjectSubitemClick(scope.row.id)">编辑</el-button>
+										<el-button class="btn-line btn-0" size="mini" @click="deleteProjectSubitemClick(scope.row.id)">删除</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -202,61 +202,74 @@
 						console.log(ajaxData)
 						var type = "GET"
 						var url = "project/findByProjectName"
-						sendAjax(ajaxData, type, url)
+						sendAjaxForTableDate(ajaxData, type, url)
 					},
 					projectSaveClick: function () {
+						console.log("================")
+						console.log(app.project)
 						var ajaxData = {}
 						ajaxData.project = encodeURI(JSON.stringify(app.project))
 						var type = "GET"
 						var url = "save"
-						sendAjax(ajaxData, type, url)
+						$.ajax({
+							data: ajaxData,
+							type: type,
+							url: url,
+							success: function (result) {
+								if(result.code == 200){
+									if(type == "GET"){
+										console.log(result.data.id)
+										projectId = result.data.id
+									}
+								}else{
+									console.log("返回值失败")
+								}
+
+							}
+						})
+					},
+					editProjectSubitemClick: function (projectSubitemId) {
+						console.log(projectSubitemId)
+					},
+					deleteProjectSubitemClick: function (projectSubitemId) {
+						var ajaxData = {}
+						ajaxData.id = projectSubitemId
+						$.ajax({
+							data: ajaxData,
+							type: "GET",
+							url: "projectSubitem/delete",
+							success: function (result) {
+								if(result.code == 200){
+									var ajaxData = {}
+									ajaxData.projectId = projectId
+									sendAjaxForTableDate(ajaxData, "GET", "projectSubitem/findByProjectId")
+								}else{
+									console.log("返回值失败")
+								}
+
+							}
+						})
 					}
 				}
 
 			})
 
-			/**
-			 * 给表赋值
-			 * @type {{}}
-			 */
 			var ajaxData = {}
 			ajaxData.projectId = projectId
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "projectSubitem/findByProjectId",
-				success: function (result) {
-					if(result.code == 200){
-						app.$data.tableData=result.data
-					}else{
-						console.log("返回值失败")
-					}
+			sendAjaxForTableDate(ajaxData, "GET", "projectSubitem/findByProjectId")
 
-				}
-			})
-
-			/**
-			 * 项目信息
-			 * @type {{}}
-			 */
-			var ajaxData = {}
-			ajaxData.projectId = projectId
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "findByProjectId",
-				success: function (result) {
-					if(result.code == 200){
-						app.project=result.data
-					}else{
-						console.log("返回值失败")
-					}
-
-				}
-			})
+			findProjectByID(projectId)
 
 
-			function sendAjax(ajaxData, type, url) {
+			function findProjectByID(projectId){
+				var ajaxData = {}
+				ajaxData.projectId = projectId
+				var url = "findByProjectId"
+				var type = "GET"
+				sendAjaxForProject(ajaxData, type, url)
+			}
+
+			function sendAjaxForTableDate(ajaxData, type, url) {
 				$.ajax({
 					data: ajaxData,
 					type: type,
@@ -264,6 +277,34 @@
 					success: function (result) {
 						if(result.code == 200){
 							app.$data.tableData=result.data
+						}else{
+							console.log("返回值失败")
+						}
+
+					}
+				})
+			}
+
+			function sendAjaxForProject(ajaxData, type, url) {
+				$.ajax({
+					data: ajaxData,
+					type: type,
+					url: url,
+					success: function (result) {
+						if(result.code == 200){
+							if(type == "GET"){
+								if(result.data != null){
+									app.project=result.data
+								}else {
+									app.project = {
+										projectName: "",
+										designPhase: null,
+										startTime: null,
+										stopTime: null,
+									}
+
+								}
+							}
 						}else{
 							console.log("返回值失败")
 						}
