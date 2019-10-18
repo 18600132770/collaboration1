@@ -28,6 +28,8 @@
         <result column="leftTime" property="leftTime"/>
         <result column="currentProcess" property="currentProcess"/>
         <result column="emergencyLevel" property="emergencyLevel"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
         <result column="deltag" property="deltag"/>
     </resultMap>
 
@@ -54,18 +56,18 @@
     </select>
 
     <insert id="deleteById">
-        update project set deltag = 1 where id = #{id}
+        update project set deltag = 1, updateTime = now() where id = #{id}
     </insert>
 
     <insert id="insert">
-        INSERT INTO project(id, projectNum, projectName, designPhase, startTime, stopTime, leftTime, currentProcess, emergencyLevel, deltag)
-         VALUES (#{id}, #{projectNum}, #{projectName}, #{designPhase}, #{startTime}, #{stopTime}, #{leftTime}, #{currentProcess}, #{emergencyLevel}, #{deltag})
+        INSERT INTO project(id, projectNum, projectName, designPhase, startTime, stopTime, leftTime, currentProcess, emergencyLevel, createTime, updateTime, deltag)
+         VALUES (#{id}, #{projectNum}, #{projectName}, #{designPhase}, #{startTime}, #{stopTime}, #{leftTime}, #{currentProcess}, #{emergencyLevel}, now(), now(), #{deltag})
     </insert>
 
     <insert id="update">
         update project set projectNum = #{projectNum}, projectName = #{projectName}, designPhase = #{designPhase},
         startTime = #{startTime}, stopTime = #{stopTime}, leftTime = #{leftTime}, currentProcess = #{currentProcess},
-         emergencyLevel = #{emergencyLevel}, deltag = #{deltag} where id = #{id}
+         emergencyLevel = #{emergencyLevel}, deltag = #{deltag}, updateTime = now() where id = #{id}
     </insert>
 
 </mapper>

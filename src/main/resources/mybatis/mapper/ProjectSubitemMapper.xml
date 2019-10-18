@@ -9,7 +9,7 @@
     </select>
 
     <insert id="deleteById">
-        update projectSubitem set deltag = 1 where id = #{id}
+        update projectSubitem set deltag = 1, updateTime = now() where id = #{id}
     </insert>
 
     <select id="findById" resultType="com.huag.collaboration.entities.ProjectSubitem">
@@ -17,8 +17,8 @@
     </select>
 
     <insert id="insert">
-        INSERT INTO projectSubitem(id, professionalSubOption, taskLevel, startTime, stopTime, currentProcess, totalWorkload, user_id, deltag, projectId)
-         VALUES (#{id}, #{professionalSubOption}, #{taskLevel}, #{startTime}, #{stopTime}, #{currentProcess}, #{totalWorkload}, #{user_id}, #{deltag}, #{projectId})
+        INSERT INTO projectSubitem(id, professionalSubOption, taskLevel, startTime, stopTime, currentProcess, totalWorkload, user_id, createTime, updateTime, deltag, projectId)
+         VALUES (#{id}, #{professionalSubOption}, #{taskLevel}, #{startTime}, #{stopTime}, #{currentProcess}, #{totalWorkload}, #{user_id}, now(), now(), #{deltag}, #{projectId})
     </insert>
 
 

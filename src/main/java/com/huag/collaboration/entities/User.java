@@ -41,5 +41,7 @@ public class User {
     private Date graduateDate;//毕业时间
     private String major;//专业
     private String undertakeJobs;//可以承担的职务：设计、复核、审核、审定
+    private String createTime;
+    private String updateTime;
 
 }

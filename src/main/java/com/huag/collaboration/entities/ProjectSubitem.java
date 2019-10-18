@@ -23,7 +23,8 @@ public class ProjectSubitem {
     private String totalWorkload;//总工作量
     private Integer user_id;
     private String deltag;
-
+    private String createTime;
+    private String updateTime;
     private String projectId;//项目id
 
 //    private Project project;

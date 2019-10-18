@@ -16,6 +16,8 @@ public class ProfessionProject {
     private String departmentalValidation;//处审定
     private Integer projectId;//项目id
     private String remark;//备注
+    private String createTime;
+    private String updateTime;
     private String deltag;
 
 }

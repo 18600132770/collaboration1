@@ -27,6 +27,8 @@ public class UserProject {
     private String leftTime;//剩余时间 XX天hh小时
     private Integer currentProcess;//目前进度
     private Integer totalWork;//总工作量
+    private String createTime;
+    private String updateTime;
     private String deltag;//删除标志
 
 }
