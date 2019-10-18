@@ -41,14 +41,8 @@
 								<svg class="icon" aria-hidden="true">
 									<use xlink:href="#icon-hh2"></use>
 								</svg>
-								<ul class="manager-sec">
-									<li><a class="m-a cur" >马东铁路</a></li>
-									<li><a :class="''" >马东铁路</a></li>
-									<li><a >阿尔卑斯公路</a></li>
-									<li><a >埃菲尔铁塔</a></li>
-									<li><a >青藏高原</a></li>
-									<li><a >长江大桥</a></li>
-									<li><a >南京大桥</a></li>
+								<ul class="manager-sec" v-for="project, key in projects" :key="key">
+									<li @click="showProjectById(project.id)"><a :class="'m-a cur'" >{{project.projectName}}</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -125,6 +119,9 @@
 								projectName: "马东铁路",
 								designPhase: "设计",
 							},
+							projects:{
+
+							},
 							isActive: true,
 							projectClass1: "m-a cur"
 						},
@@ -134,6 +131,9 @@
 						},
 						handleCurrentChange(val) {
 							console.log(`当前页: ${val}`);
+						},
+						showProjectById: function(id){
+							console.log("应该显示 " + id)
 						},
 					}
 
@@ -185,6 +185,25 @@
 						}
 					})
 				}
+
+				/**
+				 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
+				 */
+				var ajaxData = {}
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "project/findAll",
+					success: function (result) {
+						if(result.code == 200){
+							app.projects=result.data
+
+						}else{
+							console.log("返回值失败")
+						}
+
+					}
+				})
 
 
 

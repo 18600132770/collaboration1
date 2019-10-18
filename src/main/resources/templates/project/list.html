@@ -80,7 +80,12 @@
 									<template slot-scope="scope"><span>{{ scope.row.leftTime }}</span></template>
 								</el-table-column>
 								<el-table-column  label="目前进度">
-									<template slot-scope="scope"><span>{{ scope.row.currentProcess }}</span></template>
+									<template slot-scope="scope">
+										<span>
+											<div class="progress">
+											  <div class="progress-bar" role="progressbar" :style="'width: '+ scope.row.currentProcess + '%;'" aria-valuenow="scope.row.currentProcess" aria-valuemin="0" aria-valuemax="100">{{ scope.row.currentProcess }}%</div>
+											</div>
+										</span></template>
 								</el-table-column>
 								<el-table-column  label="紧急程度">
 									<template slot-scope="scope"><span>{{ scope.row.emergencyLevel }}</span></template>
