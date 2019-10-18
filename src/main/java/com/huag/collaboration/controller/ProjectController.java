@@ -100,9 +100,11 @@ public class ProjectController {
     public BaseResponse<Project> findByProjectId(HttpServletRequest request){
         BaseResponse<Project> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));
-        Project project = projectMapper.findById(Integer.valueOf(projectId));
+        if(StringUtils.isNotBlank(projectId)){
+            Project project = projectMapper.findById(Integer.valueOf(projectId));
+            result.setData(project);
+        }
         result.code = 200;
-        result.setData(project);
         return result;
     }
 

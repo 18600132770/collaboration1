@@ -20,8 +20,8 @@ public class CollaborationApplicationTests {
     @Test
     public void contextLoads() {
         System.out.println("测试OK");
-        List<ProfessionProject> professionProjectList = professionProjectMapper.findByProjectId("1");
-        System.out.println(professionProjectList);
+//        List<ProfessionProject> professionProjectList = professionProjectMapper.findByProjectId(1);
+//        System.out.println(professionProjectList);
     }
 
 }
