@@ -15,7 +15,7 @@ import java.sql.Date;
 @AllArgsConstructor
 public class User {
 
-    private String id;
+    private Integer id;
     private String cardId;//员工编号
     private String name;
     private String nationality;//民族

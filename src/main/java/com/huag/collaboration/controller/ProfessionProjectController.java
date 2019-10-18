@@ -1,12 +1,8 @@
 package com.huag.collaboration.controller;
 
 import com.huag.collaboration.entities.ProfessionProject;
-import com.huag.collaboration.entities.Project;
-import com.huag.collaboration.entities.ProjectSubitem;
-import com.huag.collaboration.entities.UserProject;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfessionProjectMapper;
-import com.huag.collaboration.mapper.UserProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,7 +42,7 @@ public class ProfessionProjectController {
         BaseResponse<List<ProfessionProject>> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));
         projectId = URLDecoder.decode(projectId, "UTF-8");
-        List<ProfessionProject> professionProjectList = professionProjectMapper.findByProjectId(projectId);
+        List<ProfessionProject> professionProjectList = professionProjectMapper.findByProjectId(Integer.valueOf(projectId));
         System.out.println(professionProjectList);
         result.code = 200;
         result.setData(professionProjectList);

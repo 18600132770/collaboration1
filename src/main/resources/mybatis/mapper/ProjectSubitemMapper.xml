@@ -16,9 +16,9 @@
         SELECT * FROM projectSubitem where id = #{id} and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
 
-    <insert id="insert">
-        INSERT INTO projectSubitem(id, professionalSubOption, taskLevel, startTime, stopTime, currentProcess, totalWorkload, user_id, createTime, updateTime, deltag, projectId)
-         VALUES (#{id}, #{professionalSubOption}, #{taskLevel}, #{startTime}, #{stopTime}, #{currentProcess}, #{totalWorkload}, #{user_id}, now(), now(), #{deltag}, #{projectId})
+    <insert id="insert"  parameterType="com.huag.collaboration.entities.ProjectSubitem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO projectSubitem(professionalSubOption, taskLevel, startTime, stopTime, currentProcess, totalWorkload, userId, createTime, updateTime, deltag, projectId)
+         VALUES (#{professionalSubOption}, #{taskLevel}, #{startTime}, #{stopTime}, #{currentProcess}, #{totalWorkload}, #{userId}, now(), now(), #{deltag}, #{projectId})
     </insert>
 
 

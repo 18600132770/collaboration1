@@ -14,8 +14,8 @@ public interface ProjectMapper {
 
     public List<Project> findAll();
     public List<Project> findByProjectName(String projectName);
-    public Project findById(String id);
-    public int deleteById(String id);
+    public Project findById(Integer id);
+    public int deleteById(Integer id);
     public int insert(Project project);
     public int update(Project project);
     public List<Project> findAllIn(String[] array);

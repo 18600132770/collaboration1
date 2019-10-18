@@ -86,7 +86,7 @@ public class ProjectController {
 
     @DeleteMapping("project/{id}")
     public String deleteProject(@PathVariable("id") String id){
-        projectMapper.deleteById(id);
+        projectMapper.deleteById(Integer.valueOf(id));
         return "redirect:/projects";
     }
 
@@ -100,7 +100,7 @@ public class ProjectController {
     public BaseResponse<Project> findByProjectId(HttpServletRequest request){
         BaseResponse<Project> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));
-        Project project = projectMapper.findById(projectId);
+        Project project = projectMapper.findById(Integer.valueOf(projectId));
         result.code = 200;
         result.setData(project);
         return result;
@@ -170,8 +170,6 @@ public class ProjectController {
         String projectStr = URLDecoder.decode(String.valueOf(request.getParameter("project")), "UTF-8");
         Project project = JSONObject.toJavaObject(JSON.parseObject(projectStr), Project.class);
         if(project.getId() == null || "".equals(project.getId())){
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            project.setId(uuid);
             projectMapper.insert(project);
         }else{
             projectMapper.update(project);
@@ -186,7 +184,7 @@ public class ProjectController {
     public BaseResponse<List<Project>> delete(HttpServletRequest request) throws Exception{
         BaseResponse<List<Project>> result = new BaseResponse<>();
         String id = String.valueOf(request.getParameter("id"));
-        projectMapper.deleteById(id);
+        projectMapper.deleteById(Integer.valueOf(id));
         result.code = 200;
         return result;
     }

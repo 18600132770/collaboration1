@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class ProfessionProject {
 
-    private String id;
+    private Integer id;
     private String profession;//专业
     private String professionValidation;//专业审定
     private String departmentalValidation;//处审定

@@ -59,9 +59,9 @@
         update project set deltag = 1, updateTime = now() where id = #{id}
     </insert>
 
-    <insert id="insert">
-        INSERT INTO project(id, projectNum, projectName, designPhase, startTime, stopTime, leftTime, currentProcess, emergencyLevel, createTime, updateTime, deltag)
-         VALUES (#{id}, #{projectNum}, #{projectName}, #{designPhase}, #{startTime}, #{stopTime}, #{leftTime}, #{currentProcess}, #{emergencyLevel}, now(), now(), #{deltag})
+    <insert id="insert" parameterType="com.huag.collaboration.entities.Project" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO project(projectNum, projectName, designPhase, startTime, stopTime, leftTime, currentProcess, emergencyLevel, createTime, updateTime, deltag)
+         VALUES (#{projectNum}, #{projectName}, #{designPhase}, #{startTime}, #{stopTime}, #{leftTime}, #{currentProcess}, #{emergencyLevel}, now(), now(), #{deltag})
     </insert>
 
     <insert id="update">

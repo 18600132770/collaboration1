@@ -29,20 +29,15 @@ public class ProjectSubitemController {
 
     @DeleteMapping("/project/projectSubitem/{id}")
     public String deleteProjectSubitem(@PathVariable("id") String id, Model model){
-        ProjectSubitem projectSubitem = projectSubitemMapper.findById(id);
-
+        ProjectSubitem projectSubitem = projectSubitemMapper.findById(Integer.valueOf(id));
         System.out.println("id: " + id);
-
-        String projectId = projectSubitem.getProjectId();
-
+        Integer projectId = projectSubitem.getProjectId();
         System.out.println("projectId: " + projectId);
-
         Project project = projectMapper.findById(projectId);
         model.addAttribute("project", project);
-        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(projectId);
+        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(Integer.valueOf(projectId));
         model.addAttribute("projectSubitemList", projectSubitemList);
-
-        projectSubitemMapper.deleteById(id);
+        projectSubitemMapper.deleteById(Integer.valueOf(id));
         return "redirect:/project/add";
 //        return "project/add";
     }
@@ -52,7 +47,7 @@ public class ProjectSubitemController {
     public BaseResponse<ProjectSubitem> toEditPage(HttpServletRequest request){
         BaseResponse<ProjectSubitem> result = new BaseResponse<ProjectSubitem>();
         String id = String.valueOf(request.getParameter("id"));
-        ProjectSubitem projectSubitem = projectSubitemMapper.findById(id);
+        ProjectSubitem projectSubitem = projectSubitemMapper.findById(Integer.valueOf(id));
         System.out.println(projectSubitem);
         result.code = 200;
         result.setData(projectSubitem);
@@ -76,7 +71,7 @@ public class ProjectSubitemController {
     public BaseResponse<List<ProjectSubitem>> findByProjectId(HttpServletRequest request){
         BaseResponse<List<ProjectSubitem>> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));
-        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(projectId);
+        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(Integer.valueOf(projectId));
         System.out.println(projectSubitemList);
         result.code = 200;
         result.setData(projectSubitemList);
@@ -88,7 +83,7 @@ public class ProjectSubitemController {
     public BaseResponse<List<ProjectSubitem>> delete(HttpServletRequest request){
         BaseResponse<List<ProjectSubitem>> result = new BaseResponse<>();
         String id = String.valueOf(request.getParameter("id"));
-        projectSubitemMapper.deleteById(id);
+        projectSubitemMapper.deleteById(Integer.valueOf(id));
         result.code = 200;
         return result;
     }

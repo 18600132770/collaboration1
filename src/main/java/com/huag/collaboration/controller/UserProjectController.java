@@ -4,6 +4,7 @@ import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.UserProject;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.UserProjectMapper;
+import com.huag.collaboration.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,8 +48,8 @@ public class UserProjectController {
         List<UserProject> userProjects = userProjectMapper.findAll();
         userProjects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
-                long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
-                project.setLeftTime(timeLength/1000/60/60/24 + "");
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
             }
         });
         System.out.println(userProjects);
@@ -71,8 +72,8 @@ public class UserProjectController {
         List<UserProject> userProjects = userProjectMapper.findByUsername(username);
         userProjects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
-                long timeLength = project.getStopTime().getTime() - project.getStartTime().getTime();
-                project.setLeftTime(timeLength/1000/60/60/24 + "");
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
             }
         });
         System.out.println(userProjects);

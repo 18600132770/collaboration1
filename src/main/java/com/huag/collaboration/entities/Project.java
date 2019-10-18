@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.util.List;
-
 /**
  * 项目信息
  * @author huag
@@ -17,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor//生成一个包含所有变量,同时如果变量使用了NotNull annotation,会进行是否为空的构造方法
 public class Project {
 
-    private String id;
+    private Integer id;
     private String projectNum;//项目编号
     private String projectName;//项目名称
     private String designPhase;//设计阶段
