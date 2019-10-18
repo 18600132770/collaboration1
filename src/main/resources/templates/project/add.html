@@ -19,7 +19,7 @@
 </head>
 
 <body>
-	<div id="flw">
+	<div id="app">
 
 		<div id="appheader">
 			<div class="top">
@@ -29,7 +29,7 @@
 			</div>
 		</div>
 
-		<div id="app" >
+		<div  >
 			<div class="dsource-wrap" style="margin-top: 5px">
 				<!-- 左侧  -->
 				<el-scrollbar class="dictionary-l">
@@ -40,7 +40,7 @@
 							</svg>
 							<ul class="manager-sec">
 								<li><a class="m-a cur" href="javascript:;">项目信息</a></li>
-								<li><a href="dictionaryManage.html">人员信息</a></li>
+								<li><a th:href="@{/userProjects}">人员信息</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -49,18 +49,18 @@
 				<el-scrollbar class="dsource-r">
 					<div class="form-group">
 						<label style="display: inline">项目名称：</label>
-						<input name="projectName" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.projectName}">
+						<input type="text" class="form-control" style="width: 200px; display: inline" placeholder=""  v-model="project.projectName">
 
 						<label style="margin-left: 50px; display: inline">设计阶段：</label>
-						<input name="designPhase" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.designPhase}">
+						<input type="text" class="form-control" style="width: 200px; display: inline" placeholder=""  v-model="project.designPhase">
 
 						<label style="margin-left: 50px; display: inline">开始时间：</label>
-						<input name="startTime" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.startTime}">
+						<input type="text" class="form-control" style="width: 200px; display: inline" placeholder=""  v-model="project.startTime">
 
 						<label style="margin-left: 50px; display: inline">结束时间：</label>
-						<input name="stopTime" type="text" class="form-control" style="width: 200px; display: inline" placeholder="" th:value="${project!=null}?${project.stopTime}">
+						<input type="text" class="form-control" style="width: 200px; display: inline" placeholder=""  v-model="project.stopTime">
 
-						<button type="submit" class="btn btn-primary" th:text="${project!=null}?'修改':'添加'" style="margin-left: 200px" id="bt_addClick">添加</button>
+						<button  class="btn btn-primary"  style="margin-left: 200px" @click="projectSaveClick">保存</button>
 					</div>
 
 					<button type="button" class="btn btn-sm alert-info" data-toggle="modal" data-target="#projectSubitemEditModel">添加</button>
@@ -101,7 +101,7 @@
 										   :page-sizes="[10,20,30,50]"
 										   :page-size="100"
 										   layout=" sizes, prev, pager, next"
-										   :total="1000">
+										   :total="1">
 							</el-pagination>
 						</div>
 					</div>
@@ -170,7 +170,10 @@
 			feather.replace()
 		</script>
 
-		<script type="text/javascript">
+		<script th:inline="javascript" type="text/javascript">
+
+			var projectId =[[ ${projectId}]]
+			console.log(projectId)
 
 			var app = new Vue({
 				el: '#app',
@@ -178,7 +181,13 @@
 					dialogFormVisible: false,
 					currentPage: 1,
 					tableData: null,
-					searchKey: null
+					searchKey: null,
+					project: {
+						projectName: "",
+						designPhase: null,
+						startTime: null,
+						stopTime: null,
+					},
 				},
 				methods: {
 					handleSizeChange(val) {
@@ -194,16 +203,28 @@
 						var type = "GET"
 						var url = "project/findByProjectName"
 						sendAjax(ajaxData, type, url)
+					},
+					projectSaveClick: function () {
+						var ajaxData = {}
+						ajaxData.project = encodeURI(JSON.stringify(app.project))
+						var type = "GET"
+						var url = "save"
+						sendAjax(ajaxData, type, url)
 					}
 				}
 
 			})
 
+			/**
+			 * 给表赋值
+			 * @type {{}}
+			 */
 			var ajaxData = {}
+			ajaxData.projectId = projectId
 			$.ajax({
 				data: ajaxData,
 				type: "GET",
-				url: "project/findAll",
+				url: "projectSubitem/findByProjectId",
 				success: function (result) {
 					if(result.code == 200){
 						app.$data.tableData=result.data
@@ -213,6 +234,27 @@
 
 				}
 			})
+
+			/**
+			 * 项目信息
+			 * @type {{}}
+			 */
+			var ajaxData = {}
+			ajaxData.projectId = projectId
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "findByProjectId",
+				success: function (result) {
+					if(result.code == 200){
+						app.project=result.data
+					}else{
+						console.log("返回值失败")
+					}
+
+				}
+			})
+
 
 			function sendAjax(ajaxData, type, url) {
 				$.ajax({
@@ -234,40 +276,6 @@
 
 		</script>
 
-	<script type="text/javascript">
-		$("#bt_addClick").click(function(){
-			alert(1)
-		});
-		$("#id_editProjectSubitemButton").click(function(){
-			console.log(this.text)
-
-			var ajaxData = {}
-			ajaxData.id = 1;
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "projectSubitem/edit",
-				success: function (result) {
-					if(result.code == 200){
-						console.log(result.data)
-						var editProjectSubitem = result.data;
-						document.getElementById("id_projectSubitem_professionalSubOption").value = editProjectSubitem.professionalSubOption
-						document.getElementById("id_projectSubitem_taskLevel").value = editProjectSubitem.taskLevel
-						document.getElementById("id_projectSubitem_startTime").value = editProjectSubitem.startTime
-						document.getElementById("id_projectSubitem_stopTime").value = editProjectSubitem.stopTime
-						document.getElementById("id_projectSubitem_currentProcess").value = editProjectSubitem.currentProcess
-					}else{
-						console.log("返回值失败")
-					}
-
-				}
-			})
-		});
-
-
-
-
-	</script>
 
 	</body>
 

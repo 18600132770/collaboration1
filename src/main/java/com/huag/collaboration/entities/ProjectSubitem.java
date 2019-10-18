@@ -1,6 +1,8 @@
 package com.huag.collaboration.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 项目分项
@@ -8,6 +10,8 @@ import lombok.Data;
  * @date 2019/9/29 9:41
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectSubitem {
 
     private Integer id;

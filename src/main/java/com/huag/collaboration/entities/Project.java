@@ -2,6 +2,7 @@ package com.huag.collaboration.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.util.List;
@@ -12,7 +13,8 @@ import java.util.List;
  * @date 2019/9/26 16:55
  */
 @Data
-@AllArgsConstructor
+@NoArgsConstructor//生成一个无参数的构造方法
+@AllArgsConstructor//生成一个包含所有变量,同时如果变量使用了NotNull annotation,会进行是否为空的构造方法
 public class Project {
 
     private Integer id;

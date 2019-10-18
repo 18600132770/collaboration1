@@ -66,6 +66,23 @@ public class ProjectSubitemController {
         return "redirect:/project/add";
     }
 
+    /**
+     * ajax请求findByProjectId
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/projectSubitem/findByProjectId")
+    public BaseResponse<List<ProjectSubitem>> findByProjectId(HttpServletRequest request){
+        BaseResponse<List<ProjectSubitem>> result = new BaseResponse<>();
+        String projectId = String.valueOf(request.getParameter("projectId"));
+        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(Integer.valueOf(projectId));
+        System.out.println(projectSubitemList);
+        result.code = 200;
+        result.setData(projectSubitemList);
+        return result;
+    }
+
 
 
 }

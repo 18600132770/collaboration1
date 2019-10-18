@@ -1,6 +1,8 @@
 package com.huag.collaboration.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
@@ -9,6 +11,8 @@ import java.sql.Date;
  * @date 2019/9/27 16:34
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     private Integer id;

@@ -1,7 +1,8 @@
 package com.huag.collaboration.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Project;
-import com.huag.collaboration.entities.ProjectSubitem;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.ProjectSubitemMapper;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
-import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -67,12 +66,16 @@ public class ProjectController {
      * @param model
      * @return
      */
+//    @ModelAttribute("model")
     @GetMapping("/project/{id}")
     public String toEditProject(@PathVariable("id") Integer id, Model model){
-        Project project = projectMapper.findById(id);
-        model.addAttribute("project", project);
-        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(id);
-        model.addAttribute("projectSubitemList", projectSubitemList);
+//        Project project = projectMapper.findById(id);
+//        model.addAttribute("project", project);
+//        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(id);
+//        System.out.println(projectSubitemList);
+//        model.addAttribute("projectSubitemList", projectSubitemList);
+        model.addAttribute("projectId", id);
+
         return "project/add";
     }
 
@@ -80,6 +83,22 @@ public class ProjectController {
     public String deleteProject(@PathVariable("id") Integer id){
         projectMapper.deleteById(id);
         return "redirect:/projects";
+    }
+
+    /**
+     * ajax请求findByProjectId
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/findByProjectId")
+    public BaseResponse<Project> findByProjectId(HttpServletRequest request){
+        BaseResponse<Project> result = new BaseResponse<>();
+        String projectId = String.valueOf(request.getParameter("projectId"));
+        Project project = projectMapper.findById(Integer.valueOf(projectId));
+        result.code = 200;
+        result.setData(project);
+        return result;
     }
 
     /**
@@ -126,6 +145,23 @@ public class ProjectController {
         System.out.println(projects);
         result.code = 200;
         result.setData(projects);
+        return result;
+    }
+
+    /**
+     * 修改或保存
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/save")
+    public BaseResponse<List<Project>> save(HttpServletRequest request) throws Exception{
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String projectStr = URLDecoder.decode(String.valueOf(request.getParameter("project")), "UTF-8");
+        Project project = JSONObject.toJavaObject(JSON.parseObject(projectStr), Project.class);
+        System.out.println(project);
+        result.code = 200;
+        result.setData(null);
         return result;
     }
 

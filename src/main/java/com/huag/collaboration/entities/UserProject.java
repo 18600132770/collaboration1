@@ -2,6 +2,7 @@ package com.huag.collaboration.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
@@ -10,6 +11,7 @@ import java.sql.Date;
  * @date 2019/10/16 22:49
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class UserProject {
 
