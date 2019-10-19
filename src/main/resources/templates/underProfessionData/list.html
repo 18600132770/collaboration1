@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml"
+	  xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>中国知网大数据融合应用平台</title>
+
+		<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+		<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
+		<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
+		<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
+		<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
+		<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
+	</head>
+
+	<body>
+		<div id="flw">
+
+			<div id="appheader">
+				<div class="top">
+					<a  th:href="@{/redirectToMain}">
+						<h1  style="color: #ffffff; margin-left: 10px; margin-top: 20px" class="top-t" >中国知网大数据融合应用平台</h1>
+					</a>
+				</div>
+			</div>
+
+
+
+			<div id="app">
+				<div class="dsource-wrap" style="margin-top: 5px">
+					<!-- 左侧  -->
+					<el-scrollbar class="dictionary-l">
+						<ul class="manager-nav dictionary-nav">
+							<li class="m-a">
+								<svg class="icon" aria-hidden="true">
+									<use xlink:href="#icon-hh2"></use>
+								</svg>
+								<!--<ul class="manager-sec" v-for="project, key in projects" :key="key">-->
+									<!--<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>-->
+								<!--</ul>-->
+							</li>
+						</ul>
+					</el-scrollbar>
+
+					<el-scrollbar class="dsource-r">
+						<nav class="navbar navbar-light bg-light">
+
+
+						</nav>
+						<div class="ds-table-wrap" >
+							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
+								<el-table-column type="selection" width="55"></el-table-column>
+								<!--<el-table-column label="序号" width="60" type="index">-->
+								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
+								<!--</el-table-column>-->
+								<el-table-column label="序号">
+									<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>
+								</el-table-column>
+								<el-table-column label="所需内容">
+									<template slot-scope="scope"><span>{{ scope.row.neededContent }}</span></template>
+								</el-table-column>
+								<el-table-column  label="提的文件名">
+									<template slot-scope="scope">
+										<el-upload
+												class="upload-demo"
+												action="https://jsonplaceholder.typicode.com/posts/"
+												multiple>
+											<el-button type="primary">选择文件</el-button>
+										</el-upload>
+									</template>
+								</el-table-column>
+								<el-table-column  label="上传日期">
+									<template slot-scope="scope"><span>{{ scope.row.uploadDate }}</span></template>
+								</el-table-column>
+								<el-table-column  label="技表日期">
+									<template slot-scope="scope"><span>{{ scope.row.checkDate }}</span></template>
+								</el-table-column>
+								<el-table-column  label="下序专业">
+									<template slot-scope="scope">
+										<el-select v-model="statestype" placeholder="请选择">
+											<el-option v-for="item in statestypeoptions" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</template>
+								</el-table-column>
+								<el-table-column  label="发送">
+									<template slot-scope="scope">
+										<button type="button" class="btn btn-danger">退回</button>
+									</template>
+								</el-table-column>
+								<el-table-column  label="备注">
+									<template slot-scope="scope"><span>{{ scope.row.remark }}</span></template>
+								</el-table-column>
+							</el-table>
+							<el-pagination class="txtCenter"
+										   @size-change="handleSizeChange"
+										   @current-change="handleCurrentChange"
+										   :current-page.sync="currentPage"
+										   :page-sizes="[10,20,30,50]"
+										   :page-size="100"
+										   layout=" sizes, prev, pager, next"
+										   :total="1000">
+							</el-pagination>
+						</div>
+					</el-scrollbar>
+				</div>
+			</div>
+
+			<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+			<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
+			<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+
+			<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+			<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
+			<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
+			<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
+
+
+			<script>
+				feather.replace()
+			</script>
+
+			<script type="text/javascript">
+
+				var app = new Vue({
+					el: '#app',
+					data: {
+							dialogFormVisible: false,
+							currentPage: 1,
+							tableData: null,
+							searchKey: null,
+							statestypeoptions:[{
+								value: '选项1',
+								label: '桥梁'
+							},{
+								value: '选项2',
+								label: '路基'
+							},{
+								value: '选项3',
+								label: '隧道'
+							},{
+								value: '选项3',
+								label: '机务'
+							}, {
+								value: '选项3',
+								label: '接触网'
+							}],
+							isActive: true,
+							projectClass1: "m-a cur"
+						},
+					methods: {
+						handleSizeChange(val) {
+							console.log(`每页 ${val} 条`);
+						},
+						handleCurrentChange(val) {
+							console.log(`当前页: ${val}`);
+						},
+					}
+
+				})
+
+				$.ajax({
+					data: null,
+					type: "GET",
+					url: "/crud/underProfessionData/findAll/",
+					success: function (result) {
+						if(result.code == 200){
+							app.$data.tableData=result.data
+						}else{
+							console.log("返回值失败 findByProjectId")
+						}
+
+					}
+				})
+
+
+
+			</script>
+		</div>
+	</body>
+</html>
