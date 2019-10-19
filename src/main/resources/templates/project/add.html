@@ -63,7 +63,7 @@
 						<button  class="btn btn-primary"  style="margin-left: 200px" @click="projectSaveClick">保存</button>
 					</div>
 
-					<button type="button" class="btn btn-sm alert-info" data-toggle="modal" data-target="#projectSubitemEditModel">添加</button>
+					<button type="button" class="btn btn-sm alert-info" data-toggle="modal"  @click="showModal">添加</button>
 
 					<div class="table-responsive" style="margin-top: 10px">
 						<div class="ds-table-wrap" >
@@ -109,52 +109,39 @@
 			</div>
 		</div>
 
+		<!-- Modal -->
+		<el-dialog title="导入" :visible.sync="dialogImportVisible" width="30%">
+			<div class="form-group">
+				<label>专业分项</label>
+				<input name="professionalSubOption" type="text" class="form-control" placeholder=""  v-model="professionalSubOptionModalInput">
+			</div>
+			<div class="form-group">
+				<label>任务级别</label>
+				<input name="taskLevel" type="text" class="form-control" placeholder="" v-model="taskLevelModalInput">
+			</div>
+			<div class="form-group">
+				<label>开始时间</label>
+				<input name="startTime" type="text" class="form-control" placeholder="" v-model="startTimeModalInput">
+			</div>
+			<div class="form-group">
+				<label>截止时间</label>
+				<input name="stopTime" type="text" class="form-control" placeholder="" v-model="stopTimeModalInput">
+			</div>
+			<div class="form-group">
+				<label>目前进度</label>
+				<input name="currentProcess" type="number" class="form-control" placeholder="" v-model="currentProcessModalInput">
+			</div>
+			<div class="modal-footer">
+				<button  class="btn btn-primary" @click="saveProjectSaveModal">保存</button>
+			</div>
+		</el-dialog>
+
+
 	</div>
 </body>
 
 
-		<!-- Modal -->
-		<div class="modal fade" id="projectSubitemEditModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<form th:action="@{/projectSubitem}" method="post">
-							<input type="hidden" name="_method" value="put" th:if="${editProjectSubitem!=null}"/>
-							<input type="hidden" name="id" id="id_projectSubitem_id" >
-							<div class="form-group">
-								<label>专业分项</label>
-								<input name="professionalSubOption" type="text" class="form-control" placeholder="" id="id_projectSubitem_professionalSubOption">
-							</div>
-							<div class="form-group">
-								<label>任务级别</label>
-								<input name="taskLevel" type="text" class="form-control" placeholder="" id="id_projectSubitem_taskLevel">
-							</div>
-							<div class="form-group">
-								<label>开始时间</label>
-								<input name="startTime" type="text" class="form-control" placeholder="" id="id_projectSubitem_startTime">
-							</div>
-							<div class="form-group">
-								<label>截止时间</label>
-								<input name="stopTime" type="text" class="form-control" placeholder="" id="id_projectSubitem_stopTime">
-							</div>
-							<div class="form-group">
-								<label>目前进度</label>
-								<input name="currentProcess" type="number" class="form-control" placeholder="" id="id_projectSubitem_currentProcess">
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn btn-primary" >保存</button>
-							</div>
-						</form>
-					</div>
 
-				</div>
-			</div>
-		</div>
 
 
 		<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
@@ -188,6 +175,12 @@
 						startTime: null,
 						stopTime: null,
 					},
+					professionalSubOptionModalInput: null,
+					taskLevelModalInput: null,
+					startTimeModalInput: null,
+					stopTimeModalInput: null,
+					currentProcessModalInput: null,
+					dialogImportVisible: false,
 				},
 				methods: {
 					handleSizeChange(val) {
@@ -250,7 +243,48 @@
 
 							}
 						})
+					},
+					saveProjectSaveModal:function(){
+						var projectSubitem = {}
+						projectSubitem.professionalSubOption = app.professionalSubOptionModalInput
+						projectSubitem.taskLevel = app.taskLevelModalInput
+						projectSubitem.startTime = app.startTimeModalInput
+						projectSubitem.stopTime = app.stopTimeModalInput
+						projectSubitem.currentProcess = app.currentProcessModalInput
+						projectSubitem.projectId = projectId
+						var ajaxData = {}
+						ajaxData.projectSubitem = encodeURI(JSON.stringify(projectSubitem))
+						var type = "GET"
+						var url = "/crud/project/projectSubitem/save"
+						$.ajax({
+							data: ajaxData,
+							type: type,
+							url: url,
+							success: function (result) {
+								if(result.code == 200){
+									if(type == "GET"){
+										//TODO
+										app.dialogImportVisible = false
+										var ajaxData = {}
+										ajaxData.projectId = projectId
+										sendAjaxForTableDate(ajaxData, "GET", "projectSubitem/findByProjectId")
+									}
+								}else{
+									console.log("返回值失败")
+								}
+
+							}
+						})
+					},
+					showModal: function () {
+						app.professionalSubOptionModalInput = null
+						app.taskLevelModalInput = null
+						app.startTimeModalInput = null
+						app.stopTimeModalInput = null
+						app.currentProcessModalInput = null
+						app.dialogImportVisible = true
 					}
+
 				}
 
 			})

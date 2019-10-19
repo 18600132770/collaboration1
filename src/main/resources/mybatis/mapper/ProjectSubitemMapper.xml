@@ -21,5 +21,11 @@
          VALUES (#{professionalSubOption}, #{taskLevel}, #{startTime}, #{stopTime}, #{currentProcess}, #{totalWorkload}, #{userId}, now(), now(), #{deltag}, #{projectId})
     </insert>
 
+    <insert id="update">
+        update projectSubitem set professionalSubOption = #{professionalSubOption}, taskLevel = #{taskLevel}, startTime = #{startTime},
+        stopTime = #{stopTime}, currentProcess = #{currentProcess}, totalWorkload = #{totalWorkload}, userId = #{userId},
+         deltag = #{deltag}, updateTime = now(), projectId = #{projectId} where id = #{id}
+    </insert>
+
 
 </mapper>

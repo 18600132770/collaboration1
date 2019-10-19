@@ -14,5 +14,6 @@ public interface ProjectSubitemMapper {
     public int deleteById(Integer id);
     public ProjectSubitem findById(Integer id);
     public int insert(ProjectSubitem projectSubitem);
+    public int update(ProjectSubitem projectSubitem);
 
 }

@@ -1,5 +1,7 @@
 package com.huag.collaboration.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectSubitem;
 import com.huag.collaboration.entities.query.BaseResponse;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -84,6 +87,27 @@ public class ProjectSubitemController {
         BaseResponse<List<ProjectSubitem>> result = new BaseResponse<>();
         String id = String.valueOf(request.getParameter("id"));
         projectSubitemMapper.deleteById(Integer.valueOf(id));
+        result.code = 200;
+        return result;
+    }
+
+    /**
+     * 修改或保存
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/projectSubitem/save")
+    public BaseResponse<ProjectSubitem> save(HttpServletRequest request) throws Exception{
+        BaseResponse<ProjectSubitem> result = new BaseResponse<>();
+        String projectStr = URLDecoder.decode(String.valueOf(request.getParameter("projectSubitem")), "UTF-8");
+        ProjectSubitem projectSubitem = JSONObject.toJavaObject(JSON.parseObject(projectStr), ProjectSubitem.class);
+        System.out.println(projectSubitem);
+        if(projectSubitem.getId() == null || "".equals(projectSubitem.getId())){
+            projectSubitemMapper.insert(projectSubitem);
+        }else{
+            projectSubitemMapper.update(projectSubitem);
+        }
         result.code = 200;
         return result;
     }
