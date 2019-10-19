@@ -110,7 +110,11 @@
 		</div>
 
 		<!-- Modal -->
-		<el-dialog title="导入" :visible.sync="dialogImportVisible" width="30%">
+		<el-dialog title="编辑" :visible.sync="dialogImportVisible" width="30%">
+			<div class="form-group" hidden="true">
+				<label>id</label>
+				<input name="id" type="text" class="form-control" placeholder=""  v-model="idModalInput">
+			</div>
 			<div class="form-group">
 				<label>专业分项</label>
 				<input name="professionalSubOption" type="text" class="form-control" placeholder=""  v-model="professionalSubOptionModalInput">
@@ -175,6 +179,7 @@
 						startTime: null,
 						stopTime: null,
 					},
+					idModalInput: null,
 					professionalSubOptionModalInput: null,
 					taskLevelModalInput: null,
 					startTimeModalInput: null,
@@ -224,6 +229,28 @@
 					},
 					editProjectSubitemClick: function (projectSubitemId) {
 						console.log(projectSubitemId)
+						//findProjectSubitemById
+						var ajaxData = {}
+						ajaxData.id = projectSubitemId
+						$.ajax({
+							data: ajaxData,
+							type: "GET",
+							url: "/crud/project/projectSubitem/findProjectSubitemById",
+							success: function (result) {
+								if(result.code == 200){
+									app.dialogImportVisible = true
+									app.idModalInput = result.data.id
+									app.professionalSubOptionModalInput = result.data.professionalSubOption
+									app.taskLevelModalInput = result.data.taskLevel
+									app.startTimeModalInput = result.data.startTime
+									app.stopTimeModalInput = result.data.stopTime
+									app.currentProcessModalInput = result.data.currentProcess
+								}else{
+									console.log("返回值失败")
+								}
+
+							}
+						})
 					},
 					deleteProjectSubitemClick: function (projectSubitemId) {
 						var ajaxData = {}
@@ -246,6 +273,7 @@
 					},
 					saveProjectSaveModal:function(){
 						var projectSubitem = {}
+						projectSubitem.id = app.idModalInput
 						projectSubitem.professionalSubOption = app.professionalSubOptionModalInput
 						projectSubitem.taskLevel = app.taskLevelModalInput
 						projectSubitem.startTime = app.startTimeModalInput

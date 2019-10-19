@@ -82,6 +82,18 @@ public class ProjectSubitemController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/project/projectSubitem/findProjectSubitemById")
+    public BaseResponse<ProjectSubitem> findProjectSubitemById(HttpServletRequest request){
+        BaseResponse<ProjectSubitem> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        ProjectSubitem projectSubitem = projectSubitemMapper.findById(Integer.valueOf(id));
+        System.out.println(projectSubitem);
+        result.code = 200;
+        result.setData(projectSubitem);
+        return result;
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/project/projectSubitem/delete")
     public BaseResponse<List<ProjectSubitem>> delete(HttpServletRequest request){
         BaseResponse<List<ProjectSubitem>> result = new BaseResponse<>();
