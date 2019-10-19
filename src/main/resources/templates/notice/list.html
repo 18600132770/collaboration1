@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>中国知网大数据融合应用平台</title>
+
+		<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+		<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
+		<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
+		<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
+		<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
+		<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
+	</head>
+
+	<body>
+		<div id="flw">
+
+			<div id="appheader">
+				<div class="top">
+					<a  th:href="@{/redirectToMain}">
+						<h1  style="color: #ffffff; margin-left: 10px; margin-top: 20px" class="top-t" >中国知网大数据融合应用平台</h1>
+					</a>
+				</div>
+			</div>
+
+
+
+			<div id="app">
+				<div class="dsource-wrap" style="margin-top: 5px">
+					<!-- 左侧  -->
+					<el-scrollbar class="dictionary-l">
+						<ul class="manager-nav dictionary-nav">
+							<li class="m-a">
+								<svg class="icon" aria-hidden="true">
+									<use xlink:href="#icon-hh2"></use>
+								</svg>
+								<ul class="manager-sec">
+									<li><a class="m-a cur" >添加1</a></li>
+									<li><a >添加1</a></li>
+								</ul>
+							</li>
+						</ul>
+					</el-scrollbar>
+
+					<el-scrollbar class="dsource-r">
+						<nav class="navbar navbar-light bg-light">
+
+						</nav>
+						<div class="ds-table-wrap" >
+							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
+								<el-table-column type="selection" width="55"></el-table-column>
+								<el-table-column label="序号" width="60" type="index">
+									<template slot-scope="scope"><span>{{ scope.row.id }}</span></template>
+								</el-table-column>
+								<el-table-column label="通知主题"  width="900" align="left">
+									<template slot-scope="scope">
+										<a  target="_blank" th:align="left">
+											<div>
+											{{ scope.row.topic }}
+											</div>
+										</a>
+									</template>
+								</el-table-column>
+								<el-table-column label="业务类型" width="150">
+									<template slot-scope="scope"><span>{{ scope.row.bussinessType }}</span></template>
+								</el-table-column>
+								<el-table-column label="创建人" width="150">
+									<template slot-scope="scope"><span>{{ scope.row.founder }}</span></template>
+								</el-table-column>
+								<el-table-column  label="创建时间" width="200">
+									<template slot-scope="scope"><span>{{ scope.row.createTime }}</span></template>
+								</el-table-column>
+							</el-table>
+							<el-pagination class="txtCenter"
+										   @size-change="handleSizeChange"
+										   @current-change="handleCurrentChange"
+										   :current-page.sync="currentPage"
+										   :page-sizes="[10,20,30,50]"
+										   :page-size="100"
+										   layout=" sizes, prev, pager, next"
+										   :total="1000">
+							</el-pagination>
+						</div>
+					</el-scrollbar>
+				</div>
+			</div>
+
+			<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+			<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
+			<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+
+			<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+			<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
+			<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
+			<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
+
+
+			<script>
+				feather.replace()
+			</script>
+
+			<script type="text/javascript">
+
+				var app = new Vue({
+					el: '#app',
+					data: {
+							dialogFormVisible: false,
+							currentPage: 1,
+							tableData: null,
+							searchKey: null,
+							myValue: 1
+						},
+					methods: {
+						handleSizeChange(val) {
+							console.log(`每页 ${val} 条`);
+						},
+						handleCurrentChange(val) {
+							console.log(`当前页: ${val}`);
+						},
+					}
+
+				})
+
+				var ajaxData = {}
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "notice/findAll",
+					success: function (result) {
+						if(result.code == 200){
+							app.$data.tableData=result.data
+						}else{
+							console.log("返回值失败")
+						}
+
+					}
+				})
+
+			</script>
+		</div>
+	</body>
+</html>

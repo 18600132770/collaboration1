@@ -41,9 +41,9 @@
 								<svg class="icon" aria-hidden="true">
 									<use xlink:href="#icon-hh2"></use>
 								</svg>
-								<ul class="manager-sec" v-for="project, key in projects" :key="key">
-									<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>
-								</ul>
+								<!--<ul class="manager-sec" v-for="project, key in projects" :key="key">-->
+									<!--<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>-->
+								<!--</ul>-->
 							</li>
 						</ul>
 					</el-scrollbar>
@@ -51,11 +51,6 @@
 					<el-scrollbar class="dsource-r">
 						<nav class="navbar navbar-light bg-light">
 
-							<label style="display: inline">项目编号：{{project.projectNum}}</label>
-							<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
-							<label style="margin-left: 50px; display: inline">项目阶段：{{project.designPhase}}</label>
-							<label style="margin-left: 50px; display: inline">总体：张三</label>
-							<label style="margin-left: 50px; display: inline">院总（审定）：刘备</label>
 
 						</nav>
 						<div class="ds-table-wrap" >
@@ -64,14 +59,36 @@
 								<!--<el-table-column label="序号" width="60" type="index">-->
 								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
 								<!--</el-table-column>-->
-								<el-table-column label="专业">
-									<template slot-scope="scope"><a target="_blank" th:href="@{/profession/1}">{{ scope.row.profession }} </a></template>
+								<el-table-column label="上序专业">
+									<template slot-scope="scope"><a target="_blank" th:href="@{/profession/1}">{{ scope.row.upperProfesson }} </a></template>
 								</el-table-column>
-								<el-table-column label="专业审定">
-									<template slot-scope="scope"><span>{{ scope.row.professionValidation }}</span></template>
+								<el-table-column label="序号">
+									<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>
 								</el-table-column>
-								<el-table-column label="处审定">
-									<template slot-scope="scope"><span>{{ scope.row.departmentalValidation }}</span></template>
+								<el-table-column label="所需内容">
+									<template slot-scope="scope"><span>{{ scope.row.neededContent }}</span></template>
+								</el-table-column>
+								<el-table-column  label="提的文件名">
+									<template slot-scope="scope"><span>{{ scope.row.fileName }}</span></template>
+								</el-table-column>
+								<el-table-column  label="上传日期">
+									<template slot-scope="scope"><span>{{ scope.row.uploadDate }}</span></template>
+								</el-table-column>
+								<el-table-column  label="技表日期">
+									<template slot-scope="scope"><span>{{ scope.row.checkDate }}</span></template>
+								</el-table-column>
+								<el-table-column  label="接收">
+									<template slot-scope="scope">
+										<button type="button" class="btn btn-info">接收</button>
+									</template>
+								</el-table-column>
+								<el-table-column  label="退回">
+									<template slot-scope="scope">
+										<button type="button" class="btn btn-danger">退回</button>
+									</template>
+								</el-table-column>
+								<el-table-column  label="退回意见">
+									<template slot-scope="scope"><span>{{ scope.row.returnOpinion }}</span></template>
 								</el-table-column>
 								<el-table-column  label="备注">
 									<template slot-scope="scope"><span>{{ scope.row.remark }}</span></template>
@@ -132,125 +149,19 @@
 						handleCurrentChange(val) {
 							console.log(`当前页: ${val}`);
 						},
-						showProjectById: function(id){
-							// console.log("应该显示 " + id)
-							var ajaxData = {}
-							ajaxData.projectId = id
-							$.ajax({
-								data: ajaxData,
-								type: "GET",
-								url: "profession/findByProjectId/",
-								success: function (result) {
-									if(result.code == 200){
-										app.$data.tableData=result.data
-									}else{
-										console.log("返回值失败")
-									}
-
-								}
-							})
-
-							//更改li颜色
-							var myProjects = app.projects
-							for(var i = 0; i < myProjects.length; i++){
-								if(i == (id-1)){
-									myProjects[i].deltag = 'm-a cur'
-								}else{
-									myProjects[i].deltag = ''
-								}
-							}
-							app.projects = myProjects
-
-							//查询项目信息，更新表头
-							$.ajax({
-								data: ajaxData,
-								type: "GET",
-								url: "project/findByProjectId/",
-								success: function (result) {
-									if(result.code == 200){
-										app.$data.project=result.data
-									}else{
-										console.log("返回值失败 project/projectId")
-									}
-
-								}
-							})
-
-
-						},
 					}
 
 				})
 
-				var ajaxData = {}
-				ajaxData.projectId = 1
 				$.ajax({
-					data: ajaxData,
+					data: null,
 					type: "GET",
-					url: "profession/findByProjectId/",
+					url: "/crud/upperProfessionData/findAll/",
 					success: function (result) {
 						if(result.code == 200){
 							app.$data.tableData=result.data
 						}else{
 							console.log("返回值失败 findByProjectId")
-						}
-
-					}
-				})
-
-
-				$.ajax({
-					data: ajaxData,
-					type: "GET",
-					url: "project/findByProjectId/",
-					success: function (result) {
-						if(result.code == 200){
-							app.$data.project=result.data
-						}else{
-							console.log("返回值失败 project/projectId")
-						}
-
-					}
-				})
-
-				function sendAjax(ajaxData, type, url) {
-					$.ajax({
-						data: ajaxData,
-						type: type,
-						url: url,
-						success: function (result) {
-							if(result.code == 200){
-								app.$data.tableData=result.data
-							}else{
-								console.log("返回值失败 sendAjax")
-							}
-
-						}
-					})
-				}
-
-				/**
-				 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
-				 */
-				var ajaxData = {}
-				$.ajax({
-					data: ajaxData,
-					type: "GET",
-					url: "project/findAll",
-					success: function (result) {
-						if(result.code == 200){
-							var projectsLiShow = result.data
-							for(var i = 0; i < projectsLiShow.length; i++){
-								if(i == 0){
-									projectsLiShow[i].deltag = 'm-a cur'
-								}else{
-									projectsLiShow[i].deltag = ''
-								}
-							}
-							app.projects=projectsLiShow
-
-						}else{
-							console.log("返回值失败")
 						}
 
 					}
