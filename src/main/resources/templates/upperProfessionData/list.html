@@ -51,6 +51,10 @@
 					<el-scrollbar class="dsource-r">
 						<nav class="navbar navbar-light bg-light">
 
+							<!--TODO 点击弹出Modal 可以提出我需要其他专业的资料 -->
+							<button type="button" class="btn btn-primary">添加</button>
+
+							<!--TODO tab 卡片 1、我收到的；2、我提出的-->
 
 						</nav>
 						<div class="ds-table-wrap" >
@@ -87,6 +91,8 @@
 										<button type="button" class="btn btn-danger">退回</button>
 									</template>
 								</el-table-column>
+
+								<!--TODO 弹出Modal 添加退回意见-->
 								<el-table-column  label="退回意见">
 									<template slot-scope="scope"><span>{{ scope.row.returnOpinion }}</span></template>
 								</el-table-column>

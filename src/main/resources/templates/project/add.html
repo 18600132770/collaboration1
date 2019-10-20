@@ -48,22 +48,28 @@
 
 				<el-scrollbar class="dsource-r">
 					<div class="form-group">
-						<label style="display: inline">项目名称：</label>
+						<label style="margin-left: 10px; display: inline">项目名称：</label>
 						<input type="text" class="form-control" style="width: 200px; display: inline" placeholder=""  v-model="project.projectName">
 
-						<label style="margin-left: 50px; display: inline">设计阶段：</label>
-						<input type="text" class="form-control" style="width: 200px; display: inline" placeholder=""  v-model="project.designPhase">
+						<label style="margin-left: 20px; display: inline">设计阶段：</label>
+						<input type="text" class="form-control" style="width: 150px; display: inline" placeholder=""  v-model="project.designPhase">
 
-						<label style="margin-left: 50px; display: inline">开始时间：</label>
-						<input type="text" class="form-control" style="width: 200px; display: inline" placeholder=""  v-model="project.startTime">
+						<label style="margin-left: 20px; display: inline">开始时间：</label>
+						<input type="text" class="form-control" style="width: 150px; display: inline" placeholder=""  v-model="project.startTime">
 
-						<label style="margin-left: 50px; display: inline">结束时间：</label>
-						<input type="text" class="form-control" style="width: 200px; display: inline" placeholder=""  v-model="project.stopTime">
+						<label style="margin-left: 20px; display: inline">结束时间：</label>
+						<input type="text" class="form-control" style="width: 150px; display: inline" placeholder=""  v-model="project.stopTime">
 
-						<button  class="btn btn-primary"  style="margin-left: 200px" @click="projectSaveClick">保存</button>
+						<label style="margin-left: 20px; display: inline">项目负责人：</label>
+						<input type="text" class="form-control" style="width: 150px; display: inline" placeholder=""  >
+
+						<label style="margin-left: 20px; display: inline">总工：</label>
+						<input type="text" class="form-control" style="width: 150px; display: inline" placeholder="" >
+
+						<button  class="btn btn-primary"  style="margin-left: 10px" @click="projectSaveClick">保存</button>
 					</div>
 
-					<button type="button" class="btn btn-sm alert-info" data-toggle="modal"  @click="showModal">添加</button>
+					<button type="button" style="margin-left: 30px" class="btn btn-sm alert-info" data-toggle="modal"  @click="showModal">添加</button>
 
 					<div class="table-responsive" style="margin-top: 10px">
 						<div class="ds-table-wrap" >

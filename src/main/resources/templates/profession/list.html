@@ -36,11 +36,19 @@
 				<div class="dsource-wrap" style="margin-top: 5px">
 					<!-- 左侧  -->
 					<el-scrollbar class="dictionary-l">
+
+                        <!--TODO 新增项目点击弹出添加项目Modal-->
+
+                        <div style="height: 50px; margin-left: 10px">
+                            <button type="button" class="btn btn-primary">新增项目</button>
+                        </div>
+
 						<ul class="manager-nav dictionary-nav">
 							<li class="m-a">
 								<svg class="icon" aria-hidden="true">
 									<use xlink:href="#icon-hh2"></use>
 								</svg>
+
 								<ul class="manager-sec" v-for="project, key in projects" :key="key">
 									<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>
 								</ul>
@@ -54,8 +62,8 @@
 							<label style="display: inline">项目编号：{{project.projectNum}}</label>
 							<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
 							<label style="margin-left: 50px; display: inline">项目阶段：{{project.designPhase}}</label>
-							<label style="margin-left: 50px; display: inline">总体：张三</label>
-							<label style="margin-left: 50px; display: inline">院总（审定）：刘备</label>
+							<label style="margin-left: 50px; display: inline">开始时间：2019-01-01</label>
+							<label style="margin-left: 50px; display: inline">截止时间：2019-10-01</label>
 
 						</nav>
 						<div class="ds-table-wrap" >
@@ -67,10 +75,12 @@
 								<el-table-column label="专业">
 									<template slot-scope="scope"><a target="_blank" th:href="@{/profession/1}">{{ scope.row.profession }} </a></template>
 								</el-table-column>
-								<el-table-column label="专业审定">
+								<!--<el-table-column label="专业审定">-->
+								<el-table-column label="专业负责人">
 									<template slot-scope="scope"><span>{{ scope.row.professionValidation }}</span></template>
 								</el-table-column>
-								<el-table-column label="处审定">
+								<!--<el-table-column label="处审定">-->
+								<el-table-column label="总工">
 									<template slot-scope="scope"><span>{{ scope.row.departmentalValidation }}</span></template>
 								</el-table-column>
 								<el-table-column  label="备注">

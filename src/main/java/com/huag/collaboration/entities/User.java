@@ -44,4 +44,7 @@ public class User {
     private String createTime;
     private String updateTime;
 
+//    TODO  添加 能否当专业负责人属性
+//    TODO 添加 能否当总工
+
 }
