@@ -19,7 +19,7 @@
 	</head>
 
 	<body>
-		<div id="flw">
+		<div id="app">
 
 			<div id="appheader">
 				<div class="top">
@@ -30,7 +30,7 @@
 			</div>
 
 
-			<div id="app">
+			<div >
 				<div class="dsource-wrap" style="margin-top: 5px">
 					<!-- 左侧  -->
 					<el-scrollbar class="dictionary-l">
@@ -85,11 +85,11 @@
 								</el-table-column>
 								<el-table-column label="负责人">
                                     <!--TODO  点击从数据库中选择-->
-									<template slot-scope="scope"><span></span></template>
+									<template slot-scope="scope"><span @click="editProjectPrincipalClick(scope.row.id)"></span></template>
 								</el-table-column>
                                 <el-table-column label="总工">
                                     <!--TODO  点击从数据库中选择-->
-                                    <template slot-scope="scope"><span></span></template>
+                                    <template slot-scope="scope"><span @click="editProjectChiefEngineerClick(scope.row.id)"></span></template>
                                 </el-table-column>
                                 <el-table-column label="开始时间">
 									<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
@@ -132,6 +132,22 @@
 				</div>
 			</div>
 
+
+			<!-- 编辑负责人Modal -->
+			<el-dialog title="编辑负责人" :visible.sync="dialogEditPrincipalVisible" width="30%">
+				<div class="form-group" hidden="true">
+					<label>id</label>
+					<input type="text" class="form-control" placeholder=""  v-model="principalIdModalInput">
+				</div>
+				<div class="form-group">
+					<label>负责人</label>
+					<input type="text" class="form-control" placeholder=""  v-model="principalNameModalInput">
+				</div>
+				<div class="modal-footer">
+					<button  class="btn btn-primary" @click="savePrincipal">保存</button>
+				</div>
+			</el-dialog>
+
 			<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
 			<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
 			<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
@@ -161,6 +177,9 @@
 							departments:{
 
 							},
+							principalIdModalInput: null,
+							principalNameModalInput: null,
+							dialogEditPrincipalVisible: false,
 						},
 					methods: {
 						handleSizeChange(val) {
@@ -200,6 +219,16 @@
 
 								}
 							})
+						},
+						savePrincipal: function(){	//保存负责人modal
+
+						},
+						editProjectPrincipalClick: function (id) {//点击编辑负责人
+							app.dialogEditPrincipalVisible = true
+							//TODO
+						},
+						editProjectChiefEngineerClick: function () {//点击编辑总工
+
 						}
 					}
 

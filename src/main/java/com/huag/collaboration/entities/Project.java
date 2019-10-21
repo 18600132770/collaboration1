@@ -18,6 +18,8 @@ public class Project {
     private String projectNum;//项目编号
     private String projectName;//项目名称
     private String designPhase;//设计阶段
+    private String principal;//负责人
+    private String chiefEngineer;//总工
     private String startTime;//开始时间
     private String stopTime;//截止时间
     private String leftTime;//剩余时间 XX天hh小时
