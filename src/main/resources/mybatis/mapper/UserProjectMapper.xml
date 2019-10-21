@@ -16,6 +16,7 @@
           and a.userId = b.id and a.projectId = c.id
           and b.username like "%"#{searchKey}"%"
           and c.departmentId = #{departmentId}
+        order by b.username asc
     </select>
 
 
