@@ -1,7 +1,9 @@
 package com.huag.collaboration;
 
 import com.huag.collaboration.entities.ProfessionProject;
+import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.mapper.ProfessionProjectMapper;
+import com.huag.collaboration.mapper.ProjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,27 @@ public class CollaborationApplicationTests {
     @Autowired
     ProfessionProjectMapper professionProjectMapper;
 
+    @Autowired
+    ProjectMapper projectMapper;
+
     @Test
-    public void contextLoads() {
-        System.out.println("测试OK");
-//        List<ProfessionProject> professionProjectList = professionProjectMapper.findByProjectId(1);
-//        System.out.println(professionProjectList);
+    public void test1() {
+        List<Project> projectList = projectMapper.findAll();
+        projectList.forEach(project -> System.out.println(project));
     }
+
+    @Test
+    public void test2() {
+        Project project = projectMapper.findById(1);
+        System.out.println(project);
+    }
+
+    @Test
+    public void test3(){
+        List<Project> projectList = projectMapper.findProjectByDepartmentId(1);
+        projectList.forEach(project -> System.out.println(project));
+    }
+
+
 
 }

@@ -19,7 +19,7 @@
 	</head>
 
 	<body>
-		<div id="app">
+		<div>
 
 			<div id="appheader">
 				<div class="top">
@@ -30,7 +30,7 @@
 			</div>
 
 
-			<div >
+			<div  id="app">
 				<div class="dsource-wrap" style="margin-top: 5px">
 					<!-- 左侧  -->
 					<el-scrollbar class="dictionary-l">
@@ -85,11 +85,11 @@
 								</el-table-column>
 								<el-table-column label="负责人">
                                     <!--TODO  点击从数据库中选择-->
-									<template slot-scope="scope"><span @click="editProjectPrincipalClick(scope.row.id)"></span></template>
+									<template slot-scope="scope"><span @click="editProjectPrincipalClick(scope.row.id)">{{ scope.row.principal }}</span></template>
 								</el-table-column>
                                 <el-table-column label="总工">
                                     <!--TODO  点击从数据库中选择-->
-                                    <template slot-scope="scope"><span @click="editProjectChiefEngineerClick(scope.row.id)"></span></template>
+                                    <template slot-scope="scope"><span @click="editProjectChiefEngineerClick(scope.row.id)">{{ scope.row.chiefEngineer }}</span></template>
                                 </el-table-column>
                                 <el-table-column label="开始时间">
 									<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
@@ -130,23 +130,42 @@
 						</div>
 					</el-scrollbar>
 				</div>
+
+				<!-- 编辑负责人Modal -->
+				<el-dialog title="编辑负责人" :visible.sync="dialogEditPrincipalVisible" width="30%">
+					<div class="form-group" hidden="true">
+						<label>id</label>
+						<input type="text" class="form-control" placeholder=""  v-model="principalIdModalInput">
+					</div>
+					<div class="form-group">
+						<label>负责人</label>
+						<input type="text" class="form-control" placeholder=""  v-model="principalNameModalInput">
+					</div>
+					<div class="modal-footer">
+						<button  class="btn btn-primary" @click="savePrincipal">保存</button>
+					</div>
+				</el-dialog>
+
+				<!-- 编辑总工Modal -->
+				<el-dialog title="编辑总工" :visible.sync="dialogEditChiefEngineerVisible" width="30%">
+					<div class="form-group" hidden="true">
+						<label>id</label>
+						<input type="text" class="form-control" placeholder=""  v-model="chiefEngineerIdModalInput">
+					</div>
+					<div class="form-group">
+						<label>总工</label>
+						<input type="text" class="form-control" placeholder=""  v-model="chiefEngineerNameModalInput">
+					</div>
+					<div class="modal-footer">
+						<button  class="btn btn-primary" @click="saveChiefEngineer">保存</button>
+					</div>
+				</el-dialog>
+
+
 			</div>
 
 
-			<!-- 编辑负责人Modal -->
-			<el-dialog title="编辑负责人" :visible.sync="dialogEditPrincipalVisible" width="30%">
-				<div class="form-group" hidden="true">
-					<label>id</label>
-					<input type="text" class="form-control" placeholder=""  v-model="principalIdModalInput">
-				</div>
-				<div class="form-group">
-					<label>负责人</label>
-					<input type="text" class="form-control" placeholder=""  v-model="principalNameModalInput">
-				</div>
-				<div class="modal-footer">
-					<button  class="btn btn-primary" @click="savePrincipal">保存</button>
-				</div>
-			</el-dialog>
+
 
 			<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
 			<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
@@ -179,7 +198,10 @@
 							},
 							principalIdModalInput: null,
 							principalNameModalInput: null,
+							chiefEngineerIdModalInput: null,
+							chiefEngineerNameModalInput: null,
 							dialogEditPrincipalVisible: false,
+							dialogEditChiefEngineerVisible: false,
 						},
 					methods: {
 						handleSizeChange(val) {
@@ -223,12 +245,46 @@
 						savePrincipal: function(){	//保存负责人modal
 
 						},
-						editProjectPrincipalClick: function (id) {//点击编辑负责人
-							app.dialogEditPrincipalVisible = true
-							//TODO
-						},
-						editProjectChiefEngineerClick: function () {//点击编辑总工
+						saveChiefEngineer: function(){	//保存总工modal
 
+						},
+						editProjectPrincipalClick: function (id) {  //点击编辑负责人
+							app.dialogEditPrincipalVisible = true
+							app.principalIdModalInput = id
+							var ajaxData = {}
+							ajaxData.projectId = id
+							$.ajax({
+								data: ajaxData,
+								type: "GET",
+								url: "/crud/project/findByProjectId",
+								success: function (result) {
+									if(result.code == 200){
+										app.principalNameModalInput = result.data.principal
+									}else{
+										console.log("findByProjectId 返回值失败")
+									}
+
+								}
+							})
+						},
+						editProjectChiefEngineerClick: function (id) {  //点击编辑总工
+							app.dialogEditChiefEngineerVisible = true
+							app.chiefEngineerIdModalInput = id
+							var ajaxData = {}
+							ajaxData.projectId = id
+							$.ajax({
+								data: ajaxData,
+								type: "GET",
+								url: "/crud/project/findByProjectId",
+								success: function (result) {
+									if(result.code == 200){
+										app.chiefEngineerNameModalInput = result.data.chiefEngineer
+									}else{
+										console.log("findByProjectId 返回值失败")
+									}
+
+								}
+							})
 						}
 					}
 
@@ -278,6 +334,7 @@
 						}
 					})
 				}
+
 
 				/**
 				 * 根据所id查询项目

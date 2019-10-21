@@ -15,7 +15,7 @@ public class User {
 
     private Integer id;
     private String cardId;//员工编号
-    private String name;
+    private String username;
     private String password;
     private String nationality;//民族
     private String birthday;
@@ -39,12 +39,12 @@ public class User {
     private String graduateDate;//毕业时间
     private String major;//专业
     private String undertakeJobs;//可以承担的职务：设计、复核、审核、审定
+    private String principalFlag;//能否当专业负责人属性
+    private String chiefEngineerFlag;//能否当总工
+    private String remark;
     private String createTime;
     private String updateTime;
     private String deltag;
-    private String remark;
-    private String principalFlag;//能否当专业负责人属性
-    private String chiefEngineerFlag;//能否当总工
 
 
 }

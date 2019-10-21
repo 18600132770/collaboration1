@@ -18,7 +18,9 @@ public class Project {
     private String projectNum;//项目编号
     private String projectName;//项目名称
     private String designPhase;//设计阶段
+    private Integer principalId;//负责人id
     private String principal;//负责人
+    private Integer chiefEngineerId;//总工id
     private String chiefEngineer;//总工
     private String startTime;//开始时间
     private String stopTime;//截止时间
@@ -28,6 +30,7 @@ public class Project {
     private String createTime;
     private String updateTime;
     private Integer departmentId;//所id
+    private String departmentName;//所
     private String deltag;//删除标志
 
 //    private List<ProjectSubitem> projectSubitems;
