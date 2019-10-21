@@ -246,5 +246,81 @@ public class ProjectController {
         return result;
     }
 
+    /**
+     * ajax请求，更新负责人
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/updatePrincipal")
+    public BaseResponse<List<Project>> updatePrincipal(HttpServletRequest request) throws Exception{
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String projectId = String.valueOf(request.getParameter("projectId"));
+        String project_principalUserId = String.valueOf(request.getParameter("project_principalUserId"));
+        String currentDepartmentId = String.valueOf(request.getParameter("currentDepartmentId"));
+        Project projectOld = projectMapper.findById(Integer.valueOf(projectId));
+        projectOld.setPrincipalId(Integer.valueOf(project_principalUserId));
+        int update = projectMapper.update(projectOld);
+
+        String projectName = String.valueOf(request.getParameter("projectName"));
+        projectName = URLDecoder.decode(projectName, "UTF-8");
+
+        List<Project> projects = new ArrayList<>();
+        if(StringUtils.isNotBlank(projectName)){
+            projects = projectMapper.findByProjectNameAndDeptId(projectName, Integer.valueOf(currentDepartmentId));
+        }else{
+            projects = projectMapper.findProjectByDepartmentId(Integer.valueOf(currentDepartmentId));
+        }
+
+        projects.forEach(project ->{
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+        System.out.println(projects);
+        result.code = 200;
+        result.setData(projects);
+        return result;
+    }
+
+    /**
+     * ajax请求，更新总工
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/updateChiefEngineer")
+    public BaseResponse<List<Project>> updateChiefEngineer(HttpServletRequest request) throws Exception{
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String projectId = String.valueOf(request.getParameter("projectId"));
+        String chiefEngineerNameModalInput = String.valueOf(request.getParameter("chiefEngineerNameModalInput"));
+        String currentDepartmentId = String.valueOf(request.getParameter("currentDepartmentId"));
+        Project projectOld = projectMapper.findById(Integer.valueOf(projectId));
+        projectOld.setChiefEngineerId(Integer.valueOf(chiefEngineerNameModalInput));
+        int update = projectMapper.update(projectOld);
+
+        String projectName = String.valueOf(request.getParameter("projectName"));
+        projectName = URLDecoder.decode(projectName, "UTF-8");
+
+        List<Project> projects = new ArrayList<>();
+        if(StringUtils.isNotBlank(projectName)){
+            projects = projectMapper.findByProjectNameAndDeptId(projectName, Integer.valueOf(currentDepartmentId));
+        }else{
+            projects = projectMapper.findProjectByDepartmentId(Integer.valueOf(currentDepartmentId));
+        }
+
+        projects.forEach(project ->{
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+        System.out.println(projects);
+        result.code = 200;
+        result.setData(projects);
+        return result;
+    }
+
 
 }

@@ -136,6 +136,7 @@
 					<div class="form-group" hidden="true">
 						<label>id</label>
 						<input type="text" class="form-control" placeholder=""  v-model="principalIdModalInput">
+						<input type="text" class="form-control" placeholder=""  v-model="defaultprincipalUserIdModalInput">
 					</div>
 					<div class="form-group">
 						<label>负责人</label>
@@ -153,6 +154,7 @@
 					<div class="form-group" hidden="true">
 						<label>id</label>
 						<input type="text" class="form-control" placeholder=""  v-model="chiefEngineerIdModalInput">
+						<input type="text" class="form-control" placeholder=""  v-model="defaultChiefEngineerIdModalInput">
 					</div>
 					<div class="form-group">
 						<label>总工</label>
@@ -202,8 +204,10 @@
 
 						},
 						principalIdModalInput: null,
+						defaultprincipalUserIdModalInput: null,
 						principalNameModalInput: null,
 						chiefEngineerIdModalInput: null,
+						defaultChiefEngineerIdModalInput: null,
 						chiefEngineerNameModalInput: null,
 						dialogEditPrincipalVisible: false,
 						dialogEditChiefEngineerVisible: false,
@@ -250,10 +254,28 @@
 							})
 						},
 						savePrincipal: function(){	//保存负责人modal
-
+							var projectId = app.principalIdModalInput
+							var project_principalUserId = app.principalNameModalInput
+							var defaultprincipalUserId = app.defaultprincipalUserIdModalInput
+							console.log("项目id: " + projectId)
+							console.log("原负责人id: " + defaultprincipalUserId)//默认用户id
+							console.log("更改后的负责人id: " + project_principalUserId)
+							if(isNumber(project_principalUserId)){//数字更新了，说明确实需要更新
+								updatePrincipal(projectId, project_principalUserId);//更新负责人
+							}
+							app.dialogEditPrincipalVisible = false
 						},
 						saveChiefEngineer: function(){	//保存总工modal
-
+							var projectId = app.chiefEngineerIdModalInput
+							var chiefEngineerNameModalInput = app.chiefEngineerNameModalInput
+							var defaultChiefEngineerIdModalInput = app.defaultChiefEngineerIdModalInput
+							console.log("项目id: " + projectId)
+							console.log("原总工id: " + defaultChiefEngineerIdModalInput)//默认用户id
+							console.log("更改后的负责人id: " + chiefEngineerNameModalInput)
+							if(isNumber(chiefEngineerNameModalInput)){//数字更新了，说明确实需要更新
+								updateChiefEngineer(projectId, chiefEngineerNameModalInput);//更新总工
+							}
+							app.dialogEditChiefEngineerVisible = false
 						},
 						editProjectPrincipalClick: function (id) {  //点击编辑负责人
 							app.dialogEditPrincipalVisible = true
@@ -268,6 +290,7 @@
 								success: function (result) {
 									if(result.code == 200){
 										app.principalNameModalInput = result.data.principal
+										app.defaultprincipalUserIdModalInput = result.data.principalId
 									}else{
 										console.log("findByProjectId 返回值失败")
 									}
@@ -288,6 +311,7 @@
 								success: function (result) {
 									if(result.code == 200){
 										app.chiefEngineerNameModalInput = result.data.chiefEngineer
+										app.defaultChiefEngineerIdModalInput = result.data.chiefEngineerId
 									}else{
 										console.log("findByProjectId 返回值失败")
 									}
@@ -328,6 +352,62 @@
 								app.$data.tableData=result.data
 							}else{
 								console.log("返回值失败")
+							}
+
+						}
+					})
+				}
+
+				/**
+				 * 更新负责人
+				 */
+				function updatePrincipal(projectId, project_principalUserId) {
+					var ajaxData = {}
+					ajaxData.projectId = projectId
+					ajaxData.project_principalUserId = project_principalUserId
+					ajaxData.currentDepartmentId = window.currentDepartmentId
+					if(app.searchKey != null){
+						ajaxData.projectName = encodeURI(app.searchKey);
+					}else{
+						ajaxData.projectName = encodeURI("");
+					}
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/project/updatePrincipal",
+						success: function (result) {
+							if(result.code == 200){
+								app.$data.tableData=result.data
+							}else{
+								console.log("findAllPrincipals 返回值失败")
+							}
+
+						}
+					})
+				}
+
+				/**
+				 * 更新总工
+				 */
+				function updateChiefEngineer(projectId, chiefEngineerNameModalInput) {
+					var ajaxData = {}
+					ajaxData.projectId = projectId
+					ajaxData.chiefEngineerNameModalInput = chiefEngineerNameModalInput
+					ajaxData.currentDepartmentId = window.currentDepartmentId
+					if(app.searchKey != null){
+						ajaxData.projectName = encodeURI(app.searchKey);
+					}else{
+						ajaxData.projectName = encodeURI("");
+					}
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/project/updateChiefEngineer",
+						success: function (result) {
+							if(result.code == 200){
+								app.$data.tableData=result.data
+							}else{
+								console.log("findAllPrincipals 返回值失败")
 							}
 
 						}
@@ -453,6 +533,20 @@
 
 						}
 					})
+				}
+
+
+				/**
+				 * 判断是否是数字
+				 * @param val
+				 * @returns {boolean}
+				 */
+				function isNumber(val){
+					if (parseFloat(val).toString() == "NaN") {
+						return false;
+					} else {
+						return true;
+					}
 				}
 
 
