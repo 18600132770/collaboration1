@@ -191,5 +191,28 @@ public class ProjectController {
         return result;
     }
 
+    /**
+     * ajax请求，findProjectByDepartmentId
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/findProjectByDepartmentId")
+    public BaseResponse<List<Project>> findProjectByDepartmentId(HttpServletRequest request){
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String departmentId = String.valueOf(request.getParameter("departmentId"));
+        List<Project> projects = projectMapper.findProjectByDepartmentId(Integer.valueOf(departmentId));
+        projects.forEach(project ->{
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+        System.out.println(projects);
+        result.code = 200;
+        result.setData(projects);
+        return result;
+    }
+
 
 }

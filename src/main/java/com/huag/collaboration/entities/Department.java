@@ -1,38 +1,23 @@
 package com.huag.collaboration.entities;
 
-public class Department {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * 所名
+ * @author huag
+ * @date 2019/10/17 14:34
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Department {
 	private Integer id;
 	private String departmentName;
-
-	public Department() {
-	}
-	
-	public Department(int i, String string) {
-		this.id = i;
-		this.departmentName = string;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getDepartmentName() {
-		return departmentName;
-	}
-
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
-	}
-
-	@Override
-	public String toString() {
-		return "Department [id=" + id + ", departmentName=" + departmentName + "]";
-	}
-
-	
+	private Integer serialNumber;//序号，用于排序
+	private String createTime;
+	private String updateTime;
+	private String style;
+	private String deltag;
 }

@@ -25,6 +25,7 @@ public class Project {
     private String emergencyLevel;//紧急程度
     private String createTime;
     private String updateTime;
+    private Integer departmentId;//所id
     private String deltag;//删除标志
 
 //    private List<ProjectSubitem> projectSubitems;

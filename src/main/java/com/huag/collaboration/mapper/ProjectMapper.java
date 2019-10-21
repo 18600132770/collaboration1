@@ -20,5 +20,7 @@ public interface ProjectMapper {
     public int update(Project project);
     public List<Project> findAllIn(String[] array);
 
+    public List<Project> findProjectByDepartmentId(Integer departmentId);
+
 
 }

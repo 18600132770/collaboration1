@@ -30,7 +30,6 @@
 			</div>
 
 
-
 			<div id="app">
 				<div class="dsource-wrap" style="margin-top: 5px">
 					<!-- 左侧  -->
@@ -48,26 +47,32 @@
 						</ul>
 					</el-scrollbar>
 
+
 					<el-scrollbar class="dsource-r">
-                        <ul class="manager-sec">
-                            <li><a class="m-a cur" >桥梁所</a></li>
-                            <!-- TODO 所名称就是专业名称，添加一下 -->
-                        </ul>
-
-						<nav class="navbar navbar-light bg-light">
-							<!--<h2><a class="btn btn-sm alert-info" href="project" :href="'/crud/project/'">添加项目</a></h2>-->
-
-							<div class="select-group">
-								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
-								<el-button class="select-btn" @click="searchClick" >查找</el-button>
-							</div>
-
-						</nav>
-
-
 
 						<div class="ds-table-wrap" >
-							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
+
+							<nav style="margin-left: 1300px" class="navbar navbar-light bg-light">
+								<!--<h2><a class="btn btn-sm alert-info" href="project" :href="'/crud/project/'">添加项目</a></h2>-->
+								<div class="select-group">
+									<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
+									<el-button class="select-btn" @click="searchClick" >查找</el-button>
+								</div>
+							</nav>
+
+							<!--<ul class="manager-sec" v-for="project, key in projects" :key="key">-->
+								<!--<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>-->
+							<!--</ul>-->
+
+							<!--nav-item nav-link active-->
+
+							<nav>
+								<div class="nav nav-tabs" role="tablist" v-for="department, key in departments" :key="key">
+									<a style="display: inline-block" :class="department.style" @click="getProjectByDepartment(department.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{department.departmentName}}</a>
+								</div>
+							</nav>
+
+							<el-table style="width: 100%;margin-top: 10px;" :data="tableData" class="x-table table-td0">
 								<el-table-column type="selection" width="55"></el-table-column>
 								<!--<el-table-column label="序号" width="60" type="index">-->
 								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
@@ -143,6 +148,8 @@
 
 			<script type="text/javascript">
 
+				window.searchKeyWord = ""
+
 				var app = new Vue({
 					el: '#app',
 					data: {
@@ -150,7 +157,10 @@
 							currentPage: 1,
 							tableData: null,
 							searchKey: null,
-							myValue: 1
+							myValue: 1,
+							departments:{
+
+							},
 						},
 					methods: {
 						handleSizeChange(val) {
@@ -161,6 +171,18 @@
 						},
 						searchClick :function () {
 							findProjectBySearchKeyWord()
+						},
+						getProjectByDepartment: function(departmentId){
+							var departments = app.departments
+							for(var i = 0; i < departments.length; i++){
+								if(i == (departmentId-1)){
+									departments[i].style = 'nav-item nav-link active'
+								}else{
+									departments[i].style = 'nav-item nav-link'
+								}
+							}
+							app.departments = departments
+							findProjectByDepartmentId(departmentId) //根据所名称查询项目
 						},
 						deleteProjectClick: function (projectId) {
 							var ajaxData = {}
@@ -182,6 +204,8 @@
 					}
 
 				})
+
+				getDepartments();//查询所有所信息
 
 				var ajaxData = {}
 				$.ajax({
@@ -220,6 +244,56 @@
 								app.$data.tableData=result.data
 							}else{
 								console.log("返回值失败")
+							}
+
+						}
+					})
+				}
+
+				/**
+				 * 根据所id查询项目
+				 */
+				function findProjectByDepartmentId(departmentId) {
+					var ajaxData = {}
+					ajaxData.departmentId = departmentId
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/project/findProjectByDepartmentId",
+						success: function (result) {
+							if(result.code == 200){
+								app.$data.tableData=result.data
+							}else{
+								console.log("返回值失败")
+							}
+
+						}
+					})
+				}
+
+
+				/**
+				 * 查询所有所信息，将值赋给li
+				 */
+				function getDepartments() {
+					$.ajax({
+						data: null,
+						type: "GET",
+						url: "/crud/department/findAll",
+						success: function (result) {
+							if(result.code == 200){
+								var departments = result.data
+								for(var i = 0; i < departments.length; i++){
+									if(i == 0){
+										departments[i].style = 'nav-item nav-link active'
+										findProjectByDepartmentId(departments[i].id)//根据所id查询项目
+									}else{
+										departments[i].style = 'nav-item nav-link'
+									}
+								}
+								app.departments = departments
+							}else{
+								console.log("getDepartments 返回值失败")
 							}
 
 						}
