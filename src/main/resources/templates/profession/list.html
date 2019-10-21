@@ -37,10 +37,8 @@
 					<!-- 左侧  -->
 					<el-scrollbar class="dictionary-l">
 
-                        <!--TODO 新增项目点击弹出添加项目Modal-->
-
                         <div style="height: 50px; margin-left: 10px">
-                            <button type="button" class="btn btn-primary">新增项目</button>
+                            <button type="button" class="btn btn-primary" @click="addProjectClick">新增项目</button>
                         </div>
 
 						<ul class="manager-nav dictionary-nav">
@@ -62,7 +60,8 @@
 							<label style="display: inline">项目编号：{{project.projectNum}}</label>
 							<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
 							<label style="margin-left: 50px; display: inline">项目阶段：{{project.designPhase}}</label>
-							<label style="margin-left: 50px; display: inline">开始时间：2019-01-01</label>
+							<label style="margin-left: 50px; display: inline">开始时间：2019-01-01
+							</label>
 							<label style="margin-left: 50px; display: inline">截止时间：2019-10-01</label>
 
 						</nav>
@@ -98,6 +97,45 @@
 							</el-pagination>
 						</div>
 					</el-scrollbar>
+
+
+					<!-- 添加项目Modal -->
+					<el-dialog title="添加项目" :visible.sync="dialogAddProjectVisible" width="30%">
+						<div class="form-group">
+							<label style="margin-left: 10px; display: inline; width: 20%;">项目编号：</label>
+							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addProject.projectNum">
+						</div>
+						<div class="form-group">
+							<label style="margin-left: 10px; display: inline; width: 20%;">项目名称：</label>
+							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addProject.projectName">
+						</div>
+						<div class="form-group">
+							<label style="margin-left: 10px; display: inline; width: 20%;">设计阶段：</label>
+							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addProject.designPhase">
+						</div>
+						<div class="form-group">
+							<label style="margin-left: 10px; display: inline; width: 20%;">开始时间：</label>
+							<el-date-picker	v-model="addProject.startTime" type="date" placeholder="选择日期"></el-date-picker>
+						</div>
+						<div class="form-group">
+							<label style="margin-left: 10px; display: inline; width: 20%;">结束时间：</label>
+							<el-date-picker	v-model="addProject.stopTime" type="date" placeholder="选择日期"></el-date-picker>
+						</div>
+						<div class="form-group">
+							<label style="margin-left: 10px; display: inline; width: 20%;">负责人：</label>
+							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder="" v-model="addProject.principal">
+						</div>
+						<div class="form-group">
+							<label style="margin-left: 10px; display: inline; width: 20%;">总工：</label>
+							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder="" v-model="addProject.chiefEngineer">
+						</div>
+						<!--TODO 添加多选框-->
+						<div class="modal-footer">
+							<button  class="btn btn-primary" @click="saveAddProject">保存</button>
+						</div>
+					</el-dialog>
+
+
 				</div>
 			</div>
 
@@ -120,27 +158,36 @@
 				var app = new Vue({
 					el: '#app',
 					data: {
-							dialogFormVisible: false,
-							currentPage: 1,
-							tableData: null,
-							searchKey: null,
-							project: {
-								projectNum: "XM-20190101A",
-								projectName: "马东铁路",
-								designPhase: "设计",
-							},
-							projects:{
-
-							},
-							isActive: true,
-							projectClass1: "m-a cur"
+						dialogFormVisible: false,
+						currentPage: 1,
+						tableData: null,
+						searchKey: null,
+						project: {
+							projectNum: "XM-20190101A",
+							projectName: "马东铁路",
+							designPhase: "设计",
 						},
+						projects:{
+
+						},
+						addProject:{},
+						isActive: true,
+						projectClass1: "m-a cur",
+						dialogAddProjectVisible: false,
+					},
 					methods: {
 						handleSizeChange(val) {
 							console.log(`每页 ${val} 条`);
 						},
 						handleCurrentChange(val) {
 							console.log(`当前页: ${val}`);
+						},
+						addProjectClick: function(){
+							app.dialogAddProjectVisible = true
+						},
+						saveAddProject: function(){
+							// TODO 保存项目，li 项目那边好像应该group by 去重后显示结果
+							console.log(app.addProject)
 						},
 						showProjectById: function(id){
 							// console.log("应该显示 " + id)
