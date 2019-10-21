@@ -237,8 +237,24 @@
 								}
 							}
 							app.departments = departments
-							app.currentDepartmentId = departmentId
 							findProjectByDepartmentId(departmentId) //根据所名称查询项目
+						},
+						deleteProjectClick: function (projectId) {
+							var ajaxData = {}
+							ajaxData.id = projectId
+							$.ajax({
+								data: ajaxData,
+								type: "GET",
+								url: "project/delete",
+								success: function (result) {
+									if(result.code == 200){
+										findProjectBySearchKeyWordAndDeptId()
+									}else{
+										console.log("返回值失败")
+									}
+
+								}
+							})
 						},
 						savePrincipal: function(){	//保存负责人modal
 							var projectId = app.principalIdModalInput
@@ -311,6 +327,23 @@
 				})
 
 				getDepartments();//查询所有所信息
+
+				var ajaxData = {}
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "project/findAll",
+					success: function (result) {
+						if(result.code == 200){
+							app.$data.tableData=result.data
+						}else{
+							console.log("返回值失败")
+						}
+
+					}
+				})
+
+
 
 				function sendAjax(ajaxData, type, url) {
 					$.ajax({

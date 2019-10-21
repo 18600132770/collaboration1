@@ -265,6 +265,8 @@ public class ProjectController {
         String projectName = String.valueOf(request.getParameter("projectName"));
         projectName = URLDecoder.decode(projectName, "UTF-8");
 
+
+
         List<Project> projects = new ArrayList<>();
         if(StringUtils.isNotBlank(projectName)){
             projects = projectMapper.findByProjectNameAndDeptId(projectName, Integer.valueOf(currentDepartmentId));
