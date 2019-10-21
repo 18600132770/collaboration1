@@ -85,7 +85,9 @@
 								</el-table-column>
 								<el-table-column label="负责人">
                                     <!--TODO  点击从数据库中选择-->
-									<template slot-scope="scope"><span @click="editProjectPrincipalClick(scope.row.id)">{{ scope.row.principal }}</span></template>
+									<template slot-scope="scope"><span @click="editProjectPrincipalClick(scope.row.id)">
+										<a>{{ scope.row.principal }}</a>
+										</span></template>
 								</el-table-column>
                                 <el-table-column label="总工">
                                     <!--TODO  点击从数据库中选择-->
