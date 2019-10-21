@@ -51,23 +51,26 @@
 					<el-scrollbar class="dsource-r">
 
 						<!--TODO 人员信息查找是所内查找-->
-						<ul class="manager-sec">
-							<li><a  class="m-a cur" >所1</a></li>
-						</ul>
-
-						<nav class="navbar navbar-light bg-light">
-
-							<div class="select-group">
-								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
-								<el-button class="select-btn" @click="searchClick">查找</el-button>
-							</div>
-
-						</nav>
 						<div class="ds-table-wrap" >
 
+							<nav style="margin-left: 1300px" class="navbar navbar-light bg-light">
+								<!--<h2><a class="btn btn-sm alert-info" href="project" :href="'/crud/project/'">添加项目</a></h2>-->
+								<el-input hidden="true"  v-model="currentDepartmentId"></el-input>
+								<div class="select-group">
+									<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
+									<el-button class="select-btn" @click="searchClick" >查找</el-button>
+								</div>
+							</nav>
+
+							<nav>
+								<div class="nav nav-tabs" role="tablist" v-for="department, key in departments" :key="key">
+									<a style="display: inline-block" :class="department.style" @click="getProjectByDepartment(department.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{department.departmentName}}</a>
+								</div>
+							</nav>
 
 
-							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
+
+							<el-table style="width: 100%;margin-top: 10px;" :data="tableData" class="x-table table-td0">
 								<el-table-column type="selection" width="55"></el-table-column>
 								<!--<el-table-column label="序号" width="60" type="index">-->
 								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
@@ -79,10 +82,10 @@
 									<template slot-scope="scope"><a  target="_blank">{{ scope.row.state }} </a></template>
 								</el-table-column>
 								<el-table-column  label="已完成工作量">
-									<template slot-scope="scope"><span>{{ scope.row.totalWork }}</span></template>
+									<template slot-scope="scope"><span>{{ scope.row.finishedWorkload }}</span></template>
 								</el-table-column>
 								<el-table-column  label="目前工作量">
-									<template slot-scope="scope"><span>{{ scope.row.totalWork }}</span></template>
+									<template slot-scope="scope"><span>{{ scope.row.currentWorkload }}</span></template>
 								</el-table-column>
 								<el-table-column label="项目名称">
 									<template slot-scope="scope"><a  target="_blank">{{ scope.row.projectName }} </a></template>
@@ -115,12 +118,6 @@
 									<!-- TODO 参与 或者负责人 -->
 									<template slot-scope="scope"><span>负责人</span></template>
 								</el-table-column>
-								<!--<el-table-column label="操作" min-width="100">-->
-									<!--<template slot-scope="scope">-->
-										<!--<el-button class="btn-line btn-0 cur" size="mini"><a th:href="@{/project/1}">编辑</a></el-button>-->
-										<!--<el-button class="btn-line btn-0" size="mini">删除</el-button>-->
-									<!--</template>-->
-								<!--</el-table-column>-->
 							</el-table>
 							<el-pagination class="txtCenter"
 										   @size-change="handleSizeChange"
@@ -157,11 +154,15 @@
 				var app = new Vue({
 					el: '#app',
 					data: {
-							dialogFormVisible: false,
-							currentPage: 1,
-							tableData: null,
-							searchKey: null
+						dialogFormVisible: false,
+						currentPage: 1,
+						tableData: null,
+						searchKey: null,
+						currentDepartmentId: null,
+						departments:{
+
 						},
+					},
 					methods: {
 						handleSizeChange(val) {
 							console.log(`每页 ${val} 条`);
@@ -176,25 +177,58 @@
 							var type = "GET"
 							var url = "userProject/findByUsername"
 							sendAjax(ajaxData, type, url)
+						},
+						getProjectByDepartment:function (departmentId) {
+							var departments = app.departments
+							for(var i = 0; i < departments.length; i++){
+								if(i == (departmentId-1)){
+									departments[i].style = 'nav-item nav-link active'
+								}else{
+									departments[i].style = 'nav-item nav-link'
+								}
+							}
+							app.departments = departments
+							app.currentDepartmentId = departmentId
+							findProjectBySearchKeyWordAndDeptId()//根据所id和searchKeyword查询
+						},
+						searchClick: function () {
+							findProjectBySearchKeyWordAndDeptId()//根据所id和searchKeyword查询
 						}
+						
 					}
 
 				})
 
-				var ajaxData = {}
-				$.ajax({
-					data: ajaxData,
-					type: "GET",
-					url: "userProject/findAll",
-					success: function (result) {
-						if(result.code == 200){
-							app.$data.tableData=result.data
-						}else{
-							console.log("返回值失败")
-						}
+				getDepartments();//查询所有所信息
+				
+				/**
+				 * 查询所有所信息，将值赋给li
+				 */
+				function getDepartments() {
+					$.ajax({
+						data: null,
+						type: "GET",
+						url: "/crud/department/findAll",
+						success: function (result) {
+							if(result.code == 200){
+								var departments = result.data
+								for(var i = 0; i < departments.length; i++){
+									if(i == 0){
+										departments[i].style = 'nav-item nav-link active'
+										app.currentDepartmentId = departments[i].id
+										findProjectBySearchKeyWordAndDeptId()//根据所id和searchKeyword查询
+									}else{
+										departments[i].style = 'nav-item nav-link'
+									}
+								}
+								app.departments = departments
+							}else{
+								console.log("getDepartments 返回值失败")
+							}
 
-					}
-				})
+						}
+					})
+				}
 
 				function sendAjax(ajaxData, type, url) {
 					$.ajax({
@@ -210,6 +244,22 @@
 
 						}
 					})
+				}
+
+				/**
+				 * 根据searchKeyWord和deptId查询
+				 */
+				function findProjectBySearchKeyWordAndDeptId(){
+					var ajaxData = {}
+					if(app.searchKey != null){
+						ajaxData.searchKey = encodeURI(app.searchKey);
+					}else{
+						ajaxData.searchKey = encodeURI("");
+					}
+					ajaxData.departmentId = app.currentDepartmentId
+					var type = "GET"
+					var url = "userProject/findUserProjectByProjectNameAndDeptId"
+					sendAjax(ajaxData, type, url)
 				}
 
 

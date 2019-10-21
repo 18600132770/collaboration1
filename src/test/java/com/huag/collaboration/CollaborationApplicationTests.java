@@ -2,8 +2,10 @@ package com.huag.collaboration;
 
 import com.huag.collaboration.entities.ProfessionProject;
 import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.mapper.ProfessionProjectMapper;
 import com.huag.collaboration.mapper.ProjectMapper;
+import com.huag.collaboration.mapper.UserProjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class CollaborationApplicationTests {
 
     @Autowired
     ProjectMapper projectMapper;
+
+    @Autowired
+    UserProjectMapper userProjectMapper;
 
     @Test
     public void test1() {
@@ -46,6 +51,12 @@ public class CollaborationApplicationTests {
         for (Project project : projectList) {
             System.out.println(project);
         }
+    }
+
+    @Test
+    public void test5(){
+        List<UserProjectMapping> userProjectMapperAll = userProjectMapper.findUserProjectByProjectNameAndDeptId("马", 1);
+        userProjectMapperAll.forEach(userProjectMapping -> System.out.println(userProjectMapping));
     }
 
 

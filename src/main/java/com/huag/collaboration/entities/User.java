@@ -44,6 +44,7 @@ public class User {
     private String remark;
     private String createTime;
     private String updateTime;
+    private String tripState;//在京、新加坡
     private String deltag;
 
 

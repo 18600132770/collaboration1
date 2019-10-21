@@ -1,7 +1,7 @@
 package com.huag.collaboration.controller;
 
 import com.huag.collaboration.entities.Project;
-import com.huag.collaboration.entities.UserProject;
+import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.UserProjectMapper;
 import com.huag.collaboration.utils.DateUtils;
@@ -42,45 +42,30 @@ public class UserProjectController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/userProject/findAll")
-    public BaseResponse<List<UserProject>> findAll(HttpServletRequest request){
-        BaseResponse<List<UserProject>> result = new BaseResponse<>();
-        List<UserProject> userProjects = userProjectMapper.findAll();
+    @RequestMapping(value = "/userProject/findUserProjectByProjectNameAndDeptId")
+    public BaseResponse<List<UserProjectMapping>> findUserProjectByProjectNameAndDeptId(HttpServletRequest request) throws Exception{
+        BaseResponse<List<UserProjectMapping>> result = new BaseResponse<>();
+
+        String searchKey = String.valueOf(request.getParameter("searchKey"));
+        searchKey = URLDecoder.decode(searchKey, "UTF-8");
+        String departmentId = String.valueOf(request.getParameter("departmentId"));
+
+        System.out.println(searchKey);
+
+        List<UserProjectMapping> userProjects = userProjectMapper.findUserProjectByProjectNameAndDeptId(searchKey, Integer.valueOf(departmentId));
         userProjects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
                 Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
                 project.setLeftTime(dateDifferenceByDay + "");
             }
         });
+
         System.out.println(userProjects);
         result.code = 200;
         result.setData(userProjects);
         return result;
     }
 
-    /**
-     * ajax请求
-     * @param request
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/userProject/findByUsername")
-    public BaseResponse<List<UserProject>> findByUsername(HttpServletRequest request) throws Exception{
-        BaseResponse<List<UserProject>> result = new BaseResponse<>();
-        String username = String.valueOf(request.getParameter("username"));
-        username = URLDecoder.decode(username, "UTF-8");
-        List<UserProject> userProjects = userProjectMapper.findByUsername(username);
-        userProjects.forEach(project ->{
-            if(project.getStopTime() != null && project.getStartTime() != null){
-                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
-                project.setLeftTime(dateDifferenceByDay + "");
-            }
-        });
-        System.out.println(userProjects);
-        result.code = 200;
-        result.setData(userProjects);
-        return result;
-    }
 
 
 }

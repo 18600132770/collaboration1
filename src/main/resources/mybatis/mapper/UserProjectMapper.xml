@@ -4,12 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.huag.collaboration.mapper.UserProjectMapper">
 
-    <select id="findAll" resultType="com.huag.collaboration.entities.UserProject">
-        SELECT * FROM userProject where deltag <![CDATA[ <> ]]> '1' or deltag is null
+    <select id="findUserProjectByProjectNameAndDeptId" resultType="com.huag.collaboration.entities.mapping.UserProjectMapping">
+        SELECT
+          a.id id, b.username username, b.tripState tripState, c.projectName, c.designPhase, a.taskLevel, c.startTime, c.stopTime, c.currentProcess, a.role
+        from
+          userProjectMapping a, user b, project c
+        where
+              (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+          and (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+          and (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
+          and a.userId = b.id and a.projectId = c.id
+          and b.username like "%"#{searchKey}"%"
+          and c.departmentId = #{departmentId}
     </select>
 
-    <select id="findByUsername" resultType="com.huag.collaboration.entities.UserProject">
-        SELECT * FROM userProject where username like "%"#{username}"%" and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
-    </select>
 
 </mapper>

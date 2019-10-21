@@ -31,6 +31,7 @@ public class Project {
     private String updateTime;
     private Integer departmentId;//所id
     private String departmentName;//所
+    private String state;//完成状态
     private String deltag;//删除标志
 
 //    private List<ProjectSubitem> projectSubitems;
