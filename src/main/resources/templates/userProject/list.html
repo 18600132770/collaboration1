@@ -115,8 +115,7 @@
 								</el-table-column>
 
 								<el-table-column label="备注">
-									<!-- TODO 参与 或者负责人 -->
-									<template slot-scope="scope"><span>负责人</span></template>
+									<template slot-scope="scope"><span>{{ scope.row.role }}</span></template>
 								</el-table-column>
 							</el-table>
 							<el-pagination class="txtCenter"
