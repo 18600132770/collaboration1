@@ -22,5 +22,14 @@ public interface ProjectMapper {
 
     public List<Project> findProjectByDepartmentId(Integer departmentId);
 
+    /**
+     * 根据projectName的模糊查询和deptId进行查询
+     * @param projectName
+     * @param departmentId
+     * @return
+     */
+
+    public List<Project> findByProjectNameAndDeptId(@Param("projectName") String projectName, @Param("departmentId") Integer departmentId);
+
 
 }

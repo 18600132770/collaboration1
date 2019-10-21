@@ -40,6 +40,14 @@ public class CollaborationApplicationTests {
         projectList.forEach(project -> System.out.println(project));
     }
 
+    @Test
+    public void test4(){
+        List<Project> projectList = projectMapper.findByProjectNameAndDeptId("马", 1);
+        for (Project project : projectList) {
+            System.out.println(project);
+        }
+    }
+
 
 
 }

@@ -161,6 +161,38 @@ public class ProjectController {
     }
 
     /**
+     * ajax请求
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/findByProjectNameAndDeptId")
+    public BaseResponse<List<Project>> findByProjectNameAndDeptId(HttpServletRequest request) throws Exception{
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String projectName = String.valueOf(request.getParameter("projectName"));
+        projectName = URLDecoder.decode(projectName, "UTF-8");
+        String departmentId = String.valueOf(request.getParameter("departmentId"));
+
+        List<Project> projects = new ArrayList<>();
+        if(StringUtils.isNotBlank(projectName)){
+            projects = projectMapper.findByProjectNameAndDeptId(projectName, Integer.valueOf(departmentId));
+        }else{
+            projects = projectMapper.findProjectByDepartmentId(Integer.valueOf(departmentId));
+        }
+
+        projects.forEach(project ->{
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+        System.out.println(projects);
+        result.code = 200;
+        result.setData(projects);
+        return result;
+    }
+
+    /**
      * 修改或保存
      * @param request
      * @return
