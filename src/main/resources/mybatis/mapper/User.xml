@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huag.collaboration.mapper.UserMapper">
+
+    <select id="findAllPrincipals" resultType="com.huag.collaboration.entities.User">
+        SELECT * FROM user where
+            principalFlag = 1
+          and
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+    </select>
+
+    <select id="findAllChiefEngineers" resultType="com.huag.collaboration.entities.User">
+        SELECT * FROM user where
+            chiefEngineerFlag = 1
+          and
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+    </select>
+
+</mapper>

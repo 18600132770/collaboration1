@@ -139,7 +139,9 @@
 					</div>
 					<div class="form-group">
 						<label>负责人</label>
-						<input type="text" class="form-control" placeholder=""  v-model="principalNameModalInput">
+						<el-select v-model="principalNameModalInput" placeholder="请选择">
+							<el-option v-for="item in principals" :key="item.value" :label="item.label" :value="item.value"></el-option>
+						</el-select>
 					</div>
 					<div class="modal-footer">
 						<button  class="btn btn-primary" @click="savePrincipal">保存</button>
@@ -154,7 +156,9 @@
 					</div>
 					<div class="form-group">
 						<label>总工</label>
-						<input type="text" class="form-control" placeholder=""  v-model="chiefEngineerNameModalInput">
+						<el-select v-model="chiefEngineerNameModalInput" placeholder="请选择">
+							<el-option v-for="item in chiefEngineers" :key="item.value" :label="item.label" :value="item.value"></el-option>
+						</el-select>
 					</div>
 					<div class="modal-footer">
 						<button  class="btn btn-primary" @click="saveChiefEngineer">保存</button>
@@ -189,21 +193,23 @@
 				var app = new Vue({
 					el: '#app',
 					data: {
-							dialogFormVisible: false,
-							currentPage: 1,
-							tableData: null,
-							searchKey: null,
-							myValue: 1,
-							departments:{
+						dialogFormVisible: false,
+						currentPage: 1,
+						tableData: null,
+						searchKey: null,
+						myValue: 1,
+						departments:{
 
-							},
-							principalIdModalInput: null,
-							principalNameModalInput: null,
-							chiefEngineerIdModalInput: null,
-							chiefEngineerNameModalInput: null,
-							dialogEditPrincipalVisible: false,
-							dialogEditChiefEngineerVisible: false,
 						},
+						principalIdModalInput: null,
+						principalNameModalInput: null,
+						chiefEngineerIdModalInput: null,
+						chiefEngineerNameModalInput: null,
+						dialogEditPrincipalVisible: false,
+						dialogEditChiefEngineerVisible: false,
+						principals: [],
+						chiefEngineers: [],
+					},
 					methods: {
 						handleSizeChange(val) {
 							console.log(`每页 ${val} 条`);
@@ -252,6 +258,7 @@
 						editProjectPrincipalClick: function (id) {  //点击编辑负责人
 							app.dialogEditPrincipalVisible = true
 							app.principalIdModalInput = id
+							findAllPrincipals();//询所有可以当负责人的人选
 							var ajaxData = {}
 							ajaxData.projectId = id
 							$.ajax({
@@ -271,6 +278,7 @@
 						editProjectChiefEngineerClick: function (id) {  //点击编辑总工
 							app.dialogEditChiefEngineerVisible = true
 							app.chiefEngineerIdModalInput = id
+							findAllChiefEngineers();//查询所有可以当总工的人选
 							var ajaxData = {}
 							ajaxData.projectId = id
 							$.ajax({
@@ -308,18 +316,7 @@
 					}
 				})
 
-				function findProjectBySearchKeyWordAndDeptId(){
-					var ajaxData = {}
-					if(app.searchKey != null){
-						ajaxData.projectName = encodeURI(app.searchKey);
-					}else{
-						ajaxData.projectName = encodeURI("");
-					}
-                    ajaxData.departmentId = window.currentDepartmentId
-					var type = "GET"
-					var url = "project/findByProjectNameAndDeptId"
-					sendAjax(ajaxData, type, url)
-				}
+
 
 				function sendAjax(ajaxData, type, url) {
 					$.ajax({
@@ -337,6 +334,75 @@
 					})
 				}
 
+				/**
+				 * 查询所有可以当负责人的人选
+				 */
+				function findAllPrincipals() {
+					$.ajax({
+						data: null,
+						type: "GET",
+						url: "/crud/user/findAllPrincipals",
+						success: function (result) {
+							if(result.code == 200){
+								var users = result.data
+								var principals = []
+								for(var i = 0; i < users.length; i++){
+									var principal = {}
+									principal.value = users[i].id
+									principal.label = users[i].username
+									principals[i] = principal
+								}
+								app.principals = principals
+							}else{
+								console.log("findAllPrincipals 返回值失败")
+							}
+
+						}
+					})
+				}
+
+				/**
+				 * 查询所有可以当总工的人选
+				 */
+				function findAllChiefEngineers() {
+					$.ajax({
+						data: null,
+						type: "GET",
+						url: "/crud/user/findAllChiefEngineers",
+						success: function (result) {
+							if(result.code == 200){
+								var users = result.data
+								var chiefEngineers = []
+								for(var i = 0; i < users.length; i++){
+									var chiefEngineer = {}
+									chiefEngineer.value = users[i].id
+									chiefEngineer.label = users[i].username
+									chiefEngineers[i] = chiefEngineer
+								}
+								app.chiefEngineers = chiefEngineers
+							}else{
+								console.log("findAllChiefEngineer 返回值失败")
+							}
+
+						}
+					})
+				}
+
+				/**
+				 * 根据searchKeyWord和deptId查询
+				 */
+				function findProjectBySearchKeyWordAndDeptId(){
+					var ajaxData = {}
+					if(app.searchKey != null){
+						ajaxData.projectName = encodeURI(app.searchKey);
+					}else{
+						ajaxData.projectName = encodeURI("");
+					}
+					ajaxData.departmentId = window.currentDepartmentId
+					var type = "GET"
+					var url = "project/findByProjectNameAndDeptId"
+					sendAjax(ajaxData, type, url)
+				}
 
 				/**
 				 * 根据所id查询项目
