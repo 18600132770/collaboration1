@@ -5,6 +5,7 @@ import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.UserProjectMapper;
 import com.huag.collaboration.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author huag
@@ -60,9 +61,54 @@ public class UserProjectController {
             }
         });
 
-        System.out.println(userProjects);
+        //统计，将相同用户名的放在一起，userProjects已经是按照username排序后的数据
+        int num = 65535;
+        List<UserProjectMapping> userProjectMappingList = new ArrayList<>();
+        userProjects.forEach(project ->{
+            if(userProjectMappingList == null || userProjectMappingList.size() == 0
+                    || !userProjectMappingList.get(userProjectMappingList.size() - 1).getUsername().equals(project.getUsername())
+            ){
+                UserProjectMapping userProjectMapper = new UserProjectMapping();
+                userProjectMapper.setId(num-userProjectMappingList.size());
+                userProjectMapper.setHidden(true);
+                userProjectMapper.setUsername(project.getUsername());
+                userProjectMapper.setTripState(project.getTripState());
+                userProjectMapper.setHasChildren(true);
+                if("完成".equals(project.getState())){
+                    userProjectMapper.setFinishedWorkload(userProjectMapper.getFinishedWorkload() == null?1:(userProjectMapper.getFinishedWorkload()+1));
+                }else{
+                    userProjectMapper.setCurrentWorkload(userProjectMapper.getCurrentWorkload() == null?1:(userProjectMapper.getCurrentWorkload()+1));
+                }
+//                userProjectMapper.setProjectName(project.getProjectName());
+//                userProjectMapper.setDesignPhase(project.getDesignPhase());
+//                userProjectMapper.setTaskLevel(project.getTaskLevel());
+//                userProjectMapper.setStartTime(project.getStartTime());
+//                userProjectMapper.setStopTime(project.getStopTime());
+//                userProjectMapper.setLeftTime(project.getLeftTime());
+//                userProjectMapper.setCurrentProcess(project.getCurrentProcess());
+//                userProjectMapper.setRole(project.getRole());
+                userProjectMapper.setChildren(Arrays.asList(project));
+                userProjectMappingList.add(userProjectMapper);
+            }else{
+                UserProjectMapping userProjectMapping = userProjectMappingList.get(userProjectMappingList.size() - 1);
+                List<UserProjectMapping> children = new ArrayList<>();
+                children.addAll(userProjectMapping.getChildren());
+                children.add(project);
+                userProjectMapping.setChildren(children);
+                if("完成".equals(project.getState())){
+                    userProjectMapping.setFinishedWorkload(userProjectMapping.getFinishedWorkload() == null?1:(userProjectMapping.getFinishedWorkload()+1));
+                }else{
+                    userProjectMapping.setCurrentWorkload(userProjectMapping.getCurrentWorkload() == null?1:(userProjectMapping.getCurrentWorkload()+1));
+                }
+                userProjectMappingList.set(userProjectMappingList.size() - 1, userProjectMapping);
+            }
+        });
+
+
+
+        System.out.println(userProjectMappingList);
         result.code = 200;
-        result.setData(userProjects);
+        result.setData(userProjectMappingList);
         return result;
     }
 

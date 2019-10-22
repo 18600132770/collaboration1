@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.List;
 
 /**
  * 人员项目信息映射
@@ -29,5 +29,12 @@ public class UserProjectMapping {
     private String leftTime;//剩余时间 XX天hh小时
     private Integer currentProcess;//目前进度
     private String role;//负责人、总工、参与
+    private String state;//项目状态
+
+    private Boolean hidden;//是总的就隐藏
+
+    private Boolean hasChildren;
+
+    private List<UserProjectMapping> children;
 
 }
