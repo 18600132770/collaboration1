@@ -127,19 +127,27 @@
 						</div>
 						<div class="form-group">
 							<label style="margin-left: 10px; display: inline; width: 20%;">负责人：</label>
-							<el-select v-model="principalModalInput" placeholder="请选择">
+							<el-select v-model="principalModalInput" filterable placeholder="请选择">
 								<el-option v-for="item in principals" :key="item.principalId" :label="item.principal" :value="item.principalId"></el-option>
 							</el-select>
-							<!--<input type="text" class="form-control" style="width: 80%; display: inline" placeholder="" v-model="addProject.principal">-->
 						</div>
 						<div class="form-group">
 							<label style="margin-left: 10px; display: inline; width: 20%;">总工：</label>
-							<el-select v-model="chiefEngineerModalInput" placeholder="请选择">
+							<el-select v-model="chiefEngineerModalInput" filterable placeholder="请选择">
 								<el-option v-for="item in chiefEngineers" :key="item.chiefEngineerId" :label="item.chiefEngineer" :value="item.chiefEngineerId"></el-option>
 							</el-select>
-							<!--<input type="text" class="form-control" style="width: 80%; display: inline" placeholder="" v-model="addProject.chiefEngineer">-->
 						</div>
 						<!--TODO 添加多选框-->
+						<div class="form-group">
+							<el-select v-model="selectDepartments" multiple placeholder="请选择">
+								<el-option
+										v-for="department in departments"
+										:key="department.id"
+										:label="department.departmentName"
+										:value="department.id">
+								</el-option>
+							</el-select>
+						</div>
 						<div class="modal-footer">
 							<button  class="btn btn-primary" @click="saveAddProject">保存</button>
 						</div>
@@ -177,12 +185,9 @@
 							projectName: "马东铁路",
 							designPhase: "设计",
 						},
-						projects:{
-
-						},
-						principals:{
-
-						},
+						projects:{},
+						principals:{},
+						chiefEngineers:{},
 						addProject:{},
 						isActive: true,
 						projectClass1: "m-a cur",
@@ -190,6 +195,8 @@
 						currentProjectSummaryId: null,
 						principalModalInput: null,
 						chiefEngineerModalInput: null,
+						selectDepartments: null,
+						departments:{},
 					},
 					methods: {
 						handleSizeChange(val) {
@@ -201,11 +208,13 @@
 						addProjectClick: function(){
 							app.dialogAddProjectVisible = true
 							findAllPrincipals();//查找所有可以担任负责人的人选
+							findAllChiefEngineers();//查询所有可以当总工的人选
+							getDepartments();//查询所有部门信息
 						},
 						saveAddProject: function(){
 							// TODO 保存项目，li 项目那边好像应该group by 去重后显示结果
-							console.log(app.addProject)
-							addProject();//通过Modal框添加新的项目
+							// console.log(app.addProject)
+							addProject(this);//通过Modal框添加新的项目
 
 						},
 						showProjectById: function(id){
@@ -236,29 +245,78 @@
 				/**
 				 * 通过Modal框添加新的项目
 				 * */
-				function addProject(){
+				function addProject(that){
 					var ajaxData = {}
 					var addProject = app.addProject
-					addProject.principal = app.principalModalInput
-					addProject.chiefEngineer = app.chiefEngineerModalInput
+					addProject.principalId = app.principalModalInput
+					addProject.chiefEngineerId = app.chiefEngineerModalInput
 
-					//TODO通过Modal框添加新的项目 for principals
+					var selectDepartments = app.selectDepartments
+					console.log(selectDepartments.length)
+					console.log(selectDepartments[0])
 
 
-					ajaxData.projectSummary = encodeURI(JSON.stringify(app.addProject))
-					$.ajax({
-						data: ajaxData,
-						type: "GET",
-						url: "projectSummary/addProject/",
-						success: function (result) {
-							if(result.code == 200){
-								// findAllProjectSummary()
-							}else{
-								console.log("返回值失败 addProject")
+					if(addProject.projectNum == null || addProject.projectNum == ""){
+						that.$message({
+							message: '项目编号不能为空',
+							type: 'warning'
+						});
+					}else if(addProject.projectName == null || addProject.projectName == ""){
+						that.$message({
+							message: '项目名称不能为空',
+							type: 'warning'
+						});
+					}else if(addProject.designPhase == null || addProject.designPhase == ""){
+						that.$message({
+							message: '设计阶段不能为空',
+							type: 'warning'
+						});
+					}else if(addProject.startTime == null || addProject.startTime == ""){
+						that.$message({
+							message: '开始时间不能为空',
+							type: 'warning'
+						});
+					}else if(addProject.stopTime == null || addProject.stopTime == ""){
+						that.$message({
+							message: '结束时间不能为空',
+							type: 'warning'
+						});
+					}else if(addProject.principalId == null || addProject.principalId == ""){
+						that.$message({
+							message: '负责人不能为空',
+							type: 'warning'
+						});
+					}else if(addProject.chiefEngineerId == null || addProject.chiefEngineerId == ""){
+						that.$message({
+							message: '总工不能为空',
+							type: 'warning'
+						});
+					}else if(app.selectDepartments == null || app.selectDepartments.length == 0){
+						that.$message({
+							message: '分派部门不能为空',
+							type: 'warning'
+						});
+					}else{
+						ajaxData.selectDepartments = app.selectDepartments
+						ajaxData.projectSummary = encodeURI(JSON.stringify(app.addProject))
+						$.ajax({
+							data: ajaxData,
+							type: "GET",
+							url: "projectSummary/addProject/",
+							traditional: true,
+							success: function (result) {
+								if(result.code == 200){
+									findAllProjectSummary()
+									app.dialogAddProjectVisible = false
+								}else{
+									console.log("返回值失败 addProject")
+								}
+
 							}
+						})
+					}
 
-						}
-					})
+
 				}
 
 				/**
@@ -358,6 +416,57 @@
 								app.principals = principals
 							}else{
 								console.log("findAllPrincipals 返回值失败")
+							}
+
+						}
+					})
+				}
+
+
+
+				/**
+				 * 查询所有可以当总工的人选
+				 */
+				function findAllChiefEngineers() {
+					var ajaxData = {}
+					ajaxData.currentDepartmentId = 1
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/user/findAllChiefEngineers",
+						success: function (result) {
+							if(result.code == 200){
+								var users = result.data
+								var chiefEngineers = []
+								for(var i = 0; i < users.length; i++){
+									var chiefEngineer = {}
+									chiefEngineer.chiefEngineer = users[i].username
+									chiefEngineer.chiefEngineerId = users[i].id
+									chiefEngineers[i] = chiefEngineer
+								}
+								app.chiefEngineers = chiefEngineers
+							}else{
+								console.log("findAllChiefEngineer 返回值失败")
+							}
+
+						}
+					})
+				}
+
+
+				/**
+				 * 查询所有所信息，将值赋给li
+				 */
+				function getDepartments() {
+					$.ajax({
+						data: null,
+						type: "GET",
+						url: "/crud/department/findAll",
+						success: function (result) {
+							if(result.code == 200){
+								app.departments = result.data
+							}else{
+								console.log("getDepartments 返回值失败")
 							}
 
 						}

@@ -32,4 +32,13 @@
 
     </select>
 
+    <insert id="insert" parameterType="com.huag.collaboration.entities.ProjectSummary" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            projectSummary(projectNum, projectName, designPhase, principalId, principal, chiefEngineerId, chiefEngineer,
+            startTime, stopTime, leftTime, createTime, updateTime, deltag)
+         VALUES
+             (#{projectNum}, #{projectName}, #{designPhase}, #{principalId}, #{principal}, #{chiefEngineerId}, #{chiefEngineer},
+             #{startTime}, #{stopTime}, #{leftTime}, now(), now(), #{deltag})
+    </insert>
+
 </mapper>

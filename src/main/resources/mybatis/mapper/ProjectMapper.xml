@@ -108,9 +108,9 @@
               and
                 (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
               and
-                a.principalId = b.id
+                (a.principalId = b.id or a.principalId is null)
               and
-                a.chiefEngineerId = c.id
+                (a.chiefEngineerId = c.id or a.chiefEngineerId is null)
               and
                 a.departmentId = d.id
               and
@@ -191,7 +191,7 @@
             project(projectSummaryId, principalId, principal, chiefEngineerId, chiefEngineer, startTime, stopTime,
             leftTime, currentProcess, emergencyLevel, createTime, updateTime, departmentId, departmentName, deltag)
          VALUES
-             (#{projectSummaryId}, #{principalId}, #{principal}, #{chiefEngineerId}, #{chiefEngineer} #{startTime}, #{stopTime},
+             (#{projectSummaryId}, #{principalId}, #{principal}, #{chiefEngineerId}, #{chiefEngineer}, #{startTime}, #{stopTime},
              #{leftTime}, #{currentProcess}, #{emergencyLevel}, now(), now(), #{departmentId} , #{departmentName}, #{deltag})
     </insert>
 

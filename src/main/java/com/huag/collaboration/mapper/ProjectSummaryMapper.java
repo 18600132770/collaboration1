@@ -22,4 +22,11 @@ public interface ProjectSummaryMapper {
      */
     public ProjectSummary findById(Integer id);
 
+    /**
+     * 插入
+     * @param projectSummary
+     * @return
+     */
+    public int insert(ProjectSummary projectSummary);
+
 }

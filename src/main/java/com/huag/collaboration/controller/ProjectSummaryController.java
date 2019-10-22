@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectSummary;
 import com.huag.collaboration.entities.query.BaseResponse;
+import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.ProjectSummaryMapper;
 import com.huag.collaboration.utils.DateUtils;
 import com.huag.collaboration.utils.JSONUtils;
@@ -30,6 +31,9 @@ public class ProjectSummaryController {
 
     @Autowired
     ProjectSummaryMapper projectSummaryMapper;
+
+    @Autowired
+    ProjectMapper projectMapper;
 
     /**
      * ajax请求，查询所有数据
@@ -84,6 +88,7 @@ public class ProjectSummaryController {
     @RequestMapping(value = "/projectSummary/addProject")
     public BaseResponse<ProjectSummary> addProject(HttpServletRequest request) throws Exception{
         BaseResponse<ProjectSummary> result = new BaseResponse<>();
+        String[] selectDepartments = request.getParameterValues("selectDepartments");
         String projectStr = URLDecoder.decode(String.valueOf(request.getParameter("projectSummary")), "UTF-8");
         ProjectSummary projectSummary = JSONObject.toJavaObject(JSON.parseObject(projectStr), ProjectSummary.class);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
@@ -92,13 +97,27 @@ public class ProjectSummaryController {
         String stopTime = df2.format(df.parse(projectSummary.getStopTime().replace("Z", " UTC")));
         projectSummary.setStartTime(startTime);
         projectSummary.setStopTime(stopTime);
-        projectSummary.setPrincipalId(Integer.valueOf(projectSummary.getPrincipal()));
-        projectSummary.setChiefEngineerId(Integer.valueOf(projectSummary.getChiefEngineer()));
+        projectSummary.setPrincipalId(Integer.valueOf(projectSummary.getPrincipalId()));
+        projectSummary.setChiefEngineerId(Integer.valueOf(projectSummary.getChiefEngineerId()));
         System.out.println(projectSummary);
 
+        projectSummaryMapper.insert(projectSummary);//总项目插入数据
+
+        Integer projectSummaryId = projectSummary.getId();//总项目id
+
+        //给部门插入数据
+        for (String selectDepartment :
+                selectDepartments) {
+            Integer departmentId = Integer.valueOf(selectDepartment);
+            Project project = new Project();
+            project.setProjectSummaryId(projectSummaryId);
+            project.setStartTime(projectSummary.getStartTime());
+            project.setStopTime(projectSummary.getStopTime());
+            project.setDepartmentId(departmentId);
+            projectMapper.insert(project);
+        }
 
         result.code = 200;
-//        result.setData(projectSummary);
         return result;
     }
 
