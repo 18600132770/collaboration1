@@ -1,6 +1,7 @@
 package com.huag.collaboration.mapper;
 
 import com.huag.collaboration.entities.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,12 +15,12 @@ public interface UserMapper {
      * 查找所有可以是负责人的用户
      * @return
      */
-    public List<User> findAllPrincipals();
+    public List<User> findAllPrincipals(@Param("departmentId") Integer departmentId);
 
     /**
      * 找所有可以是总工的用户
      * @return
      */
-    public List<User> findAllChiefEngineers();
+    public List<User> findAllChiefEngineers(@Param("departmentId") Integer departmentId);
 
 }

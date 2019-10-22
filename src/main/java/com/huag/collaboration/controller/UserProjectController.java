@@ -78,14 +78,6 @@ public class UserProjectController {
                 }else{
                     userProjectMapper.setCurrentWorkload(userProjectMapper.getCurrentWorkload() == null?1:(userProjectMapper.getCurrentWorkload()+1));
                 }
-//                userProjectMapper.setProjectName(project.getProjectName());
-//                userProjectMapper.setDesignPhase(project.getDesignPhase());
-//                userProjectMapper.setTaskLevel(project.getTaskLevel());
-//                userProjectMapper.setStartTime(project.getStartTime());
-//                userProjectMapper.setStopTime(project.getStopTime());
-//                userProjectMapper.setLeftTime(project.getLeftTime());
-//                userProjectMapper.setCurrentProcess(project.getCurrentProcess());
-//                userProjectMapper.setRole(project.getRole());
                 userProjectMapper.setChildren(Arrays.asList(project));
                 userProjectMappingList.add(userProjectMapper);
             }else{

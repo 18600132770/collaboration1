@@ -9,6 +9,8 @@
             principalFlag = 1
           and
             (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+          and
+            departmentId = #{departmentId}
     </select>
 
     <select id="findAllChiefEngineers" resultType="com.huag.collaboration.entities.User">
@@ -16,6 +18,8 @@
             chiefEngineerFlag = 1
           and
             (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+          and
+            departmentId = #{departmentId}
     </select>
 
 </mapper>

@@ -31,8 +31,9 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/user/findAllPrincipals")
     public BaseResponse<List<User>> findAllPrincipals(HttpServletRequest request){
+        String currentDepartmentId = String.valueOf(request.getParameter("currentDepartmentId"));
         BaseResponse<List<User>> result = new BaseResponse<>();
-        List<User> userList = userMapper.findAllPrincipals();
+        List<User> userList = userMapper.findAllPrincipals(Integer.valueOf(currentDepartmentId));
         System.out.println(userList);
         result.code = 200;
         result.setData(userList);
@@ -47,8 +48,9 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/user/findAllChiefEngineers")
     public BaseResponse<List<User>> findAllChiefEngineers(HttpServletRequest request){
+        String currentDepartmentId = String.valueOf(request.getParameter("currentDepartmentId"));
         BaseResponse<List<User>> result = new BaseResponse<>();
-        List<User> userList = userMapper.findAllChiefEngineers();
+        List<User> userList = userMapper.findAllChiefEngineers(Integer.valueOf(currentDepartmentId));
         System.out.println(userList);
         result.code = 200;
         result.setData(userList);
