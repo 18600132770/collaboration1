@@ -127,11 +127,17 @@
 						</div>
 						<div class="form-group">
 							<label style="margin-left: 10px; display: inline; width: 20%;">负责人：</label>
-							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder="" v-model="addProject.principal">
+							<el-select v-model="principalModalInput" placeholder="请选择">
+								<el-option v-for="item in principals" :key="item.principalId" :label="item.principal" :value="item.principalId"></el-option>
+							</el-select>
+							<!--<input type="text" class="form-control" style="width: 80%; display: inline" placeholder="" v-model="addProject.principal">-->
 						</div>
 						<div class="form-group">
 							<label style="margin-left: 10px; display: inline; width: 20%;">总工：</label>
-							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder="" v-model="addProject.chiefEngineer">
+							<el-select v-model="chiefEngineerModalInput" placeholder="请选择">
+								<el-option v-for="item in chiefEngineers" :key="item.chiefEngineerId" :label="item.chiefEngineer" :value="item.chiefEngineerId"></el-option>
+							</el-select>
+							<!--<input type="text" class="form-control" style="width: 80%; display: inline" placeholder="" v-model="addProject.chiefEngineer">-->
 						</div>
 						<!--TODO 添加多选框-->
 						<div class="modal-footer">
@@ -174,11 +180,16 @@
 						projects:{
 
 						},
+						principals:{
+
+						},
 						addProject:{},
 						isActive: true,
 						projectClass1: "m-a cur",
 						dialogAddProjectVisible: false,
 						currentProjectSummaryId: null,
+						principalModalInput: null,
+						chiefEngineerModalInput: null,
 					},
 					methods: {
 						handleSizeChange(val) {
@@ -189,10 +200,13 @@
 						},
 						addProjectClick: function(){
 							app.dialogAddProjectVisible = true
+							findAllPrincipals();//查找所有可以担任负责人的人选
 						},
 						saveAddProject: function(){
 							// TODO 保存项目，li 项目那边好像应该group by 去重后显示结果
 							console.log(app.addProject)
+							addProject();//通过Modal框添加新的项目
+
 						},
 						showProjectById: function(id){
 							app.currentProjectSummaryId = id
@@ -218,6 +232,35 @@
 
 				findAllProjectSummary();//查找所有项目
 
+
+				/**
+				 * 通过Modal框添加新的项目
+				 * */
+				function addProject(){
+					var ajaxData = {}
+					var addProject = app.addProject
+					addProject.principal = app.principalModalInput
+					addProject.chiefEngineer = app.chiefEngineerModalInput
+
+					//TODO通过Modal框添加新的项目 for principals
+
+
+					ajaxData.projectSummary = encodeURI(JSON.stringify(app.addProject))
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "projectSummary/addProject/",
+						success: function (result) {
+							if(result.code == 200){
+								// findAllProjectSummary()
+							}else{
+								console.log("返回值失败 addProject")
+							}
+
+						}
+					})
+				}
+
 				/**
 				 * 查询总项目信息byId
 				 */
@@ -232,7 +275,7 @@
 							if(result.code == 200){
 								app.project=result.data
 							}else{
-								console.log("返回值失败 project/projectId")
+								console.log("返回值失败 findProjectSummaryById")
 							}
 
 						}
@@ -286,6 +329,35 @@
 
 							}else{
 								console.log("返回值失败")
+							}
+
+						}
+					})
+				}
+
+				/**
+				 * 查询所有可以当负责人的人选
+				 */
+				function findAllPrincipals() {
+					var ajaxData = {}
+					ajaxData.currentDepartmentId = 1
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/user/findAllPrincipals",
+						success: function (result) {
+							if(result.code == 200){
+								var users = result.data
+								var principals = []
+								for(var i = 0; i < users.length; i++){
+									var principal = {}
+									principal.principal = users[i].username
+									principal.principalId = users[i].id
+									principals[i] = principal
+								}
+								app.principals = principals
+							}else{
+								console.log("findAllPrincipals 返回值失败")
 							}
 
 						}

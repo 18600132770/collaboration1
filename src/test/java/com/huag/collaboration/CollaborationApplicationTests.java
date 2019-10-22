@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -121,6 +124,24 @@ public class CollaborationApplicationTests {
         });
 
 
+    }
+
+
+
+    @Test
+    public void test8(){
+        String str = "2019-10-07T16:00:00.000Z";
+        //yyyy-MM-dd'T'HH:mm:ss.SSS Z
+        str = str.replace("Z", " UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date parse = df.parse(str);
+            String format = df2.format(parse);
+            System.out.println(format);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
