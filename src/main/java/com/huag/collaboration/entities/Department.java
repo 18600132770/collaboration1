@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class Department {
 	private Integer id;
 	private String departmentName;
+	private String departmentProperty;//部门性质
 	private Integer serialNumber;//序号，用于排序
 	private String createTime;
 	private String updateTime;

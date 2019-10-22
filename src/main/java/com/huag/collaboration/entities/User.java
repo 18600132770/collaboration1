@@ -26,8 +26,7 @@ public class User {
     private String maritalStatus;//婚姻状况
     private String settledCity;//定居城市
     private String administrativePost;//行政职务
-    private String sectoral;//所在部门
-    private String sectoralProperty;//部门性质
+    private Integer departmentId;//所在部门
     private String postSystem;//任职体系
     private String contractType;//合同类型
     private String entryDate;//入职时间

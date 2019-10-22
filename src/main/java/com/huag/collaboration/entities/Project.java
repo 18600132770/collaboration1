@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 项目信息
+ * 项目分在不同部门的表（分表）
  * @author huag
  * @date 2019/9/26 16:55
  */
@@ -15,13 +15,14 @@ import lombok.NoArgsConstructor;
 public class Project {
 
     private Integer id;
+    private Integer projectSummaryId;//总项目id
     private String projectNum;//项目编号
     private String projectName;//项目名称
     private String designPhase;//设计阶段
-    private Integer principalId;//负责人id
-    private String principal;//负责人
-    private Integer chiefEngineerId;//总工id
-    private String chiefEngineer;//总工
+    private Integer principalId;//分项目负责人id
+    private String principal;//分项目负责人
+    private Integer chiefEngineerId;//分项目总工id
+    private String chiefEngineer;//分项目总工
     private String startTime;//开始时间
     private String stopTime;//截止时间
     private String leftTime;//剩余时间 XX天hh小时

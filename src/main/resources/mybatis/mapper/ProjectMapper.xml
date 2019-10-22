@@ -39,10 +39,10 @@
     </select>
 
     <select id="findProjectByDepartmentId" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectNum, a.projectName, a.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-                       a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-                       a.departmentName, d.departmentName departmentName
-         FROM project a, user b, user c, department d
+        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
+			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
+			   a.departmentId, d.departmentName departmentName
+         FROM  project a, user b, user c, department d, projectSummary e
          where
                 (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
               and
@@ -52,20 +52,24 @@
               and
                 (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
               and
+                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
+              and
                 a.principalId = b.id
               and
                 a.chiefEngineerId = c.id
               and
                 a.departmentId = d.id
+              and
+				a.projectSummaryId = e.id
 
               and a.departmentId = #{departmentId}
     </select>
 
     <select id="findByProjectNameAndDeptId" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectNum, a.projectName, a.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-                       a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-                       a.departmentName, d.departmentName departmentName
-         FROM project a, user b, user c, department d
+        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
+			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
+			   a.departmentId, d.departmentName departmentName
+         FROM  project a, user b, user c, department d, projectSummary e
          where
                 (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
               and
@@ -75,21 +79,25 @@
               and
                 (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
               and
+                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
+              and
                 a.principalId = b.id
               and
                 a.chiefEngineerId = c.id
               and
                 a.departmentId = d.id
+              and
+				a.projectSummaryId = e.id
 
-              and a.projectName like "%"#{projectName}"%"
+              and e.projectName like "%"#{projectName}"%"
               and a.departmentId = #{departmentId}
     </select>
 
     <select id="findAll" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectNum, a.projectName, a.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-               a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-               a.departmentName, d.departmentName departmentName
-         FROM project a, user b, user c, department d
+        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
+			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
+			   a.departmentId, d.departmentName departmentName
+         FROM  project a, user b, user c, department d, projectSummary e
          where
                 (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
               and
@@ -99,11 +107,15 @@
               and
                 (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
               and
+                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
+              and
                 a.principalId = b.id
               and
                 a.chiefEngineerId = c.id
               and
                 a.departmentId = d.id
+              and
+				a.projectSummaryId = e.id
     </select>
 
     <resultMap id="findAllInMap" type="com.huag.collaboration.entities.Project" >
@@ -116,10 +128,10 @@
     </select>
 
     <select id="findById" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectNum, a.projectName, a.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-               a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-               a.departmentId, d.departmentName departmentName
-         FROM project a, user b, user c, department d
+        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
+			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
+			   a.departmentId, d.departmentName departmentName
+         FROM  project a, user b, user c, department d, projectSummary e
          where
                 (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
               and
@@ -129,11 +141,15 @@
               and
                 (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
               and
+                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
+              and
                 a.principalId = b.id
               and
                 a.chiefEngineerId = c.id
               and
                 a.departmentId = d.id
+              and
+				a.projectSummaryId = e.id
 
               and
                 a.id=#{id}
@@ -144,13 +160,17 @@
     </insert>
 
     <insert id="insert" parameterType="com.huag.collaboration.entities.Project" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO project(projectNum, projectName, designPhase, startTime, stopTime, leftTime, currentProcess, emergencyLevel, createTime, updateTime, deltag)
-         VALUES (#{projectNum}, #{projectName}, #{designPhase}, #{startTime}, #{stopTime}, #{leftTime}, #{currentProcess}, #{emergencyLevel}, now(), now(), #{deltag})
+        INSERT INTO
+            project(projectSummaryId, principalId, principal, chiefEngineerId, chiefEngineer, startTime, stopTime,
+            leftTime, currentProcess, emergencyLevel, createTime, updateTime, departmentId, departmentName, deltag)
+         VALUES
+             (#{projectSummaryId}, #{principalId}, #{principal}, #{chiefEngineerId}, #{chiefEngineer} #{startTime}, #{stopTime},
+             #{leftTime}, #{currentProcess}, #{emergencyLevel}, now(), now(), #{departmentId} , #{departmentName}, #{deltag})
     </insert>
 
     <insert id="update">
         update project set
-            projectNum = #{projectNum}, projectName = #{projectName}, designPhase = #{designPhase},
+            projectSummaryId = #{projectSummaryId},
             principalId = #{principalId}, principal = #{principal}, chiefEngineerId = #{chiefEngineerId}, chiefEngineer = #{chiefEngineer},
             startTime = #{startTime}, stopTime = #{stopTime}, leftTime = #{leftTime}, currentProcess = #{currentProcess},
             emergencyLevel = #{emergencyLevel},  updateTime = now(), departmentId = #{departmentId},
