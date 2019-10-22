@@ -62,14 +62,13 @@ public class UserProjectController {
         });
 
         //统计，将相同用户名的放在一起，userProjects已经是按照username排序后的数据
-        int num = 65535;
         List<UserProjectMapping> userProjectMappingList = new ArrayList<>();
         userProjects.forEach(project ->{
             if(userProjectMappingList == null || userProjectMappingList.size() == 0
                     || !userProjectMappingList.get(userProjectMappingList.size() - 1).getUsername().equals(project.getUsername())
             ){
                 UserProjectMapping userProjectMapper = new UserProjectMapping();
-                userProjectMapper.setId(num-userProjectMappingList.size());
+                userProjectMapper.setId(Integer.MAX_VALUE-project.getId());
                 userProjectMapper.setHidden(true);
                 userProjectMapper.setUsername(project.getUsername());
                 userProjectMapper.setTripState(project.getTripState());
