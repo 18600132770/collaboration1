@@ -25,6 +25,8 @@ public class ProjectSummary {
     private String startTime;//开始时间
     private String stopTime;//截止时间
     private String leftTime;//剩余时间 XX天hh小时
+    private String createTime;
+    private String updateTime;
     private String deltag;
 
 }

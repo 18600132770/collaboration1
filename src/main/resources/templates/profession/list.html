@@ -60,30 +60,34 @@
 							<label style="display: inline">项目编号：{{project.projectNum}}</label>
 							<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
 							<label style="margin-left: 50px; display: inline">项目阶段：{{project.designPhase}}</label>
-							<label style="margin-left: 50px; display: inline">开始时间：2019-01-01
-							</label>
-							<label style="margin-left: 50px; display: inline">截止时间：2019-10-01</label>
+							<label style="margin-left: 50px; display: inline">开始时间：{{project.startTime}}</label>
+							<label style="margin-left: 50px; display: inline">截止时间：{{project.stopTime}}</label>
+							<label style="margin-left: 50px; display: inline">负责人：{{project.principal}}</label>
+							<label style="margin-left: 50px; display: inline">总工：{{project.chiefEngineer}}</label>
 
 						</nav>
 						<div class="ds-table-wrap" >
+
+							<el-input hidden="true"  v-model="currentProjectSummaryId"></el-input>
+
 							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
 								<el-table-column type="selection" width="55"></el-table-column>
 								<!--<el-table-column label="序号" width="60" type="index">-->
 								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
 								<!--</el-table-column>-->
 								<el-table-column label="专业">
-									<template slot-scope="scope"><a target="_blank" th:href="@{/profession/1}">{{ scope.row.profession }} </a></template>
+									<template slot-scope="scope"><a target="_blank" th:href="@{/profession/1}">{{ scope.row.departmentName }} </a></template>
 								</el-table-column>
 								<!--<el-table-column label="专业审定">-->
 								<el-table-column label="专业负责人">
-									<template slot-scope="scope"><span>{{ scope.row.professionValidation }}</span></template>
+									<template slot-scope="scope"><span>{{ scope.row.principal }}</span></template>
 								</el-table-column>
 								<!--<el-table-column label="处审定">-->
-								<el-table-column label="总工">
-									<template slot-scope="scope"><span>{{ scope.row.departmentalValidation }}</span></template>
+								<el-table-column label="专业总工">
+									<template slot-scope="scope"><span>{{ scope.row.chiefEngineer }}</span></template>
 								</el-table-column>
-								<el-table-column  label="备注">
-									<template slot-scope="scope"><span>{{ scope.row.remark }}</span></template>
+								<el-table-column  label="状态">
+									<template slot-scope="scope"><span>{{ scope.row.state }}</span></template>
 								</el-table-column>
 							</el-table>
 							<el-pagination class="txtCenter"
@@ -174,6 +178,7 @@
 						isActive: true,
 						projectClass1: "m-a cur",
 						dialogAddProjectVisible: false,
+						currentProjectSummaryId: null,
 					},
 					methods: {
 						handleSizeChange(val) {
@@ -190,22 +195,7 @@
 							console.log(app.addProject)
 						},
 						showProjectById: function(id){
-							// console.log("应该显示 " + id)
-							var ajaxData = {}
-							ajaxData.projectId = id
-							$.ajax({
-								data: ajaxData,
-								type: "GET",
-								url: "profession/findByProjectId/",
-								success: function (result) {
-									if(result.code == 200){
-										app.$data.tableData=result.data
-									}else{
-										console.log("返回值失败")
-									}
-
-								}
-							})
+							app.currentProjectSummaryId = id
 
 							//更改li颜色
 							var myProjects = app.projects
@@ -218,68 +208,52 @@
 							}
 							app.projects = myProjects
 
-							//查询项目信息，更新表头
-							$.ajax({
-								data: ajaxData,
-								type: "GET",
-								url: "project/findByProjectId/",
-								success: function (result) {
-									if(result.code == 200){
-										app.$data.project=result.data
-									}else{
-										console.log("返回值失败 project/projectId")
-									}
-
-								}
-							})
-
+							findProjectSummaryById();//按照总项目id查找总项目详细信息
+							findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
 
 						},
 					}
 
 				})
 
-				var ajaxData = {}
-				ajaxData.projectId = 1
-				$.ajax({
-					data: ajaxData,
-					type: "GET",
-					url: "profession/findByProjectId/",
-					success: function (result) {
-						if(result.code == 200){
-							app.$data.tableData=result.data
-						}else{
-							console.log("返回值失败 findByProjectId")
-						}
+				findAllProjectSummary();//查找所有项目
 
-					}
-				})
-
-
-				$.ajax({
-					data: ajaxData,
-					type: "GET",
-					url: "project/findByProjectId/",
-					success: function (result) {
-						if(result.code == 200){
-							app.$data.project=result.data
-						}else{
-							console.log("返回值失败 project/projectId")
-						}
-
-					}
-				})
-
-				function sendAjax(ajaxData, type, url) {
+				/**
+				 * 查询总项目信息byId
+				 */
+				function findProjectSummaryById(){
+					var ajaxData = {}
+					ajaxData.id = app.currentProjectSummaryId
 					$.ajax({
 						data: ajaxData,
-						type: type,
-						url: url,
+						type: "GET",
+						url: "projectSummary/findById/",
+						success: function (result) {
+							if(result.code == 200){
+								app.project=result.data
+							}else{
+								console.log("返回值失败 project/projectId")
+							}
+
+						}
+					})
+				}
+
+				/**
+				 * 按照总项目id查找分项目详细信息
+				 */
+				function findProjectsByProjectSummaryId(){
+					var ajaxData = {}
+					ajaxData.projectSummaryId = app.currentProjectSummaryId
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/project/findProjectsByProjectSummaryId/",
 						success: function (result) {
 							if(result.code == 200){
 								app.$data.tableData=result.data
 							}else{
-								console.log("返回值失败 sendAjax")
+								console.log("返回值失败 findByProjectId")
 							}
 
 						}
@@ -289,29 +263,36 @@
 				/**
 				 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
 				 */
-				var ajaxData = {}
-				$.ajax({
-					data: ajaxData,
-					type: "GET",
-					url: "project/findAll",
-					success: function (result) {
-						if(result.code == 200){
-							var projectsLiShow = result.data
-							for(var i = 0; i < projectsLiShow.length; i++){
-								if(i == 0){
-									projectsLiShow[i].deltag = 'm-a cur'
-								}else{
-									projectsLiShow[i].deltag = ''
+				function findAllProjectSummary(){
+					var ajaxData = {}
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/projectSummary/findAll",
+						success: function (result) {
+							if(result.code == 200){
+								var projectsSummaryLiShow = result.data
+								for(var i = 0; i < projectsSummaryLiShow.length; i++){
+									if(i == 0){
+										app.currentProjectSummaryId = projectsSummaryLiShow[i].id
+										projectsSummaryLiShow[i].deltag = 'm-a cur'
+									}else{
+										projectsSummaryLiShow[i].deltag = ''
+									}
 								}
+								app.projects=projectsSummaryLiShow
+								findProjectSummaryById();//按照总项目id查找总项目详细信息
+								findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
+
+							}else{
+								console.log("返回值失败")
 							}
-							app.projects=projectsLiShow
 
-						}else{
-							console.log("返回值失败")
 						}
+					})
+				}
 
-					}
-				})
+
 
 
 

@@ -117,7 +117,6 @@ public class ProjectController {
     @RequestMapping(value = "/project/findAll")
     public BaseResponse<List<Project>> findAll(HttpServletRequest request){
         BaseResponse<List<Project>> result = new BaseResponse<>();
-//        List<Project> projects = projectMapper.findAllIn(new String[]{"马东铁路", "长江大桥"});
         List<Project> projects = projectMapper.findAll();
         projects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
@@ -312,6 +311,30 @@ public class ProjectController {
             projects = projectMapper.findProjectByDepartmentId(Integer.valueOf(currentDepartmentId));
         }
 
+        projects.forEach(project ->{
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+        System.out.println(projects);
+        result.code = 200;
+        result.setData(projects);
+        return result;
+    }
+
+
+    /**
+     * ajax请求，findProjectsByProjectSummaryId
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/findProjectsByProjectSummaryId")
+    public BaseResponse<List<Project>> findProjectsByProjectSummaryId(HttpServletRequest request){
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String projectSummaryId = String.valueOf(request.getParameter("projectSummaryId"));
+        List<Project> projects = projectMapper.findProjectsByProjectSummaryId(Integer.valueOf(projectSummaryId));
         projects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
                 Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huag.collaboration.mapper.ProjectSummaryMapper">
+
+    <select id="findAll" resultType="com.huag.collaboration.entities.ProjectSummary">
+        SELECT * FROM projectSummary
+        where
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+        order by
+            createTime asc
+    </select>
+
+    <select id="findById" resultType="com.huag.collaboration.entities.ProjectSummary">
+        select
+            a.id, a.projectNum, a.projectName, a.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
+            a.startTime, a.stopTime, a.leftTime, a.deltag, a.createTime, a.updateTime
+        from projectSummary a, user b, user c
+        where
+            a.principalId = b.id
+        and
+            a.chiefEngineerId = c.id
+        and
+		    (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+		and
+		    (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+		and
+		    (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
+        and
+            a.id = #{id}
+
+    </select>
+
+</mapper>
