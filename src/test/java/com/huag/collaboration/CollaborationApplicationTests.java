@@ -144,5 +144,14 @@ public class CollaborationApplicationTests {
         }
     }
 
+    @Test
+    public void test9(){
+        Long currentTimeMillis = System.currentTimeMillis();
+        int i = currentTimeMillis.intValue();
+        int abs = Math.abs(i);
+        System.out.println(i);
+        System.out.println(abs);
+    }
+
 
 }

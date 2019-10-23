@@ -34,6 +34,7 @@ public class Project {
     private String departmentName;//所
     private String state;//完成状态
     private String deltag;//删除标志
+    private String taskLevel;//任务级别
 
 //    private List<ProjectSubitem> projectSubitems;
 

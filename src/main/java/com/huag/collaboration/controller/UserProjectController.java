@@ -54,10 +54,22 @@ public class UserProjectController {
         System.out.println(searchKey);
 
         List<UserProjectMapping> userProjects = userProjectMapper.findUserProjectByProjectNameAndDeptId(searchKey, Integer.valueOf(departmentId));
+        final int index = Math.abs(Long.valueOf(System.currentTimeMillis()).intValue());
+
+        for(int i = 0; i < userProjects.size(); i++){
+            userProjects.get(i).setId(index - i);
+        }
+
         userProjects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
                 Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
                 project.setLeftTime(dateDifferenceByDay + "");
+            }
+            if(StringUtils.isNotBlank(project.getRole()) && "principal".equals(project.getRole())){
+                project.setRole("负责人");
+            }
+            if(StringUtils.isNotBlank(project.getRole()) && "chiefEngineer".equals(project.getRole())){
+                project.setRole("总工");
             }
         });
 

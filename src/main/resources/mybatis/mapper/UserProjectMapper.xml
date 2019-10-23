@@ -5,20 +5,58 @@
 <mapper namespace="com.huag.collaboration.mapper.UserProjectMapper">
 
     <select id="findUserProjectByProjectNameAndDeptId" resultType="com.huag.collaboration.entities.mapping.UserProjectMapping">
-        SELECT
-          a.id id, b.username username, b.tripState tripState, e.projectName, e.designPhase, a.taskLevel, c.startTime, c.stopTime, c.currentProcess, a.role
-        from
-          userProjectMapping a, user b, project c, projectSummary e
-        where
-              (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
-          and (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
-          and (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
-          and a.userId = b.id
-          and a.projectId = c.id
-          and c.projectSummaryId = e.id
-          and b.username like "%"#{searchKey}"%"
-          and c.departmentId = #{departmentId}
-        order by b.username asc
+
+    SELECT * from (
+
+            SELECT
+               b.username username, b.tripState tripState, e.projectName, e.designPhase, a.taskLevel, c.startTime, c.stopTime, c.currentProcess, a.role
+            from
+              user_project a, user b, project c, projectSummary e
+            where
+
+               a.userId = b.id
+              and a.projectId = c.id
+              and c.projectSummaryId = e.id
+              and c.departmentId = #{departmentId}
+              and (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+              and (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+              and (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
+              and (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
+		union
+
+            SELECT u.username, u.tripState, ps.projectName, ps.designPhase, p.taskLevel, p.startTime, p.stopTime, p.currentProcess, 'principal'
+
+            from user u, project p, projectSummary ps
+
+            where
+                 u.id = p.principalId
+                and
+                    p.projectSummaryId = ps.id
+                and p.departmentId = #{departmentId}
+                and (u.deltag <![CDATA[ <> ]]> '1' or u.deltag is null)
+                and (p.deltag <![CDATA[ <> ]]> '1' or p.deltag is null)
+                and (ps.deltag <![CDATA[ <> ]]> '1' or ps.deltag is null)
+
+	    union
+
+            SELECT u.username, u.tripState, ps.projectName, ps.designPhase, p.taskLevel, p.startTime, p.stopTime, p.currentProcess, 'chiefEngineer'
+
+            from user u, project p, projectSummary ps
+
+            where
+                 u.id = p.chiefEngineerId
+                and
+                    p.projectSummaryId = ps.id
+                and p.departmentId = #{departmentId}
+                and (u.deltag <![CDATA[ <> ]]> '1' or u.deltag is null)
+                and (p.deltag <![CDATA[ <> ]]> '1' or p.deltag is null)
+                and (ps.deltag <![CDATA[ <> ]]> '1' or ps.deltag is null)
+
+	 order by username asc
+	 ) temp
+
+	where username like "%"#{searchKey}"%"
+
     </select>
 
 
