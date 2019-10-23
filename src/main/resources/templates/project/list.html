@@ -80,16 +80,21 @@
 								</el-table-column>
 								<el-table-column label="负责人">
 									<template slot-scope="scope">
-										<span @click="editProjectPrincipalClick(scope.row.id)" style="color: #080fe8">
+										<div @click="editProjectPrincipalClick(scope.row.id)">
+											<span  style="color: #080fe8">
 											 <el-link type="primary">{{ scope.row.principal }}</el-link>
 										</span>
+										</div>
+
 									</template>
 								</el-table-column>
                                 <el-table-column label="总工">
                                     <template slot-scope="scope">
-										<span @click="editProjectChiefEngineerClick(scope.row.id)" style="color: #e85205">
+										<div @click="editProjectChiefEngineerClick(scope.row.id)">
+											<span  style="color: #e85205">
 											<el-link type="warning">{{ scope.row.chiefEngineer }}</el-link>
 										</span>
+										</div>
 									</template>
                                 </el-table-column>
                                 <el-table-column label="开始时间">

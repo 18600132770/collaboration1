@@ -39,110 +39,159 @@
     </select>
 
     <select id="findProjectByDepartmentId" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-			   a.departmentId, d.departmentName departmentName
-         FROM  project a, user b, user c, department d, projectSummary e
-         where
-                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
-              and
-                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
-              and
-                (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
-              and
-                (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
-              and
-                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
-              and
-                a.principalId = b.id
-              and
-                a.chiefEngineerId = c.id
-              and
-                a.departmentId = d.id
-              and
-				a.projectSummaryId = e.id
-
-              and a.departmentId = #{departmentId}
+        select
+        projectTemp2.id, projectTemp2.projectSummaryId, projectTemp2.projectNum, projectTemp2.projectName, projectTemp2.designPhase,
+        projectTemp2.principalId, projectTemp2.principalName principal, projectTemp2.chiefEngineerId, u2.username chiefEngineer,
+        projectTemp2.startTime, projectTemp2.stopTime, projectTemp2.leftTime, projectTemp2.currentProcess, projectTemp2.emergencyLevel,
+        projectTemp2.createTime, projectTemp2.updateTime, projectTemp2.departmentId, projectTemp2.departmentName, projectTemp2.state, projectTemp2.deltag
+        from
+        (
+                select projectTemp.*, u1.username principalName from
+                    (
+                            select
+                                a.id, a.projectSummaryId, b.projectNum, b.projectName, b.designPhase,
+                                a.principalId, a.principal, a.chiefEngineerId, a.chiefEngineer,
+                                a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel,
+                                a.createTime, a.updateTime, a.departmentId, a.departmentName, a.state, a.deltag
+                            from
+                                project a left join projectSummary b on a.projectSummaryId = b.id
+                            where
+                                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+                            and
+                                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+                    ) as projectTemp left join user u1
+                      on projectTemp.principalId = u1.id
+                where
+                    (projectTemp.deltag <![CDATA[ <> ]]> '1' or projectTemp.deltag is null)
+                and
+                    (u1.deltag <![CDATA[ <> ]]> '1' or u1.deltag is null)
+        ) as projectTemp2 left join user u2
+        on projectTemp2.chiefEngineerId = u2.id
+        where
+            (projectTemp2.deltag <![CDATA[ <> ]]> '1' or projectTemp2.deltag is null)
+        and
+            (u2.deltag <![CDATA[ <> ]]> '1' or u2.deltag is null)
+        and
+            (projectTemp2.departmentId = #{departmentId})
     </select>
 
     <select id="findProjectsByProjectSummaryId" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-			   a.departmentId, d.departmentName departmentName, a.state
-         FROM  project a, user b, user c, department d, projectSummary e
-         where
-                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
-              and
-                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
-              and
-                (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
-              and
-                (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
-              and
-                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
-              and
-                a.principalId = b.id
-              and
-                a.chiefEngineerId = c.id
-              and
-                a.departmentId = d.id
-              and
-				a.projectSummaryId = e.id
+    select
+        temp.id, temp.projectSummaryId, temp.projectNum, temp.projectName, temp.designPhase,
+        temp.principalId, temp.principal, temp.chiefEngineerId, temp.chiefEngineer,
+        temp.startTime, temp.stopTime, temp.leftTime, temp.currentProcess, temp.emergencyLevel,
+        temp.createTime, temp.updateTime, temp.departmentId, dept.departmentName, temp.state, temp.deltag
+        from (
 
-              and a.projectSummaryId = #{projectSummaryId}
+                select
+                projectTemp2.id, projectTemp2.projectSummaryId, projectTemp2.projectNum, projectTemp2.projectName, projectTemp2.designPhase,
+                projectTemp2.principalId, projectTemp2.principalName principal, projectTemp2.chiefEngineerId, u2.username chiefEngineer,
+                projectTemp2.startTime, projectTemp2.stopTime, projectTemp2.leftTime, projectTemp2.currentProcess, projectTemp2.emergencyLevel,
+                projectTemp2.createTime, projectTemp2.updateTime, projectTemp2.departmentId, projectTemp2.departmentName, projectTemp2.state, projectTemp2.deltag
+                from
+                (
+                        select projectTemp.*, u1.username principalName from
+                            (
+                                    select
+                                        a.id, a.projectSummaryId, b.projectNum, b.projectName, b.designPhase,
+                                        a.principalId, a.principal, a.chiefEngineerId, a.chiefEngineer,
+                                        a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel,
+                                        a.createTime, a.updateTime, a.departmentId, a.departmentName, a.state, a.deltag
+                                    from
+                                        project a left join projectSummary b on a.projectSummaryId = b.id
+                                    where
+                                        (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+                                    and
+                                        (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+                            ) as projectTemp left join user u1
+                              on projectTemp.principalId = u1.id
+                        where
+                            (projectTemp.deltag <![CDATA[ <> ]]> '1' or projectTemp.deltag is null)
+                        and
+                            (u1.deltag <![CDATA[ <> ]]> '1' or u1.deltag is null)
+                ) as projectTemp2 left join user u2
+                on projectTemp2.chiefEngineerId = u2.id
+                where
+                    (projectTemp2.deltag <![CDATA[ <> ]]> '1' or projectTemp2.deltag is null)
+                and
+                    (u2.deltag <![CDATA[ <> ]]> '1' or u2.deltag is null)
+
+                and
+                  (projectTemp2.projectSummaryId = #{projectSummaryId})
+        ) as temp left join department dept on temp.departmentId = dept.id
     </select>
 
     <select id="findByProjectNameAndDeptId" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-			   a.departmentId, d.departmentName departmentName
-         FROM  project a, user b, user c, department d, projectSummary e
-         where
-                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
-              and
-                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
-              and
-                (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
-              and
-                (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
-              and
-                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
-              and
-                (a.principalId = b.id or a.principalId is null)
-              and
-                (a.chiefEngineerId = c.id or a.chiefEngineerId is null)
-              and
-                a.departmentId = d.id
-              and
-				a.projectSummaryId = e.id
+        select
+        projectTemp2.id, projectTemp2.projectSummaryId, projectTemp2.projectNum, projectTemp2.projectName, projectTemp2.designPhase,
+        projectTemp2.principalId, projectTemp2.principalName principal, projectTemp2.chiefEngineerId, u2.username chiefEngineer,
+        projectTemp2.startTime, projectTemp2.stopTime, projectTemp2.leftTime, projectTemp2.currentProcess, projectTemp2.emergencyLevel,
+        projectTemp2.createTime, projectTemp2.updateTime, projectTemp2.departmentId, projectTemp2.departmentName, projectTemp2.state, projectTemp2.deltag
+        from
+        (
+                select projectTemp.*, u1.username principalName from
+                    (
+                            select
+                                a.id, a.projectSummaryId, b.projectNum, b.projectName, b.designPhase,
+                                a.principalId, a.principal, a.chiefEngineerId, a.chiefEngineer,
+                                a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel,
+                                a.createTime, a.updateTime, a.departmentId, a.departmentName, a.state, a.deltag
+                            from
+                                project a left join projectSummary b on a.projectSummaryId = b.id
+                            where
+                                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+                            and
+                                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+                    ) as projectTemp left join user u1
+                      on projectTemp.principalId = u1.id
+                where
+                    (projectTemp.deltag <![CDATA[ <> ]]> '1' or projectTemp.deltag is null)
+                and
+                    (u1.deltag <![CDATA[ <> ]]> '1' or u1.deltag is null)
+        ) as projectTemp2 left join user u2
+        on projectTemp2.chiefEngineerId = u2.id
+        where
+            (projectTemp2.deltag <![CDATA[ <> ]]> '1' or projectTemp2.deltag is null)
+        and
+            (u2.deltag <![CDATA[ <> ]]> '1' or u2.deltag is null)
 
-              and e.projectName like "%"#{projectName}"%"
-              and a.departmentId = #{departmentId}
+        and projectTemp2.projectName like "%"#{projectName}"%"
+        and projectTemp2.departmentId = #{departmentId}
     </select>
 
     <select id="findAll" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-			   a.departmentId, d.departmentName departmentName
-         FROM  project a, user b, user c, department d, projectSummary e
-         where
-                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
-              and
-                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
-              and
-                (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
-              and
-                (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
-              and
-                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
-              and
-                a.principalId = b.id
-              and
-                a.chiefEngineerId = c.id
-              and
-                a.departmentId = d.id
-              and
-				a.projectSummaryId = e.id
+        select
+        projectTemp2.id, projectTemp2.projectSummaryId, projectTemp2.projectNum, projectTemp2.projectName, projectTemp2.designPhase,
+        projectTemp2.principalId, projectTemp2.principalName principal, projectTemp2.chiefEngineerId, u2.username chiefEngineer,
+        projectTemp2.startTime, projectTemp2.stopTime, projectTemp2.leftTime, projectTemp2.currentProcess, projectTemp2.emergencyLevel,
+        projectTemp2.createTime, projectTemp2.updateTime, projectTemp2.departmentId, projectTemp2.departmentName, projectTemp2.state, projectTemp2.deltag
+        from
+        (
+                select projectTemp.*, u1.username principalName from
+                    (
+                            select
+                                a.id, a.projectSummaryId, b.projectNum, b.projectName, b.designPhase,
+                                a.principalId, a.principal, a.chiefEngineerId, a.chiefEngineer,
+                                a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel,
+                                a.createTime, a.updateTime, a.departmentId, a.departmentName, a.state, a.deltag
+                            from
+                                project a left join projectSummary b on a.projectSummaryId = b.id
+                            where
+                                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+                            and
+                                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+                    ) as projectTemp left join user u1
+                      on projectTemp.principalId = u1.id
+                where
+                    (projectTemp.deltag <![CDATA[ <> ]]> '1' or projectTemp.deltag is null)
+                and
+                    (u1.deltag <![CDATA[ <> ]]> '1' or u1.deltag is null)
+        ) as projectTemp2 left join user u2
+        on projectTemp2.chiefEngineerId = u2.id
+        where
+            (projectTemp2.deltag <![CDATA[ <> ]]> '1' or projectTemp2.deltag is null)
+        and
+            (u2.deltag <![CDATA[ <> ]]> '1' or u2.deltag is null)
     </select>
 
     <resultMap id="findAllInMap" type="com.huag.collaboration.entities.Project" >
@@ -155,31 +204,41 @@
     </select>
 
     <select id="findById" resultType="com.huag.collaboration.entities.Project">
-        SELECT a.id, a.projectSummaryId, e.projectNum, e.projectName, e.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-			   a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel, a.createTime, a.updateTime,
-			   a.departmentId, d.departmentName departmentName
-         FROM  project a, user b, user c, department d, projectSummary e
-         where
-                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
-              and
-                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
-              and
-                (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
-              and
-                (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
-              and
-                (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
-              and
-                a.principalId = b.id
-              and
-                a.chiefEngineerId = c.id
-              and
-                a.departmentId = d.id
-              and
-				a.projectSummaryId = e.id
+        select
+        projectTemp2.id, projectTemp2.projectSummaryId, projectTemp2.projectNum, projectTemp2.projectName, projectTemp2.designPhase,
+        projectTemp2.principalId, projectTemp2.principalName principal, projectTemp2.chiefEngineerId, u2.username chiefEngineer,
+        projectTemp2.startTime, projectTemp2.stopTime, projectTemp2.leftTime, projectTemp2.currentProcess, projectTemp2.emergencyLevel,
+        projectTemp2.createTime, projectTemp2.updateTime, projectTemp2.departmentId, projectTemp2.departmentName, projectTemp2.state, projectTemp2.deltag
+        from
+        (
+                select projectTemp.*, u1.username principalName from
+                    (
+                            select
+                                a.id, a.projectSummaryId, b.projectNum, b.projectName, b.designPhase,
+                                a.principalId, a.principal, a.chiefEngineerId, a.chiefEngineer,
+                                a.startTime, a.stopTime, a.leftTime, a.currentProcess, a.emergencyLevel,
+                                a.createTime, a.updateTime, a.departmentId, a.departmentName, a.state, a.deltag
+                            from
+                                project a left join projectSummary b on a.projectSummaryId = b.id
+                            where
+                                (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+                            and
+                                (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+                    ) as projectTemp left join user u1
+                      on projectTemp.principalId = u1.id
+                where
+                    (projectTemp.deltag <![CDATA[ <> ]]> '1' or projectTemp.deltag is null)
+                and
+                    (u1.deltag <![CDATA[ <> ]]> '1' or u1.deltag is null)
+        ) as projectTemp2 left join user u2
+        on projectTemp2.chiefEngineerId = u2.id
+        where
+            (projectTemp2.deltag <![CDATA[ <> ]]> '1' or projectTemp2.deltag is null)
+        and
+            (u2.deltag <![CDATA[ <> ]]> '1' or u2.deltag is null)
 
-              and
-                a.id=#{id}
+          and
+            projectTemp2.id=#{id}
     </select>
 
     <insert id="deleteById">
