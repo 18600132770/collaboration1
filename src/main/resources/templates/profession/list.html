@@ -137,7 +137,6 @@
 								<el-option v-for="item in chiefEngineers" :key="item.chiefEngineerId" :label="item.chiefEngineer" :value="item.chiefEngineerId"></el-option>
 							</el-select>
 						</div>
-						<!--TODO 添加多选框-->
 						<div class="form-group">
 							<label style="margin-left: 10px; display: inline; width: 20%;">分派部门：</label>
 							<el-select v-model="selectDepartments" multiple placeholder="请选择">
@@ -213,10 +212,7 @@
 							getDepartments();//查询所有部门信息
 						},
 						saveAddProject: function(){
-							// TODO 保存项目，li 项目那边好像应该group by 去重后显示结果
-							// console.log(app.addProject)
 							addProject(this);//通过Modal框添加新的项目
-
 						},
 						showProjectById: function(id){
 							app.currentProjectSummaryId = id
@@ -224,7 +220,7 @@
 							//更改li颜色
 							var myProjects = app.projects
 							for(var i = 0; i < myProjects.length; i++){
-								if(i == (id-1)){
+								if(myProjects[i].id == id){
 									myProjects[i].deltag = 'm-a cur'
 								}else{
 									myProjects[i].deltag = ''
