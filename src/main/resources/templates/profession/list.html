@@ -180,11 +180,7 @@
 						currentPage: 1,
 						tableData: null,
 						searchKey: null,
-						project: {
-							projectNum: "XM-20190101A",
-							projectName: "马东铁路",
-							designPhase: "设计",
-						},
+						project: {},
 						projects:{},
 						principals:{},
 						chiefEngineers:{},
@@ -305,6 +301,17 @@
 								if(result.code == 200){
 									findAllProjectSummary()
 									app.dialogAddProjectVisible = false
+									app.addProject = {}
+									app.principalModalInput = null
+									app.chiefEngineerModalInput = null
+									app.principals = {}
+									app.chiefEngineers = {}
+									app.selectDepartments = null
+									app.departments = {}
+									that.$message({
+										message: '项目添加成功',
+										type: 'success'
+									});
 								}else{
 									console.log("返回值失败 addProject")
 								}

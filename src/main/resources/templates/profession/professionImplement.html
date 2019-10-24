@@ -52,13 +52,21 @@
 			</el-scrollbar>
 
 			<el-scrollbar class="dsource-r">
+
+				<div hidden="true" v-model="projectSummaryId"></div>
+				<div hidden="true" v-model="projectId"></div>
+
 				<nav class="navbar navbar-light bg-light">
 
-					<h2><a class="btn btn-primary btn-lg active" href="project" :href="'/crud/project/'">任务分配</a></h2>
-					<h2><a class="btn btn-primary btn-lg active" href="project" th:href="@{/upperProfessionDatas/}">上序资料</a></h2>
-					<h2><a class="btn btn-primary btn-lg active" href="project" th:href="@{/underProfessionDatas/}">提下序</a></h2>
-					<h2><a class="btn btn-primary btn-lg active" href="project" :href="'/crud/project/'">专业项目文件</a></h2>
-					<h2><a class="btn btn-primary btn-lg active" href="project" th:href="@{/notices}">通知</a></h2>
+					<el-button type="primary">主要按钮</el-button>
+
+					<el-button type="primary" plain>主要按钮</el-button>
+
+					<el-button type="primary"><a :href="'/crud/project/'">任务分配</a></el-button>
+					<el-button type="primary"><a th:href="@{/upperProfessionDatas/}">上序资料</a></el-button>
+					<el-button type="primary"><a  href="project" th:href="@{/underProfessionDatas/}">提下序</a></el-button>
+					<el-button type="primary"><a  href="project" :href="'/crud/project/'">专业项目文件</a></el-button>
+					<el-button type="primary"><a  href="project" th:href="@{/notices}">通知</a></el-button>
 
 				</nav>
 				<div class="ds-table-wrap" >
@@ -102,14 +110,10 @@
 				currentPage: 1,
 				tableData: null,
 				searchKey: null,
-				project: {
-					projectNum: "XM-20190101A",
-					projectName: "马东铁路",
-					designPhase: "设计",
-				},
-				projects:{
-
-				},
+				projectSummaryId: null,
+				projectId: null,
+				project: {},
+				projects:{},
 				isActive: true,
 				projectClass1: "m-a cur"
 			},
@@ -143,34 +147,7 @@
 		})
 
 		app.projects = projectList
-
-
-		/**
-		 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
-		 */
-		// var ajaxData = {}
-		// $.ajax({
-		// 	data: ajaxData,
-		// 	type: "GET",
-		// 	url: "/crud/project/findAll",
-		// 	success: function (result) {
-		// 		if(result.code == 200){
-		// 			var projectsLiShow = result.data
-		// 			for(var i = 0; i < projectsLiShow.length; i++){
-		// 				if(i == 0){
-		// 					projectsLiShow[i].deltag = 'm-a cur'
-		// 				}else{
-		// 					projectsLiShow[i].deltag = ''
-		// 				}
-		// 			}
-		// 			app.projects=projectsLiShow
-		//
-		// 		}else{
-		// 			console.log("返回值失败")
-		// 		}
-		//
-		// 	}
-		// })
+		app.projectSummaryId = projectList[0].projectSummaryId
 
 
 
