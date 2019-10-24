@@ -75,12 +75,58 @@
 					<!--<img  th:src="@{/asserts/img/1.PNG}">-->
 
 
-					</image>
-
-
-
 				</div>
+
+
+
 			</el-scrollbar>
+
+			<!-- 任务分配modal -->
+			<el-dialog title="任务分配" :visible.sync="dialogAddTaskAssignmentVisible" width="60%">
+				<el-table style="width: 100%;" :data="taskAssignmentTable" class="x-table table-td0">
+					<el-table-column type="selection" width="55"></el-table-column>
+					<!--<el-table-column label="序号" width="60" type="index">-->
+					<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
+					<!--</el-table-column>-->
+					<el-table-column label="任务">
+						<template slot-scope="scope">
+							<template slot-scope="scope"><span>{{ scope.row.taskName }}</span></template>
+						</template>
+					</el-table-column>
+					<el-table-column label="任务级别">
+						<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
+					</el-table-column>
+					<el-table-column label="设计">
+						<template slot-scope="scope"><span>{{ scope.row.designer }}</span></template>
+					</el-table-column>
+					<el-table-column  label="复核">
+						<template slot-scope="scope"><span>{{ scope.row.reviewer }}</span></template>
+					</el-table-column>
+					<el-table-column  label="审核">
+						<template slot-scope="scope"><span>{{ scope.row.inspector }}</span></template>
+					</el-table-column>
+					<el-table-column  label="审定">
+						<template slot-scope="scope"><span>{{ scope.row.validationer }}</span></template>
+					</el-table-column>
+					<el-table-column  label="开始时间">
+						<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
+					</el-table-column>
+					<el-table-column  label="截止时间">
+						<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
+					</el-table-column>
+				</el-table>
+				<el-pagination class="txtCenter"
+							   @size-change="handleSizeChange"
+							   @current-change="handleCurrentChange"
+							   :current-page.sync="currentPage"
+							   :page-sizes="[10,20,30,50]"
+							   :page-size="100"
+							   layout=" sizes, prev, pager, next"
+							   :total="1000">
+				</el-pagination>
+			</el-dialog>
+
+
 		</div>
 	</div>
 
@@ -106,7 +152,7 @@
 		var app = new Vue({
 			el: '#app',
 			data: {
-				dialogFormVisible: false,
+				dialogAddTaskAssignmentVisible: false,
 				currentPage: 1,
 				tableData: null,
 				searchKey: null,
@@ -115,7 +161,8 @@
 				project: {},
 				projects:{},
 				isActive: true,
-				projectClass1: "m-a cur"
+				projectClass1: "m-a cur",
+				taskAssignmentTable: {},
 			},
 			methods: {
 				handleSizeChange(val) {

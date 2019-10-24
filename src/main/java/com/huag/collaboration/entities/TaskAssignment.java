@@ -25,6 +25,14 @@ public class TaskAssignment implements Serializable {
     private Integer inspectorId;//审核者id
     private Integer validationerId;//审定者id
 
+    private String designer;//设计者
+    private String reviewer;//复核者
+    private String inspector;//审核者
+    private String validationer;//审定者
+
+    private Integer departmentId;//所id
+    private String departmentName;//所
+
     private String taskLevel;//任务级别
     private String startTime;
     private String stopTime;
