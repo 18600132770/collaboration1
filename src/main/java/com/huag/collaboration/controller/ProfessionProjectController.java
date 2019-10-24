@@ -1,8 +1,10 @@
 package com.huag.collaboration.controller;
 
 import com.huag.collaboration.entities.ProfessionProject;
+import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfessionProjectMapper;
+import com.huag.collaboration.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,9 @@ public class ProfessionProjectController {
 
     @Autowired
     ProfessionProjectMapper professionProjectMapper;
+
+    @Autowired
+    ProjectMapper projectMapper;
 
     /**
      * 页面跳转
@@ -56,11 +61,26 @@ public class ProfessionProjectController {
      * @return
      */
     @GetMapping("/profession/{id}")
-    public String toEditProject(@PathVariable("id") Integer id, Model model){
+    public String toEditProject(@PathVariable("id") String id, Model model){
 //        Project project = projectMapper.findById(id);
 //        model.addAttribute("project", project);
 //        List<ProjectSubitem> projectSubitemList = projectSubitemMapper.findByProjectId(id);
 //        model.addAttribute("projectSubitemList", projectSubitemList);
+
+        String[] split = id.split(",");
+        int projectSummaryId = Integer.valueOf(split[0]);
+        int projectId = Integer.valueOf(split[1]);
+
+        List<Project> projectList = projectMapper.findProjectsByProjectSummaryId(projectSummaryId);
+        projectList.forEach(project -> {
+            if(projectId == project.getId()){
+                project.setDeltag("m-a cur");
+            }
+        });
+
+        model.addAttribute("projectSummaryId", id);
+        model.addAttribute("projectList", projectList);
+
         return "profession/professionImplement";
     }
 

@@ -153,5 +153,13 @@ public class CollaborationApplicationTests {
         System.out.println(abs);
     }
 
+    @Test
+    public void test10(){
+        List<Project> projectList = projectMapper.findProjectsByProjectSummaryId(1);
+        projectList.forEach(project -> {
+            System.out.println(project);
+        });
+    }
+
 
 }

@@ -45,7 +45,7 @@
 							<use xlink:href="#icon-hh2"></use>
 						</svg>
 						<ul class="manager-sec" v-for="project, key in projects" :key="key">
-							<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>
+							<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.departmentName}}</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -64,10 +64,7 @@
 				<div class="ds-table-wrap" >
 
 
-					<!--<image th:src="asserts/img/1.PNG">-->
-					<!--<link href="asserts/css/reset.css" th:href="@{/asserts/css/reset.css}" rel="stylesheet">-->
-					<!--<img src="asserts/img/1.PNG">-->
-					<img  th:src="@{/asserts/img/1.PNG}">
+					<!--<img  th:src="@{/asserts/img/1.PNG}">-->
 
 
 					</image>
@@ -93,7 +90,10 @@
 		feather.replace()
 	</script>
 
-	<script type="text/javascript">
+	<script th:inline="javascript" type="text/javascript">
+
+		var projectList =[[ ${projectList}]]
+		console.log(projectList)
 
 		var app = new Vue({
 			el: '#app',
@@ -127,7 +127,7 @@
 					//更改li颜色
 					var myProjects = app.projects
 					for(var i = 0; i < myProjects.length; i++){
-						if(i == (id-1)){
+						if(myProjects[i].id == id){
 							myProjects[i].deltag = 'm-a cur'
 						}else{
 							myProjects[i].deltag = ''
@@ -142,33 +142,35 @@
 
 		})
 
+		app.projects = projectList
+
 
 		/**
 		 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
 		 */
-		var ajaxData = {}
-		$.ajax({
-			data: ajaxData,
-			type: "GET",
-			url: "/crud/project/findAll",
-			success: function (result) {
-				if(result.code == 200){
-					var projectsLiShow = result.data
-					for(var i = 0; i < projectsLiShow.length; i++){
-						if(i == 0){
-							projectsLiShow[i].deltag = 'm-a cur'
-						}else{
-							projectsLiShow[i].deltag = ''
-						}
-					}
-					app.projects=projectsLiShow
-
-				}else{
-					console.log("返回值失败")
-				}
-
-			}
-		})
+		// var ajaxData = {}
+		// $.ajax({
+		// 	data: ajaxData,
+		// 	type: "GET",
+		// 	url: "/crud/project/findAll",
+		// 	success: function (result) {
+		// 		if(result.code == 200){
+		// 			var projectsLiShow = result.data
+		// 			for(var i = 0; i < projectsLiShow.length; i++){
+		// 				if(i == 0){
+		// 					projectsLiShow[i].deltag = 'm-a cur'
+		// 				}else{
+		// 					projectsLiShow[i].deltag = ''
+		// 				}
+		// 			}
+		// 			app.projects=projectsLiShow
+		//
+		// 		}else{
+		// 			console.log("返回值失败")
+		// 		}
+		//
+		// 	}
+		// })
 
 
 

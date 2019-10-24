@@ -76,7 +76,7 @@
 								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
 								<!--</el-table-column>-->
 								<el-table-column label="专业">
-									<template slot-scope="scope"><a target="_blank" th:href="@{/profession/1}">{{ scope.row.departmentName }} </a></template>
+									<template slot-scope="scope"><a target="_blank" :href="'/crud/profession/' + project.id + ',' + scope.row.id">{{ scope.row.departmentName }} </a></template>
 								</el-table-column>
 								<!--<el-table-column label="专业审定">-->
 								<el-table-column label="专业负责人">
