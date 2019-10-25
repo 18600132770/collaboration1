@@ -67,7 +67,6 @@
 
 					<el-button type="primary" @click="addTaskAssignmentClick">添加任务</el-button>
 
-					<el-button type="primary"><a :href="'/crud/project/'">任务分配</a></el-button>
 					<el-button type="primary"><a th:href="@{/upperProfessionDatas/}">上序资料</a></el-button>
 					<el-button type="primary"><a  href="project" th:href="@{/underProfessionDatas/}">提下序</a></el-button>
 					<el-button type="primary"><a  href="project" :href="'/crud/project/'">专业项目文件</a></el-button>
@@ -96,7 +95,13 @@
 								<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
 							</el-table-column>
 							<el-table-column label="设计">
-								<template slot-scope="scope"><span>{{ scope.row.designer }}</span></template>
+								<template slot-scope="scope">
+									<div @click="editTaskAssignmentClick(scope.row.id)">
+											<span  style="color: #080fe8">
+											 <el-link type="primary">{{ scope.row.designer }}</el-link>
+										</span>
+									</div>
+								</template>
 							</el-table-column>
 							<el-table-column  label="复核">
 								<template slot-scope="scope"><span>{{ scope.row.reviewer }}</span></template>
@@ -290,7 +295,17 @@
 
 						}
 					})
+				},
+				//编辑设计人员
+				editTaskAssignmentClick: function () {
+
+
 				}
+				
+				
+				
+				
+				
 			}
 
 		})
