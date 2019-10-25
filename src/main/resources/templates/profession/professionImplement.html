@@ -11,15 +11,22 @@
 
 	<title>中国知网大数据融合应用平台</title>
 
+	<!--<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">-->
+	<!--<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">-->
+	<!--<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">-->
+	<!--<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">-->
+	<!--<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">-->
+	<!--<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">-->
+	<!--<link href="asserts/css/axure_rp_page.css" th:href="@{/asserts/css/axure_rp_page.css}" rel="stylesheet">-->
+	<!--<link href="asserts/css/default.css" th:href="@{/asserts/css/default.css}" rel="stylesheet">-->
+	<!--<link href="asserts/css/reset.css" th:href="@{/asserts/css/reset.css}" rel="stylesheet">-->
+
 	<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
 	<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
 	<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
 	<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
 	<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
 	<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
-	<link href="asserts/css/axure_rp_page.css" th:href="@{/asserts/css/axure_rp_page.css}" rel="stylesheet">
-	<link href="asserts/css/default.css" th:href="@{/asserts/css/default.css}" rel="stylesheet">
-	<link href="asserts/css/reset.css" th:href="@{/asserts/css/reset.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -53,14 +60,12 @@
 
 			<el-scrollbar class="dsource-r">
 
-				<div hidden="true" v-model="projectSummaryId"></div>
-				<div hidden="true" v-model="projectId"></div>
-
 				<nav class="navbar navbar-light bg-light">
 
-					<el-button type="primary">主要按钮</el-button>
+					<el-input hidden="true"  v-model="projectSummaryId" style="height: 0px" ></el-input>
+					<el-input hidden="true"  v-model="projectId"  style="height: 0px"></el-input>
 
-					<el-button type="primary" plain>主要按钮</el-button>
+					<el-button type="primary">主要按钮</el-button>
 
 					<el-button type="primary"><a :href="'/crud/project/'">任务分配</a></el-button>
 					<el-button type="primary"><a th:href="@{/upperProfessionDatas/}">上序资料</a></el-button>
@@ -71,60 +76,79 @@
 				</nav>
 				<div class="ds-table-wrap" >
 
-
 					<!--<img  th:src="@{/asserts/img/1.PNG}">-->
+					<nav>
+						<div class="nav nav-tabs" role="tablist" v-for="navigationBar, key in navigationBars" :key="key">
+							<a style="display: inline-block" :class="navigationBar.style" @click="switchNavigationBar(navigationBar.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{navigationBar.name}}</a>
+						</div>
+					</nav>
+
+					<div :hidden="detailTableHidden" style="margin-top: 10px">
+						<el-table style="width: 100%;" :data="taskAssignmentListData" class="x-table table-td0">
+							<el-table-column type="selection" width="55"></el-table-column>
+							<!--<el-table-column label="序号" width="60" type="index">-->
+							<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
+							<!--</el-table-column>-->
+							<el-table-column label="任务">
+								<template slot-scope="scope"><span>{{ scope.row.taskName }}</span></template>
+							</el-table-column>
+							<el-table-column label="任务级别">
+								<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
+							</el-table-column>
+							<el-table-column label="设计">
+								<template slot-scope="scope"><span>{{ scope.row.designer }}</span></template>
+							</el-table-column>
+							<el-table-column  label="复核">
+								<template slot-scope="scope"><span>{{ scope.row.reviewer }}</span></template>
+							</el-table-column>
+							<el-table-column  label="审核">
+								<template slot-scope="scope"><span>{{ scope.row.inspector }}</span></template>
+							</el-table-column>
+							<el-table-column  label="审定">
+								<template slot-scope="scope"><span>{{ scope.row.validationer }}</span></template>
+							</el-table-column>
+							<el-table-column  label="开始时间">
+								<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
+							</el-table-column>
+							<el-table-column  label="截止时间">
+								<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
+							</el-table-column>
+						</el-table>
+						<el-pagination class="txtCenter"
+									   @size-change="handleSizeChange"
+									   @current-change="handleCurrentChange"
+									   :current-page.sync="currentPage"
+									   :page-sizes="[10,20,30,50]"
+									   :page-size="100"
+									   layout=" sizes, prev, pager, next"
+									   :total="1000">
+						</el-pagination>
+					</div>
+
+					<div :hidden="flowChartTableHidden" style="margin-top: 20px">
+						<ul>
+							<li v-for="taskAssignmentData, index in taskAssignmentListData" :key="index">
+								<el-steps :active="taskAssignmentData.finishedLevel" align-center>
+									<el-step :title="taskAssignmentData.designer" description="设计"></el-step>
+									<el-step :title="taskAssignmentData.reviewer" description="复核"></el-step>
+									<el-step :title="taskAssignmentData.inspector" description="审核"></el-step>
+									<el-step :title="taskAssignmentData.validationer" description="审定"></el-step>
+								</el-steps>
+								<div style="height: 40px"></div>
+
+							</li>
+						</ul>
+					</div>
 
 
 				</div>
 
-
-
 			</el-scrollbar>
 
 			<!-- 任务分配modal -->
-			<el-dialog title="任务分配" :visible.sync="dialogAddTaskAssignmentVisible" width="60%">
-				<el-table style="width: 100%;" :data="taskAssignmentTable" class="x-table table-td0">
-					<el-table-column type="selection" width="55"></el-table-column>
-					<!--<el-table-column label="序号" width="60" type="index">-->
-					<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
-					<!--</el-table-column>-->
-					<el-table-column label="任务">
-						<template slot-scope="scope">
-							<template slot-scope="scope"><span>{{ scope.row.taskName }}</span></template>
-						</template>
-					</el-table-column>
-					<el-table-column label="任务级别">
-						<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
-					</el-table-column>
-					<el-table-column label="设计">
-						<template slot-scope="scope"><span>{{ scope.row.designer }}</span></template>
-					</el-table-column>
-					<el-table-column  label="复核">
-						<template slot-scope="scope"><span>{{ scope.row.reviewer }}</span></template>
-					</el-table-column>
-					<el-table-column  label="审核">
-						<template slot-scope="scope"><span>{{ scope.row.inspector }}</span></template>
-					</el-table-column>
-					<el-table-column  label="审定">
-						<template slot-scope="scope"><span>{{ scope.row.validationer }}</span></template>
-					</el-table-column>
-					<el-table-column  label="开始时间">
-						<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
-					</el-table-column>
-					<el-table-column  label="截止时间">
-						<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
-					</el-table-column>
-				</el-table>
-				<el-pagination class="txtCenter"
-							   @size-change="handleSizeChange"
-							   @current-change="handleCurrentChange"
-							   :current-page.sync="currentPage"
-							   :page-sizes="[10,20,30,50]"
-							   :page-size="100"
-							   layout=" sizes, prev, pager, next"
-							   :total="1000">
-				</el-pagination>
-			</el-dialog>
+			<!--<el-dialog title="任务分配" :visible.sync="dialogAddTaskAssignmentVisible" width="60%">-->
+
+			<!--</el-dialog>-->
 
 
 		</div>
@@ -146,23 +170,32 @@
 
 	<script th:inline="javascript" type="text/javascript">
 
-		var projectList =[[ ${projectList}]]
-		console.log(projectList)
-
 		var app = new Vue({
 			el: '#app',
 			data: {
 				dialogAddTaskAssignmentVisible: false,
+				detailTableHidden: false,
+				flowChartTableHidden: true,
 				currentPage: 1,
-				tableData: null,
-				searchKey: null,
 				projectSummaryId: null,
 				projectId: null,
 				project: {},
 				projects:{},
 				isActive: true,
 				projectClass1: "m-a cur",
-				taskAssignmentTable: {},
+				taskAssignmentListData: null,
+				navigationBars:[
+					{
+						id: 1,
+						name: "信息列表",
+						style:"nav-item nav-link active"
+					},
+					{
+						id: 2,
+						name: "流程图",
+						style:"nav-item nav-link"
+					}
+				],
 			},
 			methods: {
 				handleSizeChange(val) {
@@ -180,21 +213,70 @@
 					for(var i = 0; i < myProjects.length; i++){
 						if(myProjects[i].id == id){
 							myProjects[i].deltag = 'm-a cur'
+							app.projectId = myProjects[i].id
+							findByProjectId();//根据分项目查询该分项目下的任务分配情况
 						}else{
 							myProjects[i].deltag = ''
 						}
 					}
 					app.projects = myProjects
-
-
-
 				},
+				switchNavigationBar: function (id) {
+					var navigationBars = app.navigationBars
+					for(var i = 0; i < navigationBars.length; i++){
+						if(id == navigationBars[i].id){
+							navigationBars[i].style = "nav-item nav-link active"
+						}else{
+							navigationBars[i].style = "nav-item nav-link"
+						}
+					}
+					if(id == 1){
+						app.detailTableHidden = false
+						app.flowChartTableHidden = true
+					}else if(id == 2){
+						app.detailTableHidden = true
+						app.flowChartTableHidden = false
+					}
+
+				}
 			}
 
 		})
 
+		var projectList =[[ ${projectList}]]
+		console.log(projectList)
+
 		app.projects = projectList
 		app.projectSummaryId = projectList[0].projectSummaryId
+
+		for(var i = 0; i < projectList.length; i++){
+			if(projectList[i].deltag == "m-a cur"){
+				app.projectId = projectList[i].id
+			}
+		}
+
+		findByProjectId();//根据分项目查询该分项目下的任务分配情况
+
+		/**
+		 * 根据分项目查询该分项目下的任务分配情况
+		 */
+		function findByProjectId() {
+			var ajaxData = {}
+			ajaxData.projectId = app.projectId
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/taskAssignment/findByProjectId",
+				success: function (result) {
+					if(result.code == 200){
+						app.taskAssignmentListData=result.data
+					}else{
+						console.log("updatePrincipal 返回值失败")
+					}
+
+				}
+			})
+		}
 
 
 

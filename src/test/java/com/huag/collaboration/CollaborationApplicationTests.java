@@ -1,9 +1,11 @@
 package com.huag.collaboration;
 
 import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.TaskAssignment;
 import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.mapper.ProfessionProjectMapper;
 import com.huag.collaboration.mapper.ProjectMapper;
+import com.huag.collaboration.mapper.TaskAssignmentMapper;
 import com.huag.collaboration.mapper.UserProjectMapper;
 import com.huag.collaboration.utils.DateUtils;
 import org.junit.Test;
@@ -31,6 +33,9 @@ public class CollaborationApplicationTests {
 
     @Autowired
     UserProjectMapper userProjectMapper;
+
+    @Autowired
+    TaskAssignmentMapper taskAssignmentMapper;
 
     @Test
     public void test1() {
@@ -158,6 +163,15 @@ public class CollaborationApplicationTests {
         List<Project> projectList = projectMapper.findProjectsByProjectSummaryId(1);
         projectList.forEach(project -> {
             System.out.println(project);
+        });
+    }
+
+
+    @Test
+    public void test11(){
+        List<TaskAssignment> taskAssignmentList = taskAssignmentMapper.findByProjectId(16);
+        taskAssignmentList.forEach(taskAssignment -> {
+            System.out.println(taskAssignment);
         });
     }
 

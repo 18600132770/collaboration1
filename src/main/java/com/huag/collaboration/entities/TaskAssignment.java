@@ -20,6 +20,10 @@ public class TaskAssignment implements Serializable {
     private String taskName;
     private Integer projectId;//专业分项id
 
+    private Integer finishedLevel;//完成程度
+                                //              设计  复核  审核  审定
+                                //         0     1      2    3     4
+
     private Integer designerId;//设计者id
     private Integer reviewerId;//复核者id
     private Integer inspectorId;//审核者id
