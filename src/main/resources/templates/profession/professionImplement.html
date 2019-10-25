@@ -65,7 +65,7 @@
 					<el-input hidden="true"  v-model="projectSummaryId" style="height: 0px" ></el-input>
 					<el-input hidden="true"  v-model="projectId"  style="height: 0px"></el-input>
 
-					<el-button type="primary">主要按钮</el-button>
+					<el-button type="primary" @click="addTaskAssignmentClick">添加任务</el-button>
 
 					<el-button type="primary"><a :href="'/crud/project/'">任务分配</a></el-button>
 					<el-button type="primary"><a th:href="@{/upperProfessionDatas/}">上序资料</a></el-button>
@@ -146,9 +146,27 @@
 			</el-scrollbar>
 
 			<!-- 任务分配modal -->
-			<!--<el-dialog title="任务分配" :visible.sync="dialogAddTaskAssignmentVisible" width="60%">-->
-
-			<!--</el-dialog>-->
+			<el-dialog title="任务分配" :visible.sync="addTaskAssignmentDialogVisible" width="60%">
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">任务名称：</label>
+					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addTaskAssignment.taskName">
+				</div>
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">任务级别：</label>
+					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addTaskAssignment.taskLevel">
+				</div>
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">开始时间：</label>
+					<el-date-picker	v-model="addTaskAssignment.startTime" type="date" placeholder="选择日期"></el-date-picker>
+				</div>
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">截止时间：</label>
+					<el-date-picker	v-model="addTaskAssignment.stopTime" type="date" placeholder="选择日期"></el-date-picker>
+				</div>
+				<div class="modal-footer">
+					<button  class="btn btn-primary" @click="saveAddTaskAssignment">保存</button>
+				</div>
+			</el-dialog>
 
 
 		</div>
@@ -173,7 +191,7 @@
 		var app = new Vue({
 			el: '#app',
 			data: {
-				dialogAddTaskAssignmentVisible: false,
+				addTaskAssignmentDialogVisible: false,
 				detailTableHidden: false,
 				flowChartTableHidden: true,
 				currentPage: 1,
@@ -181,6 +199,7 @@
 				projectId: null,
 				project: {},
 				projects:{},
+				addTaskAssignment:{},
 				isActive: true,
 				projectClass1: "m-a cur",
 				taskAssignmentListData: null,
@@ -238,6 +257,39 @@
 						app.flowChartTableHidden = false
 					}
 
+				},
+				//添加任务按钮
+				addTaskAssignmentClick: function () {
+					app.addTaskAssignmentDialogVisible = true
+				},
+				//保存新添加的任务
+				saveAddTaskAssignment: function () {
+					var that = this
+					var addTaskAssignment = app.addTaskAssignment
+					addTaskAssignment.projectId = app.projectId
+					var ajaxData = {}
+
+					ajaxData.taskAssignment = encodeURI(JSON.stringify(addTaskAssignment))
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/taskAssignment/addTaskAssignment",
+						traditional: true,
+						success: function (result) {
+							if(result.code == 200){
+								findByProjectId();//根据分项目查询该分项目下的任务分配情况
+								app.addTaskAssignmentDialogVisible = false
+								app.addTaskAssignment = {}
+								that.$message({
+									message: '任务添加成功',
+									type: 'success'
+								});
+							}else{
+								console.log("返回值失败 addTaskAssignment")
+							}
+
+						}
+					})
 				}
 			}
 

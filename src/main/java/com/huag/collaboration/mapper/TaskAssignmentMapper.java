@@ -17,4 +17,11 @@ public interface TaskAssignmentMapper {
      */
     List<TaskAssignment> findByProjectId(Integer projectId);
 
+    /**
+     * 插入数据
+     * @param taskAssignment
+     * @return
+     */
+    int insert(TaskAssignment taskAssignment);
+
 }

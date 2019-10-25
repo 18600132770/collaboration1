@@ -24,5 +24,17 @@
         ) as t4 left join user u4 on t4.validationerId = u4.id
     </select>
 
+    <insert id="insert" parameterType="com.huag.collaboration.entities.TaskAssignment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            taskAssignment(
+            taskName, projectId, finishedLevel, designerId, reviewerId, inspectorId, validationerId,
+            designer, reviewer, inspector, validationer, departmentId, departmentName,
+            taskLevel, startTime, stopTime, createtTime, updateTime, deltag)
+         VALUES
+             (#{taskName}, #{projectId}, #{finishedLevel}, #{designerId}, #{reviewerId}, #{inspectorId}, #{validationerId},
+             #{designer}, #{reviewer}, #{inspector}, #{validationer}, #{departmentId}, #{departmentName},
+             #{taskLevel}, #{startTime}, #{stopTime}, now(), now(), #{deltag})
+    </insert>
+
 
 </mapper>
