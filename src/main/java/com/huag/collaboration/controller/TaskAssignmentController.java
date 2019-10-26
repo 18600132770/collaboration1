@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectSummary;
 import com.huag.collaboration.entities.TaskAssignment;
+import com.huag.collaboration.entities.User;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.TaskAssignmentMapper;
+import com.huag.collaboration.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,9 @@ public class TaskAssignmentController {
 
     @Autowired
     TaskAssignmentMapper taskAssignmentMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
     @ResponseBody
     @RequestMapping(value = "/taskAssignment/findByProjectId")
@@ -62,6 +67,24 @@ public class TaskAssignmentController {
         taskAssignmentMapper.insert(taskAssignment);
         result.code = 200;
         return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/taskAssignment/editEngineer")
+    public BaseResponse<TaskAssignment> editEngineer(HttpServletRequest request) throws Exception{
+        BaseResponse<TaskAssignment> result = new BaseResponse<>();
+        String username = URLDecoder.decode(String.valueOf(request.getParameter("username")), "UTF-8");
+        String departmentId = String.valueOf(request.getParameter("departmentId"));
+        String selectTaskId = String.valueOf(request.getParameter("selectTaskId"));
+        String selectUserRole = String.valueOf(request.getParameter("selectUserRole"));//designer reviewer inspector validationer
+
+        List<User> userList = userMapper.findByUserNameAndDeptId(username, Integer.valueOf(departmentId));
+
+        //TODO
+
+        return null;
+
+
     }
 
 

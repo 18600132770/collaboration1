@@ -23,4 +23,6 @@ public interface UserMapper {
      */
     public List<User> findAllChiefEngineers(@Param("departmentId") Integer departmentId);
 
+    List<User> findByUserNameAndDeptId(@Param("username") String username, @Param("departmentId") Integer departmentId);
+
 }

@@ -68,7 +68,7 @@
 							</nav>
 
 							<el-table style="width: 100%;margin-top: 10px;" :data="tableData" class="x-table table-td0">
-								<el-table-column type="selection" width="55"></el-table-column>
+								<el-table-column  type="index" :index="indexMethod" width="55" label="序号"></el-table-column>
 								<!--<el-table-column label="序号" width="60" type="index">-->
 								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
 								<!--</el-table-column>-->
@@ -308,7 +308,14 @@
 
 								}
 							})
+						},
+						indexMethod: function(index) {
+							return index+1 ;
 						}
+
+
+
+
 					}
 
 				})

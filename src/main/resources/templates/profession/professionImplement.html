@@ -63,7 +63,10 @@
 				<nav class="navbar navbar-light bg-light">
 
 					<el-input hidden="true"  v-model="projectSummaryId" style="height: 0px" ></el-input>
+					<el-input hidden="true"  v-model="departmentId" style="height: 0px" ></el-input>
 					<el-input hidden="true"  v-model="projectId"  style="height: 0px"></el-input>
+					<el-input hidden="true"  v-model="selectUserRole"  style="height: 0px"></el-input>
+					<el-input hidden="true"  v-model="selectTaskId"  style="height: 0px"></el-input>
 
 					<el-button type="primary" @click="addTaskAssignmentClick">添加任务</el-button>
 
@@ -174,6 +177,73 @@
 			</el-dialog>
 
 
+			<!-- 人员项目信息modal -->
+			<el-dialog title="人员项目信息" :visible.sync="userProjectsDialogVisible" width="80%">
+				<el-table style="width: 100%;margin-top: 10px;" :data="userProjectsTableData" class="x-table table-td0">
+					<!--<el-table-column type="selection" width="55"></el-table-column>-->
+					<el-table-column label="姓名">
+						<template slot-scope="scope">
+								 <el-link type="primary">{{ scope.row.username }}</el-link>
+						</template>
+					</el-table-column>
+					<el-table-column label="状态">
+						<template slot-scope="scope"><a  target="_blank">{{ scope.row.tripState }} </a></template>
+					</el-table-column>
+					<!--<el-table-column  label="已完成工作量">-->
+						<!--<template slot-scope="scope"><span>{{ scope.row.finishedWorkload }}</span></template>-->
+					<!--</el-table-column>-->
+					<!--<el-table-column  label="目前工作量">-->
+						<!--<template slot-scope="scope"><span>{{ scope.row.currentWorkload }}</span></template>-->
+					<!--</el-table-column>-->
+					<el-table-column label="项目名称">
+						<template slot-scope="scope"><a  target="_blank">{{ scope.row.projectName }} </a></template>
+					</el-table-column>
+					<el-table-column label="设计阶段">
+						<template slot-scope="scope"><span>{{ scope.row.designPhase }}</span></template>
+					</el-table-column>
+					<el-table-column label="任务级别">
+						<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
+					</el-table-column>
+					<el-table-column label="开始时间">
+						<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
+					</el-table-column>
+					<el-table-column  label="截止时间">
+						<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
+					</el-table-column>
+					<el-table-column  label="剩余天数">
+						<template slot-scope="scope"><span>{{ scope.row.leftTime }}</span></template>
+					</el-table-column>
+					<el-table-column  label="目前进度">
+						<template slot-scope="scope">
+										<span>
+											<div class="progress" :hidden="scope.row.hidden">
+											  <div class="progress-bar" role="progressbar" :style="'width: '+ scope.row.currentProcess + '%;'" aria-valuenow="scope.row.currentProcess" aria-valuemin="0" aria-valuemax="100">{{ scope.row.currentProcess }}%</div>
+											</div>
+										</span></template>
+					</el-table-column>
+
+					<el-table-column label="备注">
+						<template slot-scope="scope"><span>{{ scope.row.role }}</span></template>
+					</el-table-column>
+					<el-table-column label="操作">
+						<template slot-scope="scope">
+							<el-button type="primary" @click="saveUser(scope.row.username)">确定</el-button>
+							<span></span>
+						</template>
+					</el-table-column>
+				</el-table>
+				<el-pagination class="txtCenter"
+							   @size-change="handleSizeChange"
+							   @current-change="handleCurrentChange"
+							   :current-page.sync="currentPage"
+							   :page-sizes="[10,20,30,50]"
+							   :page-size="100"
+							   layout=" sizes, prev, pager, next"
+							   :total="1000">
+				</el-pagination>
+			</el-dialog>
+
+
 		</div>
 	</div>
 
@@ -197,17 +267,22 @@
 			el: '#app',
 			data: {
 				addTaskAssignmentDialogVisible: false,
+				userProjectsDialogVisible: false,
 				detailTableHidden: false,
 				flowChartTableHidden: true,
 				currentPage: 1,
 				projectSummaryId: null,
+				departmentId: null,
 				projectId: null,
+				selectTaskId: null,
+				selectUserRole: null,
 				project: {},
 				projects:{},
 				addTaskAssignment:{},
 				isActive: true,
 				projectClass1: "m-a cur",
 				taskAssignmentListData: null,
+				userProjectsTableData: null,
 				navigationBars:[
 					{
 						id: 1,
@@ -238,6 +313,7 @@
 						if(myProjects[i].id == id){
 							myProjects[i].deltag = 'm-a cur'
 							app.projectId = myProjects[i].id
+							app.departmentId = myProjects[i].departmentId
 							findByProjectId();//根据分项目查询该分项目下的任务分配情况
 						}else{
 							myProjects[i].deltag = ''
@@ -297,9 +373,21 @@
 					})
 				},
 				//编辑设计人员
-				editTaskAssignmentClick: function () {
+				editTaskAssignmentClick: function (taskId) {
+					app.selectTaskId = taskId
+					app.selectUserRole = "designer"
+					app.userProjectsDialogVisible = true
+					findUserProjectsByDeptId();//根据部门id查找人员项目信息
+				},
 
-
+				//保存选中的人员
+				saveUser: function(username){
+					var ajaxData = {}
+					ajaxData.departmentId = app.departmentId
+					ajaxData.selectTaskId = app.selectTaskId
+					ajaxData.selectUserRole = app.selectUserRole
+					ajaxData.username = username
+					editEngineer(ajaxData);//编辑分任务的设计、复核、审核、审定人员
 				}
 				
 				
@@ -315,6 +403,7 @@
 
 		app.projects = projectList
 		app.projectSummaryId = projectList[0].projectSummaryId
+		app.departmentId = projectList[0].departmentId
 
 		for(var i = 0; i < projectList.length; i++){
 			if(projectList[i].deltag == "m-a cur"){
@@ -339,6 +428,50 @@
 						app.taskAssignmentListData=result.data
 					}else{
 						console.log("updatePrincipal 返回值失败")
+					}
+
+				}
+			})
+		}
+
+		/**
+		 * 根据部门id查找人员项目信息
+ 		 */
+		function findUserProjectsByDeptId(){
+			var ajaxData = {}
+			ajaxData.departmentId = app.departmentId
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/userProject/findUserProjectsByDeptId",
+				success: function (result) {
+					if(result.code == 200){
+						app.userProjectsTableData=result.data
+					}else{
+						console.log("findUserProjectsByDeptId 返回值失败")
+					}
+
+				}
+			})
+		}
+
+		/**
+		 * 编辑分任务的设计、复核、审核、审定人员
+		 * @param ajaxData
+		 */
+		function editEngineer(ajaxData){
+			$.ajax({
+				data: encodeURI(JSON.stringify(ajaxData)),
+				type: "GET",
+				url: "/crud/taskAssignment/editEngineer",
+				success: function (result) {
+					if(result.code == 200){
+						app.selectTaskId = null
+						app.selectUserRole = null
+						app.userProjectsDialogVisible = false
+						findByProjectId();//根据分项目查询该分项目下的任务分配情况
+					}else{
+						console.log("editEngineer 返回值失败")
 					}
 
 				}

@@ -37,6 +37,7 @@ public class UserProjectController {
         return "userProject/list";
     }
 
+
     /**
      * ajax请求，查询所有数据
      * @param request
@@ -113,6 +114,39 @@ public class UserProjectController {
         result.code = 200;
         result.setData(userProjectMappingList);
         return result;
+    }
+
+    /**
+     * ajax请求，查询所有数据
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/userProject/findUserProjectsByDeptId")
+    public BaseResponse<List<UserProjectMapping>> findUserProjectsByDeptId(HttpServletRequest request) throws Exception {
+        BaseResponse<List<UserProjectMapping>> result = new BaseResponse<>();
+        String departmentId = String.valueOf(request.getParameter("departmentId"));
+        List<UserProjectMapping> userProjects = userProjectMapper.findUserProjectByProjectNameAndDeptId("", Integer.valueOf(departmentId));
+        userProjects.forEach(project ->{
+            if(project.getStopTime() != null && project.getStartTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+                project.setLeftTime(dateDifferenceByDay + "");
+            }
+            if(StringUtils.isNotBlank(project.getRole()) && "principal".equals(project.getRole())){
+                project.setRole("负责人");
+            }
+            if(StringUtils.isNotBlank(project.getRole()) && "chiefEngineer".equals(project.getRole())){
+                project.setRole("总工");
+            }
+            System.out.println(project);
+        });
+
+        System.out.println(departmentId);
+        result.setData(userProjects);
+        result.code = 200;
+
+        return result;
+
     }
 
 
