@@ -138,15 +138,15 @@
 				</div>
 
 				<!-- 编辑负责人Modal -->
-				<el-dialog title="编辑负责人" :visible.sync="dialogEditPrincipalVisible" width="30%">
+				<el-dialog title="编辑负责人" :visible.sync="dialogEditPrincipalVisible" width="25%">
 					<div class="form-group" hidden="true">
 						<label>id</label>
 						<input type="text" class="form-control" placeholder=""  v-model="principalIdModalInput">
 						<input type="text" class="form-control" placeholder=""  v-model="defaultprincipalUserIdModalInput">
 					</div>
 					<div class="form-group">
-						<label>负责人</label>
-						<el-select v-model="principalNameModalInput" filterable placeholder="请选择">
+						<label>负责人：</label>
+						<el-select v-model="principalNameModalInput" filterable placeholder="请选择" style="width: 70%">
 							<el-option v-for="item in principals" :key="item.value" :label="item.label" :value="item.value"></el-option>
 						</el-select>
 					</div>
@@ -156,15 +156,15 @@
 				</el-dialog>
 
 				<!-- 编辑总工Modal -->
-				<el-dialog title="编辑总工" :visible.sync="dialogEditChiefEngineerVisible" width="30%">
+				<el-dialog title="编辑总工" :visible.sync="dialogEditChiefEngineerVisible" width="25%">
 					<div class="form-group" hidden="true">
 						<label>id</label>
 						<input type="text" class="form-control" placeholder=""  v-model="chiefEngineerIdModalInput">
 						<input type="text" class="form-control" placeholder=""  v-model="defaultChiefEngineerIdModalInput">
 					</div>
 					<div class="form-group">
-						<label>总工</label>
-						<el-select v-model="chiefEngineerNameModalInput" filterable placeholder="请选择">
+						<label>总工：</label>
+						<el-select v-model="chiefEngineerNameModalInput" filterable placeholder="请选择" style="width: 70%">
 							<el-option v-for="item in chiefEngineers" :key="item.value" :label="item.label" :value="item.value"></el-option>
 						</el-select>
 					</div>
@@ -251,7 +251,7 @@
 							console.log("原负责人id: " + defaultprincipalUserId)//默认用户id
 							console.log("更改后的负责人id: " + project_principalUserId)
 							if(isNumber(project_principalUserId)){//数字更新了，说明确实需要更新
-								updatePrincipal(projectId, project_principalUserId);//更新负责人
+								updatePrincipal(projectId, project_principalUserId, this);//更新负责人
 							}
 							app.dialogEditPrincipalVisible = false
 						},
@@ -263,7 +263,7 @@
 							console.log("原总工id: " + defaultChiefEngineerIdModalInput)//默认用户id
 							console.log("更改后的负责人id: " + chiefEngineerNameModalInput)
 							if(isNumber(chiefEngineerNameModalInput)){//数字更新了，说明确实需要更新
-								updateChiefEngineer(projectId, chiefEngineerNameModalInput);//更新总工
+								updateChiefEngineer(projectId, chiefEngineerNameModalInput, this);//更新总工
 							}
 							app.dialogEditChiefEngineerVisible = false
 						},
@@ -341,7 +341,7 @@
 				/**
 				 * 更新负责人
 				 */
-				function updatePrincipal(projectId, project_principalUserId) {
+				function updatePrincipal(projectId, project_principalUserId, that) {
 					var ajaxData = {}
 					ajaxData.projectId = projectId
 					ajaxData.project_principalUserId = project_principalUserId
@@ -358,6 +358,10 @@
 						success: function (result) {
 							if(result.code == 200){
 								app.$data.tableData=result.data
+								that.$message({
+									message: '负责人编辑成功',
+									type: 'success'
+								});
 							}else{
 								console.log("updatePrincipal 返回值失败")
 							}
@@ -369,7 +373,7 @@
 				/**
 				 * 更新总工
 				 */
-				function updateChiefEngineer(projectId, chiefEngineerNameModalInput) {
+				function updateChiefEngineer(projectId, chiefEngineerNameModalInput, that) {
 					var ajaxData = {}
 					ajaxData.projectId = projectId
 					ajaxData.chiefEngineerNameModalInput = chiefEngineerNameModalInput
@@ -386,6 +390,10 @@
 						success: function (result) {
 							if(result.code == 200){
 								app.$data.tableData=result.data
+								that.$message({
+									message: '负责人编辑成功',
+									type: 'success'
+								});
 							}else{
 								console.log("updateChiefEngineer 返回值失败")
 							}

@@ -429,7 +429,7 @@
 
 					console.log(ajaxData)
 
-					editEngineer(ajaxData);//编辑分任务的设计、复核、审核、审定人员
+					editEngineer(ajaxData, this);//编辑分任务的设计、复核、审核、审定人员
 				}
 				
 				
@@ -505,13 +505,14 @@
 		 * 编辑分任务的设计、复核、审核、审定人员
 		 * @param ajaxData
 		 */
-		function editEngineer(ajaxData){
+		function editEngineer(ajaxData, that){
 			$.ajax({
 				data: ajaxData,
 				type: "GET",
 				url: "/crud/taskAssignment/editEngineer",
 				success: function (result) {
 					if(result.code == 200){
+						showEditSuccessMessgae(that);//显示设计、复核、审核、审定编辑成功消息
 						app.selectTaskId = null
 						app.selectUserRole = null
 						app.userProjectsDialogVisible = false
@@ -522,6 +523,36 @@
 
 				}
 			})
+		}
+
+		/**
+		 * 显示编辑成功消息
+		 * @param that
+		 */
+		function showEditSuccessMessgae(that){
+			if("designer" == app.selectUserRole){
+				that.$message({
+					message: "设计人员编辑成功",
+					type: 'success'
+				});
+			}else if("reviewer" == app.selectUserRole){
+				that.$message({
+					message: "复核人员编辑成功",
+					type: 'success'
+				});
+			}else if("inspector" == app.selectUserRole){
+				that.$message({
+					message: "审核人员编辑成功",
+					type: 'success'
+				});
+			}else if("validationer" == app.selectUserRole){
+				that.$message({
+					message: "审定人员编辑成功",
+					type: 'success'
+				});
+			}
+
+
 		}
 
 
