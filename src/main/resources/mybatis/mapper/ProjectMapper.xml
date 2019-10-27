@@ -80,7 +80,7 @@
         temp.id, temp.projectSummaryId, temp.projectNum, temp.projectName, temp.designPhase,
         temp.principalId, temp.principal, temp.chiefEngineerId, temp.chiefEngineer,
         temp.startTime, temp.stopTime, temp.leftTime, temp.currentProcess, temp.emergencyLevel,
-        temp.createTime, temp.updateTime, temp.departmentId, dept.departmentName, temp.state, temp.deltag
+        temp.createTime, temp.updateTime, dept.id departmentId, dept.departmentName, temp.state, temp.deltag
         from (
 
                 select

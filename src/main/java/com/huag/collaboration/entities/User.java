@@ -38,8 +38,12 @@ public class User {
     private String graduateDate;//毕业时间
     private String major;//专业
     private String undertakeJobs;//可以承担的职务：设计、复核、审核、审定
+
+    private String projectSummaryPrincipalFlag;//能否担任总项目负责人
+    private String projectSummaryChiefEngineerFlag;//能否担任总项目总工
+
     private String principalFlag;//能否当专业负责人属性
-    private String chiefEngineerFlag;//能否当总工
+    private String chiefEngineerFlag;//能否当专业总工
     private String remark;
     private String createTime;
     private String updateTime;

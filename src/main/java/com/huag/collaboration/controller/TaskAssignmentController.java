@@ -73,20 +73,40 @@ public class TaskAssignmentController {
     @RequestMapping(value = "/taskAssignment/editEngineer")
     public BaseResponse<TaskAssignment> editEngineer(HttpServletRequest request) throws Exception{
         BaseResponse<TaskAssignment> result = new BaseResponse<>();
-        String username = URLDecoder.decode(String.valueOf(request.getParameter("username")), "UTF-8");
+        String username = URLDecoder.decode(String.valueOf(request.getParameter("username")), "UTF-8").replace("\"", "");
         String departmentId = String.valueOf(request.getParameter("departmentId"));
         String selectTaskId = String.valueOf(request.getParameter("selectTaskId"));
         String selectUserRole = String.valueOf(request.getParameter("selectUserRole"));//designer reviewer inspector validationer
 
+        System.out.println("username: " + username);
+        System.out.println("departmentId: " + departmentId);
+        System.out.println("selectTaskId: " + selectTaskId);
+        System.out.println("selectUserRole: " + selectUserRole);
+
         List<User> userList = userMapper.findByUserNameAndDeptId(username, Integer.valueOf(departmentId));
-        Integer userID  = null;
+
+        System.out.println("----------");
+        System.out.println(userList);
+
         if(userList != null && userList.size() > 0){
-
+            User user = userList.get(0);
+            System.out.println(user);
+            TaskAssignment taskAssignment = taskAssignmentMapper.findById(Integer.valueOf(selectTaskId));
+            if("designer".equals(selectUserRole)){
+                taskAssignment.setDesignerId(user.getId());
+            }else if("reviewer".equals(selectUserRole)){
+                taskAssignment.setReviewerId(user.getId());
+            }else if("inspector".equals(selectUserRole)){
+                taskAssignment.setInspectorId(user.getId());
+            }else if("validationer".equals(selectUserRole)){
+                System.out.println("设置 validationer ");
+                taskAssignment.setValidationerId(user.getId());
+            }
+            System.out.println(taskAssignment);
+            taskAssignmentMapper.update(taskAssignment);
         }
-
-        //TODO
-
-        return null;
+        result.setCode(200);
+        return result;
 
 
     }

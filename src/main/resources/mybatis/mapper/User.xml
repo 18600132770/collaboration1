@@ -13,6 +13,13 @@
             departmentId = #{departmentId}
     </select>
 
+    <select id="findProjectSummaryPrincipals" resultType="com.huag.collaboration.entities.User">
+        SELECT * FROM user where
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+          and
+            projectSummaryPrincipalFlag = '1'
+    </select>
+
     <select id="findAllChiefEngineers" resultType="com.huag.collaboration.entities.User">
         SELECT * FROM user where
             chiefEngineerFlag = 1
@@ -22,6 +29,13 @@
             departmentId = #{departmentId}
     </select>
 
+    <select id="findProjectSummaryChiefEngineers" resultType="com.huag.collaboration.entities.User">
+        SELECT * FROM user where
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+          and
+            projectSummaryChiefEngineerFlag = '1'
+    </select>
+
     <select id="findByUserNameAndDeptId" resultType="com.huag.collaboration.entities.User">
         SELECT * FROM user where
             username  = #{username}
@@ -29,6 +43,13 @@
             (deltag <![CDATA[ <> ]]> '1' or deltag is null)
           and
             departmentId = #{departmentId}
+    </select>
+
+    <select id="findByUserName" resultType="com.huag.collaboration.entities.User">
+        SELECT * FROM user where
+            username  = #{username}
+          and
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
 
 </mapper>

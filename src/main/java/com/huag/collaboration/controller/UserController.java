@@ -57,5 +57,37 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 查找可以担任总项目总负责人的人选
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/user/findProjectSummaryPrincipals")
+    public BaseResponse<List<User>> findProjectSummaryPrincipals(HttpServletRequest request){
+        BaseResponse<List<User>> result = new BaseResponse<>();
+        List<User> userList = userMapper.findProjectSummaryPrincipals();
+        System.out.println(userList);
+        result.code = 200;
+        result.setData(userList);
+        return result;
+    }
+
+    /**
+     * 查找可以担任总项目总工的人选
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/user/findProjectSummaryChiefEngineers")
+    public BaseResponse<List<User>> findProjectSummaryChiefEngineers(HttpServletRequest request){
+        BaseResponse<List<User>> result = new BaseResponse<>();
+        List<User> userList = userMapper.findProjectSummaryChiefEngineers();
+        System.out.println(userList);
+        result.code = 200;
+        result.setData(userList);
+        return result;
+    }
+
 
 }

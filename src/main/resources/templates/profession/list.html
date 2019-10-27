@@ -119,27 +119,27 @@
 						</div>
 						<div class="form-group">
 							<label style="margin-left: 10px; display: inline; width: 20%;">开始时间：</label>
-							<el-date-picker	v-model="addProject.startTime" type="date" placeholder="选择日期"></el-date-picker>
+							<el-date-picker	v-model="addProject.startTime" type="date" placeholder="选择日期"  style="width: 80%"></el-date-picker>
 						</div>
 						<div class="form-group">
 							<label style="margin-left: 10px; display: inline; width: 20%;">截止时间：</label>
-							<el-date-picker	v-model="addProject.stopTime" type="date" placeholder="选择日期"></el-date-picker>
+							<el-date-picker	v-model="addProject.stopTime" type="date" placeholder="选择日期"  style="width: 80%"></el-date-picker>
 						</div>
 						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">负责人：</label>
-							<el-select v-model="principalModalInput" filterable placeholder="请选择">
+							<label style="margin-left: 10px; display: inline; width: 20%;">项目负责人：</label>
+							<el-select v-model="principalModalInput" filterable placeholder="请选择"  style="width: 80%">
 								<el-option v-for="item in principals" :key="item.principalId" :label="item.principal" :value="item.principalId"></el-option>
 							</el-select>
 						</div>
 						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">总工：</label>
-							<el-select v-model="chiefEngineerModalInput" filterable placeholder="请选择">
+							<label style="margin-left: 10px; display: inline; width: 20%;">项目总工：</label>
+							<el-select v-model="chiefEngineerModalInput" filterable placeholder="请选择"  style="width: 60%">
 								<el-option v-for="item in chiefEngineers" :key="item.chiefEngineerId" :label="item.chiefEngineer" :value="item.chiefEngineerId"></el-option>
 							</el-select>
 						</div>
 						<div class="form-group">
 							<label style="margin-left: 10px; display: inline; width: 20%;">分派部门：</label>
-							<el-select v-model="selectDepartments" multiple placeholder="请选择">
+							<el-select v-model="selectDepartments" multiple placeholder="请选择"  style="width: 80%">
 								<el-option
 										v-for="department in departments"
 										:key="department.id"
@@ -203,8 +203,8 @@
 						},
 						addProjectClick: function(){
 							app.dialogAddProjectVisible = true
-							findAllPrincipals();//查找所有可以担任负责人的人选
-							findAllChiefEngineers();//查询所有可以当总工的人选
+							findProjectSummaryPrincipals();//查找所有可以担任负责人的人选
+							findProjectSummaryChiefEngineers();//查询所有可以当总项目总工的人选
 							getDepartments();//查询所有部门信息
 						},
 						saveAddProject: function(){
@@ -398,15 +398,15 @@
 				}
 
 				/**
-				 * 查询所有可以当负责人的人选
+				 * 查询所有可以当总项目总负责人的人选
 				 */
-				function findAllPrincipals() {
+				function findProjectSummaryPrincipals() {
 					var ajaxData = {}
 					ajaxData.currentDepartmentId = 1
 					$.ajax({
 						data: ajaxData,
 						type: "GET",
-						url: "/crud/user/findAllPrincipals",
+						url: "/crud/user/findProjectSummaryPrincipals",
 						success: function (result) {
 							if(result.code == 200){
 								var users = result.data
@@ -419,25 +419,23 @@
 								}
 								app.principals = principals
 							}else{
-								console.log("findAllPrincipals 返回值失败")
+								console.log("findProjectSummaryPrincipals 返回值失败")
 							}
 
 						}
 					})
 				}
 
-
-
 				/**
-				 * 查询所有可以当总工的人选
+				 * 查询所有可以当总项目总工的人选
 				 */
-				function findAllChiefEngineers() {
+				function findProjectSummaryChiefEngineers() {
 					var ajaxData = {}
 					ajaxData.currentDepartmentId = 1
 					$.ajax({
 						data: ajaxData,
 						type: "GET",
-						url: "/crud/user/findAllChiefEngineers",
+						url: "/crud/user/findProjectSummaryChiefEngineers",
 						success: function (result) {
 							if(result.code == 200){
 								var users = result.data

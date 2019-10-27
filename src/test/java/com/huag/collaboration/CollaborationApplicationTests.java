@@ -8,6 +8,7 @@ import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.TaskAssignmentMapper;
 import com.huag.collaboration.mapper.UserProjectMapper;
 import com.huag.collaboration.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,6 +174,15 @@ public class CollaborationApplicationTests {
         taskAssignmentList.forEach(taskAssignment -> {
             System.out.println(taskAssignment);
         });
+    }
+
+    @Test
+    public void test12(){
+        String usernameArray = "卢俊义, 史进, 吴用, 呼延灼, 宋江, 李应, 李逵, 杨志,";
+        if(StringUtils.isNotBlank(usernameArray) && usernameArray.endsWith(",")){
+            usernameArray = usernameArray.substring(0, usernameArray.length() - 1);
+        }
+        System.out.println(usernameArray);
     }
 
 

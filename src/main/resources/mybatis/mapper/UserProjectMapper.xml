@@ -59,5 +59,17 @@
 
     </select>
 
+    <select id="findUserWithoutProjectsWhereUsersNotIn" resultType="com.huag.collaboration.entities.mapping.UserProjectMapping">
+        SELECT
+          username , tripState from user
+          where
+                  departmentId = #{departmentId}
+              and username not in
+                <foreach item="item" index="index" collection="usernameArray" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+              and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+    </select>
+
 
 </mapper>

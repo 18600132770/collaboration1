@@ -99,7 +99,7 @@
 							</el-table-column>
 							<el-table-column label="设计">
 								<template slot-scope="scope">
-									<div @click="editTaskAssignmentClick(scope.row.id)">
+									<div @click="editDesignerClick(scope.row.id)">
 											<span  style="color: #080fe8">
 											 <el-link type="primary">{{ scope.row.designer }}</el-link>
 										</span>
@@ -107,13 +107,31 @@
 								</template>
 							</el-table-column>
 							<el-table-column  label="复核">
-								<template slot-scope="scope"><span>{{ scope.row.reviewer }}</span></template>
+								<template slot-scope="scope">
+									<div @click="editReviewerClick(scope.row.id)">
+											<span  style="color: #080fe8">
+											 <el-link type="primary">{{ scope.row.reviewer }}</el-link>
+										</span>
+									</div>
+								</template>
 							</el-table-column>
 							<el-table-column  label="审核">
-								<template slot-scope="scope"><span>{{ scope.row.inspector }}</span></template>
+								<template slot-scope="scope">
+									<div @click="editInspectorClick(scope.row.id)">
+											<span  style="color: #080fe8">
+											 <el-link type="primary">{{ scope.row.inspector }}</el-link>
+										</span>
+									</div>
+								</template>
 							</el-table-column>
 							<el-table-column  label="审定">
-								<template slot-scope="scope"><span>{{ scope.row.validationer }}</span></template>
+								<template slot-scope="scope">
+									<div @click="editValidationerClick(scope.row.id)">
+											<span  style="color: #080fe8">
+											 <el-link type="primary">{{ scope.row.validationer }}</el-link>
+										</span>
+									</div>
+								</template>
 							</el-table-column>
 							<el-table-column  label="开始时间">
 								<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
@@ -154,7 +172,7 @@
 			</el-scrollbar>
 
 			<!-- 任务分配modal -->
-			<el-dialog title="任务分配" :visible.sync="addTaskAssignmentDialogVisible" width="60%">
+			<el-dialog title="任务分配" :visible.sync="addTaskAssignmentDialogVisible" width="30%">
 				<div class="form-group">
 					<label style="margin-left: 10px; display: inline; width: 20%;">任务名称：</label>
 					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addTaskAssignment.taskName">
@@ -165,11 +183,11 @@
 				</div>
 				<div class="form-group">
 					<label style="margin-left: 10px; display: inline; width: 20%;">开始时间：</label>
-					<el-date-picker	v-model="addTaskAssignment.startTime" type="date" placeholder="选择日期"></el-date-picker>
+					<el-date-picker	v-model="addTaskAssignment.startTime" type="date" placeholder="选择日期" style="width: 80%"></el-date-picker>
 				</div>
 				<div class="form-group">
 					<label style="margin-left: 10px; display: inline; width: 20%;">截止时间：</label>
-					<el-date-picker	v-model="addTaskAssignment.stopTime" type="date" placeholder="选择日期"></el-date-picker>
+					<el-date-picker	v-model="addTaskAssignment.stopTime" type="date" placeholder="选择日期"  style="width: 80%"></el-date-picker>
 				</div>
 				<div class="modal-footer">
 					<button  class="btn btn-primary" @click="saveAddTaskAssignment">保存</button>
@@ -373,9 +391,30 @@
 					})
 				},
 				//编辑设计人员
-				editTaskAssignmentClick: function (taskId) {
+				editDesignerClick: function (taskId) {
 					app.selectTaskId = taskId
 					app.selectUserRole = "designer"
+					app.userProjectsDialogVisible = true
+					findUserProjectsByDeptId();//根据部门id查找人员项目信息
+				},
+				//编辑复核人员
+				editReviewerClick: function (taskId) {
+					app.selectTaskId = taskId
+					app.selectUserRole = "reviewer"
+					app.userProjectsDialogVisible = true
+					findUserProjectsByDeptId();//根据部门id查找人员项目信息
+				},
+				//编辑审核人员
+				editInspectorClick: function (taskId) {
+					app.selectTaskId = taskId
+					app.selectUserRole = "inspector"
+					app.userProjectsDialogVisible = true
+					findUserProjectsByDeptId();//根据部门id查找人员项目信息
+				},
+				//编辑审定人员
+				editValidationerClick: function (taskId) {
+					app.selectTaskId = taskId
+					app.selectUserRole = "validationer"
 					app.userProjectsDialogVisible = true
 					findUserProjectsByDeptId();//根据部门id查找人员项目信息
 				},
@@ -386,7 +425,10 @@
 					ajaxData.departmentId = app.departmentId
 					ajaxData.selectTaskId = app.selectTaskId
 					ajaxData.selectUserRole = app.selectUserRole
-					ajaxData.username = username
+					ajaxData.username = encodeURI(JSON.stringify(username))
+
+					console.log(ajaxData)
+
 					editEngineer(ajaxData);//编辑分任务的设计、复核、审核、审定人员
 				}
 				
@@ -399,11 +441,14 @@
 		})
 
 		var projectList =[[ ${projectList}]]
+		var departmentId =[[ ${departmentId}]]
 		console.log(projectList)
+		console.log(departmentId)
 
 		app.projects = projectList
 		app.projectSummaryId = projectList[0].projectSummaryId
-		app.departmentId = projectList[0].departmentId
+
+		app.departmentId = departmentId
 
 		for(var i = 0; i < projectList.length; i++){
 			if(projectList[i].deltag == "m-a cur"){
@@ -461,7 +506,7 @@
 		 */
 		function editEngineer(ajaxData){
 			$.ajax({
-				data: encodeURI(JSON.stringify(ajaxData)),
+				data: ajaxData,
 				type: "GET",
 				url: "/crud/taskAssignment/editEngineer",
 				success: function (result) {

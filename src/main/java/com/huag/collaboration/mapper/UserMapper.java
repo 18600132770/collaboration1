@@ -15,14 +15,28 @@ public interface UserMapper {
      * 查找所有可以是负责人的用户
      * @return
      */
-    public List<User> findAllPrincipals(@Param("departmentId") Integer departmentId);
+    List<User> findAllPrincipals(@Param("departmentId") Integer departmentId);
 
     /**
      * 找所有可以是总工的用户
      * @return
      */
-    public List<User> findAllChiefEngineers(@Param("departmentId") Integer departmentId);
+    List<User> findAllChiefEngineers(@Param("departmentId") Integer departmentId);
 
     List<User> findByUserNameAndDeptId(@Param("username") String username, @Param("departmentId") Integer departmentId);
+
+    List<User> findByUserName(String username);
+
+    /**
+     * 查找可以担任总项目负责人的人选
+     * @return
+     */
+    List<User> findProjectSummaryPrincipals();
+
+    /**
+     * 查找可以担任总项目总工的人选
+     * @return
+     */
+    List<User> findProjectSummaryChiefEngineers();
 
 }

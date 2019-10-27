@@ -36,5 +36,20 @@
              #{taskLevel}, #{startTime}, #{stopTime}, now(), now(), #{deltag})
     </insert>
 
+    <select id="findById" resultType="com.huag.collaboration.entities.TaskAssignment">
+        select * from taskAssignment where id = #{id}
+    </select>
+
+    <insert id="update">
+        update taskAssignment set
+        taskName = #{taskName}, projectId = #{projectId}, finishedLevel = #{finishedLevel},
+        designerId = #{designerId}, reviewerId = #{reviewerId}, inspectorId = #{inspectorId}, validationerId = #{validationerId},
+        designer = #{designer}, reviewer = #{reviewer}, inspector = #{inspector}, validationer = #{validationer},
+        departmentId = #{departmentId}, departmentName = #{departmentName},
+        taskLevel = #{taskLevel}, startTime = #{startTime}, stopTime = #{stopTime}, updateTime = now(),
+        deltag = #{deltag}
+        where id = #{id}
+    </insert>
+
 
 </mapper>

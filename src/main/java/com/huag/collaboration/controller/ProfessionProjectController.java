@@ -75,7 +75,9 @@ public class ProfessionProjectController {
         projectList.forEach(project -> {
             if(projectId == project.getId()){
                 project.setDeltag("m-a cur");
+                model.addAttribute("departmentId", project.getDepartmentId());
             }
+            System.out.println(project);
         });
 
         model.addAttribute("projectSummaryId", id);

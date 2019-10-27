@@ -126,6 +126,12 @@ public class UserProjectController {
     public BaseResponse<List<UserProjectMapping>> findUserProjectsByDeptId(HttpServletRequest request) throws Exception {
         BaseResponse<List<UserProjectMapping>> result = new BaseResponse<>();
         String departmentId = String.valueOf(request.getParameter("departmentId"));
+
+        System.out.println("departmentId: " + departmentId);
+
+        List<String> usernameList = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+
         List<UserProjectMapping> userProjects = userProjectMapper.findUserProjectByProjectNameAndDeptId("", Integer.valueOf(departmentId));
         userProjects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
@@ -138,8 +144,16 @@ public class UserProjectController {
             if(StringUtils.isNotBlank(project.getRole()) && "chiefEngineer".equals(project.getRole())){
                 project.setRole("总工");
             }
-            System.out.println(project);
+            set.add(project.getUsername());
         });
+
+        usernameList.addAll(set);
+
+        String[] usernameArray = new String[usernameList.size()];
+        usernameList.toArray(usernameArray);
+
+        List<UserProjectMapper> userWithoutProjectsWhereUsersNotIn = userProjectMapper.findUserWithoutProjectsWhereUsersNotIn(Integer.valueOf(departmentId), usernameArray);
+        userProjects.addAll((Collection)userWithoutProjectsWhereUsersNotIn);
 
         System.out.println(departmentId);
         result.setData(userProjects);

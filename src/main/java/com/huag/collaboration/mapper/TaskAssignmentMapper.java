@@ -24,4 +24,16 @@ public interface TaskAssignmentMapper {
      */
     int insert(TaskAssignment taskAssignment);
 
+    /**
+     * @param id
+     * @return
+     */
+    TaskAssignment findById(Integer id);
+
+    /**
+     * @param taskAssignment
+     * @return
+     */
+    int update(TaskAssignment taskAssignment);
+
 }
