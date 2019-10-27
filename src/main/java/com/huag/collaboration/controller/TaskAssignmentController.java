@@ -39,7 +39,6 @@ public class TaskAssignmentController {
         BaseResponse<List<TaskAssignment>> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));
         List<TaskAssignment> taskAssignmentList = taskAssignmentMapper.findByProjectId(Integer.valueOf(projectId));
-        System.out.println(taskAssignmentList);
         result.code = 200;
         result.setData(taskAssignmentList);
         return result;
@@ -63,7 +62,6 @@ public class TaskAssignmentController {
         taskAssignment.setStartTime(startTime);
         taskAssignment.setStopTime(stopTime);
         taskAssignment.setFinishedLevel(0);
-        System.out.println(taskAssignment);
         taskAssignmentMapper.insert(taskAssignment);
         result.code = 200;
         return result;
@@ -77,16 +75,7 @@ public class TaskAssignmentController {
         String departmentId = String.valueOf(request.getParameter("departmentId"));
         String selectTaskId = String.valueOf(request.getParameter("selectTaskId"));
         String selectUserRole = String.valueOf(request.getParameter("selectUserRole"));//designer reviewer inspector validationer
-
-        System.out.println("username: " + username);
-        System.out.println("departmentId: " + departmentId);
-        System.out.println("selectTaskId: " + selectTaskId);
-        System.out.println("selectUserRole: " + selectUserRole);
-
         List<User> userList = userMapper.findByUserNameAndDeptId(username, Integer.valueOf(departmentId));
-
-        System.out.println("----------");
-        System.out.println(userList);
 
         if(userList != null && userList.size() > 0){
             User user = userList.get(0);
@@ -99,10 +88,8 @@ public class TaskAssignmentController {
             }else if("inspector".equals(selectUserRole)){
                 taskAssignment.setInspectorId(user.getId());
             }else if("validationer".equals(selectUserRole)){
-                System.out.println("设置 validationer ");
                 taskAssignment.setValidationerId(user.getId());
             }
-            System.out.println(taskAssignment);
             taskAssignmentMapper.update(taskAssignment);
         }
         result.setCode(200);

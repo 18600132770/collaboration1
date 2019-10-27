@@ -395,28 +395,28 @@
 					app.selectTaskId = taskId
 					app.selectUserRole = "designer"
 					app.userProjectsDialogVisible = true
-					findUserProjectsByDeptId();//根据部门id查找人员项目信息
+					findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
 				},
 				//编辑复核人员
 				editReviewerClick: function (taskId) {
 					app.selectTaskId = taskId
 					app.selectUserRole = "reviewer"
 					app.userProjectsDialogVisible = true
-					findUserProjectsByDeptId();//根据部门id查找人员项目信息
+					findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
 				},
 				//编辑审核人员
 				editInspectorClick: function (taskId) {
 					app.selectTaskId = taskId
 					app.selectUserRole = "inspector"
 					app.userProjectsDialogVisible = true
-					findUserProjectsByDeptId();//根据部门id查找人员项目信息
+					findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
 				},
 				//编辑审定人员
 				editValidationerClick: function (taskId) {
 					app.selectTaskId = taskId
 					app.selectUserRole = "validationer"
 					app.userProjectsDialogVisible = true
-					findUserProjectsByDeptId();//根据部门id查找人员项目信息
+					findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
 				},
 
 				//保存选中的人员
@@ -482,18 +482,19 @@
 		/**
 		 * 根据部门id查找人员项目信息
  		 */
-		function findUserProjectsByDeptId(){
+		function findUserProjectsByDeptIdAndRole(){
 			var ajaxData = {}
 			ajaxData.departmentId = app.departmentId
+			ajaxData.selectUserRole = app.selectUserRole
 			$.ajax({
 				data: ajaxData,
 				type: "GET",
-				url: "/crud/userProject/findUserProjectsByDeptId",
+				url: "/crud/userProject/findUserProjectsByDeptIdAndRole",
 				success: function (result) {
 					if(result.code == 200){
 						app.userProjectsTableData=result.data
 					}else{
-						console.log("findUserProjectsByDeptId 返回值失败")
+						console.log("findUserProjectsByDeptIdAndRole 返回值失败")
 					}
 
 				}

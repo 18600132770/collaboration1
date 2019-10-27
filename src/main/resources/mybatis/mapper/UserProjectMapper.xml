@@ -59,16 +59,126 @@
 
     </select>
 
-    <select id="findUserWithoutProjectsWhereUsersNotIn" resultType="com.huag.collaboration.entities.mapping.UserProjectMapping">
+    <select id="findUserProjectsByDeptIdAndRole" resultType="com.huag.collaboration.entities.mapping.UserProjectMapping">
+
+    SELECT * from (
+
+            SELECT
+               b.username username, b.tripState tripState, e.projectName, e.designPhase, a.taskLevel, c.startTime, c.stopTime, c.currentProcess, a.role
+            from
+              user_project a, user b, project c, projectSummary e
+              <where>
+                  <if test="1 == 1">
+                      a.userId = b.id
+                      and a.projectId = c.id
+                      and c.projectSummaryId = e.id
+                      and c.departmentId = #{departmentId}
+                      and (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
+                      and (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
+                      and (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
+                      and (e.deltag <![CDATA[ <> ]]> '1' or e.deltag is null)
+                  </if>
+                  <if test='selectUserRole == "designer"'>
+                    and b.designerFlag = '1'
+                  </if>
+                  <if test='selectUserRole == "reviewer"'>
+                    and b.reviewerFlag = '1'
+                  </if>
+                  <if test='selectUserRole == "inspector"'>
+                    and b.inspectorFlag = '1'
+                  </if>
+                  <if test='selectUserRole == "validationer"'>
+                    and b.validationerFlag = '1'
+                  </if>
+              </where>
+		union
+
+            SELECT u.username, u.tripState, ps.projectName, ps.designPhase, p.taskLevel, p.startTime, p.stopTime, p.currentProcess, 'principal'
+
+            from user u, project p, projectSummary ps
+                <where>
+                    <if test="1 == 1">
+                        u.id = p.principalId
+                        and
+                        p.projectSummaryId = ps.id
+                        and p.departmentId = #{departmentId}
+                        and (u.deltag <![CDATA[ <> ]]> '1' or u.deltag is null)
+                        and (p.deltag <![CDATA[ <> ]]> '1' or p.deltag is null)
+                        and (ps.deltag <![CDATA[ <> ]]> '1' or ps.deltag is null)
+                    </if>
+                    <if test='selectUserRole == "designer"'>
+                        and u.designerFlag = '1'
+                    </if>
+                    <if test='selectUserRole == "reviewer"'>
+                        and u.reviewerFlag = '1'
+                    </if>
+                    <if test='selectUserRole == "inspector"'>
+                        and u.inspectorFlag = '1'
+                    </if>
+                    <if test='selectUserRole == "validationer"'>
+                        and u.validationerFlag = '1'
+                    </if>
+                </where>
+	    union
+
+            SELECT u.username, u.tripState, ps.projectName, ps.designPhase, p.taskLevel, p.startTime, p.stopTime, p.currentProcess, 'chiefEngineer'
+
+            from user u, project p, projectSummary ps
+
+                <where>
+                    <if test="1 == 1">
+                        u.id = p.chiefEngineerId
+                        and
+                        p.projectSummaryId = ps.id
+                        and p.departmentId = #{departmentId}
+                        and (u.deltag <![CDATA[ <> ]]> '1' or u.deltag is null)
+                        and (p.deltag <![CDATA[ <> ]]> '1' or p.deltag is null)
+                        and (ps.deltag <![CDATA[ <> ]]> '1' or ps.deltag is null)
+                    </if>
+                    <if test='selectUserRole=="designer"'>
+                        and u.designerFlag = '1'
+                    </if>
+                    <if test='selectUserRole=="reviewer"'>
+                        and u.reviewerFlag = '1'
+                    </if>
+                    <if test='selectUserRole=="inspector"'>
+                        and u.inspectorFlag = '1'
+                    </if>
+                    <if test='selectUserRole=="validationer"'>
+                        and u.validationerFlag = '1'
+                    </if>
+                </where>
+	 order by username asc
+	 ) temp
+
+
+    </select>
+
+    <select id="findUserProjectsByDeptIdAndRoleWhereUsersNotIn" resultType="com.huag.collaboration.entities.mapping.UserProjectMapping">
         SELECT
           username , tripState from user
           where
-                  departmentId = #{departmentId}
-              and username not in
+            departmentId = #{departmentId}
+            <if test="usernameArray != null">
+                and username not in
                 <foreach item="item" index="index" collection="usernameArray" open="(" separator="," close=")">
                     #{item}
                 </foreach>
-              and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+            </if>
+
+            and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+            <if test='selectUserRole=="designer"'>
+                and designerFlag = '1'
+            </if>
+            <if test='selectUserRole=="reviewer"'>
+                and reviewerFlag = '1'
+            </if>
+            <if test='selectUserRole=="inspector"'>
+                and inspectorFlag = '1'
+            </if>
+            <if test='selectUserRole=="validationer"'>
+                and validationerFlag = '1'
+            </if>
     </select>
 
 

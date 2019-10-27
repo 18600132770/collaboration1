@@ -39,6 +39,11 @@ public class User {
     private String major;//专业
     private String undertakeJobs;//可以承担的职务：设计、复核、审核、审定
 
+    private String designerFlag;//能否担任设计
+    private String reviewerFlag;//能否担任复核
+    private String inspectorFlag;//能否担任审核
+    private String validationerFlag;//能否担任审定
+
     private String projectSummaryPrincipalFlag;//能否担任总项目负责人
     private String projectSummaryChiefEngineerFlag;//能否担任总项目总工
 

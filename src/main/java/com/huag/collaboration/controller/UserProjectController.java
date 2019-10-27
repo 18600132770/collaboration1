@@ -116,23 +116,27 @@ public class UserProjectController {
         return result;
     }
 
+
     /**
-     * ajax请求，查询所有数据
+     *
      * @param request
      * @return
+     * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value = "/userProject/findUserProjectsByDeptId")
-    public BaseResponse<List<UserProjectMapping>> findUserProjectsByDeptId(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/userProject/findUserProjectsByDeptIdAndRole")
+    public BaseResponse<List<UserProjectMapping>> findUserProjectsByDeptIdAndRole(HttpServletRequest request) throws Exception {
         BaseResponse<List<UserProjectMapping>> result = new BaseResponse<>();
         String departmentId = String.valueOf(request.getParameter("departmentId"));
+        String selectUserRole = String.valueOf(request.getParameter("selectUserRole"));
 
         System.out.println("departmentId: " + departmentId);
 
         List<String> usernameList = new ArrayList<>();
         Set<String> set = new HashSet<>();
 
-        List<UserProjectMapping> userProjects = userProjectMapper.findUserProjectByProjectNameAndDeptId("", Integer.valueOf(departmentId));
+        List<UserProjectMapping> userProjects = userProjectMapper.findUserProjectsByDeptIdAndRole(Integer.valueOf(departmentId), selectUserRole);
+
         userProjects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
                 Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
@@ -146,19 +150,13 @@ public class UserProjectController {
             }
             set.add(project.getUsername());
         });
-
         usernameList.addAll(set);
-
         String[] usernameArray = new String[usernameList.size()];
         usernameList.toArray(usernameArray);
-
-        List<UserProjectMapper> userWithoutProjectsWhereUsersNotIn = userProjectMapper.findUserWithoutProjectsWhereUsersNotIn(Integer.valueOf(departmentId), usernameArray);
+        List<UserProjectMapper> userWithoutProjectsWhereUsersNotIn = userProjectMapper.findUserProjectsByDeptIdAndRoleWhereUsersNotIn(Integer.valueOf(departmentId), usernameArray, selectUserRole);
         userProjects.addAll((Collection)userWithoutProjectsWhereUsersNotIn);
-
-        System.out.println(departmentId);
         result.setData(userProjects);
         result.code = 200;
-
         return result;
 
     }
