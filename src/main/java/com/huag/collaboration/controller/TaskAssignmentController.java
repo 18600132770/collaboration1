@@ -79,6 +79,10 @@ public class TaskAssignmentController {
         String selectUserRole = String.valueOf(request.getParameter("selectUserRole"));//designer reviewer inspector validationer
 
         List<User> userList = userMapper.findByUserNameAndDeptId(username, Integer.valueOf(departmentId));
+        Integer userID  = null;
+        if(userList != null && userList.size() > 0){
+
+        }
 
         //TODO
 
