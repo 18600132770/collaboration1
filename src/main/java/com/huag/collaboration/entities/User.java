@@ -49,6 +49,7 @@ public class User {
 
     private String principalFlag;//能否当专业负责人属性
     private String chiefEngineerFlag;//能否当专业总工
+
     private String remark;
     private String createTime;
     private String updateTime;
