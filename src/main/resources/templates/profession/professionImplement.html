@@ -318,6 +318,10 @@
 
 			<!-- 下序资料modal -->
 			<el-dialog title="下序资料" :visible.sync="nextProfessionProfileDialogVisible" width="80%">
+				<div style="margin-bottom: 5px">
+					<el-button type="primary" @click="showAddNextProfessionDialog">添加</el-button>
+				</div>
+
 				<nav>
 					<div class="nav nav-tabs" role="tablist" v-for="item, key in nextProfessionProfileTabs" :key="key">
 						<a style="display: inline-block" :class="item.style" @click="getNextProfessionProfileByTabId(item.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{item.name}}</a>
@@ -331,12 +335,19 @@
 					</el-table-column>
 					<el-table-column  label="文件名">
 						<template slot-scope="scope">
-							<el-upload
-									class="upload-demo"
-									action="https://jsonplaceholder.typicode.com/posts/"
-									multiple>
-								<el-button type="primary">选择文件</el-button>
-							</el-upload>
+							<!--<el-upload-->
+									<!--class="upload-demo"-->
+									<!--action=""-->
+									<!--:on-preview="handlePreview"-->
+									<!--:on-remove="handleRemove"-->
+									<!--:before-remove="beforeRemove"-->
+									<!--multiple-->
+									<!--:limit="3"-->
+									<!--:on-exceed="handleExceed"-->
+									<!--:file-list="fileList">-->
+								<!--&lt;!&ndash;<el-button size="small" type="primary">点击上传</el-button>&ndash;&gt;-->
+								<!--<button type="button" class="btn btn-success">上传</button>-->
+							<!--</el-upload>-->
 						</template>
 					</el-table-column>
 					<el-table-column  label="上传日期">
@@ -373,6 +384,11 @@
 				</el-pagination>
 			</el-dialog>
 
+			<!--添加下序资料-->
+			<el-dialog title="添加下序" :visible.sync="addNextProfessionProfileDialogVisible" width="80%">
+<!--TODO 添加下序资料对话框-->
+			</el-dialog>
+
 
 		</div>
 	</div>
@@ -400,6 +416,7 @@
 				userProjectsDialogVisible: false,
 				previousProfileDialogVisible: false,
 				nextProfessionProfileDialogVisible: false,
+				addNextProfessionProfileDialogVisible: false,
 				detailTableHidden: false,
 				flowChartTableHidden: true,
 				currentPage: 1,
@@ -453,6 +470,17 @@
 						style: "nav-item nav-link",
 					}
 				],
+				fileList: [
+					{
+						name: 'food.jpeg',
+						url: ''
+					},
+					{
+						name: 'food2.jpeg',
+						url: ''
+					}
+					],
+
 
 			},
 			methods: {
@@ -607,6 +635,23 @@
 					app.nextProfessionProfileTabs = nextProfessionProfileTabs
 					findNextProfessionProfile(tabId);//查找上序资料列表
 				},
+				//显示添加下序文件的对话框
+				showAddNextProfessionDialog: function(){
+					app.addNextProfessionProfileDialogVisible = true
+				},
+
+				handleRemove: function(file, fileList) {
+					console.log(file, fileList);
+				},
+				handlePreview: function(file) {
+					console.log(file);
+				},
+				handleExceed: function(files, fileList) {
+					this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+				},
+				beforeRemove: function(file, fileList) {
+					return this.$confirm(`确定移除 ${ file.name }？`);
+				}
 
 
 			}
