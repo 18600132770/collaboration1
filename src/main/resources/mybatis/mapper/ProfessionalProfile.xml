@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huag.collaboration.mapper.ProfessionalProfileMapper">
+
+    <!-- 找我收到的上序资料（上序专业主动发送给我的资料）-->
+    <select id="findMyReceivedPreviousProfile" resultType="com.huag.collaboration.entities.ProfessionalProfile">
+        SELECT * FROM professionalProfile where
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+          and
+            receiveActionProjectId = #{projectId}
+          and
+            initiatorProjectId != #{projectId}
+    </select>
+
+    <!-- 查找我发起的上序资料（我需要我的上序专业给我提供的资料）-->
+    <select id="findMyInitiatedPreviousProfile" resultType="com.huag.collaboration.entities.ProfessionalProfile">
+        SELECT * FROM professionalProfile where
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+          and
+            receiveActionProjectId = #{projectId}
+          and
+            initiatorProjectId = #{projectId}
+    </select>
+
+    <!-- 查找我提交的发送给下序专业的资料 -->
+    <select id="findMySubmitProfileToNextProfession" resultType="com.huag.collaboration.entities.ProfessionalProfile">
+        SELECT * FROM professionalProfile where
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+          and
+            submitActionProjectId = #{projectId}
+          and
+            initiatorProjectId = #{projectId}
+    </select>
+
+    <!-- 查找下序专业发起的需要我提供的资料 -->
+    <select id="findMyNeededProfileToNextProfession" resultType="com.huag.collaboration.entities.ProfessionalProfile">
+        SELECT * FROM professionalProfile where
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+          and
+            submitActionProjectId = #{projectId}
+          and
+            initiatorProjectId != #{projectId}
+    </select>
+
+
+</mapper>

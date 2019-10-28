@@ -13,14 +13,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -183,6 +185,16 @@ public class CollaborationApplicationTests {
             usernameArray = usernameArray.substring(0, usernameArray.length() - 1);
         }
         System.out.println(usernameArray);
+    }
+
+    /**
+     * 读取properties配置文件key value
+     * @throws Exception
+     */
+    @Test
+    public void test13() throws Exception{
+        String endpoint = PropertiesLoaderUtils.loadAllProperties("application.properties").getProperty("oss.endpoint");
+        System.out.println(endpoint);
     }
 
 
