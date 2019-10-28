@@ -347,10 +347,10 @@
 					</el-table-column>
 					<el-table-column  label="下序专业">
 						<template slot-scope="scope">
-							<el-select v-model="statestype" placeholder="请选择">
-								<el-option v-for="item in statestypeoptions" :key="item.value" :label="item.label" :value="item.value">
-								</el-option>
-							</el-select>
+							<!--<el-select v-model="statestype" placeholder="请选择">-->
+								<!--<el-option v-for="item in statestypeoptions" :key="item.value" :label="item.label" :value="item.value">-->
+								<!--</el-option>-->
+							<!--</el-select>-->
 						</template>
 					</el-table-column>
 					<el-table-column  label="发送">
@@ -399,6 +399,7 @@
 				addTaskAssignmentDialogVisible: false,
 				userProjectsDialogVisible: false,
 				previousProfileDialogVisible: false,
+				nextProfessionProfileDialogVisible: false,
 				detailTableHidden: false,
 				flowChartTableHidden: true,
 				currentPage: 1,
