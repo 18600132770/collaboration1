@@ -335,19 +335,7 @@
 					</el-table-column>
 					<el-table-column  label="文件名">
 						<template slot-scope="scope">
-							<!--<el-upload-->
-									<!--class="upload-demo"-->
-									<!--action=""-->
-									<!--:on-preview="handlePreview"-->
-									<!--:on-remove="handleRemove"-->
-									<!--:before-remove="beforeRemove"-->
-									<!--multiple-->
-									<!--:limit="3"-->
-									<!--:on-exceed="handleExceed"-->
-									<!--:file-list="fileList">-->
-								<!--&lt;!&ndash;<el-button size="small" type="primary">点击上传</el-button>&ndash;&gt;-->
-								<!--<button type="button" class="btn btn-success">上传</button>-->
-							<!--</el-upload>-->
+
 						</template>
 					</el-table-column>
 					<el-table-column  label="上传日期">
@@ -385,8 +373,36 @@
 			</el-dialog>
 
 			<!--添加下序资料-->
-			<el-dialog title="添加下序" :visible.sync="addNextProfessionProfileDialogVisible" width="80%">
-<!--TODO 添加下序资料对话框-->
+			<el-dialog title="添加下序" :visible.sync="addNextProfessionProfileDialogVisible" width="30%">
+			<!--TODO 添加下序资料对话框-->
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">内容：</label>
+					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addNextProfessionProfile.content">
+				</div>
+				<div class="form-group">
+					<el-upload
+					class="upload-demo"
+					action=""
+					:on-preview="handlePreview"
+					:on-remove="handleRemove"
+					:before-remove="beforeRemove"
+					multiple
+					:limit="3"
+					:on-exceed="handleExceed"
+					:file-list="fileList">
+					<button type="button" class="btn btn-success">上传文件</button>
+					</el-upload>
+				</div>
+				<div class="form-group">
+					<template>
+						<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+						<div style="margin: 15px 0;"></div>
+						<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+							<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+						</el-checkbox-group>
+					</template>
+				</div>
+
 			</el-dialog>
 
 
@@ -408,6 +424,8 @@
 	</script>
 
 	<script th:inline="javascript" type="text/javascript">
+
+		const cityOptions = ['上海', '北京', '广州', '深圳'];
 
 		var app = new Vue({
 			el: '#app',
@@ -434,6 +452,7 @@
 				userProjectsTableData: null,
 				previousProfileTableData: null,
 				nextProfessionProfileTableData: null,
+				addNextProfessionProfile: {},
 				navigationBars:[
 					{
 						id: 1,
@@ -480,6 +499,11 @@
 						url: ''
 					}
 					],
+
+				checkAll: false,
+				checkedCities: ['上海', '北京'],
+				cities: cityOptions,
+				isIndeterminate: true,
 
 
 			},
@@ -651,6 +675,16 @@
 				},
 				beforeRemove: function(file, fileList) {
 					return this.$confirm(`确定移除 ${ file.name }？`);
+				},
+
+				handleCheckAllChange: function(val) {
+					this.checkedCities = val ? cityOptions : [];
+					this.isIndeterminate = false;
+				},
+				handleCheckedCitiesChange: function(value) {
+					let checkedCount = value.length;
+					this.checkAll = checkedCount === this.cities.length;
+					this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
 				}
 
 
