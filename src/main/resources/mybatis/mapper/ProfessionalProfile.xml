@@ -6,18 +6,32 @@
 
     <!-- 找我收到的上序资料（上序专业主动发送给我的资料）-->
     <select id="findMyReceivedPreviousProfile" resultType="com.huag.collaboration.entities.ProfessionalProfile">
-        SELECT * FROM professionalProfile where
-            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+        SELECT p.id, p.content, p.fileName, p.filePath, p.uploadDate, p.checkDate, p.departmentId, d.departmentName,
+               p.submitActionProjectId, p.receiveActionProjectId, p.initiatorProjectId, p.dealFlag, p.dealOpinions,
+               p.createTime, p.updateTime, p.deltag
+          FROM
+          professionalProfile p left join department d on p.departmentId = d.id
+         where
+            (p.deltag <![CDATA[ <> ]]> '1' or p.deltag is null)
+          and
+            (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
           and
             receiveActionProjectId = #{projectId}
           and
-            initiatorProjectId != #{projectId}
+            (initiatorProjectId <![CDATA[ <> ]]> #{projectId} or initiatorProjectId is null)
     </select>
 
     <!-- 查找我发起的上序资料（我需要我的上序专业给我提供的资料）-->
     <select id="findMyInitiatedPreviousProfile" resultType="com.huag.collaboration.entities.ProfessionalProfile">
-        SELECT * FROM professionalProfile where
-            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+         SELECT p.id, p.content, p.fileName, p.filePath, p.uploadDate, p.checkDate, p.departmentId, d.departmentName,
+               p.submitActionProjectId, p.receiveActionProjectId, p.initiatorProjectId, p.dealFlag, p.dealOpinions,
+               p.createTime, p.updateTime, p.deltag
+          FROM
+          professionalProfile p left join department d on p.departmentId = d.id
+         where
+            (p.deltag <![CDATA[ <> ]]> '1' or p.deltag is null)
+          and
+            (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
           and
             receiveActionProjectId = #{projectId}
           and
@@ -26,8 +40,15 @@
 
     <!-- 查找我提交的发送给下序专业的资料 -->
     <select id="findMySubmitProfileToNextProfession" resultType="com.huag.collaboration.entities.ProfessionalProfile">
-        SELECT * FROM professionalProfile where
-            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+        SELECT p.id, p.content, p.fileName, p.filePath, p.uploadDate, p.checkDate, p.departmentId, d.departmentName,
+               p.submitActionProjectId, p.receiveActionProjectId, p.initiatorProjectId, p.dealFlag, p.dealOpinions,
+               p.createTime, p.updateTime, p.deltag
+          FROM
+          professionalProfile p left join department d on p.departmentId = d.id
+         where
+            (p.deltag <![CDATA[ <> ]]> '1' or p.deltag is null)
+          and
+            (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
           and
             submitActionProjectId = #{projectId}
           and
@@ -36,12 +57,19 @@
 
     <!-- 查找下序专业发起的需要我提供的资料 -->
     <select id="findMyNeededProfileToNextProfession" resultType="com.huag.collaboration.entities.ProfessionalProfile">
-        SELECT * FROM professionalProfile where
-            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+         SELECT p.id, p.content, p.fileName, p.filePath, p.uploadDate, p.checkDate, p.departmentId, d.departmentName,
+               p.submitActionProjectId, p.receiveActionProjectId, p.initiatorProjectId, p.dealFlag, p.dealOpinions,
+               p.createTime, p.updateTime, p.deltag
+          FROM
+          professionalProfile p left join department d on p.departmentId = d.id
+         where
+            (p.deltag <![CDATA[ <> ]]> '1' or p.deltag is null)
+          and
+            (d.deltag <![CDATA[ <> ]]> '1' or d.deltag is null)
           and
             submitActionProjectId = #{projectId}
           and
-            initiatorProjectId != #{projectId}
+            (initiatorProjectId <![CDATA[ <> ]]> #{projectId} or initiatorProjectId is null)
     </select>
 
 

@@ -20,6 +20,10 @@ public class ProfessionalProfile {
     private String filePath;//文件路径
     private String uploadDate;//上传日期
     private String checkDate;//技表日期
+
+    private Integer departmentId;
+    private String departmentName;
+
     private Integer submitActionProjectId;//提交行为的分项目id
     private Integer receiveActionProjectId;//接收行为的分项目id
 

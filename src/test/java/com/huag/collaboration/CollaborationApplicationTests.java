@@ -1,12 +1,10 @@
 package com.huag.collaboration;
 
+import com.huag.collaboration.entities.ProfessionalProfile;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.TaskAssignment;
 import com.huag.collaboration.entities.mapping.UserProjectMapping;
-import com.huag.collaboration.mapper.ProfessionProjectMapper;
-import com.huag.collaboration.mapper.ProjectMapper;
-import com.huag.collaboration.mapper.TaskAssignmentMapper;
-import com.huag.collaboration.mapper.UserProjectMapper;
+import com.huag.collaboration.mapper.*;
 import com.huag.collaboration.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -39,6 +37,9 @@ public class CollaborationApplicationTests {
 
     @Autowired
     TaskAssignmentMapper taskAssignmentMapper;
+
+    @Autowired
+    ProfessionalProfileMapper professionalProfileMapper;
 
     @Test
     public void test1() {
@@ -195,6 +196,12 @@ public class CollaborationApplicationTests {
     public void test13() throws Exception{
         String endpoint = PropertiesLoaderUtils.loadAllProperties("application.properties").getProperty("oss.endpoint");
         System.out.println(endpoint);
+    }
+
+    @Test
+    public void test14(){
+        List<ProfessionalProfile> myReceivedPreviousProfile = professionalProfileMapper.findMyReceivedPreviousProfile(Integer.valueOf(39));
+        System.out.println(myReceivedPreviousProfile);
     }
 
 

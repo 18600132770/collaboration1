@@ -46,6 +46,8 @@ public class ProfessionalProfileController {
         BaseResponse<List<ProfessionalProfile>> result = new BaseResponse<>();
         String projectId = request.getParameter("projectId");
         List<ProfessionalProfile> myReceivedPreviousProfile = professionalProfileMapper.findMyReceivedPreviousProfile(Integer.valueOf(projectId));
+        System.out.println(projectId);
+        System.out.println(myReceivedPreviousProfile);
         result.code = 200;
         result.setData(myReceivedPreviousProfile);
         return result;
