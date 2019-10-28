@@ -71,7 +71,7 @@
 					<el-button type="primary" @click="addTaskAssignmentClick">添加任务</el-button>
 
 					<el-button type="primary" @click="showPreviousProfileDialog">上序资料</el-button>
-					<el-button type="primary"><a  href="project" th:href="@{/underProfessionDatas/}">提下序</a></el-button>
+					<el-button type="primary" @click="showNextProfessionProfileDialog">提下序</el-button>
 					<el-button type="primary"><a  href="project" :href="'/crud/project/'">专业项目文件</a></el-button>
 					<el-button type="primary"><a  href="project" th:href="@{/notices}">通知</a></el-button>
 
@@ -316,6 +316,63 @@
 				</el-pagination>
 			</el-dialog>
 
+			<!-- 下序资料modal -->
+			<el-dialog title="下序资料" :visible.sync="nextProfessionProfileDialogVisible" width="80%">
+				<nav>
+					<div class="nav nav-tabs" role="tablist" v-for="item, key in nextProfessionProfileTabs" :key="key">
+						<a style="display: inline-block" :class="item.style" @click="getNextProfessionProfileByTabId(item.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{item.name}}</a>
+					</div>
+				</nav>
+				<div style="height: 5px"></div>
+				<el-table style="width: 100%;" :data="nextProfessionProfileTableData" class="x-table table-td0">
+					<el-table-column type="selection" width="55"></el-table-column>
+					<el-table-column label="内容">
+						<template slot-scope="scope"><span>{{ scope.row.content }}</span></template>
+					</el-table-column>
+					<el-table-column  label="文件名">
+						<template slot-scope="scope">
+							<el-upload
+									class="upload-demo"
+									action="https://jsonplaceholder.typicode.com/posts/"
+									multiple>
+								<el-button type="primary">选择文件</el-button>
+							</el-upload>
+						</template>
+					</el-table-column>
+					<el-table-column  label="上传日期">
+						<template slot-scope="scope"><span>{{ scope.row.uploadDate }}</span></template>
+					</el-table-column>
+					<el-table-column  label="技表日期">
+						<template slot-scope="scope"><span>{{ scope.row.checkDate }}</span></template>
+					</el-table-column>
+					<el-table-column  label="下序专业">
+						<template slot-scope="scope">
+							<el-select v-model="statestype" placeholder="请选择">
+								<el-option v-for="item in statestypeoptions" :key="item.value" :label="item.label" :value="item.value">
+								</el-option>
+							</el-select>
+						</template>
+					</el-table-column>
+					<el-table-column  label="发送">
+						<template slot-scope="scope">
+							<button type="button" class="btn btn-success">发送</button>
+						</template>
+					</el-table-column>
+					<el-table-column  label="备注">
+						<template slot-scope="scope"><span>{{ scope.row.dealOpinions }}</span></template>
+					</el-table-column>
+				</el-table>
+				<el-pagination class="txtCenter"
+							   @size-change="handleSizeChange"
+							   @current-change="handleCurrentChange"
+							   :current-page.sync="currentPage"
+							   :page-sizes="[10,20,30,50]"
+							   :page-size="100"
+							   layout=" sizes, prev, pager, next"
+							   :total="1000">
+				</el-pagination>
+			</el-dialog>
+
 
 		</div>
 	</div>
@@ -358,6 +415,7 @@
 				taskAssignmentListData: null,
 				userProjectsTableData: null,
 				previousProfileTableData: null,
+				nextProfessionProfileTableData: null,
 				navigationBars:[
 					{
 						id: 1,
@@ -381,7 +439,20 @@
 						name: "我申请的",
 						style: "nav-item nav-link",
 					}
-				]
+				],
+				nextProfessionProfileTabs: [
+					{
+						id: 0,
+						name: "我发起的",
+						style: "nav-item nav-link active",
+					},
+					{
+						id: 1,
+						name: "被需要的",
+						style: "nav-item nav-link",
+					}
+				],
+
 			},
 			methods: {
 				handleSizeChange(val) {
@@ -499,7 +570,7 @@
 
 					editEngineer(ajaxData, this);//编辑分任务的设计、复核、审核、审定人员
 				},
-				//显示上序资料
+				//显示上序资料dialog
 				showPreviousProfileDialog: function(){
 					app.previousProfileDialogVisible = true
 					findPreviousProfile(0);//查找上序资料列表
@@ -514,8 +585,28 @@
 							previousProfileTabs[i].style = 'nav-item nav-link'
 						}
 					}
+					app.previousProfileTabs = previousProfileTabs
 					findPreviousProfile(tabId);//查找上序资料列表
-				}
+				},
+				//显示下序资料dialog
+				showNextProfessionProfileDialog: function(){
+					app.nextProfessionProfileDialogVisible = true
+					findNextProfessionProfile(0);//查找下序资料
+				},
+				//根据tab切换下序资料（我发起的、需要我发送的）
+				getNextProfessionProfileByTabId: function(tabId){
+					var nextProfessionProfileTabs = app.nextProfessionProfileTabs
+					for(var i = 0; i < nextProfessionProfileTabs.length; i++){
+						if(i == tabId){
+							nextProfessionProfileTabs[i].style = 'nav-item nav-link active'
+						}else{
+							nextProfessionProfileTabs[i].style = 'nav-item nav-link'
+						}
+					}
+					app.nextProfessionProfileTabs = nextProfessionProfileTabs
+					findNextProfessionProfile(tabId);//查找上序资料列表
+				},
+
 
 			}
 
@@ -657,6 +748,33 @@
 						app.previousProfileTableData = result.data
 					}else{
 						console.log("findPreviousProfile 返回值失败")
+					}
+
+				}
+			})
+		}
+
+		/**
+		 * 查找下序资料列表
+		 * @param projectId
+		 * @param flag
+		 */
+		function findNextProfessionProfile(flag){
+			var ajaxData = {}
+			ajaxData.projectId = app.projectId
+			var url = "/crud/previousProfile/findMySubmitProfileToNextProfession"	//我发起的下序资料
+			if(flag == 1){
+				url = "/crud/previousProfile/findMyNeededProfileToNextProfession" //别人向我要的资料
+			}
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: url,
+				success: function (result) {
+					if(result.code == 200){
+						app.nextProfessionProfileTableData = result.data
+					}else{
+						console.log("findNextProfessionProfile 返回值失败")
 					}
 
 				}
