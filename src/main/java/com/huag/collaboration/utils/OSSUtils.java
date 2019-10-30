@@ -5,6 +5,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.GetObjectRequest;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 
 /**
@@ -44,12 +45,23 @@ public class OSSUtils{
 
     /**
      * 下载oss文件到本地
-     * @param ossFilePath
+     * @param ossFileUrl
      * @param localFilePath
      */
-    public static void downloadFileToLocal(String ossFilePath, String localFilePath){
+    public static void downloadFileToLocal(String ossFileUrl, String localFilePath){
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-        ossClient.getObject(new GetObjectRequest(bucketName, ossFilePath), new File(localFilePath));
+        ossClient.getObject(new GetObjectRequest(bucketName, ossFileUrl), new File(localFilePath));
+        ossClient.shutdown();
+    }
+
+    /**
+     * 在OSS服务器创建一个内容是content的oosFileUrl文件
+     * @param ossFileUrl
+     * @param content
+     */
+    public static void uploadString(String ossFileUrl, String content){
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        ossClient.putObject(bucketName, ossFileUrl, new ByteArrayInputStream(content.getBytes()));
         ossClient.shutdown();
     }
 

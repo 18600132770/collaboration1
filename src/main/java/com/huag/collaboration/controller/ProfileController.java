@@ -5,6 +5,7 @@ import com.huag.collaboration.entities.Profile;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfileMapper;
+import com.huag.collaboration.utils.OSSUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,6 +65,8 @@ public class ProfileController {
         profile.setName(filename);
         profile.setProjectId(Integer.valueOf(projectId));
         profileMapper.insert(profile);
+
+        OSSUtils.uploadString("profileTree/" + projectId + "/" + filename, "测试数据，以后再用真实数据");
 
         result.code = 200;
         result.setData(null);
