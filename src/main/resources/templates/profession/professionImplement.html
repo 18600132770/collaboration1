@@ -377,7 +377,7 @@
 				<el-form ref="form" :model="form" label-width="110px">
 					<el-upload
 							class="upload-demo"
-							:action="'http://localhost:8083/crud/profile/uploadFile?projectId=' + projectId"
+							:action="'/crud/profile/uploadFile?projectId=' + projectId"
 							:on-change="handleChange"
 							:file-list="fileList">
 						<el-button size="small" type="primary">点击上传</el-button>
