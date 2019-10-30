@@ -12,15 +12,15 @@ import java.util.List;
 //@Mapper
 public interface ProjectMapper {
 
-    public List<Project> findAll();
-    public List<Project> findByProjectName(String projectName);
-    public Project findById(Integer id);
-    public int deleteById(Integer id);
-    public int insert(Project project);
-    public int update(Project project);
-    public List<Project> findAllIn(String[] array);
+    List<Project> findAll();
+    List<Project> findByProjectName(String projectName);
+    Project findById(Integer id);
+    int deleteById(Integer id);
+    int insert(Project project);
+    int update(Project project);
+    List<Project> findAllIn(String[] array);
 
-    public List<Project> findProjectByDepartmentId(Integer departmentId);
+    List<Project> findProjectByDepartmentId(Integer departmentId);
 
 
     /**
@@ -28,7 +28,7 @@ public interface ProjectMapper {
      * @param projectSummaryId
      * @return
      */
-    public List<Project> findProjectsByProjectSummaryId(Integer projectSummaryId);
+    List<Project> findProjectsByProjectSummaryId(Integer projectSummaryId);
 
     /**
      * 根据projectName的模糊查询和deptId进行查询
@@ -37,7 +37,7 @@ public interface ProjectMapper {
      * @return
      */
 
-    public List<Project> findByProjectNameAndDeptId(@Param("projectName") String projectName, @Param("departmentId") Integer departmentId);
+    List<Project> findByProjectNameAndDeptId(@Param("projectName") String projectName, @Param("departmentId") Integer departmentId);
 
 
 }

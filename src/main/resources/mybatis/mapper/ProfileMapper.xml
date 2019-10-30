@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huag.collaboration.mapper.ProfileMapper">
+
+
+    <insert id="insert" parameterType="com.huag.collaboration.entities.Profile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            profile(name, url, projectId, createUser, createTime, updateTime, deltag)
+         VALUES
+             (#{name}, #{url}, #{projectId}, #{createUser}, #{createTime}, #{updateTime}, #{deltag})
+    </insert>
+
+    <select id="findById" resultType="com.huag.collaboration.entities.Profile">
+        select * from profile where id = #{id}
+    </select>
+
+    <select id="findByProjectId" resultType="com.huag.collaboration.entities.Profile">
+        select * from profile where projectId = #{projectId}
+    </select>
+
+    <insert id="update">
+        update profile set
+        name = #{name}, url = #{url}, projectId = #{projectId},
+        createUser = #{createUser}, updateTime =now(), deltag = #{deltag}
+        where id = #{id}
+    </insert>
+
+
+</mapper>

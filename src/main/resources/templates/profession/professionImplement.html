@@ -72,7 +72,7 @@
 
 					<el-button type="primary" @click="showPreviousProfileDialog">上序资料</el-button>
 					<el-button type="primary" @click="showNextProfessionProfileDialog">提下序</el-button>
-					<el-button type="primary"><a  href="project" :href="'/crud/project/'">专业项目文件</a></el-button>
+					<el-button type="primary" @click="openProfileTreeDialog">专业项目文件</el-button>
 					<el-button type="primary"><a  href="project" th:href="@{/notices}">通知</a></el-button>
 
 				</nav>
@@ -318,9 +318,9 @@
 
 			<!-- 下序资料modal -->
 			<el-dialog title="下序资料" :visible.sync="nextProfessionProfileDialogVisible" width="80%">
-				<div style="margin-bottom: 5px">
-					<el-button type="primary" @click="showAddNextProfessionDialog">添加</el-button>
-				</div>
+				<!--<div style="margin-bottom: 5px">-->
+					<!--<el-button type="primary" @click="showAddNextProfessionDialog">添加</el-button>-->
+				<!--</div>-->
 
 				<nav>
 					<div class="nav nav-tabs" role="tablist" v-for="item, key in nextProfessionProfileTabs" :key="key">
@@ -372,37 +372,17 @@
 				</el-pagination>
 			</el-dialog>
 
-			<!--添加下序资料-->
-			<el-dialog title="添加下序" :visible.sync="addNextProfessionProfileDialogVisible" width="30%">
-			<!--TODO 添加下序资料对话框-->
-				<div class="form-group">
-					<label style="margin-left: 10px; display: inline; width: 20%;">内容：</label>
-					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addNextProfessionProfile.content">
-				</div>
-				<div class="form-group">
+			<!--专业项目文件-->
+			<el-dialog title="专业项目文件" :visible.sync="profileTreeDialogVisible" width="30%">
+				<el-form ref="form" :model="form" label-width="110px">
 					<el-upload
-					class="upload-demo"
-					action=""
-					:on-preview="handlePreview"
-					:on-remove="handleRemove"
-					:before-remove="beforeRemove"
-					multiple
-					:limit="3"
-					:on-exceed="handleExceed"
-					:file-list="fileList">
-					<button type="button" class="btn btn-success">上传文件</button>
+							class="upload-demo"
+							:action="'http://localhost:8083/crud/profile/uploadFile?projectId=' + projectId"
+							:on-change="handleChange"
+							:file-list="fileList">
+						<el-button size="small" type="primary">点击上传</el-button>
 					</el-upload>
-				</div>
-				<div class="form-group">
-					<template>
-						<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-						<div style="margin: 15px 0;"></div>
-						<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-							<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-						</el-checkbox-group>
-					</template>
-				</div>
-
+				</el-form>
 			</el-dialog>
 
 
@@ -416,6 +396,7 @@
 	<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
 	<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
 	<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
+	<script type="text/javascript" src="asserts/js/const.js" th:src="@{/asserts/js/const.js}"></script>
 	<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
 
 
@@ -434,7 +415,7 @@
 				userProjectsDialogVisible: false,
 				previousProfileDialogVisible: false,
 				nextProfessionProfileDialogVisible: false,
-				addNextProfessionProfileDialogVisible: false,
+				profileTreeDialogVisible: false,
 				detailTableHidden: false,
 				flowChartTableHidden: true,
 				currentPage: 1,
@@ -453,6 +434,10 @@
 				previousProfileTableData: null,
 				nextProfessionProfileTableData: null,
 				addNextProfessionProfile: {},
+				fileType: 'text/plain',
+				form: {
+					category: ''
+				},
 				navigationBars:[
 					{
 						id: 1,
@@ -489,23 +474,11 @@
 						style: "nav-item nav-link",
 					}
 				],
-				fileList: [
-					{
-						name: 'food.jpeg',
-						url: ''
-					},
-					{
-						name: 'food2.jpeg',
-						url: ''
-					}
-					],
-
+				fileList: [],
 				checkAll: false,
 				checkedCities: ['上海', '北京'],
 				cities: cityOptions,
 				isIndeterminate: true,
-
-
 			},
 			methods: {
 				handleSizeChange(val) {
@@ -531,6 +504,7 @@
 						}
 					}
 					app.projects = myProjects
+					app.fileList = []
 				},
 				switchNavigationBar: function (id) {
 					var navigationBars = app.navigationBars
@@ -659,32 +633,25 @@
 					app.nextProfessionProfileTabs = nextProfessionProfileTabs
 					findNextProfessionProfile(tabId);//查找上序资料列表
 				},
-				//显示添加下序文件的对话框
-				showAddNextProfessionDialog: function(){
-					app.addNextProfessionProfileDialogVisible = true
+				//显示文件树对话框
+				openProfileTreeDialog: function(){
+					app.fileList = []
+					app.profileTreeDialogVisible = true
+					findFilesByProjectId();//查找文件树内容
 				},
-
-				handleRemove: function(file, fileList) {
-					console.log(file, fileList);
+				uploadDocs: function (params) {
+					//TODO OSS文件上传可以在前端直接配置
+					console.log(params.file.name)
 				},
-				handlePreview: function(file) {
-					console.log(file);
+				beforeUploadDoc: function (file) {
+					console.log("beforeUploadDoc function")
+					console.log(file)
 				},
-				handleExceed: function(files, fileList) {
-					this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-				},
-				beforeRemove: function(file, fileList) {
-					return this.$confirm(`确定移除 ${ file.name }？`);
-				},
-
-				handleCheckAllChange: function(val) {
-					this.checkedCities = val ? cityOptions : [];
-					this.isIndeterminate = false;
-				},
-				handleCheckedCitiesChange: function(value) {
-					let checkedCount = value.length;
-					this.checkAll = checkedCount === this.cities.length;
-					this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+				handleChange(file, fileList) {
+					console.log(file)
+					console.log(fileList)
+					// this.fileList = fileList.slice(-3);
+					this.fileList = fileList;
 				}
 
 
@@ -860,6 +827,30 @@
 				}
 			})
 		}
+
+
+		/**
+		 * 查找文件树
+		 */
+		function findFilesByProjectId(){
+			var ajaxData = {}
+			ajaxData.projectId = app.projectId
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/profile/findFilesByProjectId",
+				success: function (result) {
+					if(result.code == 200){
+						app.fileList = result.data
+					}else{
+						console.log("findFilesByProjectId 返回值失败")
+					}
+
+				}
+			})
+		}
+
+
 
 
 
