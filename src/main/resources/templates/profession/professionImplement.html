@@ -672,7 +672,7 @@
 				//显示上序资料dialog
 				showPreviousProfileDialog: function(){
 					app.previousProfileDialogVisible = true
-					findPreviousProfile(0);//查找上序资料列表
+					findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
 				},
 				//根据tab切换上序文件（我收到的、我申请的）
 				getPreviousProfileByTabId: function (tabId) {
@@ -696,7 +696,7 @@
 				//显示下序资料dialog
 				showNextProfessionProfileDialog: function(){
 					app.nextProfessionProfileDialogVisible = true
-					findNextProfessionProfile(0);//查找下序资料
+					findNextProfessionProfile(app.nextProfessionProfileTabId);//查找下序资料
 				},
 				//根据tab切换下序资料（我发起的、需要我发送的）
 				getNextProfessionProfileByTabId: function(tabId){
