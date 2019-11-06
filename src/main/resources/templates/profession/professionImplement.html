@@ -67,6 +67,7 @@
 					<el-input hidden="true"  v-model="projectId"  style="height: 0px"></el-input>
 					<el-input hidden="true"  v-model="selectUserRole"  style="height: 0px"></el-input>
 					<el-input hidden="true"  v-model="selectTaskId"  style="height: 0px"></el-input>
+					<el-input hidden="true"  v-model="previousProfileTabId"  style="height: 0px"></el-input>
 
 					<el-button type="primary" @click="addTaskAssignmentClick">添加任务</el-button>
 
@@ -289,21 +290,19 @@
 					<el-table-column  label="技表日期">
 						<template slot-scope="scope"><span>{{ scope.row.checkDate }}</span></template>
 					</el-table-column>
-					<el-table-column  label="接收">
-						<template slot-scope="scope">
-							<button type="button" class="btn btn-info">接收</button>
-						</template>
+
+					<el-table-column  label="备注">
+						<template slot-scope="scope"><span>{{ scope.row.dealOpinions }}</span></template>
 					</el-table-column>
-					<el-table-column  label="退回">
+
+					<el-table-column  label="操作">
 						<template slot-scope="scope">
-							<button type="button" class="btn btn-danger">退回</button>
+							<button type="button" class="btn btn-info" @click="acceptPreviousProfile(scope.row)">接收</button>
+							<button type="button" class="btn btn-danger" @click="refusePreviousProfile(scope.row)">退回</button>
 						</template>
 					</el-table-column>
 
-					<!--TODO 弹出Modal 添加退回意见-->
-					<el-table-column  label="退回意见">
-						<template slot-scope="scope"><span>{{ scope.row.dealOpinions }}</span></template>
-					</el-table-column>
+
 				</el-table>
 				<el-pagination class="txtCenter"
 							   @size-change="handleSizeChange"
@@ -419,6 +418,7 @@
 				detailTableHidden: false,
 				flowChartTableHidden: true,
 				currentPage: 1,
+				previousProfileTabId: 0,
 				projectSummaryId: null,
 				departmentId: null,
 				projectId: null,
@@ -433,7 +433,7 @@
 				userProjectsTableData: null,
 				previousProfileTableData: null,
 				nextProfessionProfileTableData: null,
-				addNextProfessionProfile: {},
+				addNextProfessionProfile: null,
 				fileType: 'text/plain',
 				form: {
 					category: ''
@@ -604,6 +604,7 @@
 				},
 				//根据tab切换上序文件（我收到的、我申请的）
 				getPreviousProfileByTabId: function (tabId) {
+					app.previousProfileTabId = tabId
 					var previousProfileTabs = app.previousProfileTabs
 					for(var i = 0; i < previousProfileTabs.length; i++){
 						if(i == tabId){
@@ -652,8 +653,42 @@
 					console.log(fileList)
 					// this.fileList = fileList.slice(-3);
 					this.fileList = fileList;
+				},
+				//接收上序文件
+				acceptPreviousProfile: function (professionProfile) {
+					professionProfile.dealFlag = 0;//接收
+					professionProfile.dealOpinions = "接收";
+					var ajaxData = {}
+					ajaxData.professionProfile = encodeURI(JSON.stringify(professionProfile))
+					console.log(professionProfile)
+					updateProfessionProfile(ajaxData);//更新专业文件数据
+					this.$message({
+						message: '接收成功',
+						type: 'success'
+					});
+				},
+				//退回上序文件
+				refusePreviousProfile: function (professionProfile) {
+					this.$prompt('请输入驳回意见', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({ value }) => {
+						professionProfile.dealFlag = 1;//驳回
+						professionProfile.dealOpinions = value;
+						var ajaxData = {}
+						ajaxData.professionProfile = encodeURI(JSON.stringify(professionProfile))
+						updateProfessionProfile(ajaxData);//更新专业文件数据
+						this.$message({
+							message: '驳回成功',
+							type: 'success'
+						});
+					}).catch(() => {
+						this.$message({
+							type: 'info',
+							message: '取消输入'
+						});
+					});
 				}
-
 
 			}
 
@@ -844,6 +879,25 @@
 						app.fileList = result.data
 					}else{
 						console.log("findFilesByProjectId 返回值失败")
+					}
+
+				}
+			})
+		}
+
+		/**
+		 * 更新专业文件数据
+		 */
+		function updateProfessionProfile(ajaxData){
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/previousProfile/update",
+				success: function (result) {
+					if(result.code == 200){
+						findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
+					}else{
+						console.log("updateProfessionProfile 返回值失败")
 					}
 
 				}

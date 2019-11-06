@@ -72,5 +72,16 @@
             (initiatorProjectId <![CDATA[ <> ]]> #{projectId} or initiatorProjectId is null)
     </select>
 
+    <insert id="update">
+        update professionalProfile set
+        content = #{content}, fileName = #{fileName}, filePath = #{filePath},
+        uploadDate = #{uploadDate}, checkDate = #{checkDate}, departmentId = #{departmentId},
+        departmentName = #{departmentName}, submitActionProjectId = #{submitActionProjectId}, receiveActionProjectId = #{receiveActionProjectId},
+        initiatorProjectId = #{initiatorProjectId}, dealFlag = #{dealFlag}, dealOpinions = #{dealOpinions},
+        updateTime =now(), deltag = #{deltag}
+        where id = #{id}
+    </insert>
+
+
 
 </mapper>

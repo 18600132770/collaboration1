@@ -38,5 +38,12 @@ public interface ProfessionalProfileMapper {
      */
     List<ProfessionalProfile> findMyNeededProfileToNextProfession(Integer projectId);
 
+    /**
+     * 更新
+     * @param professionalProfile
+     * @return
+     */
+    int update(ProfessionalProfile professionalProfile);
+
 
 }

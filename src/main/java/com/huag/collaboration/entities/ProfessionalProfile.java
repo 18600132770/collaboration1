@@ -37,7 +37,7 @@ public class ProfessionalProfile {
     // （1）initiatorProjectId = projectId 我发起的我发送给别人的下序资料
     // （2）initiatorProjectId != projectId 别人发起的我要我提供给他的下序资料
 
-    private String dealFlag;//被处理标识, null：未处理   0：接受    1：驳回
+    private String dealFlag;//被处理标识, null：未处理   0：接收    1：驳回
     private String dealOpinions;//处理意见
 
     private String createTime;
