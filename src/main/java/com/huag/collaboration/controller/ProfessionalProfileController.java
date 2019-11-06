@@ -6,6 +6,7 @@ import com.huag.collaboration.entities.ProfessionalProfile;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfessionalProfileMapper;
+import com.huag.collaboration.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,9 @@ public class ProfessionalProfileController {
 
     @Autowired
     ProfessionalProfileMapper professionalProfileMapper;
+
+    @Autowired
+    ProjectMapper projectMapper;
 
     /**
      * 页面跳转到上序资料
@@ -121,6 +125,61 @@ public class ProfessionalProfileController {
         result.code = 200;
         return result;
     }
+
+    /**
+     * 添加
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/previousProfile/add")
+    public BaseResponse<List<ProfessionalProfile>> add(HttpServletRequest request) throws Exception{
+        BaseResponse<List<ProfessionalProfile>> result = new BaseResponse<>();
+        String professionProfileStr = URLDecoder.decode(String.valueOf(request.getParameter("professionProfile")), "UTF-8");
+        ProfessionalProfile professionalProfile = JSONObject.toJavaObject(JSON.parseObject(professionProfileStr), ProfessionalProfile.class);
+        professionalProfileMapper.insert(professionalProfile);
+        result.code = 200;
+        return result;
+    }
+
+    /**
+     * 添加我申请的上序资料
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/previousProfile/addPreviousProfessionProfile")
+    public BaseResponse<ProfessionalProfile> addPreviousProfessionProfile(HttpServletRequest request) throws Exception{
+        BaseResponse<ProfessionalProfile> result = new BaseResponse<>();
+        String content = URLDecoder.decode(String.valueOf(request.getParameter("content")), "UTF-8");
+        Integer projectId = Integer.valueOf(request.getParameter("projectId"));
+
+        String[] selectProjectIds = request.getParameterValues("selectProjectIds");//向这些分项目申请资料
+
+        for (String id :
+                selectProjectIds) {
+            ProfessionalProfile myApplyProfessionalProfile = new ProfessionalProfile();
+            myApplyProfessionalProfile.setReceiveActionProjectId(projectId);
+            myApplyProfessionalProfile.setInitiatorProjectId(projectId);
+            myApplyProfessionalProfile.setContent(content);
+            Project project = projectMapper.findById(projectId);
+            myApplyProfessionalProfile.setDepartmentId(project.getDepartmentId());
+            professionalProfileMapper.insert(myApplyProfessionalProfile);
+
+            ProfessionalProfile professionalProfile = new ProfessionalProfile();
+            professionalProfile.setSubmitActionProjectId(Integer.valueOf(id));
+            professionalProfile.setInitiatorProjectId(projectId);
+            Project project1 = projectMapper.findById(Integer.valueOf(id));
+            professionalProfile.setDepartmentId(project1.getDepartmentId());
+            professionalProfile.setContent(content);
+            professionalProfileMapper.insert(professionalProfile);
+        }
+        result.code = 200;
+        return result;
+    }
+
 
 
 }

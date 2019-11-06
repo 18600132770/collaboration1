@@ -68,6 +68,7 @@
 					<el-input hidden="true"  v-model="selectUserRole"  style="height: 0px"></el-input>
 					<el-input hidden="true"  v-model="selectTaskId"  style="height: 0px"></el-input>
 					<el-input hidden="true"  v-model="previousProfileTabId"  style="height: 0px"></el-input>
+					<el-input hidden="true"  v-model="nextProfessionProfileTabId"  style="height: 0px"></el-input>
 
 					<el-button type="primary" @click="addTaskAssignmentClick">添加任务</el-button>
 
@@ -269,6 +270,7 @@
 						<a style="display: inline-block" :class="item.style" @click="getPreviousProfileByTabId(item.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{item.name}}</a>
 					</div>
 				</nav>
+				<el-button type="primary" @click="addPreviousProfileClick" :hidden="addPreviousProfileHidden">添加</el-button>
 				<div style="height: 5px"></div>
 				<el-table style="width: 100%;" :data="previousProfileTableData" class="x-table table-td0">
 					<el-table-column type="selection" width="55"></el-table-column>
@@ -384,6 +386,28 @@
 				</el-form>
 			</el-dialog>
 
+			<!-- 添加上序文件Modal -->
+			<el-dialog title="添加我需要的上序文件" :visible.sync="addPreviousProfileDialogVisible" width="30%">
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">上序分项目：</label>
+					<el-select v-model="selectDepartments" multiple placeholder="请选择"  style="width: 80%">
+						<el-option
+								v-for="department in departments"
+								:key="department.id"
+								:label="department.departmentName"
+								:value="department.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">内容：</label>
+					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="content">
+				</div>
+				<div class="modal-footer">
+					<button  class="btn btn-primary" @click="saveAddPreviousProfileDialog">保存</button>
+				</div>
+			</el-dialog>
+
 
 		</div>
 	</div>
@@ -415,10 +439,12 @@
 				previousProfileDialogVisible: false,
 				nextProfessionProfileDialogVisible: false,
 				profileTreeDialogVisible: false,
+				addPreviousProfileDialogVisible: false,
 				detailTableHidden: false,
 				flowChartTableHidden: true,
 				currentPage: 1,
 				previousProfileTabId: 0,
+				nextProfessionProfileTabId: 0,
 				projectSummaryId: null,
 				departmentId: null,
 				projectId: null,
@@ -427,6 +453,7 @@
 				project: {},
 				projects:{},
 				addTaskAssignment:{},
+				departments: {},
 				isActive: true,
 				projectClass1: "m-a cur",
 				taskAssignmentListData: null,
@@ -434,6 +461,9 @@
 				previousProfileTableData: null,
 				nextProfessionProfileTableData: null,
 				addNextProfessionProfile: null,
+				addPreviousProfileHidden: true,
+				selectDepartments: null,
+				content: null,
 				fileType: 'text/plain',
 				form: {
 					category: ''
@@ -615,6 +645,11 @@
 					}
 					app.previousProfileTabs = previousProfileTabs
 					findPreviousProfile(tabId);//查找上序资料列表
+					if(tabId == 1){
+						app.addPreviousProfileHidden = false
+					}else{
+						app.addPreviousProfileHidden = true
+					}
 				},
 				//显示下序资料dialog
 				showNextProfessionProfileDialog: function(){
@@ -688,6 +723,31 @@
 							message: '取消输入'
 						});
 					});
+				},
+				//添加我需要的上序文件
+				addPreviousProfileClick:function () {
+					var projects = app.projects
+					var departments = new Array()
+					for(var i = 0; i< projects.length; i++){
+						if(projects[i].id != app.projectId){
+							var department = {};
+							department.id = projects[i].id
+							department.departmentName = projects[i].departmentName
+							departments.push(department)
+						}
+					}
+					app.departments = departments
+					console.log(app.departments)
+					app.addPreviousProfileDialogVisible = true;
+				},
+				//保存我添加的需要别人提供给我的上序文件
+				saveAddPreviousProfileDialog: function () {
+					var ajaxData = {}
+					ajaxData.content = app.content
+					ajaxData.selectProjectIds = app.selectDepartments
+					console.log(ajaxData)
+					ajaxData.projectId = app.projectId
+					addPreviousProfessionProfile(ajaxData);//添加我需要别人提供给我的上序资料
 				}
 
 			}
@@ -886,7 +946,7 @@
 		}
 
 		/**
-		 * 更新专业文件数据
+		 * 更新专业文件数据，接收、驳回
 		 */
 		function updateProfessionProfile(ajaxData){
 			$.ajax({
@@ -903,6 +963,28 @@
 				}
 			})
 		}
+
+		/**
+		 *  添加我需要别人提供给我的上序资料
+		 */
+		function addPreviousProfessionProfile(ajaxData){
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/previousProfile/addPreviousProfessionProfile",
+				traditional: true,
+				success: function (result) {
+					if(result.code == 200){
+						app.addPreviousProfileDialogVisible = false
+						findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
+					}else{
+						console.log("addPreviousProfessionProfile 返回值失败")
+					}
+
+				}
+			})
+		}
+
 
 
 

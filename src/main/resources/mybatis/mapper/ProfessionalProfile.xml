@@ -82,6 +82,18 @@
         where id = #{id}
     </insert>
 
+    <insert id="insert"  parameterType="com.huag.collaboration.entities.ProfessionalProfile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            professionalProfile(
+            content, fileName, filePath, uploadDate, checkDate,
+            departmentId, departmentName, submitActionProjectId, receiveActionProjectId,
+            initiatorProjectId, dealFlag, dealOpinions, createTime, deltag)
+         VALUES
+             (#{content}, #{fileName}, #{filePath}, #{uploadDate}, #{checkDate},
+             #{departmentId}, #{departmentName}, #{submitActionProjectId}, #{receiveActionProjectId},
+             #{initiatorProjectId}, #{dealFlag}, #{dealOpinions}, now(), #{deltag})
+    </insert>
+
 
 
 </mapper>

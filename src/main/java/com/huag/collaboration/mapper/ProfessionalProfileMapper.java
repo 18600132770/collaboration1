@@ -45,5 +45,12 @@ public interface ProfessionalProfileMapper {
      */
     int update(ProfessionalProfile professionalProfile);
 
+    /**
+     * 添加
+     * @param professionalProfile
+     * @return
+     */
+    int insert(ProfessionalProfile professionalProfile);
+
 
 }
