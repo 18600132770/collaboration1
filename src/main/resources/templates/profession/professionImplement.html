@@ -284,7 +284,7 @@
 						<template slot-scope="scope"><span>{{ scope.row.content }}</span></template>
 					</el-table-column>
 					<el-table-column  label="提的文件名">
-						<template slot-scope="scope"><span>{{ scope.row.fileName }}</span></template>
+						<template slot-scope="scope"><span style="white-space: pre-line">{{ scope.row.fileName }}</span></template>
 					</el-table-column>
 					<el-table-column  label="上传日期">
 						<template slot-scope="scope"><span>{{ scope.row.uploadDate }}</span></template>
@@ -329,6 +329,8 @@
 					</div>
 				</nav>
 				<div style="height: 5px"></div>
+				<el-button type="primary" @click="addNextProfessionProfileClick" :hidden="addNextProfessionProfileHidden">添加</el-button>
+
 				<el-table style="width: 100%;" :data="nextProfessionProfileTableData" class="x-table table-td0">
 					<el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column label="内容">
@@ -408,6 +410,39 @@
 				</div>
 			</el-dialog>
 
+			<!-- 添加下序文件Modal -->
+			<el-dialog title="添加下序文件" :visible.sync="addNextProfessionProfileDialogVisible" width="30%">
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">内容：</label>
+					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="nextProfessionProfileContent">
+				</div>
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">下序分项目：</label>
+					<el-select v-model="selectDepartmentsOfNextProfessionProfile" multiple placeholder="请选择"  style="width: 80%">
+						<el-option
+								v-for="department in nextProfessionProjects"
+								:key="department.id"
+								:label="department.departmentName"
+								:value="department.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="form-group">
+					<label style="margin-left: 10px; display: inline; width: 20%;">文件：</label>
+					<el-select v-model="selectProfiles" multiple placeholder="请选择"  style="width: 80%">
+						<el-option
+								v-for="profile in profileTrees"
+								:key="profile.id"
+								:label="profile.name"
+								:value="profile.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="modal-footer">
+					<button  class="btn btn-primary" @click="saveAddNextProfessionProfileDialog">保存</button>
+				</div>
+			</el-dialog>
+
 
 		</div>
 	</div>
@@ -440,6 +475,7 @@
 				nextProfessionProfileDialogVisible: false,
 				profileTreeDialogVisible: false,
 				addPreviousProfileDialogVisible: false,
+				addNextProfessionProfileDialogVisible: false,
 				detailTableHidden: false,
 				flowChartTableHidden: true,
 				currentPage: 1,
@@ -454,6 +490,7 @@
 				projects:{},
 				addTaskAssignment:{},
 				departments: {},
+				nextProfessionProjects: {},
 				isActive: true,
 				projectClass1: "m-a cur",
 				taskAssignmentListData: null,
@@ -462,9 +499,14 @@
 				nextProfessionProfileTableData: null,
 				addNextProfessionProfile: null,
 				addPreviousProfileHidden: true,
+				addNextProfessionProfileHidden: false,
 				selectDepartments: null,
+				selectDepartmentsOfNextProfessionProfile: null,
+				selectProfiles: null,
 				content: null,
+				nextProfessionProfileContent: null,
 				fileType: 'text/plain',
+				profileTrees: null,
 				form: {
 					category: ''
 				},
@@ -658,6 +700,7 @@
 				},
 				//根据tab切换下序资料（我发起的、需要我发送的）
 				getNextProfessionProfileByTabId: function(tabId){
+					app.nextProfessionProfileTabId = tabId
 					var nextProfessionProfileTabs = app.nextProfessionProfileTabs
 					for(var i = 0; i < nextProfessionProfileTabs.length; i++){
 						if(i == tabId){
@@ -668,6 +711,11 @@
 					}
 					app.nextProfessionProfileTabs = nextProfessionProfileTabs
 					findNextProfessionProfile(tabId);//查找上序资料列表
+					if(tabId == 1){
+						app.addNextProfessionProfileHidden = true
+					}else{
+						app.addNextProfessionProfileHidden = false
+					}
 				},
 				//显示文件树对话框
 				openProfileTreeDialog: function(){
@@ -745,9 +793,38 @@
 					var ajaxData = {}
 					ajaxData.content = app.content
 					ajaxData.selectProjectIds = app.selectDepartments
-					console.log(ajaxData)
 					ajaxData.projectId = app.projectId
 					addPreviousProfessionProfile(ajaxData);//添加我需要别人提供给我的上序资料
+					app.departments = null
+					app.content = null
+				},
+				//添加我发布的下序资料
+				addNextProfessionProfileClick:function () {
+					var projects = app.projects
+					var departments = new Array()
+					for(var i = 0; i< projects.length; i++){
+						if(projects[i].id != app.projectId){
+							var department = {};
+							department.id = projects[i].id
+							department.departmentName = projects[i].departmentName
+							departments.push(department)
+						}
+					}
+					app.nextProfessionProjects = departments
+					app.addNextProfessionProfileDialogVisible = true;
+					findFilesByProjectIdAddToNextProfessionProfileList();//查找文件树内容，用于给下序文件list
+				},
+				//保存我发布的下序资料
+				saveAddNextProfessionProfileDialog:function () {
+					var ajaxData = {}
+					ajaxData.content = app.nextProfessionProfileContent
+					ajaxData.selectProjectIds = app.selectDepartmentsOfNextProfessionProfile
+					ajaxData.selectProfiles = app.selectProfiles
+					ajaxData.projectId = app.projectId
+					addNextProfessionProfile(ajaxData);//添加我发给别人的下序资料
+					app.nextProfessionProfileContent = null
+					app.selectDepartmentsOfNextProfessionProfile = null
+					app.selectProfiles = null
 				}
 
 			}
@@ -946,6 +1023,27 @@
 		}
 
 		/**
+		 * 查找文件树内容，用于给下序文件list
+		 */
+		function findFilesByProjectIdAddToNextProfessionProfileList(){
+			var ajaxData = {}
+			ajaxData.projectId = app.projectId
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/profile/findFilesByProjectId",
+				success: function (result) {
+					if(result.code == 200){
+						app.profileTrees = result.data
+					}else{
+						console.log("findFilesByProjectId 返回值失败")
+					}
+
+				}
+			})
+		}
+
+		/**
 		 * 更新专业文件数据，接收、驳回
 		 */
 		function updateProfessionProfile(ajaxData){
@@ -979,6 +1077,27 @@
 						findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
 					}else{
 						console.log("addPreviousProfessionProfile 返回值失败")
+					}
+
+				}
+			})
+		}
+
+		/**
+		 * 添加我发给别人的下序资料
+		 */
+		function addNextProfessionProfile(ajaxData){
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/previousProfile/addNextProfessionProfile",
+				traditional: true,
+				success: function (result) {
+					if(result.code == 200){
+						app.addNextProfessionProfileDialogVisible = false
+						findNextProfessionProfile(app.nextProfessionProfileTabId);//查找下序资料列表
+					}else{
+						console.log("addNextProfessionProfile 返回值失败")
 					}
 
 				}

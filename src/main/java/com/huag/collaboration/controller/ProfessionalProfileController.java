@@ -3,9 +3,11 @@ package com.huag.collaboration.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.ProfessionalProfile;
+import com.huag.collaboration.entities.Profile;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfessionalProfileMapper;
+import com.huag.collaboration.mapper.ProfileMapper;
 import com.huag.collaboration.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,12 @@ public class ProfessionalProfileController {
 
     @Autowired
     ProjectMapper projectMapper;
+
+    @Autowired
+    ProfileMapper profileMapper;
+
+    final StringBuilder fileNameAppend = new StringBuilder();
+    final StringBuilder filePathAppend = new StringBuilder();
 
     /**
      * 页面跳转到上序资料
@@ -175,6 +183,60 @@ public class ProfessionalProfileController {
             professionalProfile.setDepartmentId(project1.getDepartmentId());
             professionalProfile.setContent(content);
             professionalProfileMapper.insert(professionalProfile);
+        }
+        result.code = 200;
+        return result;
+    }
+
+    /**
+     * 添加我发布给别人的下序资料
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/previousProfile/addNextProfessionProfile")
+    public BaseResponse<ProfessionalProfile> addNextProfessionProfile(HttpServletRequest request) throws Exception{
+        BaseResponse<ProfessionalProfile> result = new BaseResponse<>();
+        String content = URLDecoder.decode(String.valueOf(request.getParameter("content")), "UTF-8");
+        Integer projectId = Integer.valueOf(request.getParameter("projectId"));
+
+        String[] selectProjectIds = request.getParameterValues("selectProjectIds");//向这些分项目申请资料
+
+        String[] selectProfileIds = request.getParameterValues("selectProfiles");//发给下序的文件
+
+        for (String id :
+                selectProfileIds) {
+            List<Profile> profileList = profileMapper.findById(Integer.valueOf(id));
+            profileList.forEach(profile -> {
+                fileNameAppend.append(profile.getName()).append("\n");
+                filePathAppend.append(profile.getUrl()).append("\n");
+            });
+        }
+
+        for (String id :
+                selectProjectIds) {
+            ProfessionalProfile myApplyProfessionalProfile = new ProfessionalProfile();
+            myApplyProfessionalProfile.setSubmitActionProjectId(projectId);
+            myApplyProfessionalProfile.setInitiatorProjectId(projectId);
+            myApplyProfessionalProfile.setContent(content);
+            Project project = projectMapper.findById(projectId);
+            myApplyProfessionalProfile.setDepartmentId(project.getDepartmentId());
+            myApplyProfessionalProfile.setFileName(fileNameAppend.toString());
+            myApplyProfessionalProfile.setFilePath(filePathAppend.toString());
+            professionalProfileMapper.insert(myApplyProfessionalProfile);
+
+            ProfessionalProfile professionalProfile = new ProfessionalProfile();
+            professionalProfile.setReceiveActionProjectId(Integer.valueOf(id));
+            professionalProfile.setInitiatorProjectId(projectId);
+            Project project1 = projectMapper.findById(Integer.valueOf(id));
+            professionalProfile.setDepartmentId(project1.getDepartmentId());
+            professionalProfile.setContent(content);
+            professionalProfile.setFileName(fileNameAppend.toString());
+            professionalProfile.setFilePath(filePathAppend.toString());
+            professionalProfileMapper.insert(professionalProfile);
+
+
         }
         result.code = 200;
         return result;

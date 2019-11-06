@@ -30,4 +30,10 @@ public interface ProfileMapper {
      */
     int update(Integer id);
 
+    /**
+     * @param id
+     * @return
+     */
+    List<Profile> findById(Integer id);
+
 }
