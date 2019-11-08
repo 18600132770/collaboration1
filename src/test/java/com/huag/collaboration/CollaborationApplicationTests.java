@@ -1,5 +1,6 @@
 package com.huag.collaboration;
 
+import com.github.pagehelper.PageInfo;
 import com.huag.collaboration.entities.ProfessionalProfile;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.TaskAssignment;
@@ -204,5 +205,27 @@ public class CollaborationApplicationTests {
         System.out.println(myReceivedPreviousProfile);
     }
 
+    @Test
+    public void test15(){
+        List<Project> projectList = projectMapper.findProjectByDepartmentId(1);
+        //传入要连续显示多少页
+        PageInfo<Project> info = new PageInfo<>(projectList, 2);
+
+        System.out.println("当前页码："+info.getPageNum());
+        System.out.println("总记录数："+info.getTotal());
+        System.out.println("每页的记录数："+info.getPageSize());
+        System.out.println("总页码："+info.getPages());
+        System.out.println("是否第一页："+info.isIsFirstPage());
+        System.out.println("连续显示的页码：");
+        int[] nums = info.getNavigatepageNums();
+        for (int i = 0; i < nums.length; i++) {
+            System.out.println(nums[i]);
+        }
+
+        projectList.forEach(project -> {
+            System.out.println(project);
+        });
+
+    }
 
 }

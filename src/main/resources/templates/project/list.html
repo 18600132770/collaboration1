@@ -131,7 +131,7 @@
 										   :page-sizes="[10,20,30,50]"
 										   :page-size="100"
 										   layout=" sizes, prev, pager, next"
-										   :total="1000">
+										   :total="total">
 							</el-pagination>
 						</div>
 					</el-scrollbar>
@@ -202,6 +202,7 @@
 					data: {
 						dialogFormVisible: false,
 						currentPage: 1,
+						total: 0,
 						tableData: null,
 						searchKey: null,
 						myValue: 1,

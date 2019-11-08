@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huag.collaboration.mapper.ReviewProcessMapper">
+
+
+    <insert id="insert" parameterType="com.huag.collaboration.entities.ReviewProcess" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            reviewProcess(
+            fileNames, fileUrls, designerOpinion, designerCreateTime, reviewerOpioion, reviewerCreateTime,
+            inspectorOpionion, inspectorCreateTime, validationerOpioion, validationerCreateTime, taskAssignmentId,
+            deltag)
+         VALUES
+             (#{fileNames}, #{fileUrls}, #{designerOpinion}, #{designerCreateTime}, #{reviewerOpioion}, #{reviewerCreateTime},
+             #{inspectorOpionion}, #{inspectorCreateTime}, #{validationerOpioion}, #{validationerCreateTime}, #{taskAssignmentId},
+             #{deltag})
+    </insert>
+
+    <select id="findById" resultType="com.huag.collaboration.entities.ReviewProcess">
+        select * from reviewProcess where id = #{id}
+    </select>
+
+    <select id="findByTaskAssignmentId" resultType="com.huag.collaboration.entities.ReviewProcess">
+        select * from reviewProcess where taskAssignmentId = #{taskAssignmentId}
+    </select>
+
+    <insert id="update">
+        update reviewProcess set
+        fileNames = #{fileNames}, fileUrls = #{fileUrls},
+        designerOpinion = #{designerOpinion}, designerCreateTime = #{designerCreateTime},
+        reviewerOpioion = #{reviewerOpioion}, reviewerCreateTime = #{reviewerCreateTime},
+        inspectorOpionion = #{inspectorOpionion}, inspectorCreateTime = #{inspectorCreateTime},
+        validationerOpioion = #{validationerOpioion}, validationerCreateTime = #{validationerCreateTime},
+        taskAssignmentId = #{taskAssignmentId}, deltag = #{deltag}
+        where id = #{id}
+    </insert>
+
+
+</mapper>

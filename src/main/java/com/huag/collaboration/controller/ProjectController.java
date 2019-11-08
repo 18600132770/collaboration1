@@ -2,8 +2,11 @@ package com.huag.collaboration.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectSubitem;
+import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.ProjectSubitemMapper;
@@ -172,6 +175,11 @@ public class ProjectController {
         projectName = URLDecoder.decode(projectName, "UTF-8");
         String departmentId = String.valueOf(request.getParameter("departmentId"));
 
+        int pageNum = 1;
+        int pageSize = 2;
+
+        PageHelper.startPage(pageNum,pageSize);
+
         List<Project> projects = new ArrayList<>();
         if(StringUtils.isNotBlank(projectName)){
             projects = projectMapper.findByProjectNameAndDeptId(projectName, Integer.valueOf(departmentId));
@@ -185,6 +193,15 @@ public class ProjectController {
                 project.setLeftTime(dateDifferenceByDay + "");
             }
         });
+
+        //分页
+        PageInfo<Project> pageInfo = new PageInfo<>(projects);
+        int pages = pageInfo.getPages();
+        long total = pageInfo.getTotal();
+        PageBaseResponse response = new PageBaseResponse(projects, pageNum,
+                pageSize, pages, total);
+
+
         System.out.println(projects);
         result.code = 200;
         result.setData(projects);

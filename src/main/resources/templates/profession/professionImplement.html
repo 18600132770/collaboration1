@@ -69,6 +69,7 @@
 					<el-input hidden="true"  v-model="selectTaskId"  style="height: 0px"></el-input>
 					<el-input hidden="true"  v-model="previousProfileTabId"  style="height: 0px"></el-input>
 					<el-input hidden="true"  v-model="nextProfessionProfileTabId"  style="height: 0px"></el-input>
+					<el-input hidden="true"  v-model="taskAssignmentId"  style="height: 0px"></el-input>
 
 					<el-button type="primary" @click="addTaskAssignmentClick">添加任务</el-button>
 
@@ -157,10 +158,10 @@
 						<ul>
 							<li v-for="taskAssignmentData, index in taskAssignmentListData" :key="index">
 								<el-steps :active="taskAssignmentData.finishedLevel" align-center>
-									<el-step :title="taskAssignmentData.designer" description="设计"></el-step>
-									<el-step :title="taskAssignmentData.reviewer" description="复核"></el-step>
-									<el-step :title="taskAssignmentData.inspector" description="审核"></el-step>
-									<el-step :title="taskAssignmentData.validationer" description="审定"></el-step>
+									<el-step :title="taskAssignmentData.designer" @click.native="designerReviewProcessClick(taskAssignmentData.id)" description="设计"></el-step>
+									<el-step :title="taskAssignmentData.reviewer" @click.native="reviewerReviewProcessClick(taskAssignmentData.id)" description="复核"></el-step>
+									<el-step :title="taskAssignmentData.inspector" @click.native="inspectorReviewProcessClick(taskAssignmentData.id)" description="审核"></el-step>
+									<el-step :title="taskAssignmentData.validationer" @click.native="validationerReviewProcessClick(taskAssignmentData.id)" description="审定"></el-step>
 								</el-steps>
 								<div style="height: 40px"></div>
 
@@ -444,6 +445,36 @@
 			</el-dialog>
 
 
+			<!-- 送审流程 -->
+			<el-dialog title="送审流程" :visible.sync="reviewProcessDialogVisible" width="50%">
+				<el-form ref="form" :model="form" label-width="110px" >
+					<el-upload
+							class="upload-demo"
+							:action="'/crud/reviewProcess/uploadFile?taskAssignmentId=' + taskAssignmentId"
+							:on-change="handleChange"
+							:file-list="reviewProcessFileNames">
+						<el-button size="small" type="primary" :disabled="designerOpinionDisable">点击上传</el-button>
+					</el-upload>
+				</el-form>
+				<el-form ref="form" :model="form" label-width="110px">
+					<el-form-item label="设计意见">
+						<el-input type="textarea" v-model="reviewProcessData.designerOpinion" :disabled="designerOpinionDisable"></el-input>
+					</el-form-item>
+					<el-form-item label="复核意见">
+						<el-input type="textarea" v-model="reviewProcessData.reviewerOpioion" :disabled="reviewerOpioionDisable"></el-input>
+					</el-form-item>
+					<el-form-item label="审核意见">
+						<el-input type="textarea" v-model="reviewProcessData.inspectorOpionion" :disabled="inspectorOpionionDisable"></el-input>
+					</el-form-item>
+					<el-form-item label="审定意见">
+						<el-input type="textarea" v-model="reviewProcessData.validationerOpioion" :disabled="validationerOpioionDisable"></el-input>
+					</el-form-item>
+				</el-form>
+				<div class="modal-footer">
+					<button  class="btn btn-primary" @click="saveReviewProcessData">送审</button>
+				</div>
+			</el-dialog>
+
 		</div>
 	</div>
 
@@ -476,11 +507,17 @@
 				profileTreeDialogVisible: false,
 				addPreviousProfileDialogVisible: false,
 				addNextProfessionProfileDialogVisible: false,
+				reviewProcessDialogVisible: false,
 				detailTableHidden: false,
 				flowChartTableHidden: true,
+				designerOpinionDisable: true,
+				reviewerOpioionDisable: true,
+				inspectorOpionionDisable: true,
+				validationerOpioionDisable: true,
 				currentPage: 1,
 				previousProfileTabId: 0,
 				nextProfessionProfileTabId: 0,
+				taskAssignmentId: null,
 				projectSummaryId: null,
 				departmentId: null,
 				projectId: null,
@@ -490,6 +527,7 @@
 				projects:{},
 				addTaskAssignment:{},
 				departments: {},
+				reviewProcessData: {},
 				nextProfessionProjects: {},
 				isActive: true,
 				projectClass1: "m-a cur",
@@ -547,6 +585,7 @@
 					}
 				],
 				fileList: [],
+				reviewProcessFileNames: [],
 				checkAll: false,
 				checkedCities: ['上海', '北京'],
 				cities: cityOptions,
@@ -825,7 +864,40 @@
 					app.nextProfessionProfileContent = null
 					app.selectDepartmentsOfNextProfessionProfile = null
 					app.selectProfiles = null
-				}
+				},
+				//设计人员点击事件
+				designerReviewProcessClick:function (taskAssignmentId) {
+					app.taskAssignmentId = taskAssignmentId
+					findReviewProcessByTaskAssignmentId();//查询审核流程数据
+					app.reviewProcessDialogVisible = true
+					app.designerOpinionDisable = false
+					setDisable("designerOpinionDisable")
+				},
+				//复核人员点击事件
+				reviewerReviewProcessClick:function (taskAssignmentId) {
+					app.taskAssignmentId = taskAssignmentId
+					findReviewProcessByTaskAssignmentId();//查询审核流程数据
+					app.reviewProcessDialogVisible = true
+					setDisable("reviewerOpioionDisable")
+				},
+				//审核人员点击事件
+				inspectorReviewProcessClick:function (taskAssignmentId) {
+					app.taskAssignmentId = taskAssignmentId
+					findReviewProcessByTaskAssignmentId();//查询审核流程数据
+					app.reviewProcessDialogVisible = true
+					setDisable("inspectorOpionionDisable")
+				},
+				//审定人员点击事件
+				validationerReviewProcessClick:function (taskAssignmentId) {
+					app.taskAssignmentId = taskAssignmentId
+					findReviewProcessByTaskAssignmentId();//查询审核流程数据
+					app.reviewProcessDialogVisible = true
+					setDisable("validationerOpioionDisable")
+				},
+				//保存送审流程内容
+				saveReviewProcessData: function(){
+					saveReviewProcessDataFunction();//保存送审内容
+				},
 
 			}
 
@@ -1103,6 +1175,92 @@
 				}
 			})
 		}
+
+		/**
+		 * 查询审核流程数据
+		 */
+		function findReviewProcessByTaskAssignmentId(){
+			var ajaxData = {}
+			ajaxData.taskAssignmentId = app.taskAssignmentId
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/reviewProcess/findByTaskAssignmentId",
+				traditional: true,
+				success: function (result) {
+					if(result.code == 200){
+						app.reviewProcessData = result.data
+						var reviewProcessFileNames = new Array()
+
+						var fileNameArray = result.data.fileNames.split("\n");
+						// var fileUrlArray = result.data.fileUrls.split("\n")
+
+						for(var i = 0; i< fileNameArray.length; i++){
+							var reviewProcessFile = {}
+							reviewProcessFile.name =fileNameArray[i]
+							reviewProcessFile.url = ""
+							reviewProcessFileNames.push(reviewProcessFile)
+						}
+						app.reviewProcessFileNames = reviewProcessFileNames
+					}else{
+						console.log("findReviewProcessByTaskAssignmentId 返回值失败")
+					}
+
+				}
+			})
+		}
+
+		/**
+		 * 保存送审流程内容
+		 */
+		function saveReviewProcessDataFunction(){
+			var ajaxData = {}
+			ajaxData.reviewProcessData = app.reviewProcessData
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/previousProfile/saveReviewProcessData",
+				traditional: true,
+				success: function (result) {
+					if(result.code == 200){
+
+					}else{
+						console.log("saveReviewProcessDataFunction 返回值失败")
+					}
+
+				}
+			})
+		}
+
+		/**
+		 * 设置可见与不可见
+		 */
+		function setDisable(disabledElement){
+			if(disabledElement == "designerOpinionDisable"){
+				app.designerOpinionDisable = false
+				app.reviewerOpioionDisable = true
+				app.inspectorOpionionDisable = true
+				app.validationerOpioionDisable = true
+			}else if(disabledElement == "reviewerOpioionDisable"){
+				app.designerOpinionDisable = true
+				app.reviewerOpioionDisable = false
+				app.inspectorOpionionDisable = true
+				app.validationerOpioionDisable = true
+			}else if(disabledElement == "inspectorOpionionDisable"){
+				app.designerOpinionDisable = true
+				app.reviewerOpioionDisable = true
+				app.inspectorOpionionDisable = false
+				app.validationerOpioionDisable = true
+			}else if(disabledElement == "validationerOpioionDisable"){
+				app.designerOpinionDisable = true
+				app.reviewerOpioionDisable = true
+				app.inspectorOpionionDisable = true
+				app.validationerOpioionDisable = false
+			}
+
+
+		}
+
 
 
 

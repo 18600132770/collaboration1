@@ -2,6 +2,7 @@ package com.huag.collaboration.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author huag
@@ -27,6 +28,15 @@ public class DateUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * yyyy-MM-dd HH:mm:ss
+     * @return
+     */
+    public static String getDateIn_yyyyMMddHHmmss(){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(new Date());
     }
 
 }
