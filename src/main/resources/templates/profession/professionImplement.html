@@ -1189,19 +1189,26 @@
 				traditional: true,
 				success: function (result) {
 					if(result.code == 200){
-						app.reviewProcessData = result.data
-						var reviewProcessFileNames = new Array()
+						if(result.data != null){
+							app.reviewProcessData = result.data
 
-						var fileNameArray = result.data.fileNames.split("\n");
-						// var fileUrlArray = result.data.fileUrls.split("\n")
+							var reviewProcessFileNames = new Array()
+							var fileNames = result.data.fileNames
+							if(fileNames != null && fileNames != undefined && fileNames.length > 0){
+								var fileNameArray = result.data.fileNames.split("\n");
+								// var fileUrlArray = result.data.fileUrls.split("\n")
 
-						for(var i = 0; i< fileNameArray.length; i++){
-							var reviewProcessFile = {}
-							reviewProcessFile.name =fileNameArray[i]
-							reviewProcessFile.url = ""
-							reviewProcessFileNames.push(reviewProcessFile)
+								for(var i = 0; i< fileNameArray.length; i++){
+									var reviewProcessFile = {}
+									reviewProcessFile.name =fileNameArray[i]
+									reviewProcessFile.url = ""
+									reviewProcessFileNames.push(reviewProcessFile)
+								}
+								app.reviewProcessFileNames = reviewProcessFileNames
+							}
 						}
-						app.reviewProcessFileNames = reviewProcessFileNames
+
+
 					}else{
 						console.log("findReviewProcessByTaskAssignmentId 返回值失败")
 					}
@@ -1215,15 +1222,17 @@
 		 */
 		function saveReviewProcessDataFunction(){
 			var ajaxData = {}
-			ajaxData.reviewProcessData = app.reviewProcessData
+			ajaxData.reviewProcessData =  encodeURI(JSON.stringify(app.reviewProcessData))
+			ajaxData.taskAssignmentId = app.taskAssignmentId
 			$.ajax({
 				data: ajaxData,
 				type: "GET",
-				url: "/crud/previousProfile/saveReviewProcessData",
+				url: "/crud/reviewProcess/saveReviewProcessData",
 				traditional: true,
 				success: function (result) {
 					if(result.code == 200){
-
+						app.reviewProcessDialogVisible = false
+						findByProjectId();//根据分项目查询该分项目下的任务分配情况
 					}else{
 						console.log("saveReviewProcessDataFunction 返回值失败")
 					}

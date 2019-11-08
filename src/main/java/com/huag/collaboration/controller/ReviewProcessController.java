@@ -3,12 +3,13 @@ package com.huag.collaboration.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Profile;
-import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ReviewProcess;
+import com.huag.collaboration.entities.TaskAssignment;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ReviewProcessMapper;
+import com.huag.collaboration.mapper.TaskAssignmentMapper;
 import com.huag.collaboration.utils.DateUtils;
-import com.huag.collaboration.utils.OSSUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,9 @@ public class ReviewProcessController {
 
     @Autowired
     ReviewProcessMapper reviewProcessMapper;
+
+    @Autowired
+    TaskAssignmentMapper taskAssignmentMapper;
 
 
     /**
@@ -99,7 +103,28 @@ public class ReviewProcessController {
     public BaseResponse<ReviewProcess> saveReviewProcessData(HttpServletRequest request) throws Exception{
         BaseResponse<ReviewProcess> result = new BaseResponse<>();
         String reviewProcessData = URLDecoder.decode(String.valueOf(request.getParameter("reviewProcessData")), "UTF-8");
+        String taskAssignmentId = String.valueOf(request.getParameter("taskAssignmentId"));
         ReviewProcess reviewProcess = JSONObject.toJavaObject(JSON.parseObject(reviewProcessData), ReviewProcess.class);
+
+        if(reviewProcess == null){
+            int id = reviewProcessMapper.insert(reviewProcess);
+            reviewProcess.setId(id);
+            reviewProcess.setTaskAssignmentId(Integer.valueOf(taskAssignmentId));
+        }
+
+        TaskAssignment taskAssignment = taskAssignmentMapper.findById(Integer.valueOf(taskAssignmentId));
+
+        if(reviewProcess != null && StringUtils.isNotBlank(reviewProcess.getValidationerOpioion())){
+            taskAssignment.setFinishedLevel(4);
+        }else if(reviewProcess != null && StringUtils.isNotBlank(reviewProcess.getInspectorOpionion())){
+            taskAssignment.setFinishedLevel(3);
+        }else if(reviewProcess != null && StringUtils.isNotBlank(reviewProcess.getReviewerOpioion())){
+            taskAssignment.setFinishedLevel(2);
+        }else if(reviewProcess != null && StringUtils.isNotBlank(reviewProcess.getDesignerOpinion())){
+            taskAssignment.setFinishedLevel(1);
+        }
+        taskAssignmentMapper.update(taskAssignment);
+
         reviewProcessMapper.update(reviewProcess);
         result.code = 200;
         return result;
