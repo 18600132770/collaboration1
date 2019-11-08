@@ -1180,6 +1180,8 @@
 		 * 查询审核流程数据
 		 */
 		function findReviewProcessByTaskAssignmentId(){
+			app.reviewProcessData = {}
+			app.reviewProcessFileNames = []
 			var ajaxData = {}
 			ajaxData.taskAssignmentId = app.taskAssignmentId
 			$.ajax({

@@ -106,10 +106,10 @@ public class ReviewProcessController {
         String taskAssignmentId = String.valueOf(request.getParameter("taskAssignmentId"));
         ReviewProcess reviewProcess = JSONObject.toJavaObject(JSON.parseObject(reviewProcessData), ReviewProcess.class);
 
-        if(reviewProcess == null){
+        if(reviewProcess != null && reviewProcess.getTaskAssignmentId() == null){
+            reviewProcess.setTaskAssignmentId(Integer.valueOf(taskAssignmentId));
             int id = reviewProcessMapper.insert(reviewProcess);
             reviewProcess.setId(id);
-            reviewProcess.setTaskAssignmentId(Integer.valueOf(taskAssignmentId));
         }
 
         TaskAssignment taskAssignment = taskAssignmentMapper.findById(Integer.valueOf(taskAssignmentId));
