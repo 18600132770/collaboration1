@@ -1232,6 +1232,8 @@
 				success: function (result) {
 					if(result.code == 200){
 						app.reviewProcessDialogVisible = false
+						app.reviewProcessData = {}
+						app.reviewProcessFileNames = []
 						findByProjectId();//根据分项目查询该分项目下的任务分配情况
 					}else{
 						console.log("saveReviewProcessDataFunction 返回值失败")
