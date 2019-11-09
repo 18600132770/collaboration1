@@ -32,10 +32,7 @@
 						text-color="#fff"
 						active-text-color="#ffd04b">
 
-					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px">中国知网大数据融合应用平台</h1>
-
-					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 200px"></h1>
-
+					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 550px;">中国知网大数据融合应用平台</h1>
 
 					<el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
 					<el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
@@ -60,10 +57,6 @@
 				<div class="dsource-wrap" style="margin-top: 5px">
 					<!-- 左侧  -->
 					<el-scrollbar class="dictionary-l">
-
-                        <div style="height: 50px; margin-left: 10px">
-                            <button type="button" class="btn btn-primary" @click="addProjectClick">新增项目</button>
-                        </div>
 
 						<ul class="manager-nav dictionary-nav">
 							<li class="m-a">
@@ -90,6 +83,11 @@
 							<label style="margin-left: 50px; display: inline">总工：{{project.chiefEngineer}}</label>
 
 						</nav>
+
+						<div style="height: 50px; margin-left: 10px">
+							<button type="button" class="btn btn-primary" @click="addProjectClick">新增项目</button>
+						</div>
+
 						<div class="ds-table-wrap" >
 
 							<el-input hidden="true"  v-model="currentProjectSummaryId"></el-input>

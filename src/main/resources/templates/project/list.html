@@ -31,10 +31,7 @@
 						text-color="#fff"
 						active-text-color="#ffd04b">
 
-					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px">中国知网大数据融合应用平台</h1>
-
-					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 200px"></h1>
-
+					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 550px;">中国知网大数据融合应用平台</h1>
 
 					<el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
 					<el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
@@ -54,40 +51,36 @@
 			</div>
 
 			<div  id="app">
-				<div class="dsource-wrap" style="margin-top: 5px">
+				<div class="dsource-wrap" style="margin-top: 0px">
 					<!-- 左侧  -->
-					<el-scrollbar class="dictionary-l">
-						<ul class="manager-nav dictionary-nav">
-							<li class="m-a">
-								<svg class="icon" aria-hidden="true">
-									<use xlink:href="#icon-hh2"></use>
-								</svg>
-								<ul class="manager-sec">
-									<li><a class="m-a cur" th:href="@{/projects}">项目信息</a></li>
-									<li><a th:href="@{/userProjects}">人员项目信息</a></li>
-								</ul>
-							</li>
-						</ul>
-					</el-scrollbar>
+					<!--<el-scrollbar class="dictionary-l">-->
+						<!--<ul class="manager-nav dictionary-nav">-->
+							<!--<li class="m-a">-->
+								<!--<svg class="icon" aria-hidden="true">-->
+									<!--<use xlink:href="#icon-hh2"></use>-->
+								<!--</svg>-->
+								<!--<ul class="manager-sec">-->
+									<!--<li><a class="m-a cur" th:href="@{/projects}">项目信息</a></li>-->
+									<!--<li><a th:href="@{/userProjects}">人员项目信息</a></li>-->
+								<!--</ul>-->
+							<!--</li>-->
+						<!--</ul>-->
+					<!--</el-scrollbar>-->
+
+					<el-input hidden="true"  v-model="currentDepartmentId"></el-input>
 
 
 					<el-scrollbar class="dsource-r">
 
 						<div class="ds-table-wrap" >
 
-							<nav style="margin-left: 1300px" class="navbar navbar-light bg-light">
-								<!--<h2><a class="btn btn-sm alert-info" href="project" :href="'/crud/project/'">添加项目</a></h2>-->
-								<el-input hidden="true"  v-model="currentDepartmentId"></el-input>
-								<div class="select-group">
-									<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey"></el-input>
-									<el-button class="select-btn" @click="searchClick" >查找</el-button>
-								</div>
-							</nav>
-
 							<nav>
 								<div class="nav nav-tabs" role="tablist" v-for="department, key in departments" :key="key">
 									<a style="display: inline-block" :class="department.style" @click="getProjectByDepartment(department.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{department.departmentName}}</a>
 								</div>
+
+								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey" style="margin-left: 1270px"></el-input>
+								<el-button class="select-btn" @click="searchClick" >查找</el-button>
 							</nav>
 
 							<el-table style="width: 100%;margin-top: 10px;" :data="tableData" class="x-table table-td0">
