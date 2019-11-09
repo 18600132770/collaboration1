@@ -71,6 +71,16 @@
 						</ul>
 					</el-scrollbar>
 
+					<el-scrollbar class="dictionary-l" style="width: 50px; border:0;margin-top: 0px">
+						<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+							<el-menu-item index="1">
+								<i class="el-icon-circle-plus" @click="addProjectClick"></i>
+								<span slot="title" @click="addProjectClick">新增项目</span>
+							</el-menu-item>
+						</el-menu>
+
+					</el-scrollbar>
+
 					<el-scrollbar class="dsource-r">
 						<nav class="navbar navbar-light bg-light">
 
@@ -83,10 +93,6 @@
 							<label style="margin-left: 50px; display: inline">总工：{{project.chiefEngineer}}</label>
 
 						</nav>
-
-						<div style="height: 50px; margin-left: 10px">
-							<button type="button" class="btn btn-primary" @click="addProjectClick">新增项目</button>
-						</div>
 
 						<div class="ds-table-wrap" >
 
@@ -199,6 +205,7 @@
 					el: '#app',
 					data: {
 						dialogFormVisible: false,
+						isCollapse: true,
 						currentPage: 1,
 						tableData: null,
 						searchKey: null,
