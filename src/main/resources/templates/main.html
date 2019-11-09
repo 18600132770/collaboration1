@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>协同五影办公平台</title>
+    <title>中国知网大数据融合应用平台</title>
     <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
     <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
     <link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
@@ -17,33 +17,48 @@
 </head>
 
 <body>
-<!--引入topbar-->
-<!--<div th:replace="commons/bar::topbar"></div>-->
-<div id="appheader" >
-    <div class="top">
-        <a th:href="@{/redirectToMain}">
-            <h1  style="color: #ffffff; margin-left: 10px; margin-top: 20px" class="top-t" >中国知网大数据融合应用平台</h1>
-        </a>
-        <a class="nav-link active" href="#" style="font-size: 25px;margin-right: 5px">[[${session.loginUser}]]</a>
-    </div>
+<div  id="app">
+    <el-menu
+            :default-active="activeIndex2"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+            background-color="#303133"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+
+        <h1 class="top-t" style="margin-top: 20px;margin-left: 10px">中国知网大数据融合应用平台</h1>
+
+        <h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 200px"></h1>
+
+
+        <el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
+        <el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
+        <el-menu-item index="3"><a th:href="@{/userProjects}" >人员项目信息</a></el-menu-item>
+        <el-menu-item index="4"><a th:href="@{/professions}" >专业协同</a></el-menu-item>
+        <el-menu-item index="5"><a >人员信息管理</a></el-menu-item>
+        <el-menu-item index="6"><a th:href="@{/notices}">通知</a></el-menu-item>
+
+        <el-submenu index="7" style="margin-left: 600px">
+            <template slot="title">[[${session.loginUser}]]</template>
+            <el-menu-item index="7-1">修改密码</el-menu-item>
+            <el-menu-item index="7-2">退出登录</el-menu-item>
+            <el-menu-item index="7-3">其他</el-menu-item>
+        </el-submenu>
+
+    </el-menu>
+
+    <!--<img  th:src="@{/asserts/img/bg_home.png}" style="width: 1920px; height: 1080px">-->
+    <img  th:src="@{/asserts/img/bg_home.png}" style="margin-left: 10px; margin-top: 20px">
+
+
 </div>
 
-<img  th:src="@{/asserts/img/bg_home.png}">
 
-<div>
-    <a th:href="@{/projects}">
-        <button type="button" class="btn btn-primary" style="margin-left: 200px;margin-top: 60px; width: 250px; height: 100px">生产处协同</button>
-    </a>
 
-    <a th:href="@{/professions}">
-        <button type="button" class="btn btn-primary" style="margin-left: 200px;margin-top: 60px; width: 250px; height: 100px">专业协同</button>
-    </a>
 
-    <a th:href="@{/notices}">
-        <button type="button" class="btn btn-warning" style="margin-left: 200px;margin-top: 60px; width: 250px; height: 100px">通知</button>
-    </a>
 
-</div>
+
 
 <script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
 <script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
@@ -54,6 +69,21 @@
 <script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
 <script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
 
+<script type="text/javascript">
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            activeIndex2: '1',
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            }
+        }
+    })
+
+</script>
 
 
 </body>

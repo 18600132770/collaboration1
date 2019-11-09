@@ -21,14 +21,37 @@
 	<body>
 		<div>
 
-			<div id="appheader">
-				<div class="top">
-					<a  th:href="@{/redirectToMain}">
-						<h1  style="color: #ffffff; margin-left: 10px; margin-top: 20px" class="top-t" >中国知网大数据融合应用平台</h1>
-					</a>
-				</div>
-			</div>
+			<div  id="topBar">
+				<el-menu
+						:default-active="activeIndex2"
+						class="el-menu-demo"
+						mode="horizontal"
+						@select="handleSelect"
+						background-color="#303133"
+						text-color="#fff"
+						active-text-color="#ffd04b">
 
+					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px">中国知网大数据融合应用平台</h1>
+
+					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 200px"></h1>
+
+
+					<el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
+					<el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
+					<el-menu-item index="3"><a th:href="@{/userProjects}" >人员项目信息</a></el-menu-item>
+					<el-menu-item index="4"><a th:href="@{/professions}" >专业协同</a></el-menu-item>
+					<el-menu-item index="5"><a >人员信息管理</a></el-menu-item>
+					<el-menu-item index="6"><a th:href="@{/notices}">通知</a></el-menu-item>
+
+					<el-submenu index="7" style="margin-left: 600px">
+						<template slot="title">[[${session.loginUser}]]</template>
+						<el-menu-item index="7-1">修改密码</el-menu-item>
+						<el-menu-item index="7-2">退出登录</el-menu-item>
+						<el-menu-item index="7-3">其他</el-menu-item>
+					</el-submenu>
+
+				</el-menu>
+			</div>
 
 			<div  id="app">
 				<div class="dsource-wrap" style="margin-top: 5px">
@@ -541,6 +564,18 @@
 						return true;
 					}
 				}
+
+				var topBar = new Vue({
+					el: '#topBar',
+					data: {
+						activeIndex2: '2',
+					},
+					methods: {
+						handleSelect(key, keyPath) {
+							console.log(key, keyPath);
+						}
+					}
+				})
 
 
 
