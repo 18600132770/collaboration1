@@ -21,6 +21,7 @@ public class User {
     private String birthday;
     private String domicilePlace;//户籍所在地
     private String telephoneNumber;
+    private String mailBox;//邮箱
     private String gender;
     private String politicalOutlook;//政治面貌
     private String maritalStatus;//婚姻状况

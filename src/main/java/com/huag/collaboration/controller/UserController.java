@@ -1,10 +1,17 @@
 package com.huag.collaboration.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.User;
+import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.UserMapper;
 import com.huag.collaboration.utils.DateUtils;
+import com.huag.collaboration.utils.RequestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -103,11 +110,23 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "user/findAll")
-    public BaseResponse<List<User>> findAll(HttpServletRequest request){
-        BaseResponse<List<User>> result = new BaseResponse<>();
+    public BaseResponse<Object> findAll(HttpServletRequest request){
+        BaseResponse<Object> result = new BaseResponse<>();
+
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
+
+        Page<Object> page = PageHelper.startPage(currentPage, pageSize);
         List<User> userList = userMapper.findAll();
+        PageInfo<User> pageInfo = new PageInfo<>(userList, pageSize);
+
+        int pages = pageInfo.getPages();
+        long total = pageInfo.getTotal();
+        PageBaseResponse response = new PageBaseResponse(userList, currentPage,
+                pageSize, pages, total);
+
         result.code = 200;
-        result.setData(userList);
+        result.setData(JSON.parseObject(JSON.toJSONString(response)));
         return result;
     }
 
