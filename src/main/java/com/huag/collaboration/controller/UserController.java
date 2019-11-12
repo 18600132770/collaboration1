@@ -7,6 +7,8 @@ import com.huag.collaboration.mapper.UserMapper;
 import com.huag.collaboration.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,6 +24,11 @@ public class UserController {
 
     @Autowired
     UserMapper userMapper;
+
+    @GetMapping("/users")
+    public String  list(Model model){
+        return "user/list";
+    }
 
     /**
      * ajax请求，询所有可以当负责人的人选
@@ -84,6 +91,21 @@ public class UserController {
         BaseResponse<List<User>> result = new BaseResponse<>();
         List<User> userList = userMapper.findProjectSummaryChiefEngineers();
         System.out.println(userList);
+        result.code = 200;
+        result.setData(userList);
+        return result;
+    }
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "user/findAll")
+    public BaseResponse<List<User>> findAll(HttpServletRequest request){
+        BaseResponse<List<User>> result = new BaseResponse<>();
+        List<User> userList = userMapper.findAll();
         result.code = 200;
         result.setData(userList);
         return result;

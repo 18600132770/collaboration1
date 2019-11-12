@@ -52,4 +52,8 @@
             (deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
 
+    <select id="findAll" resultType="com.huag.collaboration.entities.User">
+        SELECT * FROM user
+    </select>
+
 </mapper>

@@ -39,4 +39,10 @@ public interface UserMapper {
      */
     List<User> findProjectSummaryChiefEngineers();
 
+    /**
+     * 查询全部
+     * @return
+     */
+    List<User> findAll();
+
 }

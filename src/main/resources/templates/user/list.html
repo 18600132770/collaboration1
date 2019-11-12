@@ -51,61 +51,37 @@
 			</div>
 
 
+
 			<div id="app">
 				<div class="dsource-wrap" style="margin-top: 5px">
-					<!-- 左侧  -->
-					<el-scrollbar class="dictionary-l">
-						<ul class="manager-nav dictionary-nav">
-							<li class="m-a">
-								<svg class="icon" aria-hidden="true">
-									<use xlink:href="#icon-hh2"></use>
-								</svg>
-								<ul class="manager-sec">
-									<li><a class="m-a cur" >添加1</a></li>
-									<li><a >添加1</a></li>
-								</ul>
-							</li>
-						</ul>
-					</el-scrollbar>
 
 					<el-scrollbar class="dsource-r">
-						<nav class="navbar navbar-light bg-light">
 
-						</nav>
 						<div class="ds-table-wrap" >
-							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
-								<el-table-column type="selection" width="55"></el-table-column>
-								<el-table-column label="序号" width="60" type="index">
-									<template slot-scope="scope"><span>{{ scope.row.id }}</span></template>
-								</el-table-column>
-								<el-table-column label="通知主题"  width="900" align="left">
-									<template slot-scope="scope">
-										<a  target="_blank" th:align="left">
-											<div>
-											{{ scope.row.topic }}
+
+							<nav>
+
+								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey" style="margin-left: 1270px"></el-input>
+								<el-button class="select-btn" @click="searchClick" >查找</el-button>
+							</nav>
+
+
+							<div v-for="user in users">
+
+								<div style="display: inline">
+									<template  style="display: inline">
+										<div class="demo-fit">
+											<div class="block" v-for="fit in fits" :key="fit">
+												<el-avatar shape="square" :size="100" :fit="fit" :src="url"></el-avatar>
 											</div>
-										</a>
+										</div>
 									</template>
-								</el-table-column>
-								<el-table-column label="业务类型" width="150">
-									<template slot-scope="scope"><span>{{ scope.row.bussinessType }}</span></template>
-								</el-table-column>
-								<el-table-column label="创建人" width="150">
-									<template slot-scope="scope"><span>{{ scope.row.founder }}</span></template>
-								</el-table-column>
-								<el-table-column  label="创建时间" width="200">
-									<template slot-scope="scope"><span>{{ scope.row.createTime }}</span></template>
-								</el-table-column>
-							</el-table>
-							<el-pagination class="txtCenter"
-										   @size-change="handleSizeChange"
-										   @current-change="handleCurrentChange"
-										   :current-page.sync="currentPage"
-										   :page-sizes="[10,20,30,50]"
-										   :page-size="100"
-										   layout=" sizes, prev, pager, next"
-										   :total="1000">
-							</el-pagination>
+								</div>
+
+
+							</div>
+
+
 						</div>
 					</el-scrollbar>
 				</div>
@@ -127,46 +103,55 @@
 
 			<script type="text/javascript">
 
+
+
 				var app = new Vue({
 					el: '#app',
 					data: {
-							dialogFormVisible: false,
-							currentPage: 1,
-							tableData: null,
-							searchKey: null,
-							myValue: 1
-						},
+						searchKey: null,
+						users: null,
+						fits: ['fill'],
+						url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+					},
 					methods: {
-						handleSizeChange(val) {
-							console.log(`每页 ${val} 条`);
+						searchClick :function () {
 						},
-						handleCurrentChange(val) {
-							console.log(`当前页: ${val}`);
-						},
+
 					}
 
 				})
 
-				var ajaxData = {}
-				$.ajax({
-					data: ajaxData,
-					type: "GET",
-					url: "notice/findAll",
-					success: function (result) {
-						if(result.code == 200){
-							app.$data.tableData=result.data
-						}else{
-							console.log("返回值失败")
+				findAllUsers();//查询所有人员信息
+
+				/**
+				 *
+				 * @param ajaxData
+				 * @param type
+				 * @param url
+				 */
+				function findAllUsers() {
+					$.ajax({
+						data: null,
+						type: "GET",
+						url: "/crud/user/findAll",
+						success: function (result) {
+							if(result.code == 200){
+								app.users=result.data
+							}else{
+								console.log("返回值失败")
+							}
+
 						}
+					})
+				}
 
-					}
-				})
+
 
 
 				var topBar = new Vue({
 					el: '#topBar',
 					data: {
-						activeIndex2: '6',
+						activeIndex2: '5',
 					},
 					methods: {
 						handleSelect(key, keyPath) {
@@ -174,6 +159,8 @@
 						}
 					}
 				})
+
+
 
 			</script>
 		</div>
