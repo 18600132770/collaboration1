@@ -18,6 +18,29 @@
 		<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
 	</head>
 
+	<style>
+		.el-col {
+			border-radius: 4px;
+		}
+		.bg-purple-dark {
+			background: #99a9bf;
+		}
+		.bg-purple {
+			background: #d3dce6;
+		}
+		.bg-purple-light {
+			background: #e5e9f2;
+		}
+		.grid-content {
+			border-radius: 4px;
+			min-height: 36px;
+		}
+		.row-bg {
+			padding: 10px 0;
+			background-color: #f9fafc;
+		}
+	</style>
+
 	<body>
 		<div id="flw">
 
@@ -57,19 +80,93 @@
 
 					<el-scrollbar class="dsource-r">
 
-						<div class="ds-table-wrap" >
 
-							<nav>
-
-								<el-input hidden="true"  v-model="pageSize"  style="height: 0px"></el-input>
-
-								<el-input class="select-zu" placeholder="输入查询内容" v-model="searchKey" style="margin-left: 1270px"></el-input>
-								<el-button class="select-btn" @click="searchClick" >查找</el-button>
-							</nav>
+						<el-row>
+							<el-col :span="24"><div class="grid-content bg-purple-dark"></div></el-col>
+						</el-row>
 
 
+						<el-form :inline="true"  class="demo-form-inline" style="margin-left: 50px; margin-top: 50px" :label-position="labelPosition">
+							<el-form-item label="  姓名" style="width: 350px; word-spacing:30px">
+								<el-input v-model="user.username" placeholder=""></el-input>
+							</el-form-item>
+							<el-form-item label="  性别" style="width: 350px;">
+								<el-select v-model="user.gender" placeholder="男">
+									<el-option label="男" value="男"></el-option>
+									<el-option label="女" value="女"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="  民族" style="width: 350px;">
+								<el-select v-model="user.nationality" placeholder="汉族">
+									<el-option label="汉族" value="汉族"></el-option>
+									<el-option label="回族" value="回族"></el-option>
+								</el-select>
+							</el-form-item>
 
-						</div>
+							<!--<el-form-item label="户口所在地" style="width: 350px;">-->
+								<!--<el-select v-model="user.domicilePlace" placeholder="北京">-->
+									<!--<el-option label="河北" value="河北"></el-option>-->
+									<!--<el-option label="河南" value="河南"></el-option>-->
+								<!--</el-select>-->
+							<!--</el-form-item>-->
+							<el-form-item label="联系电话" style="width: 350px;">
+								<el-input v-model="user.telephoneNumber" placeholder=""></el-input>
+							</el-form-item>
+						</el-form>
+
+						<el-form :inline="true"  class="demo-form-inline" style="margin-left: 50px; margin-top: 10px" :label-position="'left'">
+							<el-form-item label="出生日期" style="width: 350px;">
+								<el-date-picker	v-model="user.birthday" type="date" placeholder="选择日期" style="width: 80%"></el-date-picker>
+							</el-form-item>
+							<el-form-item label="政治面貌" style="width: 350px;">
+								<el-select v-model="user.politicalOutlook" placeholder="群众">
+									<el-option label="群众" value="群众"></el-option>
+									<el-option label="党员" value="党员"></el-option>
+									<el-option label="预备党员" value="预备党员"></el-option>
+									<el-option label="积极分子" value="积极分子"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="婚姻状况" style="width: 350px;">
+								<el-select v-model="user.maritalStatus" placeholder="未婚">
+									<el-option label="未婚" value="未婚"></el-option>
+									<el-option label="已婚" value="已婚"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="定居城市" style="width: 350px;">
+								<el-select v-model="user.settledCity" placeholder="北京">
+									<el-option label="河北" value="河北"></el-option>
+									<el-option label="河南" value="河南"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-form>
+
+						<el-col :span="24"><div class="grid-content bg-purple-light"></div></el-col>
+
+						<el-form :inline="true"  class="demo-form-inline" style="margin-left: 50px; margin-top: 20px" :label-position="'left'">
+							<el-form-item label="行政职务" style="width: 350px;">
+								<el-select v-model="user.administrativePost" placeholder="设计员">
+									<el-option label="设计员" value="设计员"></el-option>
+									<el-option label="研究员" value="研究员"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="入职时间" style="width: 350px;">
+								<el-date-picker	v-model="user.entryDate" type="date" placeholder="选择日期" style="width: 80%"></el-date-picker>
+							</el-form-item>
+							<el-form-item label="最高学历" style="width: 350px;">
+								<el-select v-model="user.education" placeholder="本科">
+									<el-option label="本科" value="本科"></el-option>
+									<el-option label="研究生" value="研究生"></el-option>
+									<el-option label="博士" value="博士"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="毕业院校" style="width: 350px;">
+								<el-select v-model="user.settledCity" placeholder="国内">
+									<el-option label="国内" value="国内"></el-option>
+									<el-option label="境内" value="境内"></el-option>
+									<el-option label="科研" value="科研"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-form>
 
 
 
@@ -101,13 +198,10 @@
 				var app = new Vue({
 					el: '#app',
 					data: {
-						searchKey: null,
-						users: null,
-						pageSize: 16,
 						fits: ['fill'],
+						labelPosition: 'left',
 						url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-						currentPage: 1,
-						total: 0,
+						user: {},
 					},
 					methods: {
 						searchClick :function () {
@@ -136,6 +230,7 @@
 						success: function (result) {
 							if(result.code == 200){
 								console.log(result.data)
+								app.user = result.data
 							}else{
 								console.log("返回值失败")
 							}
@@ -150,7 +245,7 @@
 				var topBar = new Vue({
 					el: '#topBar',
 					data: {
-						activeIndex2: '5',
+						activeIndex2: '4',
 					},
 					methods: {
 						handleSelect(key, keyPath) {
@@ -161,7 +256,11 @@
 
 
 
+
+
 			</script>
+
+
 		</div>
 	</body>
 </html>
