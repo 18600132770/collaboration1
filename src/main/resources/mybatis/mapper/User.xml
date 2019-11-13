@@ -56,4 +56,8 @@
         SELECT * FROM user
     </select>
 
+    <select id="findById" resultType="com.huag.collaboration.entities.User">
+        SELECT * FROM user where id = #{id}
+    </select>
+
 </mapper>

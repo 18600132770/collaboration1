@@ -4,6 +4,7 @@ import com.huag.collaboration.entities.base.Constants;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 /**
  * @author huag
@@ -36,6 +37,44 @@ public class RequestUtils {
             return Integer.valueOf(pageSizeStr);
         }else{
             return Constants.PAGE_SIZE;
+        }
+    }
+
+    /**
+     * 判断参数是否存在
+     * @param request
+     * @param param
+     * @return
+     */
+    public static boolean isExist(HttpServletRequest request, String param){
+        boolean exist = false;
+        Enumeration paraEnum = request.getParameterNames();
+        while (paraEnum.hasMoreElements()) {
+            String paramInRequest = (String) paraEnum.nextElement();
+            if(StringUtils.isNotBlank(param) && param.equals(paramInRequest)){
+                exist = true;
+            }
+        }
+        return exist;
+    }
+
+    /**
+     * 获取整形参数
+     * @param request
+     * @param param
+     * @return
+     */
+    public static Integer getIntegerParam(HttpServletRequest request, String param){
+        String paramInRequest = String.valueOf(request.getParameter(param));
+        if(StringUtils.isNotBlank(paramInRequest) && !"null".equals(paramInRequest)){
+            try{
+                return Integer.valueOf(paramInRequest);
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }else {
+            return null;
         }
     }
 

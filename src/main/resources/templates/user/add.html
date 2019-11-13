@@ -68,49 +68,6 @@
 							</nav>
 
 
-							<div v-for="user in users">
-
-								<a :href="'/crud/user/'+user.id">
-									<div style="float: left; border:3px solid #fcffee; width: 25%; height: 170px" >
-
-										<div style="margin-left: 30px; margin-top: 30px; border-radius: 4px; background-color: #91ff5c">
-											<div  style="float: left; ">
-												<template>
-													<div class="demo-fit">
-														<div class="block" v-for="fit in fits" :key="fit">
-															<el-avatar shape="square" :size="80" :fit="fit" :src="url"></el-avatar>
-														</div>
-													</div>
-												</template>
-											</div>
-
-											<div style="float: left; margin-left: 80px;">
-												<div style="font-size: 20px">{{user.username}}</div>
-											</div>
-										</div>
-
-										<div style="float: none; margin-left: 150px; margin-top: 70px">
-											<p>邮箱：{{user.mailbox}}</p>
-											<p>手机：{{user.telephoneNumber}}</p>
-											<p>状态：{{user.tripState}}</p>
-										</div>
-									</div>
-								</a>
-
-							</div>
-
-							<div style="float: bottom; clear: left; margin-top: 60px">
-								<el-pagination class="txtCenter"
-											   @size-change="handleSizeChange"
-											   @current-change="handleCurrentChange"
-											   :current-page.sync="currentPage"
-											   :page-sizes="[16,32,64]"
-											   :page-size="100"
-											   layout=" sizes, prev, pager, next"
-											   :total="total">
-								</el-pagination>
-							</div>
-
 
 						</div>
 
@@ -135,8 +92,10 @@
 				feather.replace()
 			</script>
 
-			<script type="text/javascript">
+			<script th:inline="javascript" type="text/javascript">
 
+				var userId =[[ ${userId}]]
+				console.log(userId)
 
 
 				var app = new Vue({
@@ -154,22 +113,12 @@
 						searchClick :function () {
 
 						},
-						handleSizeChange(val) {
-							console.log(`每页 ${val} 条`);
-							app.pageSize = val
-							findAllUsers(app.currentPage, app.pageSize)
-						},
-						handleCurrentChange(val) {
-							console.log(`当前页: ${val}`);
-							console.log(val)
-							findAllUsers(val, app.pageSize)
-						},
 
 					}
 
 				})
 
-				findAllUsers(1, 16);//查询所有人员信息
+				findById();
 
 				/**
 				 *
@@ -177,19 +126,15 @@
 				 * @param type
 				 * @param url
 				 */
-				function findAllUsers(currentPage, pageSize) {
+				function findById() {
 					var ajaxData = {}
-					ajaxData.currentPage = currentPage
-					ajaxData.pageSize = pageSize
+					ajaxData.id = userId
 					$.ajax({
 						data: ajaxData,
 						type: "GET",
-						url: "/crud/user/findAll",
+						url: "/crud/user/findById",
 						success: function (result) {
 							if(result.code == 200){
-								app.users=result.data.list
-								// app.currentPage=result.data.currentPage
-								app.total=result.data.totalCount
 								console.log(result.data)
 							}else{
 								console.log("返回值失败")

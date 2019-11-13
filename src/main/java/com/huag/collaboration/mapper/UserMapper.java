@@ -45,4 +45,10 @@ public interface UserMapper {
      */
     List<User> findAll();
 
+    /**
+     * @param id
+     * @return
+     */
+    User findById(int id);
+
 }

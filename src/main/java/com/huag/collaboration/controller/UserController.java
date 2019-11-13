@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -35,6 +36,18 @@ public class UserController {
     @GetMapping("/users")
     public String  list(Model model){
         return "user/list";
+    }
+
+    /**
+     * 跳转到修改页面
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/{id}")
+    public String toEditProject(@PathVariable("id") Integer id, Model model){
+        model.addAttribute("userId", id);
+        return "user/add";
     }
 
     /**
@@ -127,6 +140,21 @@ public class UserController {
 
         result.code = 200;
         result.setData(JSON.parseObject(JSON.toJSONString(response)));
+        return result;
+    }
+
+    /**
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/user/findById")
+    public BaseResponse<User> findById(HttpServletRequest request){
+        BaseResponse<User> result = new BaseResponse<>();
+        Integer id = RequestUtils.getIntegerParam(request, "id");
+        User user = userMapper.findById(id);
+        result.code = 200;
+        result.setData(user);
         return result;
     }
 
