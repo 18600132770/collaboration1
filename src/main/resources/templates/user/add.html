@@ -80,6 +80,10 @@
 
 					<el-scrollbar class="dsource-r">
 
+						<div style="position: absolute; left: 1600px; top: 100px">
+							<el-avatar shape="square" :size="80" :fit="fit" :src="url"></el-avatar>
+						</div>
+
 
 						<el-row>
 							<el-col :span="24"><div class="grid-content bg-purple-dark"></div></el-col>
@@ -142,7 +146,7 @@
 
 						<el-col :span="24"><div class="grid-content bg-purple-light"></div></el-col>
 
-						<el-form :inline="true"  class="demo-form-inline" style="margin-left: 50px; margin-top: 20px" :label-position="'left'">
+						<el-form :inline="true"  class="demo-form-inline" style="margin-left: 50px; margin-top: 50px" :label-position="'left'">
 							<el-form-item label="行政职务" style="width: 350px;">
 								<el-select v-model="user.administrativePost" placeholder="设计员">
 									<el-option label="设计员" value="设计员"></el-option>
@@ -165,6 +169,63 @@
 									<el-option label="境内" value="境内"></el-option>
 									<el-option label="科研" value="科研"></el-option>
 								</el-select>
+							</el-form-item>
+						</el-form>
+
+						<el-form :inline="true"  class="demo-form-inline" style="margin-left: 50px; margin-top: 20px" :label-position="'left'">
+							<el-form-item label="所在部门" style="width: 350px;">
+								<el-select v-model="user.departmentId" placeholder="">
+									<el-option label="设计员" value="设计员"></el-option>
+									<el-option label="研究员" value="研究员"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="任职体系" style="width: 350px;">
+								<el-select v-model="user.postSystem" placeholder="">
+									<el-option label="国内" value="国内"></el-option>
+									<el-option label="境内" value="境内"></el-option>
+									<el-option label="科研" value="科研"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="合同类型" style="width: 350px;">
+								<el-select v-model="user.contractType" placeholder="">
+									<el-option label="本科" value="本科"></el-option>
+									<el-option label="研究生" value="研究生"></el-option>
+									<el-option label="博士" value="博士"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="入职时间" style="width: 350px;">
+								<el-date-picker	v-model="user.entryDate" type="date" placeholder="选择日期" style="width: 80%"></el-date-picker>
+							</el-form-item>
+						</el-form>
+
+						<el-form :inline="true"  class="demo-form-inline" style="margin-left: 50px; margin-top: 20px" :label-position="'left'">
+							<el-form-item label="原工作单位" style="width: 350px;">
+								<el-select v-model="user.departmentId" placeholder="">
+									<el-option label="设计员" value="设计员"></el-option>
+									<el-option label="研究员" value="研究员"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="职称" style="width: 350px;">
+								<el-select v-model="user.postSystem" placeholder="">
+									<el-option label="国内" value="国内"></el-option>
+									<el-option label="境内" value="境内"></el-option>
+									<el-option label="科研" value="科研"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="注册情况" style="width: 350px;">
+								<el-select v-model="user.contractType" placeholder="">
+									<el-option label="本科" value="本科"></el-option>
+									<el-option label="研究生" value="研究生"></el-option>
+									<el-option label="博士" value="博士"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="可担任职务" style="width: 350px;">
+								<el-checkbox-group v-model="checkList">
+									<el-checkbox label="设计"></el-checkbox>
+									<el-checkbox label="复核"></el-checkbox>
+									<el-checkbox label="审核"></el-checkbox>
+									<el-checkbox label="审定"></el-checkbox>
+								</el-checkbox-group>
 							</el-form-item>
 						</el-form>
 
@@ -198,10 +259,11 @@
 				var app = new Vue({
 					el: '#app',
 					data: {
-						fits: ['fill'],
+						fit: 'fill',
 						labelPosition: 'left',
 						url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
 						user: {},
+						checkList: ['设计'],
 					},
 					methods: {
 						searchClick :function () {
@@ -245,7 +307,7 @@
 				var topBar = new Vue({
 					el: '#topBar',
 					data: {
-						activeIndex2: '4',
+						activeIndex2: '5',
 					},
 					methods: {
 						handleSelect(key, keyPath) {
