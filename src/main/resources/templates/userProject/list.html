@@ -54,24 +54,13 @@
 
 			<div id="app">
 				<div class="dsource-wrap" style="margin-top: 5px">
-					<!-- 左侧  -->
-					<!--<el-scrollbar class="dictionary-l">-->
-						<!--<ul class="manager-nav dictionary-nav">-->
-							<!--<li class="m-a">-->
-								<!--<svg class="icon" aria-hidden="true">-->
-									<!--<use xlink:href="#icon-hh2"></use>-->
-								<!--</svg>-->
-								<!--<ul class="manager-sec">-->
-									<!--<li><a  th:href="@{/projects}">项目信息</a></li>-->
-									<!--<li><a class="m-a cur" th:href="@{/userProjects}">人员项目信息</a></li>-->
-								<!--</ul>-->
-							<!--</li>-->
-						<!--</ul>-->
-					<!--</el-scrollbar>-->
 
 					<el-scrollbar class="dsource-r">
 
 						<div class="ds-table-wrap" >
+
+							<el-input hidden="true"  v-model="currentDepartmentId"></el-input>
+							<el-input hidden="true"  v-model="pageSize"  style="height: 0px"></el-input>
 
 							<nav>
 								<div class="nav nav-tabs" role="tablist" v-for="department, key in departments" :key="key">
@@ -143,10 +132,10 @@
 										   @size-change="handleSizeChange"
 										   @current-change="handleCurrentChange"
 										   :current-page.sync="currentPage"
-										   :page-sizes="[10,20,30,50]"
+										   :page-sizes="[5,10,20,50]"
 										   :page-size="100"
 										   layout=" sizes, prev, pager, next"
-										   :total="1000">
+										   :total="total">
 							</el-pagination>
 						</div>
 					</el-scrollbar>
@@ -176,27 +165,23 @@
 					data: {
 						dialogFormVisible: false,
 						currentPage: 1,
+						total: 0,
+						pageSize: 5,
 						tableData: null,
 						searchKey: null,
 						currentDepartmentId: null,
-						departments:{
-
-						},
+						departments: null,
 					},
 					methods: {
 						handleSizeChange(val) {
 							console.log(`每页 ${val} 条`);
+							app.pageSize = val
+							findProjectBySearchKeyWordAndDeptId()
 						},
 						handleCurrentChange(val) {
 							console.log(`当前页: ${val}`);
-						},
-						searchClick :function () {
-							var ajaxData = {}
-							ajaxData.username = encodeURI(app.searchKey);
-							console.log(ajaxData)
-							var type = "GET"
-							var url = "userProject/findByUsername"
-							sendAjax(ajaxData, type, url)
+							app.currentPage = val
+							findProjectBySearchKeyWordAndDeptId()
 						},
 						getProjectByDepartment:function (departmentId) {
 							var departments = app.departments
@@ -223,7 +208,7 @@
 				})
 
 				getDepartments();//查询所有所信息
-				
+
 				/**
 				 * 查询所有所信息，将值赋给li
 				 */
@@ -254,13 +239,16 @@
 				}
 
 				function sendAjax(ajaxData, type, url) {
+					ajaxData.currentPage = app.currentPage
+					ajaxData.pageSize = app.pageSize
 					$.ajax({
 						data: ajaxData,
 						type: type,
 						url: url,
 						success: function (result) {
 							if(result.code == 200){
-								app.$data.tableData=result.data
+								app.tableData=result.data.list
+								app.total=result.data.totalCount
 							}else{
 								console.log("返回值失败")
 							}

@@ -72,7 +72,7 @@
 					</el-scrollbar>
 
 					<el-scrollbar class="dictionary-l" style="width: 50px; border:0;margin-top: 0px">
-						<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+						<el-menu default-active="1-4-1" class="el-menu-vertical-demo"  :collapse="isCollapse">
 							<el-menu-item index="1">
 								<i class="el-icon-circle-plus" @click="addProjectClick"></i>
 								<span slot="title" @click="addProjectClick">新增项目</span>
@@ -83,6 +83,8 @@
 
 					<el-scrollbar class="dsource-r">
 						<nav class="navbar navbar-light bg-light">
+
+							<el-input hidden="true"  v-model="pageSize"  style="height: 0px"></el-input>
 
 							<label style="display: inline">项目编号：{{project.projectNum}}</label>
 							<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
@@ -125,7 +127,7 @@
 										   :page-sizes="[10,20,30,50]"
 										   :page-size="100"
 										   layout=" sizes, prev, pager, next"
-										   :total="1000">
+										   :total="total">
 							</el-pagination>
 						</div>
 					</el-scrollbar>
@@ -207,6 +209,8 @@
 						dialogFormVisible: false,
 						isCollapse: true,
 						currentPage: 1,
+						total: 0,
+						pageSize: 10,
 						tableData: null,
 						searchKey: null,
 						project: {},
@@ -226,9 +230,13 @@
 					methods: {
 						handleSizeChange(val) {
 							console.log(`每页 ${val} 条`);
+							app.pageSize = val
+							findProjectsByProjectSummaryId()
 						},
 						handleCurrentChange(val) {
 							console.log(`当前页: ${val}`);
+							app.currentPage = val
+							findProjectsByProjectSummaryId()
 						},
 						addProjectClick: function(){
 							app.dialogAddProjectVisible = true
@@ -378,6 +386,8 @@
 				 */
 				function findProjectsByProjectSummaryId(){
 					var ajaxData = {}
+					ajaxData.currentPage = app.currentPage
+					ajaxData.pageSize = app.pageSize
 					ajaxData.projectSummaryId = app.currentProjectSummaryId
 					$.ajax({
 						data: ajaxData,
@@ -385,7 +395,8 @@
 						url: "/crud/project/findProjectsByProjectSummaryId/",
 						success: function (result) {
 							if(result.code == 200){
-								app.$data.tableData=result.data
+								app.tableData=result.data.list
+								app.total=result.data.totalCount
 							}else{
 								console.log("返回值失败 findByProjectId")
 							}

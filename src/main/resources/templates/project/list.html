@@ -67,6 +67,8 @@
 						<!--</ul>-->
 					<!--</el-scrollbar>-->
 
+					<el-input hidden="true"  v-model="pageSize"  style="height: 0px"></el-input>
+
 					<el-input hidden="true"  v-model="currentDepartmentId"></el-input>
 
 
@@ -219,6 +221,7 @@
 						dialogFormVisible: false,
 						currentPage: 1,
 						total: 0,
+						pageSize: 10,
 						tableData: null,
 						searchKey: null,
 						myValue: 1,
@@ -240,12 +243,15 @@
 					methods: {
 						handleSizeChange(val) {
 							console.log(`每页 ${val} 条`);
+							app.pageSize = val
+							findProjectBySearchKeyWordAndDeptId(app.currentPage, app.pageSize)
 						},
 						handleCurrentChange(val) {
 							console.log(`当前页: ${val}`);
+							findProjectBySearchKeyWordAndDeptId(val, app.pageSize)
 						},
 						searchClick :function () {
-							findProjectBySearchKeyWordAndDeptId()
+							findProjectBySearchKeyWordAndDeptId(app.currentPage, app.pageSize)
 						},
 						getProjectByDepartment: function(departmentId){
 							var departments = app.departments
@@ -346,7 +352,8 @@
 						url: url,
 						success: function (result) {
 							if(result.code == 200){
-								app.$data.tableData=result.data
+								app.tableData=result.data.list
+								app.total=result.data.totalCount
 							}else{
 								console.log("返回值失败")
 							}
@@ -480,8 +487,10 @@
 				/**
 				 * 根据searchKeyWord和deptId查询
 				 */
-				function findProjectBySearchKeyWordAndDeptId(){
+				function findProjectBySearchKeyWordAndDeptId(currentPage, pageSize){
 					var ajaxData = {}
+					ajaxData.currentPage = currentPage
+					ajaxData.pageSize = pageSize
 					if(app.searchKey != null){
 						ajaxData.projectName = encodeURI(app.searchKey);
 					}else{
@@ -498,6 +507,8 @@
 				 */
 				function findProjectByDepartmentId(departmentId) {
 					var ajaxData = {}
+					ajaxData.currentPage = app.currentPage
+					ajaxData.pageSize = app.pageSize
 					ajaxData.departmentId = departmentId
 					$.ajax({
 						data: ajaxData,
@@ -505,7 +516,8 @@
 						url: "/crud/project/findProjectByDepartmentId",
 						success: function (result) {
 							if(result.code == 200){
-								app.$data.tableData=result.data
+								app.tableData=result.data.list
+								app.total=result.data.totalCount
 							}else{
 								console.log("返回值失败")
 							}

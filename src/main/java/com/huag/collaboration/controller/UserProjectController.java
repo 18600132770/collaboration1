@@ -1,10 +1,15 @@
 package com.huag.collaboration.controller;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.UserProjectMapper;
 import com.huag.collaboration.utils.DateUtils;
+import com.huag.collaboration.utils.RequestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,14 +50,15 @@ public class UserProjectController {
      */
     @ResponseBody
     @RequestMapping(value = "/userProject/findUserProjectByProjectNameAndDeptId")
-    public BaseResponse<List<UserProjectMapping>> findUserProjectByProjectNameAndDeptId(HttpServletRequest request) throws Exception{
-        BaseResponse<List<UserProjectMapping>> result = new BaseResponse<>();
+    public BaseResponse<Object> findUserProjectByProjectNameAndDeptId(HttpServletRequest request) throws Exception{
+        BaseResponse<Object> result = new BaseResponse<>();
 
         String searchKey = String.valueOf(request.getParameter("searchKey"));
         searchKey = URLDecoder.decode(searchKey, "UTF-8");
         String departmentId = String.valueOf(request.getParameter("departmentId"));
 
-        System.out.println(searchKey);
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
 
         List<UserProjectMapping> userProjects = userProjectMapper.findUserProjectByProjectNameAndDeptId(searchKey, Integer.valueOf(departmentId));
         final int index = Math.abs(Long.valueOf(System.currentTimeMillis()).intValue());
@@ -109,10 +115,14 @@ public class UserProjectController {
         });
 
 
+        long total = userProjectMappingList.size();
+        List<UserProjectMapping> list =  userProjectMappingList.subList((currentPage-1)*pageSize, currentPage*pageSize > userProjectMappingList.size()?userProjectMappingList.size():currentPage*pageSize);
 
-        System.out.println(userProjectMappingList);
+//        PageBaseResponse response = new PageBaseResponse(list, currentPage, pageSize, pages, total);
+        PageBaseResponse response = new PageBaseResponse(list, currentPage, pageSize, pageSize, total);
+
         result.code = 200;
-        result.setData(userProjectMappingList);
+        result.setData(response);
         return result;
     }
 
