@@ -254,4 +254,10 @@ public class CollaborationApplicationTests {
 
     }
 
+    @Test
+    public void test17(){
+        long round = Math.round(1.0 / 7 * 100);
+        System.out.println(round);
+    }
+
 }

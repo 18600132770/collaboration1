@@ -29,4 +29,11 @@ public interface ProjectSummaryMapper {
      */
     public int insert(ProjectSummary projectSummary);
 
+    /**
+     * 更新
+     * @param projectSummary
+     * @return
+     */
+    public int update(ProjectSummary projectSummary);
+
 }

@@ -9,6 +9,7 @@ import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.ProjectSummaryMapper;
 import com.huag.collaboration.utils.DateUtils;
 import com.huag.collaboration.utils.JSONUtils;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,6 +120,54 @@ public class ProjectSummaryController {
 
         result.code = 200;
         return result;
+    }
+
+    /**
+     * 修改设计阶段
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/editDesignPhase")
+    public BaseResponse<List<Project>> editDesignPhase(HttpServletRequest request) throws Exception{
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String projectId = String.valueOf(request.getParameter("projectId"));
+        Project project = projectMapper.findById(Integer.valueOf(projectId));
+        String designPhase = String.valueOf(request.getParameter("degignPhaseModalInput"));
+        designPhase = URLDecoder.decode(designPhase, "UTF-8");
+        updateProjectSummaryDesginPhase(Integer.valueOf(projectId), designPhase);
+        ProjectSummary projectSummary = projectSummaryMapper.findById(Integer.valueOf(project.getProjectSummaryId()));
+        projectSummary.setDesignPhase(designPhase);
+        projectSummaryMapper.update(projectSummary);
+        result.code = 200;
+        result.setData(null);
+        return result;
+    }
+
+    /**
+     * 更新分项目设计阶段
+     * @param projectId
+     * @param designPhase
+     */
+    public void updateProjectSummaryDesginPhase(int projectId, String designPhase){
+        Project project = projectMapper.findById(Integer.valueOf(projectId));
+        if("投标阶段".equals(designPhase)){
+            project.setCurrentProcess(6);
+        }else if("前期方案研究".equals(designPhase)){
+            project.setCurrentProcess(12);
+        }else if("初步设计".equals(designPhase)){
+            project.setCurrentProcess(42);
+        }else if("施工图设计".equals(designPhase)){
+            project.setCurrentProcess(82);
+        }else if("施工配合".equals(designPhase)){
+            project.setCurrentProcess(88);
+        }else if("结算".equals(designPhase)){
+            project.setCurrentProcess(94);
+        }else if("完结".equals(designPhase)){
+            project.setCurrentProcess(100);
+        }
+        projectMapper.update(project);
     }
 
 

@@ -94,7 +94,13 @@
 									<template slot-scope="scope"><a  target="_blank">{{ scope.row.projectName }} </a></template>
 								</el-table-column>
 								<el-table-column label="设计阶段">
-									<template slot-scope="scope"><span>{{ scope.row.designPhase }}</span></template>
+									<template slot-scope="scope">
+										<div @click="editDesignPhaseClick(scope.row.id)">
+											<span  style="color: #080fe8">
+											 <el-link type="primary">{{ scope.row.designPhase }}</el-link>
+										</span>
+										</div>
+									</template>
 								</el-table-column>
 								<el-table-column label="负责人">
 									<template slot-scope="scope">
@@ -126,11 +132,16 @@
 								</el-table-column>
 								<el-table-column  label="目前进度">
 									<template slot-scope="scope">
-										<span>
+										<span >
 											<div class="progress">
-											  <div class="progress-bar" role="progressbar" :style="'width: '+ scope.row.currentProcess + '%;'" aria-valuenow="scope.row.currentProcess" aria-valuemin="0" aria-valuemax="100">{{ scope.row.currentProcess }}%</div>
+											  <div class="progress-bar"  role="progressbar" :style="'width: '+ scope.row.currentProcess + '%;'" aria-valuenow="scope.row.currentProcess" aria-valuemin="0" aria-valuemax="100">
+												  <div style="font-size: 1px">
+													  {{ scope.row.currentProcess }}%
+												  </div>
+											  </div>
 											</div>
-										</span></template>
+										</span>
+									</template>
 								</el-table-column>
 								<el-table-column  label="紧急程度">
 									<template slot-scope="scope"><span>{{ scope.row.emergencyLevel }}</span></template>
@@ -170,6 +181,23 @@
 					</div>
 					<div class="modal-footer">
 						<button  class="btn btn-primary" @click="savePrincipal">保存</button>
+					</div>
+				</el-dialog>
+
+				<!-- 编辑设计阶段Modal -->
+				<el-dialog title="编辑设计阶段" :visible.sync="dialogEditDesignPhaseVisible" width="25%">
+					<div class="form-group" hidden="true">
+						<label>id</label>
+						<input type="text" class="form-control" placeholder=""  v-model="designPhaseIdModalInput">
+					</div>
+					<div class="form-group">
+						<label>设计阶段：</label>
+						<el-select v-model="degignPhaseModalInput" filterable placeholder="请选择" style="width: 70%">
+							<el-option v-for="item in designPhases" :key="item.value" :label="item.label" :value="item.value"></el-option>
+						</el-select>
+					</div>
+					<div class="modal-footer">
+						<button  class="btn btn-primary" @click="saveDesignPhase">保存</button>
 					</div>
 				</el-dialog>
 
@@ -230,14 +258,26 @@
 						},
 						currentDepartmentId: null,
 						principalIdModalInput: null,
+						designPhaseIdModalInput: null,
 						defaultprincipalUserIdModalInput: null,
 						principalNameModalInput: null,
+						degignPhaseModalInput: null,
 						chiefEngineerIdModalInput: null,
 						defaultChiefEngineerIdModalInput: null,
 						chiefEngineerNameModalInput: null,
 						dialogEditPrincipalVisible: false,
+						dialogEditDesignPhaseVisible: false,
 						dialogEditChiefEngineerVisible: false,
 						principals: [],
+						designPhases: [
+								{value:"投标阶段",label:"投标阶段"},
+								{value:"前期方案研究",label:"前期方案研究"},
+								{value:"初步设计",label:"初步设计"},
+								{value:"施工图设计",label:"施工图设计"},
+								{value:"施工配合",label:"施工配合"},
+								{value:"结算",label:"结算"},
+								{value:"完结",label:"完结"},
+								],
 						chiefEngineers: [],
 					},
 					methods: {
@@ -266,6 +306,9 @@
 							app.currentDepartmentId = departmentId
 							findProjectByDepartmentId(departmentId) //根据所名称查询项目
 						},
+						saveDesignPhase: function(){
+							editDesignPhaseAjaxFunction(this)
+						},
 						savePrincipal: function(){	//保存负责人modal
 							var projectId = app.principalIdModalInput
 							var project_principalUserId = app.principalNameModalInput
@@ -289,6 +332,26 @@
 								updateChiefEngineer(projectId, chiefEngineerNameModalInput, this);//更新总工
 							}
 							app.dialogEditChiefEngineerVisible = false
+						},
+						editDesignPhaseClick:function(id){	//点击编辑设计阶段
+							console.log("id: " + id)
+							app.dialogEditDesignPhaseVisible = true
+							app.designPhaseIdModalInput = id
+							var ajaxData = {}
+							ajaxData.projectId = id
+							$.ajax({
+								data: ajaxData,
+								type: "GET",
+								url: "/crud/project/findByProjectId",
+								success: function (result) {
+									if(result.code == 200){
+										app.degignPhaseModalInput = result.data.designPhase
+									}else{
+										console.log("findByProjectId 返回值失败")
+									}
+
+								}
+							})
 						},
 						editProjectPrincipalClick: function (id) {  //点击编辑负责人
 							app.dialogEditPrincipalVisible = true
@@ -358,6 +421,33 @@
 								console.log("返回值失败")
 							}
 
+						}
+					})
+				}
+
+				/**
+				 * 设计阶段编辑
+				 * */
+				function editDesignPhaseAjaxFunction(that) {
+					var ajaxData = {}
+					ajaxData.projectId = app.designPhaseIdModalInput
+					ajaxData.degignPhaseModalInput = encodeURI(app.degignPhaseModalInput)
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/project/editDesignPhase",
+						success: function (result) {
+							if(result.code == 200){
+								app.dialogEditDesignPhaseVisible = false
+								findProjectBySearchKeyWordAndDeptId(app.currentPage, app.pageSize)
+								that.$message({
+									message: '设计阶段编辑成功',
+									type: 'success'
+								});
+
+							}else{
+								console.log("editDesignPhase 返回值失败")
+							}
 						}
 					})
 				}

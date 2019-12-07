@@ -272,6 +272,7 @@ public class ProjectController {
         return result;
     }
 
+
     /**
      * ajax请求，更新负责人
      * @param request

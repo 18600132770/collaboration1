@@ -41,4 +41,13 @@
              #{startTime}, #{stopTime}, #{leftTime}, now(), now(), #{deltag})
     </insert>
 
+    <insert id="update">
+        update projectSummary set
+            projectNum = #{projectNum},
+            projectName = #{projectName}, designPhase = #{designPhase}, principalId = #{principalId}, principal = #{principal},
+            chiefEngineerId = #{chiefEngineerId}, chiefEngineer = #{chiefEngineer}, startTime = #{startTime}, stopTime = #{stopTime},
+            leftTime = #{leftTime},  updateTime = now(), deltag = #{deltag}
+         where id = #{id}
+    </insert>
+
 </mapper>
