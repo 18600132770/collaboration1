@@ -114,6 +114,23 @@ public class UserProjectController {
             }
         });
 
+        userProjectMappingList.forEach(userProjectMapping -> {
+            int finishedProcess = 0;
+            List<UserProjectMapping> children = userProjectMapping.getChildren();
+            if(children != null && children.size() > 0){
+                for(int i = 0; i < children.size(); i++){
+                    Integer currentProcess = children.get(i).getCurrentProcess();
+                    finishedProcess += currentProcess;
+                    UserProjectMapping child = children.get(i);
+                    child.setReverseHidden(true);
+                    children.set(i, child);
+                }
+                userProjectMapping.setFinishedWorkload(finishedProcess/children.size());
+            }else{
+                userProjectMapping.setFinishedWorkload(0);
+            }
+        });
+
 
         long total = userProjectMappingList.size();
         List<UserProjectMapping> list =  userProjectMappingList.subList((currentPage-1)*pageSize, currentPage*pageSize > userProjectMappingList.size()?userProjectMappingList.size():currentPage*pageSize);

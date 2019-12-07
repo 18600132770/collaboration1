@@ -46,7 +46,7 @@
 
 			<el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
 			<el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
-			<el-menu-item index="3"><a th:href="@{/userProjects}" >人员项目信息</a></el-menu-item>
+			<el-menu-item index="3"><a th:href="@{/userProjects}" >人员工作信息</a></el-menu-item>
 			<el-menu-item index="4"><a th:href="@{/professions}" >专业协同</a></el-menu-item>
 			<el-menu-item index="5"><a th:href="@{/users}">人员信息管理</a></el-menu-item>
 			<el-menu-item index="6"><a th:href="@{/notices}">通知</a></el-menu-item>
@@ -91,7 +91,7 @@
 					<!--<el-radio-button :label="false">展开</el-radio-button>-->
 					<!--<el-radio-button :label="true">收起</el-radio-button>-->
 				<!--</el-radio-group>-->
-				<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+				<el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse">
 					<el-menu-item index="1">
 						<i class="el-icon-circle-plus" @click="addTaskAssignmentClick"></i>
 						<span slot="title" @click="addTaskAssignmentClick">添加任务</span>
@@ -205,6 +205,9 @@
 					<div :hidden="flowChartTableHidden" style="margin-top: 20px">
 						<ul>
 							<li v-for="taskAssignmentData, index in taskAssignmentListData" :key="index">
+
+								{{taskAssignmentData.taskName}}
+
 								<el-steps :active="taskAssignmentData.finishedLevel" align-center>
 									<el-step :title="taskAssignmentData.designer" @click.native="designerReviewProcessClick(taskAssignmentData.id)" description="设计"></el-step>
 									<el-step :title="taskAssignmentData.reviewer" @click.native="reviewerReviewProcessClick(taskAssignmentData.id)" description="复核"></el-step>
@@ -246,8 +249,8 @@
 			</el-dialog>
 
 
-			<!-- 人员项目信息modal -->
-			<el-dialog title="人员项目信息" :visible.sync="userProjectsDialogVisible" width="80%">
+			<!-- 人员工作信息modal -->
+			<el-dialog title="人员工作信息" :visible.sync="userProjectsDialogVisible" width="80%">
 				<el-table style="width: 100%;margin-top: 10px;" :data="userProjectsTableData" class="x-table table-td0">
 					<!--<el-table-column type="selection" width="55"></el-table-column>-->
 					<el-table-column label="姓名">
@@ -426,15 +429,27 @@
 
 			<!--专业项目文件-->
 			<el-dialog title="专业项目文件" :visible.sync="profileTreeDialogVisible" width="30%">
-				<el-form ref="form" :model="form" label-width="110px">
-					<el-upload
-							class="upload-demo"
-							:action="'/crud/profile/uploadFile?projectId=' + projectId"
-							:on-change="handleChange"
-							:file-list="fileList">
-						<el-button size="small" type="primary">点击上传</el-button>
-					</el-upload>
-				</el-form>
+				<!--<el-form ref="form" :model="form" label-width="110px">-->
+					<!--<el-upload-->
+							<!--class="upload-demo"-->
+							<!--:action="'/crud/profile/uploadFile?projectId=' + projectId"-->
+							<!--:on-change="handleChange"-->
+							<!--:file-list="fileList">-->
+						<!--<el-button size="small" type="primary">点击上传</el-button>-->
+					<!--</el-upload>-->
+
+				<form action='saveFile' enctype='multipart/form-data' method='post' id="fileUpload1">
+					<el-upload class="upload-demo" action="saveFile" id="filename1" name='file' ref="upload" :auto-upload='false'
+								   :on-change='fileChange1' accept="">
+							<a href="#" class="btn-line">
+								<svg class="icon" aria-hidden="true">
+									<use xlink:href="#icon-upload"></use>
+								</svg>
+								<span>上传文件</span>
+							</a>
+						</el-upload>
+				</form>
+				<!--</el-form>-->
 			</el-dialog>
 
 			<!-- 添加上序文件Modal -->
@@ -612,12 +627,12 @@
 				previousProfileTabs: [
 					{
 						id: 0,
-						name: "我收到的",
+						name: "收文",
 						style: "nav-item nav-link active",
 					},
 					{
 						id: 1,
-						name: "我申请的",
+						name: "发文",
 						style: "nav-item nav-link",
 					}
 				],
@@ -946,6 +961,28 @@
 				//保存送审流程内容
 				saveReviewProcessData: function(){
 					saveReviewProcessDataFunction();//保存送审内容
+				},
+				fileChange1: function(target){
+					var form = document.getElementById("fileUpload1");
+					var url = "/crud/profile/uploadFile?projectId=" + app.projectId
+					var postData = new FormData(form);
+					app.uploading = true;
+					$("#msg").html("处理中...");
+					$.ajax({
+						url: url,
+						type: "POST",
+						data: postData,
+						contentType: false,
+						processData: false,
+						success: function (result) {
+							if (result.code == 200) {
+							}else{
+							}
+						},
+						error: function () {
+							alert("处理失败！");
+						}
+					});
 				},
 
 			}
@@ -1335,6 +1372,7 @@
 				}
 			}
 		})
+
 
 
 

@@ -33,6 +33,8 @@ public class UserProjectMapping {
 
     private Boolean hidden;//是总的就隐藏
 
+    private Boolean reverseHidden;//分的就显示
+
     private Boolean hasChildren;
 
     private List<UserProjectMapping> children;

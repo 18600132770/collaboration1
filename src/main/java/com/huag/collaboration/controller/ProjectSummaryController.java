@@ -129,7 +129,7 @@ public class ProjectSummaryController {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value = "/project/editDesignPhase")
+    @RequestMapping(value = "/projectSummary/editDesignPhase")
     public BaseResponse<List<Project>> editDesignPhase(HttpServletRequest request) throws Exception{
         BaseResponse<List<Project>> result = new BaseResponse<>();
         String projectId = String.valueOf(request.getParameter("projectId"));

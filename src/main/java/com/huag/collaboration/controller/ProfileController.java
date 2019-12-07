@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,25 +52,19 @@ public class ProfileController {
      */
     @ResponseBody
     @RequestMapping(value = "/profile/uploadFile")
-    public BaseResponse<List<Profile>> upload(HttpServletRequest request){
+    public BaseResponse<List<Profile>> upload(HttpServletRequest request) throws Exception{
         BaseResponse<List<Profile>> result = new BaseResponse<>();
-
         MultipartHttpServletRequest multipartRequest = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
         MultipartFile file = multipartRequest.getFile("file");
         String filename = file.getOriginalFilename();
-
-        System.out.println(filename);
-
+        byte[] content = file.getBytes();
         String projectId = String.valueOf(request.getParameter("projectId"));
-        System.out.println("projectId: " + projectId);
-
         Profile profile = new Profile();
         profile.setName(filename);
         profile.setProjectId(Integer.valueOf(projectId));
         profileMapper.insert(profile);
-
-        OSSUtils.uploadString("profileTree/" + projectId + "/" + filename, "测试数据，以后再用真实数据");
-
+        String str = new String(content, StandardCharsets.UTF_8);
+        OSSUtils.uploadString("profileTree/" + projectId + "/" + filename, str);
         result.code = 200;
         result.setData(null);
         return result;

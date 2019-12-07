@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectSubitem;
+import com.huag.collaboration.entities.ProjectSummary;
 import com.huag.collaboration.entities.User;
 import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.query.BaseResponse;
@@ -380,6 +381,27 @@ public class ProjectController {
                 pageSize, pages, total);
         result.code = 200;
         result.setData(response);
+        return result;
+    }
+
+    /**
+     * 修改紧急程度
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/editEmergencyLevel")
+    public BaseResponse<List<Project>> editEmergencyLevel(HttpServletRequest request) throws Exception{
+        BaseResponse<List<Project>> result = new BaseResponse<>();
+        String projectId = String.valueOf(request.getParameter("projectId"));
+        Project project = projectMapper.findById(Integer.valueOf(projectId));
+        String emergencyLevel = String.valueOf(request.getParameter("emergencyLevel"));
+        emergencyLevel = URLDecoder.decode(emergencyLevel, "UTF-8");
+        project.setEmergencyLevel(emergencyLevel);
+        projectMapper.update(project);
+        result.code = 200;
+        result.setData(null);
         return result;
     }
 

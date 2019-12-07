@@ -35,7 +35,7 @@
 
 					<el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
 					<el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
-					<el-menu-item index="3"><a th:href="@{/userProjects}" >人员项目信息</a></el-menu-item>
+					<el-menu-item index="3"><a th:href="@{/userProjects}" >人员工作信息</a></el-menu-item>
 					<el-menu-item index="4"><a th:href="@{/professions}" >专业协同</a></el-menu-item>
 					<el-menu-item index="5"><a th:href="@{/users}">人员信息管理</a></el-menu-item>
 					<el-menu-item index="6"><a th:href="@{/notices}">通知</a></el-menu-item>
@@ -52,20 +52,6 @@
 
 			<div  id="app">
 				<div class="dsource-wrap" style="margin-top: 0px">
-					<!-- 左侧  -->
-					<!--<el-scrollbar class="dictionary-l">-->
-						<!--<ul class="manager-nav dictionary-nav">-->
-							<!--<li class="m-a">-->
-								<!--<svg class="icon" aria-hidden="true">-->
-									<!--<use xlink:href="#icon-hh2"></use>-->
-								<!--</svg>-->
-								<!--<ul class="manager-sec">-->
-									<!--<li><a class="m-a cur" th:href="@{/projects}">项目信息</a></li>-->
-									<!--<li><a th:href="@{/userProjects}">人员项目信息</a></li>-->
-								<!--</ul>-->
-							<!--</li>-->
-						<!--</ul>-->
-					<!--</el-scrollbar>-->
 
 					<el-input hidden="true"  v-model="pageSize"  style="height: 0px"></el-input>
 
@@ -109,7 +95,6 @@
 											 <el-link type="primary">{{ scope.row.principal }}</el-link>
 										</span>
 										</div>
-
 									</template>
 								</el-table-column>
                                 <el-table-column label="总工">
@@ -144,7 +129,13 @@
 									</template>
 								</el-table-column>
 								<el-table-column  label="紧急程度">
-									<template slot-scope="scope"><span>{{ scope.row.emergencyLevel }}</span></template>
+									<template slot-scope="scope">
+										<div @click="editEmergencyLevelClick(scope.row.id)">
+											<span  style="color: #080fe8">
+											 <el-link type="primary">{{ scope.row.emergencyLevel }}</el-link>
+										</span>
+										</div>
+									</template>
 								</el-table-column>
 								<!--<el-table-column label="操作" min-width="100">-->
 									<!--<template slot-scope="scope">-->
@@ -185,7 +176,7 @@
 				</el-dialog>
 
 				<!-- 编辑设计阶段Modal -->
-				<el-dialog title="编辑设计阶段" :visible.sync="dialogEditDesignPhaseVisible" width="25%">
+				<el-dialog title="编辑" :visible.sync="dialogEditDesignPhaseVisible" width="25%">
 					<div class="form-group" hidden="true">
 						<label>id</label>
 						<input type="text" class="form-control" placeholder=""  v-model="designPhaseIdModalInput">
@@ -198,6 +189,23 @@
 					</div>
 					<div class="modal-footer">
 						<button  class="btn btn-primary" @click="saveDesignPhase">保存</button>
+					</div>
+				</el-dialog>
+
+				<!-- 编辑紧急程度Modal -->
+				<el-dialog title="编辑" :visible.sync="dialogEditEmergencyLevelVisible" width="25%">
+					<div class="form-group" hidden="true">
+						<label>id</label>
+						<input type="text" class="form-control" placeholder=""  v-model="designEmergencyLevelIdModalInput">
+					</div>
+					<div class="form-group">
+						<label>紧急程度：</label>
+						<el-select v-model="emergencyLevelModalInput" filterable placeholder="请选择" style="width: 70%">
+							<el-option v-for="item in emergencyLevels" :key="item.value" :label="item.label" :value="item.value"></el-option>
+						</el-select>
+					</div>
+					<div class="modal-footer">
+						<button  class="btn btn-primary" @click="saveEmergencyLevel">保存</button>
 					</div>
 				</el-dialog>
 
@@ -259,14 +267,17 @@
 						currentDepartmentId: null,
 						principalIdModalInput: null,
 						designPhaseIdModalInput: null,
+						designEmergencyLevelIdModalInput: null,
 						defaultprincipalUserIdModalInput: null,
 						principalNameModalInput: null,
 						degignPhaseModalInput: null,
+						emergencyLevelModalInput: null,
 						chiefEngineerIdModalInput: null,
 						defaultChiefEngineerIdModalInput: null,
 						chiefEngineerNameModalInput: null,
 						dialogEditPrincipalVisible: false,
 						dialogEditDesignPhaseVisible: false,
+						dialogEditEmergencyLevelVisible: false,
 						dialogEditChiefEngineerVisible: false,
 						principals: [],
 						designPhases: [
@@ -278,6 +289,13 @@
 								{value:"结算",label:"结算"},
 								{value:"完结",label:"完结"},
 								],
+						emergencyLevels: [
+							{value:"暂停",label:"暂停"},
+							{value:"延缓",label:"延缓"},
+							{value:"正常",label:"正常"},
+							{value:"紧急",label:"紧急"},
+							{value:"特急",label:"特急"},
+						],
 						chiefEngineers: [],
 					},
 					methods: {
@@ -309,6 +327,9 @@
 						saveDesignPhase: function(){
 							editDesignPhaseAjaxFunction(this)
 						},
+						saveEmergencyLevel: function(){//保存编辑的紧急程度
+							editEmergencyLevelAjaxFunction(this)
+						},
 						savePrincipal: function(){	//保存负责人modal
 							var projectId = app.principalIdModalInput
 							var project_principalUserId = app.principalNameModalInput
@@ -334,7 +355,6 @@
 							app.dialogEditChiefEngineerVisible = false
 						},
 						editDesignPhaseClick:function(id){	//点击编辑设计阶段
-							console.log("id: " + id)
 							app.dialogEditDesignPhaseVisible = true
 							app.designPhaseIdModalInput = id
 							var ajaxData = {}
@@ -346,6 +366,25 @@
 								success: function (result) {
 									if(result.code == 200){
 										app.degignPhaseModalInput = result.data.designPhase
+									}else{
+										console.log("findByProjectId 返回值失败")
+									}
+
+								}
+							})
+						},
+						editEmergencyLevelClick: function(id){ //点击编辑紧急程度
+							app.dialogEditEmergencyLevelVisible = true
+							app.designEmergencyLevelIdModalInput = id
+							var ajaxData = {}
+							ajaxData.projectId = id
+							$.ajax({
+								data: ajaxData,
+								type: "GET",
+								url: "/crud/project/findByProjectId",
+								success: function (result) {
+									if(result.code == 200){
+										app.emergencyLevelModalInput = result.data.emergencyLevel
 									}else{
 										console.log("findByProjectId 返回值失败")
 									}
@@ -435,7 +474,7 @@
 					$.ajax({
 						data: ajaxData,
 						type: "GET",
-						url: "/crud/project/editDesignPhase",
+						url: "/crud/projectSummary/editDesignPhase",
 						success: function (result) {
 							if(result.code == 200){
 								app.dialogEditDesignPhaseVisible = false
@@ -447,6 +486,33 @@
 
 							}else{
 								console.log("editDesignPhase 返回值失败")
+							}
+						}
+					})
+				}
+
+				/***
+				 * 编辑紧急程度
+				 * */
+				function editEmergencyLevelAjaxFunction(that) {
+					var ajaxData = {}
+					ajaxData.projectId = app.designEmergencyLevelIdModalInput
+					ajaxData.emergencyLevel = encodeURI(app.emergencyLevelModalInput)
+					$.ajax({
+						data: ajaxData,
+						type: "GET",
+						url: "/crud/project/editEmergencyLevel",
+						success: function (result) {
+							if(result.code == 200){
+								app.dialogEditEmergencyLevelVisible = false
+								findProjectBySearchKeyWordAndDeptId(app.currentPage, app.pageSize)
+								that.$message({
+									message: '紧急程度编辑成功',
+									type: 'success'
+								});
+
+							}else{
+								console.log("editEmergencyLevelAjaxFunction 返回值失败")
 							}
 						}
 					})
