@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -155,6 +156,18 @@ public class UserController {
         User user = userMapper.findById(id);
         result.code = 200;
         result.setData(user);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/user/updateUserTripStateByUsername")
+    public BaseResponse<User> updateUserTripStateByUsername(HttpServletRequest request) throws Exception{
+        BaseResponse<User> result = new BaseResponse<>();
+        String username = URLDecoder.decode(String.valueOf(request.getParameter("username")), "UTF-8");
+        String tripState = URLDecoder.decode(String.valueOf(request.getParameter("tripState")).replace(",", "-"), "UTF-8");
+        userMapper.updateUserTripStateByUsername(username, tripState);
+        result.code = 200;
+        result.setData(null);
         return result;
     }
 

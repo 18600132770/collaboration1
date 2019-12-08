@@ -71,9 +71,24 @@
 
 
 	<div id="app">
-		<div class="dsource-wrap" style="margin-top: 5px">
+		<div class="dsource-wrap" style="margin-top: 5px;">
+
+			<!--<el-scrollbar class="dictionary-l" style=" width: 200px">-->
+				<!--<ul class="manager-nav dictionary-nav">-->
+					<!--<li class="m-a">-->
+						<!--<svg class="icon" aria-hidden="true">-->
+							<!--<use xlink:href="#icon-hh2"></use>-->
+						<!--</svg>-->
+
+						<!--<ul class="manager-sec" v-for="project, key in projects" :key="key">-->
+							<!--<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>-->
+						<!--</ul>-->
+					<!--</li>-->
+				<!--</ul>-->
+			<!--</el-scrollbar>-->
+
 			<!-- 左侧  -->
-			<el-scrollbar class="dictionary-l">
+			<el-scrollbar class="dictionary-l" style=" width: 200px">
 				<ul class="manager-nav dictionary-nav">
 					<li class="m-a">
 						<svg class="icon" aria-hidden="true">
@@ -86,27 +101,27 @@
 				</ul>
 			</el-scrollbar>
 
-			<el-scrollbar class="dictionary-l" style="width: 50px; border:0;margin-top: 10px">
+			<el-scrollbar class="dictionary-l" style="width: 120px; border:0;margin-top: 0px; background-color: #f4f3fb" >
 				<!--<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
 					<!--<el-radio-button :label="false">展开</el-radio-button>-->
 					<!--<el-radio-button :label="true">收起</el-radio-button>-->
 				<!--</el-radio-group>-->
 				<el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse">
 					<el-menu-item index="1">
-						<i class="el-icon-circle-plus" @click="addTaskAssignmentClick"></i>
+						<i class="el-icon-circle-plus" @click="addTaskAssignmentClick" style="font-size: 15px">添加任务</i>
 						<span slot="title" @click="addTaskAssignmentClick">添加任务</span>
 					</el-menu-item>
 					<el-menu-item index="2">
-						<i class="el-icon-s-fold" @click="showPreviousProfileDialog"></i>
+						<i class="el-icon-s-fold" @click="showPreviousProfileDialog" style="font-size: 15px">上序资料</i>
 						<span slot="title" @click="showPreviousProfileDialog">上序资料</span>
 					</el-menu-item>
 					<el-menu-item index="3">
-						<i class="el-icon-s-unfold" @click="showNextProfessionProfileDialog"></i>
+						<i class="el-icon-s-unfold" @click="showNextProfessionProfileDialog" style="font-size: 15px">提下序</i>
 						<span slot="title" @click="showNextProfessionProfileDialog">提下序</span>
 					</el-menu-item>
 					<el-menu-item index="4">
-						<i class="el-icon-document" @click="openProfileTreeDialog"></i>
-						<span slot="title" @click="openProfileTreeDialog">专业项目文件</span>
+						<i class="el-icon-document" @click="openProfileTreeDialog" style="font-size: 15px">专业文件</i>
+						<span slot="title" @click="openProfileTreeDialog">专业文件</span>
 					</el-menu-item>
 				</el-menu>
 
@@ -205,10 +220,8 @@
 					<div :hidden="flowChartTableHidden" style="margin-top: 20px">
 						<ul>
 							<li v-for="taskAssignmentData, index in taskAssignmentListData" :key="index">
-
-								{{taskAssignmentData.taskName}}
-
 								<el-steps :active="taskAssignmentData.finishedLevel" align-center>
+									<el-link type="primary" style="width: 150px; color: #fb2e8c; font-size: 15px">{{taskAssignmentData.taskName}}</el-link>
 									<el-step :title="taskAssignmentData.designer" @click.native="designerReviewProcessClick(taskAssignmentData.id)" description="设计"></el-step>
 									<el-step :title="taskAssignmentData.reviewer" @click.native="reviewerReviewProcessClick(taskAssignmentData.id)" description="复核"></el-step>
 									<el-step :title="taskAssignmentData.inspector" @click.native="inspectorReviewProcessClick(taskAssignmentData.id)" description="审核"></el-step>
@@ -1372,6 +1385,38 @@
 				}
 			}
 		})
+
+		/**
+		 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
+		 */
+		function findAllProjectSummary(){
+			var ajaxData = {}
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/projectSummary/findAll",
+				success: function (result) {
+					if(result.code == 200){
+						var projectsSummaryLiShow = result.data
+						for(var i = 0; i < projectsSummaryLiShow.length; i++){
+							if(i == 0){
+								app.currentProjectSummaryId = projectsSummaryLiShow[i].id
+								projectsSummaryLiShow[i].deltag = 'm-a cur'
+							}else{
+								projectsSummaryLiShow[i].deltag = ''
+							}
+						}
+						app.projects=projectsSummaryLiShow
+						findProjectSummaryById();//按照总项目id查找总项目详细信息
+						findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
+
+					}else{
+						console.log("返回值失败")
+					}
+
+				}
+			})
+		}
 
 
 

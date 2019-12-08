@@ -60,4 +60,10 @@
         SELECT * FROM user where id = #{id}
     </select>
 
+    <insert id="updateUserTripStateByUsername">
+        update user set
+            tripState = #{tripState}, updateTime = now()
+         where username = #{username}
+    </insert>
+
 </mapper>

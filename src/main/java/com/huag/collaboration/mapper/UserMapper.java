@@ -51,4 +51,12 @@ public interface UserMapper {
      */
     User findById(int id);
 
+    /**
+     * 根据人名修改出差状态
+     * @param username
+     * @param tripState
+     * @return
+     */
+    int updateUserTripStateByUsername(@Param("username")String username, @Param("tripState")String tripState);
+
 }

@@ -71,13 +71,17 @@
 						</ul>
 					</el-scrollbar>
 
-					<el-scrollbar class="dictionary-l" style="width: 50px; border:0;margin-top: 0px">
-						<el-menu default-active="1-4-1" class="el-menu-vertical-demo"  :collapse="isCollapse">
+					<el-scrollbar class="dictionary-l" style="width: 120px; border:0;margin-top: 0px">
+						<el-menu default-active="1-4-1" class="el-menu-vertical-demo"  :collapse="isCollapse" >
 							<el-menu-item index="1">
-								<i class="el-icon-circle-plus" @click="addProjectClick"></i>
-								<span slot="title" @click="addProjectClick">新增项目</span>
+								<el-button type="primary" style="width: 100px" @click="addProjectClick">新增项目</el-button>
 							</el-menu-item>
 						</el-menu>
+
+						<!--<el-menu-item index="2">-->
+							<!--<i class="el-icon-menu" @click="addProjectClick"></i>-->
+							<!--<span slot="title">导航二</span>-->
+						<!--</el-menu-item>-->
 
 					</el-scrollbar>
 
