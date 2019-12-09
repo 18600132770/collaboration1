@@ -9,7 +9,7 @@
         INSERT INTO
             profile(name, url, projectId, createUser, createTime, updateTime, deltag)
          VALUES
-             (#{name}, #{url}, #{projectId}, #{createUser}, #{createTime}, #{updateTime}, #{deltag})
+             (#{name}, #{url}, #{projectId}, #{createUser}, now(), now(), #{deltag})
     </insert>
 
     <select id="findById" resultType="com.huag.collaboration.entities.Profile">

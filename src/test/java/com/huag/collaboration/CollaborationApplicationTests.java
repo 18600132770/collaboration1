@@ -10,6 +10,7 @@ import com.huag.collaboration.entities.User;
 import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.mapper.*;
 import com.huag.collaboration.utils.DateUtils;
+import com.huag.collaboration.utils.OSSUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -258,6 +259,11 @@ public class CollaborationApplicationTests {
     public void test17(){
         long round = Math.round(1.0 / 7 * 100);
         System.out.println(round);
+    }
+
+    @Test
+    public void test18() throws Exception{
+        OSSUtils.getFileData("profileTree/38/Hadoop学习笔记.txt");
     }
 
 }

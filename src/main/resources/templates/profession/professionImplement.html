@@ -11,16 +11,6 @@
 
 	<title>中国知网大数据融合应用平台</title>
 
-	<!--<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">-->
-	<!--<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">-->
-	<!--<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">-->
-	<!--<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">-->
-	<!--<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">-->
-	<!--<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">-->
-	<!--<link href="asserts/css/axure_rp_page.css" th:href="@{/asserts/css/axure_rp_page.css}" rel="stylesheet">-->
-	<!--<link href="asserts/css/default.css" th:href="@{/asserts/css/default.css}" rel="stylesheet">-->
-	<!--<link href="asserts/css/reset.css" th:href="@{/asserts/css/reset.css}" rel="stylesheet">-->
-
 	<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
 	<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
 	<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
@@ -349,7 +339,8 @@
 						<template slot-scope="scope"><span>{{ scope.row.content }}</span></template>
 					</el-table-column>
 					<el-table-column  label="提的文件名">
-						<template slot-scope="scope"><span style="white-space: pre-line">{{ scope.row.fileName }}</span></template>
+							<template slot-scope="scope" @click="download()"><span style="white-space: pre-line">{{ scope.row.fileName }}</span></template>
+
 					</el-table-column>
 					<el-table-column  label="上传日期">
 						<template slot-scope="scope"><span>{{ scope.row.uploadDate }}</span></template>
@@ -442,15 +433,6 @@
 
 			<!--专业项目文件-->
 			<el-dialog title="专业项目文件" :visible.sync="profileTreeDialogVisible" width="30%">
-				<!--<el-form ref="form" :model="form" label-width="110px">-->
-					<!--<el-upload-->
-							<!--class="upload-demo"-->
-							<!--:action="'/crud/profile/uploadFile?projectId=' + projectId"-->
-							<!--:on-change="handleChange"-->
-							<!--:file-list="fileList">-->
-						<!--<el-button size="small" type="primary">点击上传</el-button>-->
-					<!--</el-upload>-->
-
 				<form action='saveFile' enctype='multipart/form-data' method='post' id="fileUpload1">
 					<el-upload class="upload-demo" action="saveFile" id="filename1" name='file' ref="upload" :auto-upload='false'
 								   :on-change='fileChange1' accept="">
@@ -462,7 +444,9 @@
 							</a>
 						</el-upload>
 				</form>
-				<!--</el-form>-->
+				<div  role="tablist" v-for="profile, key in fileList" :key="key">
+					<el-link type="primary" @click="downloadFile(profile.url, profile.name)" style="color: #00a0e8">{{profile.name}}</el-link>
+				</div>
 			</el-dialog>
 
 			<!-- 添加上序文件Modal -->
@@ -989,6 +973,7 @@
 						processData: false,
 						success: function (result) {
 							if (result.code == 200) {
+								findFilesByProjectId()
 							}else{
 							}
 						},
@@ -997,6 +982,9 @@
 						}
 					});
 				},
+				downloadFile: function(ossFileUrl, name){
+					downloadFunction(ossFileUrl, name)
+				}
 
 			}
 
@@ -1136,6 +1124,7 @@
 				success: function (result) {
 					if(result.code == 200){
 						app.previousProfileTableData = result.data
+						console.log(result.data)
 					}else{
 						console.log("findPreviousProfile 返回值失败")
 					}
@@ -1418,6 +1407,40 @@
 			})
 		}
 
+		/**
+		 * 下载
+		 */
+		function downloadFunction(ossFileUrl, name) {
+			var url = '/crud/previousProfile/dwnSavedFile?fileName=' + encodeURI(ossFileUrl);
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', url, true);        // 也可以使用POST方式，根据接口
+			// xhr.responseType = "blob";    // 返回类型blob
+			xhr.responseType = "text";    // 返回类型blob
+			// 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+			xhr.onload = function () {
+				// 请求完成
+				if (this.status === 200) {
+					// var blob = this.response;
+					let res = xhr.responseText;
+					// let blob = new Blob([res], {type: 'text/xml'});
+					let blob = new Blob([res], {type: 'text'});
+					var reader = new FileReader();
+					//TODO 文件下载不能下pdf、dwg文件
+					reader.readAsDataURL(blob);    // 转换为base64，可以直接放入a表情href
+					reader.onload = function (e) {
+						// 转换完成，创建一个a标签用于下载
+						var a = document.createElement('a');
+						a.download = name;
+						a.href = e.target.result;
+						$("body").append(a);    // 修复firefox中无法触发click
+						a.click();
+						$(a).remove();
+					}
+				}
+			};
+			// 发送ajax请求
+			xhr.send()
+		}
 
 
 

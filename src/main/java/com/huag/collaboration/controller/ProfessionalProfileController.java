@@ -9,6 +9,8 @@ import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfessionalProfileMapper;
 import com.huag.collaboration.mapper.ProfileMapper;
 import com.huag.collaboration.mapper.ProjectMapper;
+import com.huag.collaboration.utils.OSSUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 专业文件
@@ -242,6 +247,30 @@ public class ProfessionalProfileController {
         return result;
     }
 
+
+    /**
+     * 下载文件
+     * @param request
+     * @param response
+     */
+    @ResponseBody
+    @RequestMapping(value = "/previousProfile/dwnSavedFile")
+    public void dwnSavedFile(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String fileName = request.getParameter("fileName");
+            fileName = URLDecoder.decode(fileName, "UTF-8");
+            String fileData = OSSUtils.getFileData(fileName);
+            InputStream is = new ByteArrayInputStream(fileData.getBytes());
+            OutputStream os = null;
+            os = response.getOutputStream();
+            IOUtils.copy(is, os);
+            response.flushBuffer();
+            IOUtils.closeQuietly(os);
+            IOUtils.closeQuietly(is);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

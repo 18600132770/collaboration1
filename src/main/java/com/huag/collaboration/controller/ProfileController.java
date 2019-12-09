@@ -62,9 +62,11 @@ public class ProfileController {
         Profile profile = new Profile();
         profile.setName(filename);
         profile.setProjectId(Integer.valueOf(projectId));
+        String oosFileUrl = "profileTree/" + projectId + "/" + filename;
+        profile.setUrl(oosFileUrl);
         profileMapper.insert(profile);
         String str = new String(content, StandardCharsets.UTF_8);
-        OSSUtils.uploadString("profileTree/" + projectId + "/" + filename, str);
+        OSSUtils.uploadString(oosFileUrl, str);
         result.code = 200;
         result.setData(null);
         return result;
