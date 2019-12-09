@@ -26,7 +26,7 @@ public interface UserProjectMapper {
      * @param usernameList
      * @return
      */
-    List<UserProjectMapper> findUserProjectsByDeptIdAndRoleWhereUsersNotIn(@Param("departmentId") Integer department, @Param("usernameArray") String[] usernameList, @Param("selectUserRole") String selectUserRole);
+    List<UserProjectMapping> findUserProjectsByDeptIdAndRoleWhereUsersNotIn(@Param("departmentId") Integer department, @Param("usernameArray") String[] usernameList, @Param("selectUserRole") String selectUserRole);
 
     /**
      * 查找本部门能担任role(设计、复核、审核、审定)的工程师

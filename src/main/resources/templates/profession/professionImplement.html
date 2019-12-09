@@ -93,6 +93,9 @@
 
 			<el-scrollbar class="dictionary-l" style="width: 120px; border:0;margin-top: 0px; background-color: #f4f3fb" >
 				<el-input hidden="true"  v-model="pageSizeTaskAssignmentListData"  style="height: 0px"></el-input>
+				<el-input hidden="true"  v-model="pageSizeUserProjectsTableData"  style="height: 0px"></el-input>
+				<el-input hidden="true"  v-model="pageSizepreviousProfileTableData"  style="height: 0px"></el-input>
+				<el-input hidden="true"  v-model="pageSizeNextProfessionProfileTableData"  style="height: 0px"></el-input>
 				<!--<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
 					<!--<el-radio-button :label="false">展开</el-radio-button>-->
 					<!--<el-radio-button :label="true">收起</el-radio-button>-->
@@ -309,13 +312,13 @@
 					</el-table-column>
 				</el-table>
 				<el-pagination class="txtCenter"
-							   @size-change="handleSizeChange"
-							   @current-change="handleCurrentChange"
-							   :current-page.sync="currentPage"
+							   @size-change="handleSizeChangeUserProjectsTableData"
+							   @current-change="handleCurrentChangeUserProjectsTableData"
+							   :current-page.sync="currentPageUserProjectsTableData"
 							   :page-sizes="[10,20,30,50]"
 							   :page-size="100"
 							   layout=" sizes, prev, pager, next"
-							   :total="1000">
+							   :total="totalUserProjectsTableData">
 				</el-pagination>
 			</el-dialog>
 
@@ -364,13 +367,13 @@
 
 				</el-table>
 				<el-pagination class="txtCenter"
-							   @size-change="handleSizeChange"
-							   @current-change="handleCurrentChange"
-							   :current-page.sync="currentPage"
+							   @size-change="handleSizeChangepreviousProfileTableData"
+							   @current-change="handleCurrentChangepreviousProfileTableData"
+							   :current-page.sync="currentPagepreviousProfileTableData"
 							   :page-sizes="[10,20,30,50]"
 							   :page-size="100"
 							   layout=" sizes, prev, pager, next"
-							   :total="1000">
+							   :total="totalpreviousProfileTableData">
 				</el-pagination>
 			</el-dialog>
 
@@ -422,13 +425,13 @@
 					</el-table-column>
 				</el-table>
 				<el-pagination class="txtCenter"
-							   @size-change="handleSizeChange"
-							   @current-change="handleCurrentChange"
-							   :current-page.sync="currentPage"
+							   @size-change="handleSizeChangeNextProfessionProfileTableData"
+							   @current-change="handleCurrentChangeNextProfessionProfileTableData"
+							   :current-page.sync="currentPageNextProfessionProfileTableData"
 							   :page-sizes="[10,20,30,50]"
 							   :page-size="100"
 							   layout=" sizes, prev, pager, next"
-							   :total="total">
+							   :total="totalNextProfessionProfileTableData">
 				</el-pagination>
 			</el-dialog>
 
@@ -577,9 +580,18 @@
 				validationerOpioionDisable: true,
 				isCollapse: true,
 				currentPageTaskAssignmentListData: 1,
-				currentPage: 1,
 				totalTaskAssignmentListData: 0,
 				pageSizeTaskAssignmentListData: 10,
+				currentPageUserProjectsTableData: 1,
+				totalUserProjectsTableData: 0,
+				pageSizeUserProjectsTableData: 10,
+				currentPagepreviousProfileTableData: 1,
+				totalpreviousProfileTableData: 0,
+				pageSizepreviousProfileTableData: 10,
+				currentPageNextProfessionProfileTableData: 1,
+				totalNextProfessionProfileTableData: 0,
+				pageSizeNextProfessionProfileTableData: 10,
+				currentPage: 1,
 				total: 0,
 				previousProfileTabId: 0,
 				nextProfessionProfileTabId: 0,
@@ -667,6 +679,36 @@
 					console.log(`当前页: ${val}`);
 					app.currentPageTaskAssignmentListData = val
 					findByProjectId()
+				},
+				handleSizeChangeUserProjectsTableData(val) {
+					console.log(`每页 ${val} 条`);
+					app.pageSizeUserProjectsTableData = val
+					findUserProjectsByDeptIdAndRole()
+				},
+				handleCurrentChangeUserProjectsTableData(val) {
+					console.log(`当前页: ${val}`);
+					app.currentPageUserProjectsTableData = val
+					findUserProjectsByDeptIdAndRole()
+				},
+				handleSizeChangepreviousProfileTableData(val) {
+					console.log(`每页 ${val} 条`);
+					app.pageSizepreviousProfileTableData = val
+					findPreviousProfile()
+				},
+				handleCurrentChangepreviousProfileTableData(val) {
+					console.log(`当前页: ${val}`);
+					app.currentPagepreviousProfileTableData = val
+					findPreviousProfile()
+				},
+				handleSizeChangeNextProfessionProfileTableData(val) {
+					console.log(`每页 ${val} 条`);
+					app.pageSizeNextProfessionProfileTableData = val
+					findNextProfessionProfile()
+				},
+				handleCurrentChangeNextProfessionProfileTableData(val) {
+					console.log(`当前页: ${val}`);
+					app.currentPageNextProfessionProfileTableData = val
+					findNextProfessionProfile()
 				},
 				handleSizeChange(val) {
 					console.log(`每页 ${val} 条`);
@@ -1054,13 +1096,18 @@
 			var ajaxData = {}
 			ajaxData.departmentId = app.departmentId
 			ajaxData.selectUserRole = app.selectUserRole
+			ajaxData.currentPage = app.currentPageUserProjectsTableData
+			ajaxData.pageSize = app.pageSizeUserProjectsTableData
 			$.ajax({
 				data: ajaxData,
 				type: "GET",
 				url: "/crud/userProject/findUserProjectsByDeptIdAndRole",
 				success: function (result) {
 					if(result.code == 200){
-						app.userProjectsTableData=result.data
+						app.userProjectsTableData=result.data.list
+						app.totalUserProjectsTableData = result.data.totalCount
+						console.log(result.data.totalCount)
+						console.log(result.data.list)
 					}else{
 						console.log("findUserProjectsByDeptIdAndRole 返回值失败")
 					}
@@ -1141,8 +1188,8 @@
 				url: url,
 				success: function (result) {
 					if(result.code == 200){
-						app.previousProfileTableData = result.data
-						console.log(result.data)
+						app.previousProfileTableData = result.data.list
+						app.totalpreviousProfileTableData=result.data.totalCount
 					}else{
 						console.log("findPreviousProfile 返回值失败")
 					}
@@ -1169,7 +1216,9 @@
 				url: url,
 				success: function (result) {
 					if(result.code == 200){
-						app.nextProfessionProfileTableData = result.data
+						app.nextProfessionProfileTableData = result.data.list
+						app.totalNextProfessionProfileTableData = result.data.list
+
 					}else{
 						console.log("findNextProfessionProfile 返回值失败")
 					}

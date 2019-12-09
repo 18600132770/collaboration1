@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.TaskAssignment;
 import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.entities.query.BaseResponse;
@@ -152,8 +153,11 @@ public class UserProjectController {
      */
     @ResponseBody
     @RequestMapping(value = "/userProject/findUserProjectsByDeptIdAndRole")
-    public BaseResponse<List<UserProjectMapping>> findUserProjectsByDeptIdAndRole(HttpServletRequest request) throws Exception {
-        BaseResponse<List<UserProjectMapping>> result = new BaseResponse<>();
+    public BaseResponse<Object> findUserProjectsByDeptIdAndRole(HttpServletRequest request) throws Exception {
+        BaseResponse<Object> result = new BaseResponse<>();
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
+
         String departmentId = String.valueOf(request.getParameter("departmentId"));
         String selectUserRole = String.valueOf(request.getParameter("selectUserRole"));
 
@@ -180,10 +184,16 @@ public class UserProjectController {
         usernameList.addAll(set);
         String[] usernameArray = new String[usernameList.size()];
         usernameList.toArray(usernameArray);
-        List<UserProjectMapper> userWithoutProjectsWhereUsersNotIn = userProjectMapper.findUserProjectsByDeptIdAndRoleWhereUsersNotIn(Integer.valueOf(departmentId), usernameArray, selectUserRole);
+        List<UserProjectMapping> userWithoutProjectsWhereUsersNotIn = userProjectMapper.findUserProjectsByDeptIdAndRoleWhereUsersNotIn(Integer.valueOf(departmentId), usernameArray, selectUserRole);
         userProjects.addAll((Collection)userWithoutProjectsWhereUsersNotIn);
-        result.setData(userProjects);
+
+        long total = userProjects.size();
+        List<UserProjectMapping> list =  userProjects.subList((currentPage-1)*pageSize, currentPage*pageSize > userProjects.size()?userProjects.size():currentPage*pageSize);
+
+        PageBaseResponse response = new PageBaseResponse(list, currentPage, pageSize, pageSize, total);
+
         result.code = 200;
+        result.setData(response);
         return result;
 
     }

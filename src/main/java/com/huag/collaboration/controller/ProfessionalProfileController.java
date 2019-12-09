@@ -5,11 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.ProfessionalProfile;
 import com.huag.collaboration.entities.Profile;
 import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.base.PageBaseResponse;
+import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfessionalProfileMapper;
 import com.huag.collaboration.mapper.ProfileMapper;
 import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.utils.OSSUtils;
+import com.huag.collaboration.utils.RequestUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -63,14 +66,17 @@ public class ProfessionalProfileController {
      */
     @ResponseBody
     @RequestMapping(value = "/previousProfile/findMyReceivedPreviousProfile")
-    public BaseResponse<List<ProfessionalProfile>> findMyReceivedPreviousProfile(HttpServletRequest request){
-        BaseResponse<List<ProfessionalProfile>> result = new BaseResponse<>();
+    public BaseResponse<Object> findMyReceivedPreviousProfile(HttpServletRequest request){
+        BaseResponse<Object> result = new BaseResponse<>();
         String projectId = request.getParameter("projectId");
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
         List<ProfessionalProfile> myReceivedPreviousProfile = professionalProfileMapper.findMyReceivedPreviousProfile(Integer.valueOf(projectId));
-        System.out.println(projectId);
-        System.out.println(myReceivedPreviousProfile);
+        long total = myReceivedPreviousProfile.size();
+        List<ProfessionalProfile> list =  myReceivedPreviousProfile.subList((currentPage-1)*pageSize, currentPage*pageSize > myReceivedPreviousProfile.size()?myReceivedPreviousProfile.size():currentPage*pageSize);
+        PageBaseResponse response = new PageBaseResponse(list, currentPage, pageSize, pageSize, total);
         result.code = 200;
-        result.setData(myReceivedPreviousProfile);
+        result.setData(response);
         return result;
     }
 
@@ -81,12 +87,18 @@ public class ProfessionalProfileController {
      */
     @ResponseBody
     @RequestMapping(value = "/previousProfile/findMyInitiatedPreviousProfile")
-    public BaseResponse<List<ProfessionalProfile>> findMyInitiatedPreviousProfile(HttpServletRequest request){
-        BaseResponse<List<ProfessionalProfile>> result = new BaseResponse<>();
+    public BaseResponse<Object> findMyInitiatedPreviousProfile(HttpServletRequest request){
+        BaseResponse<Object> result = new BaseResponse<>();
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
         String projectId = request.getParameter("projectId");
         List<ProfessionalProfile> myReceivedPreviousProfile = professionalProfileMapper.findMyInitiatedPreviousProfile(Integer.valueOf(projectId));
+
+        long total = myReceivedPreviousProfile.size();
+        List<ProfessionalProfile> list =  myReceivedPreviousProfile.subList((currentPage-1)*pageSize, currentPage*pageSize > myReceivedPreviousProfile.size()?myReceivedPreviousProfile.size():currentPage*pageSize);
+        PageBaseResponse response = new PageBaseResponse(list, currentPage, pageSize, pageSize, total);
         result.code = 200;
-        result.setData(myReceivedPreviousProfile);
+        result.setData(response);
         return result;
     }
 
@@ -97,12 +109,17 @@ public class ProfessionalProfileController {
      */
     @ResponseBody
     @RequestMapping(value = "/previousProfile/findMySubmitProfileToNextProfession")
-    public BaseResponse<List<ProfessionalProfile>> findMySubmitProfileToNextProfession(HttpServletRequest request){
-        BaseResponse<List<ProfessionalProfile>> result = new BaseResponse<>();
+    public BaseResponse<Object> findMySubmitProfileToNextProfession(HttpServletRequest request){
+        BaseResponse<Object> result = new BaseResponse<>();
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
         String projectId = request.getParameter("projectId");
         List<ProfessionalProfile> myReceivedPreviousProfile = professionalProfileMapper.findMySubmitProfileToNextProfession(Integer.valueOf(projectId));
+        long total = myReceivedPreviousProfile.size();
+        List<ProfessionalProfile> list =  myReceivedPreviousProfile.subList((currentPage-1)*pageSize, currentPage*pageSize > myReceivedPreviousProfile.size()?myReceivedPreviousProfile.size():currentPage*pageSize);
+        PageBaseResponse response = new PageBaseResponse(list, currentPage, pageSize, pageSize, total);
         result.code = 200;
-        result.setData(myReceivedPreviousProfile);
+        result.setData(response);
         return result;
     }
 
@@ -113,12 +130,17 @@ public class ProfessionalProfileController {
      */
     @ResponseBody
     @RequestMapping(value = "/previousProfile/findMyNeededProfileToNextProfession")
-    public BaseResponse<List<ProfessionalProfile>> findMyNeededProfileToNextProfession(HttpServletRequest request){
-        BaseResponse<List<ProfessionalProfile>> result = new BaseResponse<>();
+    public BaseResponse<Object> findMyNeededProfileToNextProfession(HttpServletRequest request){
+        BaseResponse<Object> result = new BaseResponse<>();
         String projectId = request.getParameter("projectId");
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
         List<ProfessionalProfile> myReceivedPreviousProfile = professionalProfileMapper.findMyNeededProfileToNextProfession(Integer.valueOf(projectId));
+        long total = myReceivedPreviousProfile.size();
+        List<ProfessionalProfile> list =  myReceivedPreviousProfile.subList((currentPage-1)*pageSize, currentPage*pageSize > myReceivedPreviousProfile.size()?myReceivedPreviousProfile.size():currentPage*pageSize);
+        PageBaseResponse response = new PageBaseResponse(list, currentPage, pageSize, pageSize, total);
         result.code = 200;
-        result.setData(myReceivedPreviousProfile);
+        result.setData(response);
         return result;
     }
 
