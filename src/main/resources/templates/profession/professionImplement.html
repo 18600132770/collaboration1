@@ -92,6 +92,7 @@
 			</el-scrollbar>
 
 			<el-scrollbar class="dictionary-l" style="width: 120px; border:0;margin-top: 0px; background-color: #f4f3fb" >
+				<el-input hidden="true"  v-model="pageSizeTaskAssignmentListData"  style="height: 0px"></el-input>
 				<!--<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
 					<!--<el-radio-button :label="false">展开</el-radio-button>-->
 					<!--<el-radio-button :label="true">收起</el-radio-button>-->
@@ -197,13 +198,13 @@
 							</el-table-column>
 						</el-table>
 						<el-pagination class="txtCenter"
-									   @size-change="handleSizeChange"
-									   @current-change="handleCurrentChange"
-									   :current-page.sync="currentPage"
+									   @size-change="handleSizeChangeTaskAssignmentListData"
+									   @current-change="handleCurrentChangeTaskAssignmentListData"
+									   :current-page.sync="currentPageTaskAssignmentListData"
 									   :page-sizes="[10,20,30,50]"
 									   :page-size="100"
 									   layout=" sizes, prev, pager, next"
-									   :total="1000">
+									   :total="totalTaskAssignmentListData">
 						</el-pagination>
 					</div>
 
@@ -427,7 +428,7 @@
 							   :page-sizes="[10,20,30,50]"
 							   :page-size="100"
 							   layout=" sizes, prev, pager, next"
-							   :total="1000">
+							   :total="total">
 				</el-pagination>
 			</el-dialog>
 
@@ -575,7 +576,11 @@
 				inspectorOpionionDisable: true,
 				validationerOpioionDisable: true,
 				isCollapse: true,
+				currentPageTaskAssignmentListData: 1,
 				currentPage: 1,
+				totalTaskAssignmentListData: 0,
+				pageSizeTaskAssignmentListData: 10,
+				total: 0,
 				previousProfileTabId: 0,
 				nextProfessionProfileTabId: 0,
 				taskAssignmentId: null,
@@ -653,6 +658,16 @@
 				isIndeterminate: true,
 			},
 			methods: {
+				handleSizeChangeTaskAssignmentListData(val) {
+					console.log(`每页 ${val} 条`);
+					app.pageSizeTaskAssignmentListData = val
+					findByProjectId()
+				},
+				handleCurrentChangeTaskAssignmentListData(val) {
+					console.log(`当前页: ${val}`);
+					app.currentPageTaskAssignmentListData = val
+					findByProjectId()
+				},
 				handleSizeChange(val) {
 					console.log(`每页 ${val} 条`);
 				},
@@ -1013,6 +1028,8 @@
 		 */
 		function findByProjectId() {
 			var ajaxData = {}
+			ajaxData.currentPage = app.currentPageTaskAssignmentListData
+			ajaxData.pageSize = app.pageSizeTaskAssignmentListData
 			ajaxData.projectId = app.projectId
 			$.ajax({
 				data: ajaxData,
@@ -1020,7 +1037,8 @@
 				url: "/crud/taskAssignment/findByProjectId",
 				success: function (result) {
 					if(result.code == 200){
-						app.taskAssignmentListData=result.data
+						app.taskAssignmentListData=result.data.list
+						app.totalTaskAssignmentListData=result.data.totalCount
 					}else{
 						console.log("updatePrincipal 返回值失败")
 					}
