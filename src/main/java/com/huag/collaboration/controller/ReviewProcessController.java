@@ -1,6 +1,7 @@
 package com.huag.collaboration.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Profile;
 import com.huag.collaboration.entities.ReviewProcess;
@@ -9,6 +10,7 @@ import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ReviewProcessMapper;
 import com.huag.collaboration.mapper.TaskAssignmentMapper;
 import com.huag.collaboration.utils.DateUtils;
+import com.huag.collaboration.utils.OSSUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -37,38 +40,58 @@ public class ReviewProcessController {
 
 
     /**
-     * TODO 只上传了文件名，还没上传文件内容
      * @param request
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/reviewProcess/uploadFile")
-    public BaseResponse<List<Profile>> upload(HttpServletRequest request){
+    public BaseResponse<List<Profile>> upload(HttpServletRequest request) throws Exception{
         BaseResponse<List<Profile>> result = new BaseResponse<>();
-
         MultipartHttpServletRequest multipartRequest = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
         MultipartFile file = multipartRequest.getFile("file");
         String filename = file.getOriginalFilename();
-
-        System.out.println(filename);
+        byte[] content = file.getBytes();
 
         String taskAssignmentId = String.valueOf(request.getParameter("taskAssignmentId"));
-        System.out.println("taskAssignmentId: " + taskAssignmentId);
+        String oosFileUrl = "reviewProcess/" + taskAssignmentId + "/" + filename;
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", filename);
+        jsonObject.put("url", oosFileUrl);
 
         List<ReviewProcess> reviewProcessList = reviewProcessMapper.findByTaskAssignmentId(Integer.valueOf(taskAssignmentId));
         if(reviewProcessList != null && reviewProcessList.size() > 0){
             ReviewProcess reviewProcess = reviewProcessList.get(0);
-            reviewProcess.setFileNames(reviewProcess.getFileNames() + "\n" + filename);
-            reviewProcessMapper.update(reviewProcess);
+            String fileField = reviewProcess.getFile();
+            if(StringUtils.isNotBlank(fileField)){
+                JSONArray jsonArray = JSONArray.parseArray(fileField);
+                jsonArray.add(jsonObject);
+                reviewProcess.setFile(jsonArray.toJSONString());
+                System.out.println(jsonArray.toJSONString());
+                reviewProcessMapper.update(reviewProcess);
+            }else{
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.add(jsonObject);
+                reviewProcess.setFile(jsonArray.toJSONString());
+                System.out.println(jsonArray.toJSONString());
+                reviewProcessMapper.update(reviewProcess);
+            }
+
         }else{
             ReviewProcess reviewProcess = new ReviewProcess();
-            reviewProcess.setFileNames(filename);
             reviewProcess.setDesignerCreateTime(DateUtils.getDateIn_yyyyMMddHHmmss());
             reviewProcess.setTaskAssignmentId(Integer.valueOf(taskAssignmentId));
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(jsonObject);
+            reviewProcess.setFile(jsonArray.toJSONString());
             reviewProcessMapper.insert(reviewProcess);
         }
 
-//        OSSUtils.uploadString("profileTree/" + projectId + "/" + filename, "测试数据，以后再用真实数据");
+        System.out.println("--------------------- 上传文件");
+        System.out.println(oosFileUrl);
+
+        String str = new String(content, StandardCharsets.UTF_8);
+        OSSUtils.uploadString(oosFileUrl, str);
 
         result.code = 200;
         result.setData(null);

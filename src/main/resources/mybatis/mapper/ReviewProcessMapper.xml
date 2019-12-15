@@ -8,11 +8,14 @@
     <insert id="insert" parameterType="com.huag.collaboration.entities.ReviewProcess" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
             reviewProcess(
+            file,
             fileNames, fileUrls, designerOpinion, designerCreateTime, reviewerOpioion, reviewerCreateTime,
             inspectorOpionion, inspectorCreateTime, validationerOpioion, validationerCreateTime, taskAssignmentId,
             deltag)
          VALUES
-             (#{fileNames}, #{fileUrls}, #{designerOpinion}, #{designerCreateTime}, #{reviewerOpioion}, #{reviewerCreateTime},
+             (
+             #{file},
+             #{fileNames}, #{fileUrls}, #{designerOpinion}, #{designerCreateTime}, #{reviewerOpioion}, #{reviewerCreateTime},
              #{inspectorOpionion}, #{inspectorCreateTime}, #{validationerOpioion}, #{validationerCreateTime}, #{taskAssignmentId},
              #{deltag})
     </insert>
@@ -27,6 +30,7 @@
 
     <insert id="update">
         update reviewProcess set
+        file = #{file},
         fileNames = #{fileNames}, fileUrls = #{fileUrls},
         designerOpinion = #{designerOpinion}, designerCreateTime = #{designerCreateTime},
         reviewerOpioion = #{reviewerOpioion}, reviewerCreateTime = #{reviewerCreateTime},

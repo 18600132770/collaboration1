@@ -46,7 +46,6 @@ public class ProfileController {
     }
 
     /**
-     * TODO 只上传了文件名，还没上传文件内容
      * @param request
      * @return
      */

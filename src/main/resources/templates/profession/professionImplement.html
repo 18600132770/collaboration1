@@ -511,15 +511,16 @@
 
 			<!-- 送审流程 -->
 			<el-dialog title="送审流程" :visible.sync="reviewProcessDialogVisible" width="50%">
-				<el-form ref="form" :model="form" label-width="110px" >
-					<el-upload
-							class="upload-demo"
-							:action="'/crud/reviewProcess/uploadFile?taskAssignmentId=' + taskAssignmentId"
-							:on-change="handleChange"
-							:file-list="reviewProcessFileNames">
+				<form action='saveReviewProcessFile' enctype='multipart/form-data' method='post' id="reviewProcessFileUpload">
+					<el-upload class="upload-demo" action="saveReviewProcessFile" id="filename1" name='file' ref="upload" :auto-upload='false'
+							   :on-change='reviewProcessFileChange' accept="">
 						<el-button size="small" type="primary" :disabled="designerOpinionDisable">点击上传</el-button>
 					</el-upload>
-				</el-form>
+				</form>
+				<div  role="tablist" v-for="profile, key in reviewProcessFileNames" :key="key">
+					<el-link type="primary" @click="downloadReviewProcessFile(profile.url, profile.name)" style="color: #00a0e8">{{profile.name}}</el-link>
+				</div>
+
 				<el-form ref="form" :model="form" label-width="110px">
 					<el-form-item label="设计意见">
 						<el-input type="textarea" v-model="reviewProcessData.designerOpinion" :disabled="designerOpinionDisable"></el-input>
@@ -1041,7 +1042,35 @@
 				},
 				downloadFile: function(ossFileUrl, name){
 					downloadFunction(ossFileUrl, name)
-				}
+				},
+				//下载送审流程文件
+				downloadReviewProcessFile: function(ossFileUrl, name){
+					downloadFunction(ossFileUrl, name)
+				},
+				//送审流程文件上传
+				reviewProcessFileChange: function () {
+					var form = document.getElementById("reviewProcessFileUpload");
+					var url = "/crud/reviewProcess/uploadFile?taskAssignmentId=" + app.taskAssignmentId
+					var postData = new FormData(form);
+					app.uploading = true;
+					$("#msg").html("处理中...");
+					$.ajax({
+						url: url,
+						type: "POST",
+						data: postData,
+						contentType: false,
+						processData: false,
+						success: function (result) {
+							if (result.code == 200) {
+								findReviewProcessByTaskAssignmentId()
+							}else{
+							}
+						},
+						error: function () {
+							alert("处理失败！");
+						}
+					});
+				},
 
 			}
 
@@ -1348,21 +1377,8 @@
 					if(result.code == 200){
 						if(result.data != null){
 							app.reviewProcessData = result.data
-
-							var reviewProcessFileNames = new Array()
-							var fileNames = result.data.fileNames
-							if(fileNames != null && fileNames != undefined && fileNames.length > 0){
-								var fileNameArray = result.data.fileNames.split("\n");
-								// var fileUrlArray = result.data.fileUrls.split("\n")
-
-								for(var i = 0; i< fileNameArray.length; i++){
-									var reviewProcessFile = {}
-									reviewProcessFile.name =fileNameArray[i]
-									reviewProcessFile.url = ""
-									reviewProcessFileNames.push(reviewProcessFile)
-								}
-								app.reviewProcessFileNames = reviewProcessFileNames
-							}
+							var reviewProcessFileNames = JSON.parse(result.data.file)
+							app.reviewProcessFileNames = reviewProcessFileNames
 						}
 
 

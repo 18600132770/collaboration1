@@ -1,5 +1,7 @@
 package com.huag.collaboration;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -264,6 +266,35 @@ public class CollaborationApplicationTests {
     @Test
     public void test18() throws Exception{
         OSSUtils.getFileData("profileTree/38/Hadoop学习笔记.txt");
+    }
+
+    @Test
+    public void test19(){
+        String jsonString = "[\n" +
+                "\t{\n" +
+                "\t\t\"name\": \"aa\",\n" +
+                "\t\t\"url\": \"url1\"\n" +
+                "\t},\n" +
+                "\t{\n" +
+                "\t\t\"name\": \"bb\",\n" +
+                "\t\t\"url\": \"url2\"\n" +
+                "\t},\n" +
+                "\t{\n" +
+                "\t\t\"name\": \"cc\",\n" +
+                "\t\t\"url\": \"url3\"\n" +
+                "\t}\n" +
+                "]";
+
+        JSONArray jsonArray = JSONArray.parseArray(jsonString);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "name1");
+        jsonObject.put("url", "urlsss");
+
+        boolean add = jsonArray.add(jsonObject);
+
+        System.out.println(jsonArray);
+
+
     }
 
 }

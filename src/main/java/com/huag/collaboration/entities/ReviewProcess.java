@@ -18,6 +18,8 @@ public class ReviewProcess {
     private String fileNames;
     private String fileUrls;
 
+    private String file;
+
     private String designerOpinion;//设计者意见
     private String designerCreateTime;
 
