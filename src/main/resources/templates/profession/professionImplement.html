@@ -124,6 +124,7 @@
 
 			<el-scrollbar class="dsource-r">
 
+
 				<nav class="navbar navbar-light bg-light">
 
 					<el-input hidden="true"  v-model="projectSummaryId" style="height: 0px" ></el-input>
@@ -134,6 +135,14 @@
 					<el-input hidden="true"  v-model="previousProfileTabId"  style="height: 0px"></el-input>
 					<el-input hidden="true"  v-model="nextProfessionProfileTabId"  style="height: 0px"></el-input>
 					<el-input hidden="true"  v-model="taskAssignmentId"  style="height: 0px"></el-input>
+
+					<label style="display: inline">项目编号：{{project.projectNum}}</label>
+					<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
+					<label style="margin-left: 50px; display: inline">项目阶段：{{project.designPhase}}</label>
+					<label style="margin-left: 50px; display: inline">开始时间：{{project.startTime}}</label>
+					<label style="margin-left: 50px; display: inline">截止时间：{{project.stopTime}}</label>
+					<label style="margin-left: 50px; display: inline">负责人：{{project.principal}}</label>
+					<label style="margin-left: 50px; display: inline">总工：{{project.chiefEngineer}}</label>
 
 				</nav>
 				<div class="ds-table-wrap" >
@@ -1083,6 +1092,7 @@
 
 		app.projects = projectList
 		app.projectSummaryId = projectList[0].projectSummaryId
+		app.currentProjectSummaryId = projectList[0].projectSummaryId
 
 		app.departmentId = departmentId
 
@@ -1093,6 +1103,7 @@
 		}
 
 		findByProjectId();//根据分项目查询该分项目下的任务分配情况
+		findProjectSummaryById()//查看项目详细信息
 
 		/**
 		 * 根据分项目查询该分项目下的任务分配情况
@@ -1525,6 +1536,26 @@
 			xhr.send()
 		}
 
+		/**
+		 * 查询项目信息
+		 */
+		function findProjectSummaryById(){
+			var ajaxData = {}
+			ajaxData.id = app.currentProjectSummaryId
+			$.ajax({
+				data: ajaxData,
+				type: "GET",
+				url: "/crud/projectSummary/findById/",
+				success: function (result) {
+					if(result.code == 200){
+						app.project=result.data
+					}else{
+						console.log("返回值失败 findProjectSummaryById")
+					}
+
+				}
+			})
+		}
 
 
 
