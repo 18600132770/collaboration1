@@ -3,7 +3,7 @@ spring:
     username: root
     password: huag123456
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://cdb-glzrfir0.bj.tencentcdb.com:10114/collaboration?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://cdb-2xpnnjxc.bj.tencentcdb.com:10252/collaboration?useSSL=false&serverTimezone=UTC
     type: com.alibaba.druid.pool.DruidDataSource
     #   数据源其他配置
     initialSize: 5
