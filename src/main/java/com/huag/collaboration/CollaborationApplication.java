@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ViewResolver;
 
 import java.util.Locale;
 
+
 @SpringBootApplication
 @MapperScan(value = "com.huag.collaboration.mapper")
 public class CollaborationApplication {
