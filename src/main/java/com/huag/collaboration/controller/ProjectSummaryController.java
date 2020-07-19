@@ -3,10 +3,12 @@ package com.huag.collaboration.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.ProjectEnum;
 import com.huag.collaboration.entities.ProjectSummary;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.ProjectSummaryMapper;
+import com.huag.collaboration.mapper.TaskAssignmentMapper;
 import com.huag.collaboration.utils.DateUtils;
 import com.huag.collaboration.utils.JSONUtils;
 import org.apache.commons.lang3.builder.ToStringExclude;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -36,6 +39,9 @@ public class ProjectSummaryController {
     @Autowired
     ProjectMapper projectMapper;
 
+    @Autowired
+    TaskAssignmentMapper taskAssignmentMapper;
+
     /**
      * ajax请求，查询所有数据
      * @param request
@@ -43,8 +49,9 @@ public class ProjectSummaryController {
      */
     @ResponseBody
     @RequestMapping(value = "/projectSummary/findAll")
-    public BaseResponse<List<ProjectSummary>> findAll(HttpServletRequest request){
-        BaseResponse<List<ProjectSummary>> result = new BaseResponse<>();
+    public BaseResponse<List<ProjectEnum>> findAll(HttpServletRequest request){
+        BaseResponse<List<ProjectEnum>> result = new BaseResponse<>();
+
         List<ProjectSummary> projectSummaryList = projectSummaryMapper.findAll();
         projectSummaryList.forEach(projectSummary ->{
             if(projectSummary.getStopTime() != null && projectSummary.getStartTime() != null){
@@ -52,9 +59,29 @@ public class ProjectSummaryController {
                 projectSummary.setLeftTime(dateDifferenceByDay + "");
             }
         });
-        System.out.println(projectSummaryList);
+        List<ProjectEnum> list = new ArrayList<ProjectEnum>();
+        projectSummaryList.forEach(projectSummary -> {
+            ProjectEnum projectEnum = new ProjectEnum();
+            projectEnum.setId(projectSummary.getId());
+            projectEnum.setProjectNum(projectSummary.getProjectNum());
+            projectEnum.setProjectName(projectSummary.getProjectName());
+            projectEnum.setDesignPhase(projectSummary.getDesignPhase());
+            projectEnum.setPrincipalId(projectSummary.getPrincipalId());
+            projectEnum.setPrincipal(projectSummary.getPrincipal());
+            projectEnum.setChiefEngineerId(projectSummary.getChiefEngineerId());
+            projectEnum.setChiefEngineer(projectSummary.getChiefEngineer());
+            projectEnum.setStartTime(projectSummary.getStartTime());
+            projectEnum.setStopTime(projectSummary.getStopTime());
+            projectEnum.setLeftTime(projectSummary.getLeftTime());
+            projectEnum.setCreateTime(projectSummary.getCreateTime());
+            projectEnum.setUpdateTime(projectSummary.getUpdateTime());
+            projectEnum.setDeltag(projectSummary.getDeltag());
+            projectEnum.setChildren(projectMapper.findProjectsByProjectSummaryId(projectSummary.getId()));
+            list.add(projectEnum);
+        });
+        System.out.println(list);
         result.code = 200;
-        result.setData(projectSummaryList);
+        result.setData(list);
         return result;
     }
 
