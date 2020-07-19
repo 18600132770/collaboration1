@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>首页</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <meta name="_csrf" th:content="${_csrf.token}" /> -->
+    <!-- default header name is X-CSRF-TOKEN spring security 避免ajax请求403-->
+    <!-- <meta name="_csrf_header" th:content="${_csrf.headerName}" /> -->
+    <!-- <script type="text/javascript">
+      var contextRoot = '[[@{/}]]'
+    </script> -->
+    <!-- import css -->
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css}"
+      href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css"
+    />
+
+    <link rel="stylesheet" th:href="@{/asserts/css/reset.css}" href="/asserts/css/reset.css">
+
+    <style type="text/css">
+      [v-cloak] {
+        /* display: none !important; */
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      #app {
+        height: calc(100% - 60px);
+      }
+      #appheader {
+        background: rgb(48, 49, 51);
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+      }
+      .top h3 {
+        width: 200px;
+        margin: 0 40px;
+        line-height: 60px;
+        font-size: 28px;
+        color: #ffffff;
+      }
+      .top-head {
+        color: #ffffff;
+        margin: 0 30px;
+        line-height: 60px;
+      }
+      .top .head-box {
+        display: flex;
+        align-items: center;
+      }
+      .head-box span {
+        margin: 0 5px;
+      }
+      .top a, .el-dropdown-menu a {
+        text-decoration: none;
+      }
+      .top .el-menu a {
+        display: block;
+        height: 60px;
+        line-height: 60px;
+      }
+      .body-wrap {
+        min-height: calc(100vh - 60px) !important;
+      }
+    </style>
+
+    <!-- <script th:src="@{/js/auth.js}"></script> -->
+  </head>
+  <body>
+    <div id="flw" style="height: 100%;">
+      <!-- <div class="index"> -->
+      <!-- 页头 -->
+      <div id="appheader" v-cloak th:include="/layout/header::header"></div>
+      <!-- 正文内容 -->
+      <div id="app" v-cloak layout:fragment="content"></div>
+      <!-- 页脚 -->
+      <!-- <div th:include="/share/footer::footer"></div> -->
+      <!-- </div> -->
+    </div>
+
+    <script
+      th:inline="javascript"
+      th:src="@{https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js}"
+      src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"
+    ></script>
+    <!-- <script th:src="@{/js/iconfont.js}"></script> -->
+    <script
+      th:inline="javascript"
+      th:src="@{https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js}"
+      src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"
+    ></script>
+    <script
+      th:inline="javascript"
+      th:src="@{https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/index.js}"
+      src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/index.js"
+    ></script>
+
+    <script th:inline="javascript" type="text/javascript">
+      // var showHeaderFlag = [[${showHeaderFlag}]];
+      // showHeaderFlag = showHeaderFlag||showHeaderFlag==null?true:false;
+      var appheader = new Vue({
+        el: '#appheader',
+        data: {
+          // showHeaderFlag: showHeaderFlag,
+          // currentUrl:[[${#request.getRequestURI()}]],//当前路由
+          autofocus: true,
+          isOpen: false,
+          search_active: false,
+          message: '',
+          searchword: '',
+          activeIndex: '0',
+          activeIndex2: '1'
+        },
+        methods: {
+          handleSelect () {},
+          searchResult() {
+            window.location.href = '/search?keyword=' + this.searchword
+          },
+          searchVoice() {
+            window.location.href = '/searchVoice?message=' + this.message
+          },
+        }
+      })
+    </script>
+
+    <!-- JS内容 -->
+    <div layout:fragment="jscontent"></div>
+  </body>
+  
+</html>

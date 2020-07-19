@@ -1,0 +1,65 @@
+#app .el-scrollbar__wrap {
+  overflow-x: hidden;
+}
+
+.dsource-wrap,
+.el-container {
+  height: 100%;
+}
+.el-aside {
+  /* background-color: #F2F2F4; */
+  height: 100%;
+  border-right: 1px solid #eeeeee;
+  box-sizing: border-box;
+}
+.manager-nav {
+  padding: 0 0 20px;
+  margin-top: 10px;
+}
+.manager-nav li {
+  height: 30px;
+  padding: 5px 30px;
+  line-height: 30px;
+  cursor: pointer;
+  border-bottom: 1px solid #eeeeee;
+}
+.manager-nav li.active {
+  background: #409eff;
+  color: #ffffff;
+}
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px;
+}
+.navbar label {
+  width: 250px;
+  height: 50px;
+}
+.ds-table-wrap {
+  padding: 0 30px 30px;
+}
+.txtCenter {
+  text-align: center;
+}
+.pagination {
+  margin: 15px;
+}
+.el-table a {
+  text-decoration: none;
+}
+.project-title {
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 10px 0 15px;
+  border-bottom: 1px solid #eeeeee;
+}
+.project-title > span {
+  font-weight: 600;
+}
+.table-operate {
+  display: flex;
+  justify-content: space-between;
+}

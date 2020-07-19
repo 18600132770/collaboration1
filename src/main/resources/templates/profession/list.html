@@ -1,540 +1,762 @@
 <!DOCTYPE html>
 <!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml"
-	  xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:v-on="http://www.w3.org/1999/xhtml"
+  xmlns:v-bind="http://www.w3.org/1999/xhtml"
+  layout:decorate="layout/index"
+>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="">
-		<meta name="author" content="">
+    <title>协同平台</title>
 
-		<title>协同平台</title>
+    <!-- <link
+      href="asserts/css/bootstrap.min.css"
+      th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}"
+      rel="stylesheet"
+    />
+    <link
+      href="asserts/css/dashboard.css"
+      th:href="@{/asserts/css/dashboard.css}"
+      rel="stylesheet"
+    />
+    <link
+      href="asserts/element2.10.1/index.css"
+      th:href="@{/asserts/element2.10.1/index.css}"
+      rel="stylesheet"
+    /> -->
+    <!-- <link
+      href="asserts/css/myCSS.css"
+      th:href="@{/asserts/css/myCSS.css}"
+      rel="stylesheet"
+    /> -->
+    <!-- <link
+      href="asserts/css/myManager.css"
+      th:href="@{/asserts/css/myManager.css}"
+      rel="stylesheet"
+    /> -->
+    <!-- <link
+      href="asserts/css/myCutWord.css"
+      th:href="@{/asserts/css/myCutWord.css}"
+      rel="stylesheet"
+		/> -->
+		<link href="asserts/css/new-style.css" th:href="@{/asserts/css/new-style.css}" rel="stylesheet">
+    <style>
+      .dictionary-l {
+        height: calc(100% - 51px);
+      }
+      /* .ds-table-wrap {
+				box-shadow: 0 0 8px 0 rgba(232,237,250,.6), 0 2px 4px 0 rgba(232,237,250,.5);
+			} */
+    </style>
+  </head>
 
-		<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
-		<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
-		<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
-		<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
-		<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
-		<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
-	</head>
+  <body>
+    <div id="flw">
+      <div layout:fragment="content">
+        <div class="dsource-wrap">
+          <el-container>
+            <el-aside width="250px">
+              <div class="project-title">
+                <span>项目列表</span>
+              </div>
+              <!-- 左侧  -->
+              <el-scrollbar class="dictionary-l">
+                <ul class="manager-nav dictionary-nav">
+                  <li
+                    class="m-a"
+                    v-for="project, key in projects"
+                    :key="key"
+                    @click="showProjectById(project.id)"
+                    :class="{'active': currentProjectSummaryId === project.id }"
+                  >
+                    <a :class="project.deltag">{{project.projectName}}</a>
+                  </li>
+                </ul>
+              </el-scrollbar>
+            </el-aside>
+            <el-main style="padding: 20px 30px;">
+              <el-scrollbar class="dsource-r">
+                <!-- <el-input
+									hidden="true"
+									v-model="pageSize"
+									style="height: 0px;"
+									v-show="false"
+								></el-input> -->
+								<div class="btn-group">
+									<el-button type="primary" size="small" @click="addProjectClick"
+                  >新增项目</el-button
+                >
+								</div>
+                <nav class="navbar navbar-light bg-light">
+                  <label style="display: inline-block;"
+                    >项目编号：{{project.projectNum}}</label
+                  >
+                  <label style="display: inline-block;"
+                    >项目名称：{{project.projectName}}</label
+                  >
+                  <label style="display: inline-block;"
+                    >项目阶段：{{project.designPhase}}</label
+                  >
+                  <label style="display: inline-block;"
+                    >开始时间：{{project.startTime}}</label
+                  >
+                  <label style="display: inline-block;"
+                    >截止时间：{{project.stopTime}}</label
+                  >
+                  <label style="display: inline-block;"
+                    >负责人：{{project.principal}}</label
+                  >
+                  <label style="display: inline-block;"
+                    >总工：{{project.chiefEngineer}}</label
+                  >
+                </nav>
 
-	<body>
-		<div id="flw">
+                <!-- <el-input
+									hidden="true"
+									v-model="currentProjectSummaryId"
+									v-show="false"
+								></el-input> -->
+                <div class="ds-table-wrap">
+                  <el-table
+                    style="width: 100%;"
+                    :data="tableData"
+                    class="x-table table-td0"
+                    stripe
+                    highlight
+                  >
+                    <el-table-column
+                      type="selection"
+                      width="55"
+                    ></el-table-column>
+                    <!--<el-table-column label="序号" width="60" type="index">-->
+                    <!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
+                    <!--</el-table-column>-->
+                    <el-table-column label="专业">
+                      <template slot-scope="scope"
+                        ><a
+                          target="_blank"
+                          :href="'/crud/profession/' + project.id + ',' + scope.row.id"
+                          >{{ scope.row.departmentName }}
+                        </a></template
+                      >
+                    </el-table-column>
+                    <!--<el-table-column label="专业审定">-->
+                    <el-table-column label="专业负责人">
+                      <template slot-scope="scope"
+                        ><span>{{ scope.row.principal }}</span></template
+                      >
+                    </el-table-column>
+                    <!--<el-table-column label="处审定">-->
+                    <el-table-column label="专业总工">
+                      <template slot-scope="scope"
+                        ><span>{{ scope.row.chiefEngineer }}</span></template
+                      >
+                    </el-table-column>
+                    <el-table-column label="状态">
+                      <template slot-scope="scope"
+                        ><span>{{ scope.row.state }}</span></template
+                      >
+                    </el-table-column>
+                  </el-table>
+                  <el-pagination
+                    class="txtCenter pagination"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-sizes="[10,20,30,50]"
+                    :page-size="100"
+                    layout=" sizes, prev, pager, next"
+                    :total="total"
+                    background
+                  >
+                  </el-pagination>
+                </div>
+              </el-scrollbar>
+            </el-main>
+          </el-container>
 
-			<div  id="topBar">
-				<el-menu
-						:default-active="activeIndex2"
-						class="el-menu-demo"
-						mode="horizontal"
-						@select="handleSelect"
-						background-color="#303133"
-						text-color="#fff"
-						active-text-color="#ffd04b">
-
-					<h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 550px;">协同平台</h1>
-
-					<el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
-					<el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
-					<el-menu-item index="3"><a th:href="@{/userProjects}" >人员工作信息</a></el-menu-item>
-					<el-menu-item index="4"><a th:href="@{/professions}" >专业协同</a></el-menu-item>
-					<el-menu-item index="5"><a th:href="@{/users}">人员信息管理</a></el-menu-item>
-					<el-menu-item index="6"><a th:href="@{/notices}">通知</a></el-menu-item>
-
-					<el-submenu index="7" style="margin-left: 600px">
-						<template slot="title">[[${session.loginUser}]]</template>
-						<el-menu-item index="7-1">修改密码</el-menu-item>
-						<el-menu-item index="7-2">退出登录</el-menu-item>
-						<el-menu-item index="7-3">其他</el-menu-item>
-					</el-submenu>
-
-				</el-menu>
-			</div>
-
-
-
-			<div id="app">
-				<div class="dsource-wrap" style="margin-top: 5px">
-					<!-- 左侧  -->
-					<el-scrollbar class="dictionary-l">
-
-						<ul class="manager-nav dictionary-nav">
-							<li class="m-a">
-								<svg class="icon" aria-hidden="true">
-									<use xlink:href="#icon-hh2"></use>
-								</svg>
-
-								<ul class="manager-sec" v-for="project, key in projects" :key="key">
-									<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>
-								</ul>
-							</li>
-						</ul>
-					</el-scrollbar>
-
-					<el-scrollbar class="dictionary-l" style="width: 120px; border:0;margin-top: 0px">
-						<el-menu default-active="1-4-1" class="el-menu-vertical-demo"  :collapse="isCollapse" >
-							<el-menu-item index="1">
-								<el-button type="primary" style="width: 100px" @click="addProjectClick">新增项目</el-button>
-							</el-menu-item>
-						</el-menu>
-
-						<!--<el-menu-item index="2">-->
-							<!--<i class="el-icon-menu" @click="addProjectClick"></i>-->
-							<!--<span slot="title">导航二</span>-->
-						<!--</el-menu-item>-->
-
-					</el-scrollbar>
-
-					<el-scrollbar class="dsource-r">
-						<nav class="navbar navbar-light bg-light">
-
-							<el-input hidden="true"  v-model="pageSize"  style="height: 0px"></el-input>
-
-							<label style="display: inline">项目编号：{{project.projectNum}}</label>
-							<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
-							<label style="margin-left: 50px; display: inline">项目阶段：{{project.designPhase}}</label>
-							<label style="margin-left: 50px; display: inline">开始时间：{{project.startTime}}</label>
-							<label style="margin-left: 50px; display: inline">截止时间：{{project.stopTime}}</label>
-							<label style="margin-left: 50px; display: inline">负责人：{{project.principal}}</label>
-							<label style="margin-left: 50px; display: inline">总工：{{project.chiefEngineer}}</label>
-
-						</nav>
-
-						<div class="ds-table-wrap" >
-
-							<el-input hidden="true"  v-model="currentProjectSummaryId"></el-input>
-
-							<el-table style="width: 100%;" :data="tableData" class="x-table table-td0">
-								<el-table-column type="selection" width="55"></el-table-column>
-								<!--<el-table-column label="序号" width="60" type="index">-->
-								<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
-								<!--</el-table-column>-->
-								<el-table-column label="专业">
-									<template slot-scope="scope"><a target="_blank" :href="'/crud/profession/' + project.id + ',' + scope.row.id">{{ scope.row.departmentName }} </a></template>
-								</el-table-column>
-								<!--<el-table-column label="专业审定">-->
-								<el-table-column label="专业负责人">
-									<template slot-scope="scope"><span>{{ scope.row.principal }}</span></template>
-								</el-table-column>
-								<!--<el-table-column label="处审定">-->
-								<el-table-column label="专业总工">
-									<template slot-scope="scope"><span>{{ scope.row.chiefEngineer }}</span></template>
-								</el-table-column>
-								<el-table-column  label="状态">
-									<template slot-scope="scope"><span>{{ scope.row.state }}</span></template>
-								</el-table-column>
-							</el-table>
-							<el-pagination class="txtCenter"
-										   @size-change="handleSizeChange"
-										   @current-change="handleCurrentChange"
-										   :current-page.sync="currentPage"
-										   :page-sizes="[10,20,30,50]"
-										   :page-size="100"
-										   layout=" sizes, prev, pager, next"
-										   :total="total">
-							</el-pagination>
-						</div>
-					</el-scrollbar>
-
-
-					<!-- 添加项目Modal -->
-					<el-dialog title="添加项目" :visible.sync="dialogAddProjectVisible" width="30%">
-						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">项目编号：</label>
-							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addProject.projectNum">
-						</div>
-						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">项目名称：</label>
-							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addProject.projectName">
-						</div>
-						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">设计阶段：</label>
-							<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addProject.designPhase">
-						</div>
-						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">开始时间：</label>
-							<el-date-picker	v-model="addProject.startTime" type="date" placeholder="选择日期"  style="width: 80%"></el-date-picker>
-						</div>
-						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">截止时间：</label>
-							<el-date-picker	v-model="addProject.stopTime" type="date" placeholder="选择日期"  style="width: 80%"></el-date-picker>
-						</div>
-						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">项目负责人：</label>
-							<el-select v-model="principalModalInput" filterable placeholder="请选择"  style="width: 80%">
-								<el-option v-for="item in principals" :key="item.principalId" :label="item.principal" :value="item.principalId"></el-option>
-							</el-select>
-						</div>
-						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">项目总工：</label>
-							<el-select v-model="chiefEngineerModalInput" filterable placeholder="请选择"  style="width: 60%">
-								<el-option v-for="item in chiefEngineers" :key="item.chiefEngineerId" :label="item.chiefEngineer" :value="item.chiefEngineerId"></el-option>
-							</el-select>
-						</div>
-						<div class="form-group">
-							<label style="margin-left: 10px; display: inline; width: 20%;">分派部门：</label>
-							<el-select v-model="selectDepartments" multiple placeholder="请选择"  style="width: 80%">
-								<el-option
+          <!-- 添加项目Modal -->
+          <el-dialog
+            title="添加项目"
+            :visible.sync="dialogAddProjectVisible"
+            width="600px"
+          >
+            <el-form
+              label-width="100px"
+              :model="addProject"
+              label-suffix="："
+              size="small"
+            >
+              <el-form-item label="项目编号">
+                <el-input
+                  v-model="addProject.projectNum"
+                  placeholder="请输入项目编号"
+                  clearable
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="项目名称">
+                <el-input
+                  v-model="addProject.projectName"
+                  placeholder="请输入项目名称"
+                  clearable
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="项目名称">
+                <el-input
+                  v-model="addProject.designPhase"
+                  placeholder="请输入设计阶段"
+                  clearable
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="开始时间">
+                <el-date-picker
+                  v-model="addProject.startTime"
+                  type="date"
+                  placeholder="选择日期"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item label="开始时间">
+                <el-date-picker
+                  v-model="addProject.stopTime"
+                  type="date"
+                  placeholder="截止时间"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item label="项目负责人">
+                <el-select
+                  v-model="principalModalInput"
+                  filterable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in principals"
+                    :key="item.principalId"
+                    :label="item.principal"
+                    :value="item.principalId"
+                  ></el-option>
+                </el-select>
+							</el-form-item>
+							<el-form-item label="项目总工">
+								<el-select
+									v-model="chiefEngineerModalInput"
+									filterable
+									placeholder="请选择"
+								>
+									<el-option
+										v-for="item in chiefEngineers"
+										:key="item.chiefEngineerId"
+										:label="item.chiefEngineer"
+										:value="item.chiefEngineerId"
+									></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="分派部门">
+								<el-select
+									v-model="selectDepartments"
+									multiple
+									placeholder="请选择"
+								>
+									<el-option
 										v-for="department in departments"
 										:key="department.id"
 										:label="department.departmentName"
-										:value="department.id">
-								</el-option>
-							</el-select>
+										:value="department.id"
+									>
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-form>
+						
+						<div slot="footer" class="txtCenter">
+							<el-button size="small" type="primary" class="btn btn-primary" @click="saveAddProject">
+								保存
+							</el-button>
+							<el-button size="small" @click="dialogAddProjectVisible = false">取消</el-button>
 						</div>
-						<div class="modal-footer">
-							<button  class="btn btn-primary" @click="saveAddProject">保存</button>
-						</div>
-					</el-dialog>
 
+            <!-- <div class="form-group">
+              <label style="margin-left: 10px; display: inline; width: 20%;"
+                >项目编号：</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                style="width: 80%; display: inline;"
+                placeholder=""
+                v-model="addProject.projectNum"
+              />
+            </div> -->
+            <!-- <div class="form-group">
+              <label style="margin-left: 10px; display: inline; width: 20%;"
+                >项目名称：</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                style="width: 80%; display: inline;"
+                placeholder=""
+                v-model="addProject.projectName"
+              />
+            </div> -->
+            <!-- <div class="form-group">
+              <label style="margin-left: 10px; display: inline; width: 20%;"
+                >设计阶段：</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                style="width: 80%; display: inline;"
+                placeholder=""
+                v-model="addProject.designPhase"
+              />
+            </div> -->
+            <!-- <div class="form-group">
+              <label style="margin-left: 10px; display: inline; width: 20%;"
+                >开始时间：</label
+              >
+              <el-date-picker
+                v-model="addProject.startTime"
+                type="date"
+                placeholder="选择日期"
+                style="width: 80%;"
+              ></el-date-picker>
+            </div> -->
+            <!-- <div class="form-group">
+              <label style="margin-left: 10px; display: inline; width: 20%;"
+                >截止时间：</label
+              >
+              <el-date-picker
+                v-model="addProject.stopTime"
+                type="date"
+                placeholder="选择日期"
+                style="width: 80%;"
+              ></el-date-picker>
+            </div> -->
+            <!-- <div class="form-group">
+              <label style="margin-left: 10px; display: inline; width: 20%;"
+                >项目负责人：</label
+              >
+              <el-select
+                v-model="principalModalInput"
+                filterable
+                placeholder="请选择"
+                style="width: 80%;"
+              >
+                <el-option
+                  v-for="item in principals"
+                  :key="item.principalId"
+                  :label="item.principal"
+                  :value="item.principalId"
+                ></el-option>
+              </el-select>
+            </div> -->
+            <!-- <div class="form-group">
+              <label style="margin-left: 10px; display: inline; width: 20%;"
+                >项目总工：</label
+              >
+              <el-select
+                v-model="chiefEngineerModalInput"
+                filterable
+                placeholder="请选择"
+                style="width: 60%;"
+              >
+                <el-option
+                  v-for="item in chiefEngineers"
+                  :key="item.chiefEngineerId"
+                  :label="item.chiefEngineer"
+                  :value="item.chiefEngineerId"
+                ></el-option>
+              </el-select>
+            </div> -->
+            <!-- <div class="form-group">
+              <label style="margin-left: 10px; display: inline; width: 20%;"
+                >分派部门：</label
+              >
+              <el-select
+                v-model="selectDepartments"
+                multiple
+                placeholder="请选择"
+                style="width: 80%;"
+              >
+                <el-option
+                  v-for="department in departments"
+                  :key="department.id"
+                  :label="department.departmentName"
+                  :value="department.id"
+                >
+                </el-option>
+              </el-select>
+            </div> -->
+            <!-- <div class="modal-footer">
+              <button class="btn btn-primary" @click="saveAddProject">
+                保存
+              </button>
+            </div> -->
+          </el-dialog>
+        </div>
+      </div>
 
-				</div>
-			</div>
+      <!-- <script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script> -->
+      <!-- <script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script> -->
+      <!-- <script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script> -->
 
-			<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
-			<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
-			<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+      <script
+        type="text/javascript"
+        src="asserts/js/feather.min.js"
+        th:src="@{/asserts/js/feather.min.js}"
+      ></script>
+      <!-- <script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script> -->
+      <!-- <script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script> -->
+      <!-- <script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script> -->
 
-			<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
-			<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
-			<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
-			<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
+      <div layout:fragment="jscontent">
+        <script>
+          feather.replace()
+        </script>
 
+        <script type="text/javascript">
+          var app = new Vue({
+            el: '#app',
+            data: {
+              dialogFormVisible: false,
+              isCollapse: false,
+              currentPage: 1,
+              total: 0,
+              pageSize: 10,
+              tableData: null,
+              searchKey: null,
+              project: {},
+              projects: {},
+              principals: {},
+              chiefEngineers: {},
+              addProject: {},
+              isActive: true,
+              projectClass1: 'm-a cur',
+              dialogAddProjectVisible: false,
+              currentProjectSummaryId: null,
+              principalModalInput: null,
+              chiefEngineerModalInput: null,
+              selectDepartments: null,
+              departments: {},
+            },
+            methods: {
+              handleSizeChange(val) {
+                console.log(`每页 ${val} 条`)
+                app.pageSize = val
+                findProjectsByProjectSummaryId()
+              },
+              handleCurrentChange(val) {
+                console.log(`当前页: ${val}`)
+                app.currentPage = val
+                findProjectsByProjectSummaryId()
+              },
+              addProjectClick: function () {
+                app.dialogAddProjectVisible = true
+                findProjectSummaryPrincipals() //查找所有可以担任负责人的人选
+                findProjectSummaryChiefEngineers() //查询所有可以当总项目总工的人选
+                getDepartments() //查询所有部门信息
+              },
+              saveAddProject: function () {
+                addProject(this) //通过Modal框添加新的项目
+              },
+              showProjectById: function (id) {
+                app.currentProjectSummaryId = id
 
-			<script>
-				feather.replace()
-			</script>
+                //更改li颜色
+                var myProjects = app.projects
+                for (var i = 0; i < myProjects.length; i++) {
+                  if (myProjects[i].id == id) {
+                    myProjects[i].deltag = 'm-a cur'
+                  } else {
+                    myProjects[i].deltag = ''
+                  }
+                }
+                app.projects = myProjects
 
-			<script type="text/javascript">
+                findProjectSummaryById() //按照总项目id查找总项目详细信息
+                findProjectsByProjectSummaryId() //按照总项目id查找分项目详细信息
+              },
+            },
+          })
 
-				var app = new Vue({
-					el: '#app',
-					data: {
-						dialogFormVisible: false,
-						isCollapse: false,
-						currentPage: 1,
-						total: 0,
-						pageSize: 10,
-						tableData: null,
-						searchKey: null,
-						project: {},
-						projects:{},
-						principals:{},
-						chiefEngineers:{},
-						addProject:{},
-						isActive: true,
-						projectClass1: "m-a cur",
-						dialogAddProjectVisible: false,
-						currentProjectSummaryId: null,
-						principalModalInput: null,
-						chiefEngineerModalInput: null,
-						selectDepartments: null,
-						departments:{},
-					},
-					methods: {
-						handleSizeChange(val) {
-							console.log(`每页 ${val} 条`);
-							app.pageSize = val
-							findProjectsByProjectSummaryId()
-						},
-						handleCurrentChange(val) {
-							console.log(`当前页: ${val}`);
-							app.currentPage = val
-							findProjectsByProjectSummaryId()
-						},
-						addProjectClick: function(){
-							app.dialogAddProjectVisible = true
-							findProjectSummaryPrincipals();//查找所有可以担任负责人的人选
-							findProjectSummaryChiefEngineers();//查询所有可以当总项目总工的人选
-							getDepartments();//查询所有部门信息
-						},
-						saveAddProject: function(){
-							addProject(this);//通过Modal框添加新的项目
-						},
-						showProjectById: function(id){
-							app.currentProjectSummaryId = id
+          findAllProjectSummary() //查找所有项目
 
-							//更改li颜色
-							var myProjects = app.projects
-							for(var i = 0; i < myProjects.length; i++){
-								if(myProjects[i].id == id){
-									myProjects[i].deltag = 'm-a cur'
-								}else{
-									myProjects[i].deltag = ''
-								}
-							}
-							app.projects = myProjects
+          /**
+           * 通过Modal框添加新的项目
+           * */
+          function addProject(that) {
+            var ajaxData = {}
+            var addProject = app.addProject
+            addProject.principalId = app.principalModalInput
+            addProject.chiefEngineerId = app.chiefEngineerModalInput
 
-							findProjectSummaryById();//按照总项目id查找总项目详细信息
-							findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
+            var selectDepartments = app.selectDepartments
+            console.log(selectDepartments.length)
+            console.log(selectDepartments[0])
 
-						},
-					}
+            if (addProject.projectNum == null || addProject.projectNum == '') {
+              that.$message({
+                message: '项目编号不能为空',
+                type: 'warning',
+              })
+            } else if (
+              addProject.projectName == null ||
+              addProject.projectName == ''
+            ) {
+              that.$message({
+                message: '项目名称不能为空',
+                type: 'warning',
+              })
+            } else if (
+              addProject.designPhase == null ||
+              addProject.designPhase == ''
+            ) {
+              that.$message({
+                message: '设计阶段不能为空',
+                type: 'warning',
+              })
+            } else if (
+              addProject.startTime == null ||
+              addProject.startTime == ''
+            ) {
+              that.$message({
+                message: '开始时间不能为空',
+                type: 'warning',
+              })
+            } else if (
+              addProject.stopTime == null ||
+              addProject.stopTime == ''
+            ) {
+              that.$message({
+                message: '结束时间不能为空',
+                type: 'warning',
+              })
+            } else if (
+              addProject.principalId == null ||
+              addProject.principalId == ''
+            ) {
+              that.$message({
+                message: '负责人不能为空',
+                type: 'warning',
+              })
+            } else if (
+              addProject.chiefEngineerId == null ||
+              addProject.chiefEngineerId == ''
+            ) {
+              that.$message({
+                message: '总工不能为空',
+                type: 'warning',
+              })
+            } else if (
+              app.selectDepartments == null ||
+              app.selectDepartments.length == 0
+            ) {
+              that.$message({
+                message: '分派部门不能为空',
+                type: 'warning',
+              })
+            } else {
+              ajaxData.selectDepartments = app.selectDepartments
+              ajaxData.projectSummary = encodeURI(
+                JSON.stringify(app.addProject)
+              )
+              $.ajax({
+                data: ajaxData,
+                type: 'GET',
+                url: 'projectSummary/addProject/',
+                traditional: true,
+                success: function (result) {
+                  if (result.code == 200) {
+                    findAllProjectSummary()
+                    app.dialogAddProjectVisible = false
+                    app.addProject = {}
+                    app.principalModalInput = null
+                    app.chiefEngineerModalInput = null
+                    app.principals = {}
+                    app.chiefEngineers = {}
+                    app.selectDepartments = null
+                    app.departments = {}
+                    that.$message({
+                      message: '项目添加成功',
+                      type: 'success',
+                    })
+                  } else {
+                    console.log('返回值失败 addProject')
+                  }
+                },
+              })
+            }
+          }
 
-				})
+          /**
+           * 查询总项目信息byId
+           */
+          function findProjectSummaryById() {
+            var ajaxData = {}
+            ajaxData.id = app.currentProjectSummaryId
+            $.ajax({
+              data: ajaxData,
+              type: 'GET',
+              url: 'projectSummary/findById/',
+              success: function (result) {
+                if (result.code == 200) {
+                  app.project = result.data
+                } else {
+                  console.log('返回值失败 findProjectSummaryById')
+                }
+              },
+            })
+          }
 
-				findAllProjectSummary();//查找所有项目
+          /**
+           * 按照总项目id查找分项目详细信息
+           */
+          function findProjectsByProjectSummaryId() {
+            var ajaxData = {}
+            ajaxData.currentPage = app.currentPage
+            ajaxData.pageSize = app.pageSize
+            ajaxData.projectSummaryId = app.currentProjectSummaryId
+            $.ajax({
+              data: ajaxData,
+              type: 'GET',
+              url: '/crud/project/findProjectsByProjectSummaryId/',
+              success: function (result) {
+                if (result.code == 200) {
+                  app.tableData = result.data.list
+                  app.total = result.data.totalCount
+                } else {
+                  console.log('返回值失败 findByProjectId')
+                }
+              },
+            })
+          }
 
+          /**
+           * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
+           */
+          function findAllProjectSummary() {
+            var ajaxData = {}
+            $.ajax({
+              data: ajaxData,
+              type: 'GET',
+              url: '/crud/projectSummary/findAll',
+              success: function (result) {
+                if (result.code == 200) {
+                  var projectsSummaryLiShow = result.data
+                  for (var i = 0; i < projectsSummaryLiShow.length; i++) {
+                    if (i == 0) {
+                      app.currentProjectSummaryId = projectsSummaryLiShow[i].id
+                      projectsSummaryLiShow[i].deltag = 'm-a cur'
+                    } else {
+                      projectsSummaryLiShow[i].deltag = ''
+                    }
+                  }
+                  app.projects = projectsSummaryLiShow
+                  findProjectSummaryById() //按照总项目id查找总项目详细信息
+                  findProjectsByProjectSummaryId() //按照总项目id查找分项目详细信息
+                } else {
+                  console.log('返回值失败')
+                }
+              },
+            })
+          }
 
-				/**
-				 * 通过Modal框添加新的项目
-				 * */
-				function addProject(that){
-					var ajaxData = {}
-					var addProject = app.addProject
-					addProject.principalId = app.principalModalInput
-					addProject.chiefEngineerId = app.chiefEngineerModalInput
+          /**
+           * 查询所有可以当总项目总负责人的人选
+           */
+          function findProjectSummaryPrincipals() {
+            var ajaxData = {}
+            ajaxData.currentDepartmentId = 1
+            $.ajax({
+              data: ajaxData,
+              type: 'GET',
+              url: '/crud/user/findProjectSummaryPrincipals',
+              success: function (result) {
+                if (result.code == 200) {
+                  var users = result.data
+                  var principals = []
+                  for (var i = 0; i < users.length; i++) {
+                    var principal = {}
+                    principal.principal = users[i].username
+                    principal.principalId = users[i].id
+                    principals[i] = principal
+                  }
+                  app.principals = principals
+                } else {
+                  console.log('findProjectSummaryPrincipals 返回值失败')
+                }
+              },
+            })
+          }
 
-					var selectDepartments = app.selectDepartments
-					console.log(selectDepartments.length)
-					console.log(selectDepartments[0])
+          /**
+           * 查询所有可以当总项目总工的人选
+           */
+          function findProjectSummaryChiefEngineers() {
+            var ajaxData = {}
+            ajaxData.currentDepartmentId = 1
+            $.ajax({
+              data: ajaxData,
+              type: 'GET',
+              url: '/crud/user/findProjectSummaryChiefEngineers',
+              success: function (result) {
+                if (result.code == 200) {
+                  var users = result.data
+                  var chiefEngineers = []
+                  for (var i = 0; i < users.length; i++) {
+                    var chiefEngineer = {}
+                    chiefEngineer.chiefEngineer = users[i].username
+                    chiefEngineer.chiefEngineerId = users[i].id
+                    chiefEngineers[i] = chiefEngineer
+                  }
+                  app.chiefEngineers = chiefEngineers
+                } else {
+                  console.log('findAllChiefEngineer 返回值失败')
+                }
+              },
+            })
+          }
 
+          /**
+           * 查询所有所信息，将值赋给li
+           */
+          function getDepartments() {
+            $.ajax({
+              data: null,
+              type: 'GET',
+              url: '/crud/department/findAll',
+              success: function (result) {
+                if (result.code == 200) {
+                  app.departments = result.data
+                } else {
+                  console.log('getDepartments 返回值失败')
+                }
+              },
+            })
+          }
 
-					if(addProject.projectNum == null || addProject.projectNum == ""){
-						that.$message({
-							message: '项目编号不能为空',
-							type: 'warning'
-						});
-					}else if(addProject.projectName == null || addProject.projectName == ""){
-						that.$message({
-							message: '项目名称不能为空',
-							type: 'warning'
-						});
-					}else if(addProject.designPhase == null || addProject.designPhase == ""){
-						that.$message({
-							message: '设计阶段不能为空',
-							type: 'warning'
-						});
-					}else if(addProject.startTime == null || addProject.startTime == ""){
-						that.$message({
-							message: '开始时间不能为空',
-							type: 'warning'
-						});
-					}else if(addProject.stopTime == null || addProject.stopTime == ""){
-						that.$message({
-							message: '结束时间不能为空',
-							type: 'warning'
-						});
-					}else if(addProject.principalId == null || addProject.principalId == ""){
-						that.$message({
-							message: '负责人不能为空',
-							type: 'warning'
-						});
-					}else if(addProject.chiefEngineerId == null || addProject.chiefEngineerId == ""){
-						that.$message({
-							message: '总工不能为空',
-							type: 'warning'
-						});
-					}else if(app.selectDepartments == null || app.selectDepartments.length == 0){
-						that.$message({
-							message: '分派部门不能为空',
-							type: 'warning'
-						});
-					}else{
-						ajaxData.selectDepartments = app.selectDepartments
-						ajaxData.projectSummary = encodeURI(JSON.stringify(app.addProject))
-						$.ajax({
-							data: ajaxData,
-							type: "GET",
-							url: "projectSummary/addProject/",
-							traditional: true,
-							success: function (result) {
-								if(result.code == 200){
-									findAllProjectSummary()
-									app.dialogAddProjectVisible = false
-									app.addProject = {}
-									app.principalModalInput = null
-									app.chiefEngineerModalInput = null
-									app.principals = {}
-									app.chiefEngineers = {}
-									app.selectDepartments = null
-									app.departments = {}
-									that.$message({
-										message: '项目添加成功',
-										type: 'success'
-									});
-								}else{
-									console.log("返回值失败 addProject")
-								}
-
-							}
-						})
-					}
-
-
-				}
-
-				/**
-				 * 查询总项目信息byId
-				 */
-				function findProjectSummaryById(){
-					var ajaxData = {}
-					ajaxData.id = app.currentProjectSummaryId
-					$.ajax({
-						data: ajaxData,
-						type: "GET",
-						url: "projectSummary/findById/",
-						success: function (result) {
-							if(result.code == 200){
-								app.project=result.data
-							}else{
-								console.log("返回值失败 findProjectSummaryById")
-							}
-
-						}
-					})
-				}
-
-				/**
-				 * 按照总项目id查找分项目详细信息
-				 */
-				function findProjectsByProjectSummaryId(){
-					var ajaxData = {}
-					ajaxData.currentPage = app.currentPage
-					ajaxData.pageSize = app.pageSize
-					ajaxData.projectSummaryId = app.currentProjectSummaryId
-					$.ajax({
-						data: ajaxData,
-						type: "GET",
-						url: "/crud/project/findProjectsByProjectSummaryId/",
-						success: function (result) {
-							if(result.code == 200){
-								app.tableData=result.data.list
-								app.total=result.data.totalCount
-							}else{
-								console.log("返回值失败 findByProjectId")
-							}
-
-						}
-					})
-				}
-
-				/**
-				 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
-				 */
-				function findAllProjectSummary(){
-					var ajaxData = {}
-					$.ajax({
-						data: ajaxData,
-						type: "GET",
-						url: "/crud/projectSummary/findAll",
-						success: function (result) {
-							if(result.code == 200){
-								var projectsSummaryLiShow = result.data
-								for(var i = 0; i < projectsSummaryLiShow.length; i++){
-									if(i == 0){
-										app.currentProjectSummaryId = projectsSummaryLiShow[i].id
-										projectsSummaryLiShow[i].deltag = 'm-a cur'
-									}else{
-										projectsSummaryLiShow[i].deltag = ''
-									}
-								}
-								app.projects=projectsSummaryLiShow
-								findProjectSummaryById();//按照总项目id查找总项目详细信息
-								findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
-
-							}else{
-								console.log("返回值失败")
-							}
-
-						}
-					})
-				}
-
-				/**
-				 * 查询所有可以当总项目总负责人的人选
-				 */
-				function findProjectSummaryPrincipals() {
-					var ajaxData = {}
-					ajaxData.currentDepartmentId = 1
-					$.ajax({
-						data: ajaxData,
-						type: "GET",
-						url: "/crud/user/findProjectSummaryPrincipals",
-						success: function (result) {
-							if(result.code == 200){
-								var users = result.data
-								var principals = []
-								for(var i = 0; i < users.length; i++){
-									var principal = {}
-									principal.principal = users[i].username
-									principal.principalId = users[i].id
-									principals[i] = principal
-								}
-								app.principals = principals
-							}else{
-								console.log("findProjectSummaryPrincipals 返回值失败")
-							}
-
-						}
-					})
-				}
-
-				/**
-				 * 查询所有可以当总项目总工的人选
-				 */
-				function findProjectSummaryChiefEngineers() {
-					var ajaxData = {}
-					ajaxData.currentDepartmentId = 1
-					$.ajax({
-						data: ajaxData,
-						type: "GET",
-						url: "/crud/user/findProjectSummaryChiefEngineers",
-						success: function (result) {
-							if(result.code == 200){
-								var users = result.data
-								var chiefEngineers = []
-								for(var i = 0; i < users.length; i++){
-									var chiefEngineer = {}
-									chiefEngineer.chiefEngineer = users[i].username
-									chiefEngineer.chiefEngineerId = users[i].id
-									chiefEngineers[i] = chiefEngineer
-								}
-								app.chiefEngineers = chiefEngineers
-							}else{
-								console.log("findAllChiefEngineer 返回值失败")
-							}
-
-						}
-					})
-				}
-
-
-				/**
-				 * 查询所有所信息，将值赋给li
-				 */
-				function getDepartments() {
-					$.ajax({
-						data: null,
-						type: "GET",
-						url: "/crud/department/findAll",
-						success: function (result) {
-							if(result.code == 200){
-								app.departments = result.data
-							}else{
-								console.log("getDepartments 返回值失败")
-							}
-
-						}
-					})
-				}
-
-				var topBar = new Vue({
-					el: '#topBar',
-					data: {
-						activeIndex2: '4',
-					},
-					methods: {
-						handleSelect(key, keyPath) {
-							console.log(key, keyPath);
-						}
-					}
-				})
-
-
-
-
-			</script>
-		</div>
-	</body>
+          var topBar = new Vue({
+            el: '#topBar',
+            data: {
+              activeIndex2: '4',
+            },
+            methods: {
+              handleSelect(key, keyPath) {
+                console.log(key, keyPath)
+              },
+            },
+          })
+        </script>
+      </div>
+    </div>
+  </body>
 </html>

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" 
+    xmlns:th="http://www.thymeleaf.org/xhtml" 
+    xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" 
+    layout:decorate="layout/index">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,56 +11,29 @@
     <meta name="author" content="">
 
     <title>协同平台</title>
-    <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
-    <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
-    <link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
-    <link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
-    <link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
-    <link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
+    <!-- <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet"> -->
+    <!-- <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet"> -->
+    <!-- <link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet"> -->
+    <!-- <link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet"> -->
+    <!-- <link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet"> -->
+    <!-- <link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet"> -->
 
     <link href="asserts/css/style.css" th:href="@{/asserts/css/style.css}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
 
 
 
-    <link href="asserts/scss/abstracts/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
+    <!-- <link href="asserts/scss/abstracts/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet"> -->
+    
 
 
 </head>
-
-<body class="is-boxed has-animations">
-<div  id="app">
+<!-- is-boxed has-animations -->
+<body class="">
+<div layout:fragment="content">
 
     <div class="body-wrap">
-
-        <el-menu
-                :default-active="activeIndex2"
-                class="el-menu-demo"
-                mode="horizontal"
-                @select="handleSelect"
-                background-color="#303133"
-                text-color="#fff"
-                active-text-color="#ffd04b">
-
-            <h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 550px;">协同平台</h1>
-
-            <el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
-            <el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
-            <el-menu-item index="3"><a th:href="@{/userProjects}" >人员工作信息</a></el-menu-item>
-            <el-menu-item index="4"><a th:href="@{/professions}" >专业协同</a></el-menu-item>
-            <el-menu-item index="5"><a th:href="@{/users}">人员信息管理</a></el-menu-item>
-            <el-menu-item index="6"><a th:href="@{/notices}">通知</a></el-menu-item>
-
-            <el-submenu index="7" style="margin-left: 600px">
-                <template slot="title">[[${session.loginUser}]]</template>
-                <el-menu-item index="7-1">修改密码</el-menu-item>
-                <el-menu-item index="7-2">退出登录</el-menu-item>
-                <el-menu-item index="7-3">其他</el-menu-item>
-            </el-submenu>
-
-        </el-menu>
-
-        <div class="hero-figure anime-element">
+        <div class="hero-figure anime-element" style="display: none;">
             <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
                 <rect width="528" height="396" style="fill:transparent;" />
             </svg>
@@ -72,8 +48,6 @@
             <div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
             <div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
         </div>
-
-
         <main>
             <section class="hero">
                 <div class="container">
@@ -109,39 +83,26 @@
 
 
         </main>
-
-
     </div>
-
-
 </div>
 
+<!-- <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script> -->
+<!-- <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script> -->
+
+<!-- <script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script> -->
+<!-- <script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script> -->
+<!-- <script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script> -->
+
+<!-- <script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script> -->
+<!-- <script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script> -->
+<!-- <script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script> -->
+<!-- <script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script> -->
+<!-- <script type="text/javascript" src="asserts/element2.10.1/js/main.min.js" th:src="@{/asserts/element2.10.1/js/main.min.js}"></script> -->
+<!-- <script type="text/javascript" src="asserts/js/main.min.js" th:src="@{/asserts/js/main.min.js}"></script> -->
 
 
 
-
-
-
-
-
-<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
-<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
-<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
-
-<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
-<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
-<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
-<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
-<script type="text/javascript" src="asserts/element2.10.1/js/main.min.js" th:src="@{/asserts/element2.10.1/js/main.min.js}"></script>
-<script type="text/javascript" src="asserts/js/main.min.js" th:src="@{/asserts/js/main.min.js}"></script>
-<script type="text/javascript" src="asserts/js/main.main.js" th:src="@{/asserts/js/main.main.js}"></script>
-
-<script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
-<script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
-
-
-
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
 
     var app = new Vue({
         el: '#app',

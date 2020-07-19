@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml"
-	  xmlns:v-bind="http://www.w3.org/1999/xhtml">
+		xmlns:v-bind="http://www.w3.org/1999/xhtml"
+		layout:decorate="layout/index">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -11,46 +12,17 @@
 
 	<title>协同平台</title>
 
-	<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
-	<link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
-	<link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet">
-	<link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet">
-	<link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet">
-	<link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet">
+	<!-- <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet"> -->
+	<!-- <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet"> -->
+	<!-- <link href="asserts/element2.10.1/index.css" th:href="@{/asserts/element2.10.1/index.css}" rel="stylesheet"> -->
+	<!-- <link href="asserts/css/myCSS.css" th:href="@{/asserts/css/myCSS.css}" rel="stylesheet"> -->
+	<!-- <link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet"> -->
+	<!-- <link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet"> -->
+	<link href="asserts/css/new-style.css" th:href="@{/asserts/css/new-style.css}" rel="stylesheet">
 </head>
 
 <body>
 <div id="flw">
-
-	<div  id="topBar">
-		<el-menu
-				:default-active="activeIndex2"
-				class="el-menu-demo"
-				mode="horizontal"
-				@select="handleSelect"
-				background-color="#303133"
-				text-color="#fff"
-				active-text-color="#ffd04b">
-
-			<h1 class="top-t" style="margin-top: 20px;margin-left: 10px; width: 550px;">协同平台</h1>
-
-			<el-menu-item index="1"><a th:href="@{/redirectToMain}" >首页</a></el-menu-item>
-			<el-menu-item index="2"><a th:href="@{/projects}" >项目信息</a></el-menu-item>
-			<el-menu-item index="3"><a th:href="@{/userProjects}" >人员工作信息</a></el-menu-item>
-			<el-menu-item index="4"><a th:href="@{/professions}" >专业协同</a></el-menu-item>
-			<el-menu-item index="5"><a th:href="@{/users}">人员信息管理</a></el-menu-item>
-			<el-menu-item index="6"><a th:href="@{/notices}">通知</a></el-menu-item>
-
-			<el-submenu index="7" style="margin-left: 600px">
-				<template slot="title">[[${session.loginUser}]]</template>
-				<el-menu-item index="7-1">修改密码</el-menu-item>
-				<el-menu-item index="7-2">退出登录</el-menu-item>
-				<el-menu-item index="7-3">其他</el-menu-item>
-			</el-submenu>
-
-		</el-menu>
-	</div>
-
 	<style>
 		.el-menu-vertical-demo:not(.el-menu--collapse) {
 			width: 200px;
@@ -60,47 +32,172 @@
 
 
 
-	<div id="app">
-		<div class="dsource-wrap" style="margin-top: 5px;">
+	<div layout:fragment="content">
+		<div class="dsource-wrap">
 
-			<!--<el-scrollbar class="dictionary-l" style=" width: 200px">-->
-				<!--<ul class="manager-nav dictionary-nav">-->
-					<!--<li class="m-a">-->
-						<!--<svg class="icon" aria-hidden="true">-->
-							<!--<use xlink:href="#icon-hh2"></use>-->
-						<!--</svg>-->
-
-						<!--<ul class="manager-sec" v-for="project, key in projects" :key="key">-->
-							<!--<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.projectName}}</a></li>-->
-						<!--</ul>-->
-					<!--</li>-->
-				<!--</ul>-->
-			<!--</el-scrollbar>-->
-
-			<!-- 左侧  -->
-			<el-scrollbar class="dictionary-l" style=" width: 200px">
-				<ul class="manager-nav dictionary-nav">
-					<li class="m-a">
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-hh2"></use>
-						</svg>
-						<ul class="manager-sec" v-for="project, key in projects" :key="key">
-							<li @click="showProjectById(project.id)"><a :class="project.deltag" >{{project.departmentName}}</a></li>
+			<el-container>
+				<el-aside width="250px">
+					<div class="project-title">
+						<span>协同部门</span>
+					</div>
+					<!-- 左侧  -->
+					<el-scrollbar class="dictionary-l">
+						<ul class="manager-nav dictionary-nav">
+							<li 
+								class="m-a" 
+								v-for="project, key in projects" 
+								@click="showProjectById(project.id)" 
+								:key="key" 
+								:class="{'active': projectId === project.id }"
+							>
+								<a :class="project.deltag" >{{project.departmentName}}</a>
+							</li>
 						</ul>
-					</li>
-				</ul>
-			</el-scrollbar>
+					</el-scrollbar>
+				</el-aside>
+				<el-main>
+					<el-scrollbar class="dsource-r">
+						<el-input hidden="true" v-show="false"  v-model="projectSummaryId" style="height: 0px" ></el-input>
+						<el-input hidden="true" v-show="false"  v-model="departmentId" style="height: 0px" ></el-input>
+						<el-input hidden="true" v-show="false"  v-model="projectId"  style="height: 0px"></el-input>
+						<el-input hidden="true" v-show="false"  v-model="selectUserRole"  style="height: 0px"></el-input>
+						<el-input hidden="true" v-show="false"  v-model="selectTaskId"  style="height: 0px"></el-input>
+						<el-input hidden="true" v-show="false"  v-model="previousProfileTabId"  style="height: 0px"></el-input>
+						<el-input hidden="true" v-show="false"  v-model="nextProfessionProfileTabId"  style="height: 0px"></el-input>
+						<el-input hidden="true" v-show="false"  v-model="taskAssignmentId"  style="height: 0px"></el-input>
+
+						<div class="btn-group">
+							<el-button type="primary" size="small" @click="addTaskAssignmentClick">
+								<i class="el-icon-circle-plus"></i> 添加任务
+							</el-button>
+							<el-button type="primary" size="small" @click="showPreviousProfileDialog">
+								<i class="el-icon-s-fold"></i> 上序资料
+							</el-button>
+							<el-button type="primary" size="small" @click="showNextProfessionProfileDialog">
+								<i class="el-icon-s-unfold"></i> 提下序
+							</el-button>
+							<el-button type="primary" size="small" @click="openProfileTreeDialog">
+								<i class="el-icon-document" style="font-size: 15px"></i> 专业文件
+							</el-button>
+						</div>
+	
+						<nav class="navbar navbar-light bg-light">
+							<label style="display: inline-block;">项目编号：{{project.projectNum}}</label>
+							<label style="display: inline-block;">项目名称：{{project.projectName}}</label>
+							<label style="display: inline-block;">项目阶段：{{project.designPhase}}</label>
+							<label style="display: inline-block;">开始时间：{{project.startTime}}</label>
+							<label style="display: inline-block;">截止时间：{{project.stopTime}}</label>
+							<label style="display: inline-block;">负责人：{{project.principal}}</label>
+							<label style="display: inline-block;">总工：{{project.chiefEngineer}}</label>
+						</nav>
+		
+						<div class="ds-table-wrap" >
+							<!--<img  th:src="@{/asserts/img/1.PNG}">-->
+							<nav>
+								<div class="nav nav-tabs" role="tablist" v-for="navigationBar, key in navigationBars" :key="key">
+									<a style="display: inline-block" :class="navigationBar.style" @click="switchNavigationBar(navigationBar.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{navigationBar.name}}</a>
+								</div>
+							</nav>
+		
+							<div :hidden="detailTableHidden" style="margin-top: 10px">
+								<el-table style="width: 100%;" :data="taskAssignmentListData" class="x-table table-td0" 
+									stripe
+									highlight
+								>
+									<el-table-column type="selection" width="55"></el-table-column>
+									<!--<el-table-column label="序号" width="60" type="index">-->
+									<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
+									<!--</el-table-column>-->
+									<el-table-column label="任务">
+										<template slot-scope="scope"><span>{{ scope.row.taskName }}</span></template>
+									</el-table-column>
+									<el-table-column label="任务级别">
+										<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
+									</el-table-column>
+									<el-table-column label="设计">
+										<template slot-scope="scope">
+											<div @click="editDesignerClick(scope.row.id)">
+													<span  style="color: #080fe8">
+													<el-link type="primary">{{ scope.row.designer }}</el-link>
+												</span>
+											</div>
+										</template>
+									</el-table-column>
+									<el-table-column  label="复核">
+										<template slot-scope="scope">
+											<div @click="editReviewerClick(scope.row.id)">
+													<span  style="color: #080fe8">
+													<el-link type="primary">{{ scope.row.reviewer }}</el-link>
+												</span>
+											</div>
+										</template>
+									</el-table-column>
+									<el-table-column  label="审核">
+										<template slot-scope="scope">
+											<div @click="editInspectorClick(scope.row.id)">
+													<span  style="color: #080fe8">
+													<el-link type="primary">{{ scope.row.inspector }}</el-link>
+												</span>
+											</div>
+										</template>
+									</el-table-column>
+									<el-table-column  label="审定">
+										<template slot-scope="scope">
+											<div @click="editValidationerClick(scope.row.id)">
+													<span  style="color: #080fe8">
+													<el-link type="primary">{{ scope.row.validationer }}</el-link>
+												</span>
+											</div>
+										</template>
+									</el-table-column>
+									<el-table-column  label="开始时间">
+										<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
+									</el-table-column>
+									<el-table-column  label="截止时间">
+										<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
+									</el-table-column>
+								</el-table>
+								<el-pagination class="txtCenter pagination"
+									background
+									@size-change="handleSizeChangeTaskAssignmentListData"
+									@current-change="handleCurrentChangeTaskAssignmentListData"
+									:current-page.sync="currentPageTaskAssignmentListData"
+									:page-sizes="[10,20,30,50]"
+									:page-size="100"
+									layout=" sizes, prev, pager, next"
+									:total="totalTaskAssignmentListData">
+								</el-pagination>
+							</div>
+		
+							<div :hidden="flowChartTableHidden" style="margin-top: 20px">
+								<ul>
+									<li v-for="taskAssignmentData, index in taskAssignmentListData" :key="index">
+										<el-steps :active="taskAssignmentData.finishedLevel" align-center>
+											<el-link type="primary" style="width: 150px; color: #fb2e8c; font-size: 15px">{{taskAssignmentData.taskName}}</el-link>
+											<el-step :title="taskAssignmentData.designer" @click.native="designerReviewProcessClick(taskAssignmentData.id)" description="设计"></el-step>
+											<el-step :title="taskAssignmentData.reviewer" @click.native="reviewerReviewProcessClick(taskAssignmentData.id)" description="复核"></el-step>
+											<el-step :title="taskAssignmentData.inspector" @click.native="inspectorReviewProcessClick(taskAssignmentData.id)" description="审核"></el-step>
+											<el-step :title="taskAssignmentData.validationer" @click.native="validationerReviewProcessClick(taskAssignmentData.id)" description="审定"></el-step>
+										</el-steps>
+										<div style="height: 40px"></div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</el-scrollbar>
+				</el-main>
+			</el-container>
 
 			<el-scrollbar class="dictionary-l" style="width: 120px; border:0;margin-top: 0px; background-color: #f4f3fb" >
-				<el-input hidden="true"  v-model="pageSizeTaskAssignmentListData"  style="height: 0px"></el-input>
-				<el-input hidden="true"  v-model="pageSizeUserProjectsTableData"  style="height: 0px"></el-input>
-				<el-input hidden="true"  v-model="pageSizepreviousProfileTableData"  style="height: 0px"></el-input>
-				<el-input hidden="true"  v-model="pageSizeNextProfessionProfileTableData"  style="height: 0px"></el-input>
+				<el-input hidden="true" v-show="false"  v-model="pageSizeTaskAssignmentListData"  style="height: 0px"></el-input>
+				<el-input hidden="true" v-show="false"  v-model="pageSizeUserProjectsTableData"  style="height: 0px"></el-input>
+				<el-input hidden="true" v-show="false"  v-model="pageSizepreviousProfileTableData"  style="height: 0px"></el-input>
+				<el-input hidden="true" v-show="false"  v-model="pageSizeNextProfessionProfileTableData"  style="height: 0px"></el-input>
 				<!--<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
 					<!--<el-radio-button :label="false">展开</el-radio-button>-->
 					<!--<el-radio-button :label="true">收起</el-radio-button>-->
 				<!--</el-radio-group>-->
-				<el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse">
+				<!-- <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse">
 					<el-menu-item index="1">
 						<i class="el-icon-circle-plus" @click="addTaskAssignmentClick" style="font-size: 15px">添加任务</i>
 						<span slot="title" @click="addTaskAssignmentClick">添加任务</span>
@@ -117,228 +214,116 @@
 						<i class="el-icon-document" @click="openProfileTreeDialog" style="font-size: 15px">专业文件</i>
 						<span slot="title" @click="openProfileTreeDialog">专业文件</span>
 					</el-menu-item>
-				</el-menu>
+				</el-menu> -->
 
 			</el-scrollbar>
 
-
-			<el-scrollbar class="dsource-r">
-
-
-				<nav class="navbar navbar-light bg-light">
-
-					<el-input hidden="true"  v-model="projectSummaryId" style="height: 0px" ></el-input>
-					<el-input hidden="true"  v-model="departmentId" style="height: 0px" ></el-input>
-					<el-input hidden="true"  v-model="projectId"  style="height: 0px"></el-input>
-					<el-input hidden="true"  v-model="selectUserRole"  style="height: 0px"></el-input>
-					<el-input hidden="true"  v-model="selectTaskId"  style="height: 0px"></el-input>
-					<el-input hidden="true"  v-model="previousProfileTabId"  style="height: 0px"></el-input>
-					<el-input hidden="true"  v-model="nextProfessionProfileTabId"  style="height: 0px"></el-input>
-					<el-input hidden="true"  v-model="taskAssignmentId"  style="height: 0px"></el-input>
-
-					<label style="display: inline">项目编号：{{project.projectNum}}</label>
-					<label style="margin-left: 50px; display: inline">项目名称：{{project.projectName}}</label>
-					<label style="margin-left: 50px; display: inline">项目阶段：{{project.designPhase}}</label>
-					<label style="margin-left: 50px; display: inline">开始时间：{{project.startTime}}</label>
-					<label style="margin-left: 50px; display: inline">截止时间：{{project.stopTime}}</label>
-					<label style="margin-left: 50px; display: inline">负责人：{{project.principal}}</label>
-					<label style="margin-left: 50px; display: inline">总工：{{project.chiefEngineer}}</label>
-
-				</nav>
-				<div class="ds-table-wrap" >
-
-					<!--<img  th:src="@{/asserts/img/1.PNG}">-->
-					<nav>
-						<div class="nav nav-tabs" role="tablist" v-for="navigationBar, key in navigationBars" :key="key">
-							<a style="display: inline-block" :class="navigationBar.style" @click="switchNavigationBar(navigationBar.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{navigationBar.name}}</a>
-						</div>
-					</nav>
-
-					<div :hidden="detailTableHidden" style="margin-top: 10px">
-						<el-table style="width: 100%;" :data="taskAssignmentListData" class="x-table table-td0">
-							<el-table-column type="selection" width="55"></el-table-column>
-							<!--<el-table-column label="序号" width="60" type="index">-->
-							<!--<template slot-scope="scope"><span>{{ scope.row.serialNumber }}</span></template>-->
-							<!--</el-table-column>-->
-							<el-table-column label="任务">
-								<template slot-scope="scope"><span>{{ scope.row.taskName }}</span></template>
-							</el-table-column>
-							<el-table-column label="任务级别">
-								<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
-							</el-table-column>
-							<el-table-column label="设计">
-								<template slot-scope="scope">
-									<div @click="editDesignerClick(scope.row.id)">
-											<span  style="color: #080fe8">
-											 <el-link type="primary">{{ scope.row.designer }}</el-link>
-										</span>
-									</div>
-								</template>
-							</el-table-column>
-							<el-table-column  label="复核">
-								<template slot-scope="scope">
-									<div @click="editReviewerClick(scope.row.id)">
-											<span  style="color: #080fe8">
-											 <el-link type="primary">{{ scope.row.reviewer }}</el-link>
-										</span>
-									</div>
-								</template>
-							</el-table-column>
-							<el-table-column  label="审核">
-								<template slot-scope="scope">
-									<div @click="editInspectorClick(scope.row.id)">
-											<span  style="color: #080fe8">
-											 <el-link type="primary">{{ scope.row.inspector }}</el-link>
-										</span>
-									</div>
-								</template>
-							</el-table-column>
-							<el-table-column  label="审定">
-								<template slot-scope="scope">
-									<div @click="editValidationerClick(scope.row.id)">
-											<span  style="color: #080fe8">
-											 <el-link type="primary">{{ scope.row.validationer }}</el-link>
-										</span>
-									</div>
-								</template>
-							</el-table-column>
-							<el-table-column  label="开始时间">
-								<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
-							</el-table-column>
-							<el-table-column  label="截止时间">
-								<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
-							</el-table-column>
-						</el-table>
-						<el-pagination class="txtCenter"
-									   @size-change="handleSizeChangeTaskAssignmentListData"
-									   @current-change="handleCurrentChangeTaskAssignmentListData"
-									   :current-page.sync="currentPageTaskAssignmentListData"
-									   :page-sizes="[10,20,30,50]"
-									   :page-size="100"
-									   layout=" sizes, prev, pager, next"
-									   :total="totalTaskAssignmentListData">
-						</el-pagination>
-					</div>
-
-					<div :hidden="flowChartTableHidden" style="margin-top: 20px">
-						<ul>
-							<li v-for="taskAssignmentData, index in taskAssignmentListData" :key="index">
-								<el-steps :active="taskAssignmentData.finishedLevel" align-center>
-									<el-link type="primary" style="width: 150px; color: #fb2e8c; font-size: 15px">{{taskAssignmentData.taskName}}</el-link>
-									<el-step :title="taskAssignmentData.designer" @click.native="designerReviewProcessClick(taskAssignmentData.id)" description="设计"></el-step>
-									<el-step :title="taskAssignmentData.reviewer" @click.native="reviewerReviewProcessClick(taskAssignmentData.id)" description="复核"></el-step>
-									<el-step :title="taskAssignmentData.inspector" @click.native="inspectorReviewProcessClick(taskAssignmentData.id)" description="审核"></el-step>
-									<el-step :title="taskAssignmentData.validationer" @click.native="validationerReviewProcessClick(taskAssignmentData.id)" description="审定"></el-step>
-								</el-steps>
-								<div style="height: 40px"></div>
-
-							</li>
-						</ul>
-					</div>
-
-
-				</div>
-
-			</el-scrollbar>
 
 			<!-- 任务分配modal -->
 			<el-dialog title="任务分配" :visible.sync="addTaskAssignmentDialogVisible" width="30%">
-				<div class="form-group">
-					<label style="margin-left: 10px; display: inline; width: 20%;">任务名称：</label>
-					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addTaskAssignment.taskName">
-				</div>
-				<div class="form-group">
-					<label style="margin-left: 10px; display: inline; width: 20%;">任务级别：</label>
-					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="addTaskAssignment.taskLevel">
-				</div>
-				<div class="form-group">
-					<label style="margin-left: 10px; display: inline; width: 20%;">开始时间：</label>
-					<el-date-picker	v-model="addTaskAssignment.startTime" type="date" placeholder="选择日期" style="width: 80%"></el-date-picker>
-				</div>
-				<div class="form-group">
-					<label style="margin-left: 10px; display: inline; width: 20%;">截止时间：</label>
-					<el-date-picker	v-model="addTaskAssignment.stopTime" type="date" placeholder="选择日期"  style="width: 80%"></el-date-picker>
-				</div>
-				<div class="modal-footer">
-					<button  class="btn btn-primary" @click="saveAddTaskAssignment">保存</button>
+				<el-form size="small" label-width="100px" label-suffix="：">
+					<el-form-item label="任务名称">
+						<el-input placeholder="请输入任务名称" clearable v-model="addTaskAssignment.taskName"></el-input>
+					</el-form-item>
+					<el-form-item label="任务级别">
+						<el-input placeholder="请输入任务级别" clearable v-model="addTaskAssignment.taskLevel"></el-input>
+					</el-form-item>
+					<el-form-item label="开始时间">
+						<el-date-picker	v-model="addTaskAssignment.startTime" type="date" placeholder="选择日期"></el-date-picker>
+					</el-form-item>
+					<el-form-item label="截止时间">
+						<el-date-picker	v-model="addTaskAssignment.stopTime" type="date" placeholder="选择日期"></el-date-picker>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="txtCenter">
+					<el-button size="small" type="primary" @click="saveAddTaskAssignment">保存</el-button>
+					<el-button size="small" @click="addTaskAssignmentDialogVisible = false">取消</el-button>
 				</div>
 			</el-dialog>
 
 
 			<!-- 人员工作信息modal -->
 			<el-dialog title="人员工作信息" :visible.sync="userProjectsDialogVisible" width="80%">
-				<el-table style="width: 100%;margin-top: 10px;" :data="userProjectsTableData" class="x-table table-td0">
-					<!--<el-table-column type="selection" width="55"></el-table-column>-->
-					<el-table-column label="姓名">
-						<template slot-scope="scope">
-								 <el-link type="primary">{{ scope.row.username }}</el-link>
-						</template>
-					</el-table-column>
-					<el-table-column label="状态">
-						<template slot-scope="scope"><a  target="_blank">{{ scope.row.tripState }} </a></template>
-					</el-table-column>
-					<!--<el-table-column  label="已完成工作量">-->
-						<!--<template slot-scope="scope"><span>{{ scope.row.finishedWorkload }}</span></template>-->
-					<!--</el-table-column>-->
-					<!--<el-table-column  label="目前工作量">-->
-						<!--<template slot-scope="scope"><span>{{ scope.row.currentWorkload }}</span></template>-->
-					<!--</el-table-column>-->
-					<el-table-column label="项目名称">
-						<template slot-scope="scope"><a  target="_blank">{{ scope.row.projectName }} </a></template>
-					</el-table-column>
-					<el-table-column label="设计阶段">
-						<template slot-scope="scope"><span>{{ scope.row.designPhase }}</span></template>
-					</el-table-column>
-					<el-table-column label="任务级别">
-						<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
-					</el-table-column>
-					<el-table-column label="开始时间">
-						<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
-					</el-table-column>
-					<el-table-column  label="截止时间">
-						<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
-					</el-table-column>
-					<el-table-column  label="剩余天数">
-						<template slot-scope="scope"><span>{{ scope.row.leftTime }}</span></template>
-					</el-table-column>
-					<el-table-column  label="目前进度">
-						<template slot-scope="scope">
-										<span>
-											<div class="progress" :hidden="scope.row.hidden">
-											  <div class="progress-bar" role="progressbar" :style="'width: '+ scope.row.currentProcess + '%;'" aria-valuenow="scope.row.currentProcess" aria-valuemin="0" aria-valuemax="100">{{ scope.row.currentProcess }}%</div>
-											</div>
-										</span></template>
-					</el-table-column>
+				<el-scrollbar style="height: 400px;">
+					<el-table style="width: 100%;margin-top: 10px;" :data="userProjectsTableData" class="x-table table-td0">
+						<!--<el-table-column type="selection" width="55"></el-table-column>-->
+						<el-table-column label="姓名">
+							<template slot-scope="scope">
+									<el-link type="primary">{{ scope.row.username }}</el-link>
+							</template>
+						</el-table-column>
+						<el-table-column label="状态">
+							<template slot-scope="scope"><a  target="_blank">{{ scope.row.tripState }} </a></template>
+						</el-table-column>
+						<!--<el-table-column  label="已完成工作量">-->
+							<!--<template slot-scope="scope"><span>{{ scope.row.finishedWorkload }}</span></template>-->
+						<!--</el-table-column>-->
+						<!--<el-table-column  label="目前工作量">-->
+							<!--<template slot-scope="scope"><span>{{ scope.row.currentWorkload }}</span></template>-->
+						<!--</el-table-column>-->
+						<el-table-column label="项目名称">
+							<template slot-scope="scope"><a  target="_blank">{{ scope.row.projectName }} </a></template>
+						</el-table-column>
+						<el-table-column label="设计阶段">
+							<template slot-scope="scope"><span>{{ scope.row.designPhase }}</span></template>
+						</el-table-column>
+						<el-table-column label="任务级别">
+							<template slot-scope="scope"><span>{{ scope.row.taskLevel }}</span></template>
+						</el-table-column>
+						<el-table-column label="开始时间">
+							<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
+						</el-table-column>
+						<el-table-column  label="截止时间">
+							<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
+						</el-table-column>
+						<el-table-column  label="剩余天数">
+							<template slot-scope="scope"><span>{{ scope.row.leftTime }}</span></template>
+						</el-table-column>
+						<el-table-column  label="目前进度">
+							<template slot-scope="scope">
+											<span>
+												<div class="progress" :hidden="scope.row.hidden">
+													<div class="progress-bar" role="progressbar" :style="'width: '+ scope.row.currentProcess + '%;'" aria-valuenow="scope.row.currentProcess" aria-valuemin="0" aria-valuemax="100">{{ scope.row.currentProcess }}%</div>
+												</div>
+											</span></template>
+						</el-table-column>
 
-					<el-table-column label="备注">
-						<template slot-scope="scope"><span>{{ scope.row.role }}</span></template>
-					</el-table-column>
-					<el-table-column label="操作">
-						<template slot-scope="scope">
-							<el-button type="primary" @click="saveUser(scope.row.username)">确定</el-button>
-							<span></span>
-						</template>
-					</el-table-column>
-				</el-table>
-				<el-pagination class="txtCenter"
-							   @size-change="handleSizeChangeUserProjectsTableData"
-							   @current-change="handleCurrentChangeUserProjectsTableData"
-							   :current-page.sync="currentPageUserProjectsTableData"
-							   :page-sizes="[10,20,30,50]"
-							   :page-size="100"
-							   layout=" sizes, prev, pager, next"
-							   :total="totalUserProjectsTableData">
+						<el-table-column label="备注">
+							<template slot-scope="scope"><span>{{ scope.row.role }}</span></template>
+						</el-table-column>
+						<el-table-column label="操作">
+							<template slot-scope="scope">
+								<el-button type="primary" size="mini" @click="saveUser(scope.row.username)">确定</el-button>
+								<span></span>
+							</template>
+						</el-table-column>
+					</el-table>
+				</el-scrollbar>
+				<el-pagination class="txtCenter pagination"
+					background
+					@size-change="handleSizeChangeUserProjectsTableData"
+					@current-change="handleCurrentChangeUserProjectsTableData"
+					:current-page.sync="currentPageUserProjectsTableData"
+					:page-sizes="[10,20,30,50]"
+					:page-size="100"
+					layout=" sizes, prev, pager, next"
+					:total="totalUserProjectsTableData">
 				</el-pagination>
 			</el-dialog>
 
 			<!-- 上序资料modal -->
 			<el-dialog title="上序资料" :visible.sync="previousProfileDialogVisible" width="80%">
-				<nav>
+				<!-- <nav>
 					<div class="nav nav-tabs" role="tablist" v-for="item, key in previousProfileTabs" :key="key">
 						<a style="display: inline-block" :class="item.style" @click="getPreviousProfileByTabId(item.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{item.name}}</a>
 					</div>
-				</nav>
-				<el-button type="primary" @click="addPreviousProfileClick" :hidden="addPreviousProfileHidden">添加</el-button>
+				</nav> -->
+				<div class="table-operate">
+					<el-radio-group size="small" v-model="profileType" @change="profileChange">
+						<el-radio-button v-for="item, key in previousProfileTabs" :key="item.id" :label="item.id">{{item.name}}</el-radio-button>
+					</el-radio-group>
+					<el-button type="primary" size="small" @click="addPreviousProfileClick" :hidden="addPreviousProfileHidden">添加</el-button>
+				</div>
 				<div style="height: 5px"></div>
 				<el-table style="width: 100%;" :data="previousProfileTableData" class="x-table table-td0">
 					<el-table-column type="selection" width="55"></el-table-column>
@@ -368,21 +353,22 @@
 
 					<el-table-column  label="操作">
 						<template slot-scope="scope">
-							<button type="button" class="btn btn-info" @click="acceptPreviousProfile(scope.row)">接收</button>
-							<button type="button" class="btn btn-danger" @click="refusePreviousProfile(scope.row)">退回</button>
+							<el-button type="primary" size="mini" @click="acceptPreviousProfile(scope.row)">接收</el-button>
+							<el-button size="mini" @click="refusePreviousProfile(scope.row)">退回</el-button>
 						</template>
 					</el-table-column>
 
 
 				</el-table>
-				<el-pagination class="txtCenter"
-							   @size-change="handleSizeChangepreviousProfileTableData"
-							   @current-change="handleCurrentChangepreviousProfileTableData"
-							   :current-page.sync="currentPagepreviousProfileTableData"
-							   :page-sizes="[10,20,30,50]"
-							   :page-size="100"
-							   layout=" sizes, prev, pager, next"
-							   :total="totalpreviousProfileTableData">
+				<el-pagination class="txtCenter pagination"
+					background
+					@size-change="handleSizeChangepreviousProfileTableData"
+					@current-change="handleCurrentChangepreviousProfileTableData"
+					:current-page.sync="currentPagepreviousProfileTableData"
+					:page-sizes="[10,20,30,50]"
+					:page-size="100"
+					layout=" sizes, prev, pager, next"
+					:total="totalpreviousProfileTableData">
 				</el-pagination>
 			</el-dialog>
 
@@ -392,13 +378,19 @@
 					<!--<el-button type="primary" @click="showAddNextProfessionDialog">添加</el-button>-->
 				<!--</div>-->
 
-				<nav>
+				<!-- <nav>
 					<div class="nav nav-tabs" role="tablist" v-for="item, key in nextProfessionProfileTabs" :key="key">
 						<a style="display: inline-block" :class="item.style" @click="getNextProfessionProfileByTabId(item.id)" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true">{{item.name}}</a>
 					</div>
-				</nav>
-				<div style="height: 5px"></div>
-				<el-button type="primary" @click="addNextProfessionProfileClick" :hidden="addNextProfessionProfileHidden">添加</el-button>
+				</nav> -->
+				<div class="table-operate">
+					<el-radio-group size="small" v-model="profileType" @change="nextProfessionProfileChange">
+						<el-radio-button v-for="item, key in nextProfessionProfileTabs" :key="item.id" :label="item.id">{{item.name}}</el-radio-button>
+					</el-radio-group>
+					<el-button type="primary" size="small" @click="addNextProfessionProfileClick" :hidden="addNextProfessionProfileHidden">添加</el-button>
+				</div>
+				<!-- <div style="height: 5px"></div> -->
+				<!-- <el-button type="primary" @click="addNextProfessionProfileClick" :hidden="addNextProfessionProfileHidden">添加</el-button> -->
 
 				<el-table style="width: 100%;" :data="nextProfessionProfileTableData" class="x-table table-td0">
 					<el-table-column type="selection" width="55"></el-table-column>
@@ -426,21 +418,23 @@
 					</el-table-column>
 					<el-table-column  label="发送">
 						<template slot-scope="scope">
-							<button type="button" class="btn btn-success">发送</button>
+							<el-button type="primary" size="mini" class="btn btn-success">发送</el-button>
 						</template>
 					</el-table-column>
 					<el-table-column  label="备注">
 						<template slot-scope="scope"><span>{{ scope.row.dealOpinions }}</span></template>
 					</el-table-column>
 				</el-table>
-				<el-pagination class="txtCenter"
-							   @size-change="handleSizeChangeNextProfessionProfileTableData"
-							   @current-change="handleCurrentChangeNextProfessionProfileTableData"
-							   :current-page.sync="currentPageNextProfessionProfileTableData"
-							   :page-sizes="[10,20,30,50]"
-							   :page-size="100"
-							   layout=" sizes, prev, pager, next"
-							   :total="totalNextProfessionProfileTableData">
+				<el-pagination 
+					class="txtCenter pagination"
+					background
+					@size-change="handleSizeChangeNextProfessionProfileTableData"
+					@current-change="handleCurrentChangeNextProfessionProfileTableData"
+					:current-page.sync="currentPageNextProfessionProfileTableData"
+					:page-sizes="[10,20,30,50]"
+					:page-size="100"
+					layout=" sizes, prev, pager, next"
+					:total="totalNextProfessionProfileTableData">
 				</el-pagination>
 			</el-dialog>
 
@@ -464,29 +458,60 @@
 
 			<!-- 添加上序文件Modal -->
 			<el-dialog title="添加我需要的上序文件" :visible.sync="addPreviousProfileDialogVisible" width="30%">
-				<div class="form-group">
-					<label style="margin-left: 10px; display: inline; width: 20%;">上序分项目：</label>
-					<el-select v-model="selectDepartments" multiple placeholder="请选择"  style="width: 80%">
-						<el-option
-								v-for="department in departments"
-								:key="department.id"
-								:label="department.departmentName"
-								:value="department.id">
-						</el-option>
-					</el-select>
-				</div>
-				<div class="form-group">
-					<label style="margin-left: 10px; display: inline; width: 20%;">内容：</label>
-					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="content">
-				</div>
-				<div class="modal-footer">
-					<button  class="btn btn-primary" @click="saveAddPreviousProfileDialog">保存</button>
+				<el-form size="small" label-suffix="：" label-width="100px">
+					<el-form-item label="上序分项目">
+						<el-select v-model="selectDepartments" multiple placeholder="请选择">
+							<el-option
+									v-for="department in departments"
+									:key="department.id"
+									:label="department.departmentName"
+									:value="department.id">
+							</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="内容">
+						<el-input v-model="content" placeholder="请输入内容"></el-input>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="txtCenter">
+					<el-button type="primary" size="small" @click="saveAddPreviousProfileDialog">保存</el-button>
+					<el-button size="small" @click="addPreviousProfileDialogVisible = false">保存</el-button>
 				</div>
 			</el-dialog>
 
 			<!-- 添加下序文件Modal -->
 			<el-dialog title="添加下序文件" :visible.sync="addNextProfessionProfileDialogVisible" width="30%">
-				<div class="form-group">
+				<el-form label-width="100px" label-suffix="：" size="small">
+					<el-form-item label="内容">
+						<el-input v-model="nextProfessionProfileContent"  placeholder="请输入内容"></el-input>
+					</el-form-item>
+					<el-form-item label="下序分项目">
+						<el-select v-model="selectDepartmentsOfNextProfessionProfile" multiple placeholder="请选择"  style="width: 80%">
+							<el-option
+									v-for="department in nextProfessionProjects"
+									:key="department.id"
+									:label="department.departmentName"
+									:value="department.id">
+							</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="文件">
+						<el-select v-model="selectProfiles" multiple placeholder="请选择"  style="width: 80%">
+							<el-option
+									v-for="profile in profileTrees"
+									:key="profile.id"
+									:label="profile.name"
+									:value="profile.id">
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="txtCenter">
+					<el-button type="primary" size="small" @click="saveAddNextProfessionProfileDialog">保存</el-button>
+					<el-button size="small" @click="addNextProfessionProfileDialogVisible = false">保存</el-button>
+				</div>
+
+				<!-- <div class="form-group">
 					<label style="margin-left: 10px; display: inline; width: 20%;">内容：</label>
 					<input type="text" class="form-control" style="width: 80%; display: inline" placeholder=""  v-model="nextProfessionProfileContent">
 				</div>
@@ -514,9 +539,8 @@
 				</div>
 				<div class="modal-footer">
 					<button  class="btn btn-primary" @click="saveAddNextProfessionProfileDialog">保存</button>
-				</div>
+				</div> -->
 			</el-dialog>
-
 
 			<!-- 送审流程 -->
 			<el-dialog title="送审流程" :visible.sync="reviewProcessDialogVisible" width="50%">
@@ -552,1017 +576,1011 @@
 		</div>
 	</div>
 
-	<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
-	<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
-	<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+	<div layout:fragment="jscontent">
+		<!-- <script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script> -->
+		<!-- <script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script> -->
+		<!-- <script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script> -->
 
-	<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
-	<script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script>
-	<script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script>
-	<script type="text/javascript" src="asserts/js/const.js" th:src="@{/asserts/js/const.js}"></script>
-	<script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script>
+		<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+		<!-- <script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script> -->
+		<!-- <script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script> -->
+		<!-- <script type="text/javascript" src="asserts/js/const.js" th:src="@{/asserts/js/const.js}"></script> -->
+		<!-- <script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script> -->
 
 
-	<script>
-		feather.replace()
-	</script>
+		<script>
+			feather.replace()
+		</script>
 
-	<script th:inline="javascript" type="text/javascript">
+		<script th:inline="javascript" type="text/javascript">
 
-		const cityOptions = ['上海', '北京', '广州', '深圳'];
+			const cityOptions = ['上海', '北京', '广州', '深圳'];
 
-		var app = new Vue({
-			el: '#app',
-			data: {
-				addTaskAssignmentDialogVisible: false,
-				userProjectsDialogVisible: false,
-				previousProfileDialogVisible: false,
-				nextProfessionProfileDialogVisible: false,
-				profileTreeDialogVisible: false,
-				addPreviousProfileDialogVisible: false,
-				addNextProfessionProfileDialogVisible: false,
-				reviewProcessDialogVisible: false,
-				detailTableHidden: false,
-				flowChartTableHidden: true,
-				designerOpinionDisable: true,
-				reviewerOpioionDisable: true,
-				inspectorOpionionDisable: true,
-				validationerOpioionDisable: true,
-				isCollapse: true,
-				currentPageTaskAssignmentListData: 1,
-				totalTaskAssignmentListData: 0,
-				pageSizeTaskAssignmentListData: 10,
-				currentPageUserProjectsTableData: 1,
-				totalUserProjectsTableData: 0,
-				pageSizeUserProjectsTableData: 10,
-				currentPagepreviousProfileTableData: 1,
-				totalpreviousProfileTableData: 0,
-				pageSizepreviousProfileTableData: 10,
-				currentPageNextProfessionProfileTableData: 1,
-				totalNextProfessionProfileTableData: 0,
-				pageSizeNextProfessionProfileTableData: 10,
-				currentPage: 1,
-				total: 0,
-				previousProfileTabId: 0,
-				nextProfessionProfileTabId: 0,
-				taskAssignmentId: null,
-				projectSummaryId: null,
-				departmentId: null,
-				projectId: null,
-				selectTaskId: null,
-				selectUserRole: null,
-				project: {},
-				projects:{},
-				addTaskAssignment:{},
-				departments: {},
-				reviewProcessData: {},
-				nextProfessionProjects: {},
-				isActive: true,
-				projectClass1: "m-a cur",
-				taskAssignmentListData: null,
-				userProjectsTableData: null,
-				previousProfileTableData: null,
-				nextProfessionProfileTableData: null,
-				addNextProfessionProfile: null,
-				addPreviousProfileHidden: true,
-				addNextProfessionProfileHidden: false,
-				selectDepartments: null,
-				selectDepartmentsOfNextProfessionProfile: null,
-				selectProfiles: null,
-				content: null,
-				nextProfessionProfileContent: null,
-				fileType: 'text/plain',
-				profileTrees: null,
-				form: {
-					category: ''
-				},
-				navigationBars:[
-					{
-						id: 1,
-						name: "信息列表",
-						style:"nav-item nav-link active"
+			var app = new Vue({
+				el: '#app',
+				data: {
+					addTaskAssignmentDialogVisible: false,
+					userProjectsDialogVisible: false,
+					previousProfileDialogVisible: false,
+					nextProfessionProfileDialogVisible: false,
+					profileTreeDialogVisible: false,
+					addPreviousProfileDialogVisible: false,
+					addNextProfessionProfileDialogVisible: false,
+					reviewProcessDialogVisible: false,
+					detailTableHidden: false,
+					flowChartTableHidden: true,
+					designerOpinionDisable: true,
+					reviewerOpioionDisable: true,
+					inspectorOpionionDisable: true,
+					validationerOpioionDisable: true,
+					isCollapse: true,
+					currentPageTaskAssignmentListData: 1,
+					totalTaskAssignmentListData: 0,
+					pageSizeTaskAssignmentListData: 10,
+					currentPageUserProjectsTableData: 1,
+					totalUserProjectsTableData: 0,
+					pageSizeUserProjectsTableData: 10,
+					currentPagepreviousProfileTableData: 1,
+					totalpreviousProfileTableData: 0,
+					pageSizepreviousProfileTableData: 10,
+					currentPageNextProfessionProfileTableData: 1,
+					totalNextProfessionProfileTableData: 0,
+					pageSizeNextProfessionProfileTableData: 10,
+					currentPage: 1,
+					total: 0,
+					previousProfileTabId: 0,
+					nextProfessionProfileTabId: 0,
+					taskAssignmentId: null,
+					projectSummaryId: null,
+					departmentId: null,
+					projectId: null,
+					selectTaskId: null,
+					selectUserRole: null,
+					project: {},
+					projects:{},
+					addTaskAssignment:{},
+					departments: {},
+					reviewProcessData: {},
+					nextProfessionProjects: {},
+					isActive: true,
+					projectClass1: "m-a cur",
+					taskAssignmentListData: null,
+					userProjectsTableData: null,
+					previousProfileTableData: null,
+					nextProfessionProfileTableData: null,
+					addNextProfessionProfile: null,
+					addPreviousProfileHidden: true,
+					addNextProfessionProfileHidden: false,
+					selectDepartments: null,
+					selectDepartmentsOfNextProfessionProfile: null,
+					selectProfiles: null,
+					content: null,
+					nextProfessionProfileContent: null,
+					fileType: 'text/plain',
+					profileTrees: null,
+					form: {
+						category: ''
 					},
-					{
-						id: 2,
-						name: "流程图",
-						style:"nav-item nav-link"
-					}
-				],
-				previousProfileTabs: [
-					{
-						id: 0,
-						name: "收文",
-						style: "nav-item nav-link active",
-					},
-					{
-						id: 1,
-						name: "发文",
-						style: "nav-item nav-link",
-					}
-				],
-				nextProfessionProfileTabs: [
-					{
-						id: 0,
-						name: "我发起的",
-						style: "nav-item nav-link active",
-					},
-					{
-						id: 1,
-						name: "被需要的",
-						style: "nav-item nav-link",
-					}
-				],
-				fileList: [],
-				reviewProcessFileNames: [],
-				checkAll: false,
-				checkedCities: ['上海', '北京'],
-				cities: cityOptions,
-				isIndeterminate: true,
-			},
-			methods: {
-				handleSizeChangeTaskAssignmentListData(val) {
-					console.log(`每页 ${val} 条`);
-					app.pageSizeTaskAssignmentListData = val
-					findByProjectId()
-				},
-				handleCurrentChangeTaskAssignmentListData(val) {
-					console.log(`当前页: ${val}`);
-					app.currentPageTaskAssignmentListData = val
-					findByProjectId()
-				},
-				handleSizeChangeUserProjectsTableData(val) {
-					console.log(`每页 ${val} 条`);
-					app.pageSizeUserProjectsTableData = val
-					findUserProjectsByDeptIdAndRole()
-				},
-				handleCurrentChangeUserProjectsTableData(val) {
-					console.log(`当前页: ${val}`);
-					app.currentPageUserProjectsTableData = val
-					findUserProjectsByDeptIdAndRole()
-				},
-				handleSizeChangepreviousProfileTableData(val) {
-					console.log(`每页 ${val} 条`);
-					app.pageSizepreviousProfileTableData = val
-					findPreviousProfile()
-				},
-				handleCurrentChangepreviousProfileTableData(val) {
-					console.log(`当前页: ${val}`);
-					app.currentPagepreviousProfileTableData = val
-					findPreviousProfile()
-				},
-				handleSizeChangeNextProfessionProfileTableData(val) {
-					console.log(`每页 ${val} 条`);
-					app.pageSizeNextProfessionProfileTableData = val
-					findNextProfessionProfile()
-				},
-				handleCurrentChangeNextProfessionProfileTableData(val) {
-					console.log(`当前页: ${val}`);
-					app.currentPageNextProfessionProfileTableData = val
-					findNextProfessionProfile()
-				},
-				handleSizeChange(val) {
-					console.log(`每页 ${val} 条`);
-				},
-				handleCurrentChange(val) {
-					console.log(`当前页: ${val}`);
-				},
-				showProjectById: function(id){
-					// console.log("应该显示 " + id)
-					var ajaxData = {}
-					ajaxData.projectId = id
-					//更改li颜色
-					var myProjects = app.projects
-					for(var i = 0; i < myProjects.length; i++){
-						if(myProjects[i].id == id){
-							myProjects[i].deltag = 'm-a cur'
-							app.projectId = myProjects[i].id
-							app.departmentId = myProjects[i].departmentId
-							findByProjectId();//根据分项目查询该分项目下的任务分配情况
-						}else{
-							myProjects[i].deltag = ''
+					navigationBars:[
+						{
+							id: 1,
+							name: "信息列表",
+							style:"nav-item nav-link active"
+						},
+						{
+							id: 2,
+							name: "流程图",
+							style:"nav-item nav-link"
 						}
-					}
-					app.projects = myProjects
-					app.fileList = []
-				},
-				switchNavigationBar: function (id) {
-					var navigationBars = app.navigationBars
-					for(var i = 0; i < navigationBars.length; i++){
-						if(id == navigationBars[i].id){
-							navigationBars[i].style = "nav-item nav-link active"
-						}else{
-							navigationBars[i].style = "nav-item nav-link"
+					],
+					previousProfileTabs: [
+						{
+							id: 0,
+							name: "收文",
+							style: "nav-item nav-link active",
+						},
+						{
+							id: 1,
+							name: "发文",
+							style: "nav-item nav-link",
 						}
-					}
-					if(id == 1){
-						app.detailTableHidden = false
-						app.flowChartTableHidden = true
-					}else if(id == 2){
-						app.detailTableHidden = true
-						app.flowChartTableHidden = false
-					}
+					],
+					nextProfessionProfileTabs: [
+						{
+							id: 0,
+							name: "我发起的",
+							style: "nav-item nav-link active",
+						},
+						{
+							id: 1,
+							name: "被需要的",
+							style: "nav-item nav-link",
+						}
+					],
+					fileList: [],
+					reviewProcessFileNames: [],
+					checkAll: false,
+					checkedCities: ['上海', '北京'],
+					cities: cityOptions,
+					isIndeterminate: true,
+					activeName: '收文',
 
+					profileType: 0
 				},
-				//添加任务按钮
-				addTaskAssignmentClick: function () {
-					app.addTaskAssignmentDialogVisible = true
-				},
-				//保存新添加的任务
-				saveAddTaskAssignment: function () {
-					var that = this
-					var addTaskAssignment = app.addTaskAssignment
-					addTaskAssignment.projectId = app.projectId
-					var ajaxData = {}
-
-					ajaxData.taskAssignment = encodeURI(JSON.stringify(addTaskAssignment))
-					$.ajax({
-						data: ajaxData,
-						type: "GET",
-						url: "/crud/taskAssignment/addTaskAssignment",
-						traditional: true,
-						success: function (result) {
-							if(result.code == 200){
+				methods: {
+					handleSizeChangeTaskAssignmentListData(val) {
+						console.log(`每页 ${val} 条`);
+						app.pageSizeTaskAssignmentListData = val
+						findByProjectId()
+					},
+					handleCurrentChangeTaskAssignmentListData(val) {
+						console.log(`当前页: ${val}`);
+						app.currentPageTaskAssignmentListData = val
+						findByProjectId()
+					},
+					handleSizeChangeUserProjectsTableData(val) {
+						console.log(`每页 ${val} 条`);
+						app.pageSizeUserProjectsTableData = val
+						findUserProjectsByDeptIdAndRole()
+					},
+					handleCurrentChangeUserProjectsTableData(val) {
+						console.log(`当前页: ${val}`);
+						app.currentPageUserProjectsTableData = val
+						findUserProjectsByDeptIdAndRole()
+					},
+					handleSizeChangepreviousProfileTableData(val) {
+						console.log(`每页 ${val} 条`);
+						app.pageSizepreviousProfileTableData = val
+						findPreviousProfile()
+					},
+					handleCurrentChangepreviousProfileTableData(val) {
+						console.log(`当前页: ${val}`);
+						app.currentPagepreviousProfileTableData = val
+						findPreviousProfile()
+					},
+					handleSizeChangeNextProfessionProfileTableData(val) {
+						console.log(`每页 ${val} 条`);
+						app.pageSizeNextProfessionProfileTableData = val
+						findNextProfessionProfile()
+					},
+					handleCurrentChangeNextProfessionProfileTableData(val) {
+						console.log(`当前页: ${val}`);
+						app.currentPageNextProfessionProfileTableData = val
+						findNextProfessionProfile()
+					},
+					handleSizeChange(val) {
+						console.log(`每页 ${val} 条`);
+					},
+					handleCurrentChange(val) {
+						console.log(`当前页: ${val}`);
+					},
+					showProjectById: function(id){
+						// console.log("应该显示 " + id)
+						app.currentProjectSummaryId = id
+						var ajaxData = {}
+						ajaxData.projectId = id
+						//更改li颜色
+						var myProjects = app.projects
+						for(var i = 0; i < myProjects.length; i++){
+							if(myProjects[i].id == id){
+								myProjects[i].deltag = 'm-a cur'
+								app.projectId = myProjects[i].id
+								app.departmentId = myProjects[i].departmentId
 								findByProjectId();//根据分项目查询该分项目下的任务分配情况
-								app.addTaskAssignmentDialogVisible = false
-								app.addTaskAssignment = {}
-								that.$message({
-									message: '任务添加成功',
-									type: 'success'
-								});
 							}else{
-								console.log("返回值失败 addTaskAssignment")
+								myProjects[i].deltag = ''
 							}
-
 						}
-					})
-				},
-				//编辑设计人员
-				editDesignerClick: function (taskId) {
-					app.selectTaskId = taskId
-					app.selectUserRole = "designer"
-					app.userProjectsDialogVisible = true
-					findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
-				},
-				//编辑复核人员
-				editReviewerClick: function (taskId) {
-					app.selectTaskId = taskId
-					app.selectUserRole = "reviewer"
-					app.userProjectsDialogVisible = true
-					findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
-				},
-				//编辑审核人员
-				editInspectorClick: function (taskId) {
-					app.selectTaskId = taskId
-					app.selectUserRole = "inspector"
-					app.userProjectsDialogVisible = true
-					findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
-				},
-				//编辑审定人员
-				editValidationerClick: function (taskId) {
-					app.selectTaskId = taskId
-					app.selectUserRole = "validationer"
-					app.userProjectsDialogVisible = true
-					findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
-				},
-				//保存选中的人员
-				saveUser: function(username){
-					var ajaxData = {}
-					ajaxData.departmentId = app.departmentId
-					ajaxData.selectTaskId = app.selectTaskId
-					ajaxData.selectUserRole = app.selectUserRole
-					ajaxData.username = encodeURI(JSON.stringify(username))
+						app.projects = myProjects
+						app.fileList = []
+					},
+					switchNavigationBar: function (id) {
+						var navigationBars = app.navigationBars
+						for(var i = 0; i < navigationBars.length; i++){
+							if(id == navigationBars[i].id){
+								navigationBars[i].style = "nav-item nav-link active"
+							}else{
+								navigationBars[i].style = "nav-item nav-link"
+							}
+						}
+						if(id == 1){
+							app.detailTableHidden = false
+							app.flowChartTableHidden = true
+						}else if(id == 2){
+							app.detailTableHidden = true
+							app.flowChartTableHidden = false
+						}
 
-					console.log(ajaxData)
+					},
+					//添加任务按钮
+					addTaskAssignmentClick: function () {
+						app.addTaskAssignmentDialogVisible = true
+					},
+					//保存新添加的任务
+					saveAddTaskAssignment: function () {
+						var that = this
+						var addTaskAssignment = app.addTaskAssignment
+						addTaskAssignment.projectId = app.projectId
+						var ajaxData = {}
 
-					editEngineer(ajaxData, this);//编辑分任务的设计、复核、审核、审定人员
-				},
-				//显示上序资料dialog
-				showPreviousProfileDialog: function(){
-					app.previousProfileDialogVisible = true
-					findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
-				},
-				//根据tab切换上序文件（我收到的、我申请的）
-				getPreviousProfileByTabId: function (tabId) {
-					app.previousProfileTabId = tabId
-					var previousProfileTabs = app.previousProfileTabs
-					for(var i = 0; i < previousProfileTabs.length; i++){
-						if(i == tabId){
-							previousProfileTabs[i].style = 'nav-item nav-link active'
+						ajaxData.taskAssignment = encodeURI(JSON.stringify(addTaskAssignment))
+						$.ajax({
+							data: ajaxData,
+							type: "GET",
+							url: "/crud/taskAssignment/addTaskAssignment",
+							traditional: true,
+							success: function (result) {
+								if(result.code == 200){
+									findByProjectId();//根据分项目查询该分项目下的任务分配情况
+									app.addTaskAssignmentDialogVisible = false
+									app.addTaskAssignment = {}
+									that.$message({
+										message: '任务添加成功',
+										type: 'success'
+									});
+								}else{
+									console.log("返回值失败 addTaskAssignment")
+								}
+
+							}
+						})
+					},
+					//编辑设计人员
+					editDesignerClick: function (taskId) {
+						app.selectTaskId = taskId
+						app.selectUserRole = "designer"
+						app.userProjectsDialogVisible = true
+						findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
+					},
+					//编辑复核人员
+					editReviewerClick: function (taskId) {
+						app.selectTaskId = taskId
+						app.selectUserRole = "reviewer"
+						app.userProjectsDialogVisible = true
+						findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
+					},
+					//编辑审核人员
+					editInspectorClick: function (taskId) {
+						app.selectTaskId = taskId
+						app.selectUserRole = "inspector"
+						app.userProjectsDialogVisible = true
+						findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
+					},
+					//编辑审定人员
+					editValidationerClick: function (taskId) {
+						app.selectTaskId = taskId
+						app.selectUserRole = "validationer"
+						app.userProjectsDialogVisible = true
+						findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
+					},
+					//保存选中的人员
+					saveUser: function(username){
+						var ajaxData = {}
+						ajaxData.departmentId = app.departmentId
+						ajaxData.selectTaskId = app.selectTaskId
+						ajaxData.selectUserRole = app.selectUserRole
+						ajaxData.username = encodeURI(JSON.stringify(username))
+
+						console.log(ajaxData)
+
+						editEngineer(ajaxData, this);//编辑分任务的设计、复核、审核、审定人员
+					},
+					//显示上序资料dialog
+					showPreviousProfileDialog: function(){
+						app.previousProfileDialogVisible = true
+						findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
+					},
+					//根据tab切换上序文件（我收到的、我申请的）
+					getPreviousProfileByTabId: function (tabId) {
+						app.previousProfileTabId = tabId
+						var previousProfileTabs = app.previousProfileTabs
+						for(var i = 0; i < previousProfileTabs.length; i++){
+							if(i == tabId){
+								previousProfileTabs[i].style = 'nav-item nav-link active'
+							}else{
+								previousProfileTabs[i].style = 'nav-item nav-link'
+							}
+						}
+						app.previousProfileTabs = previousProfileTabs
+						findPreviousProfile(tabId);//查找上序资料列表
+						if(tabId == 1){
+							app.addPreviousProfileHidden = false
 						}else{
-							previousProfileTabs[i].style = 'nav-item nav-link'
+							app.addPreviousProfileHidden = true
 						}
-					}
-					app.previousProfileTabs = previousProfileTabs
-					findPreviousProfile(tabId);//查找上序资料列表
-					if(tabId == 1){
-						app.addPreviousProfileHidden = false
-					}else{
-						app.addPreviousProfileHidden = true
-					}
-				},
-				//显示下序资料dialog
-				showNextProfessionProfileDialog: function(){
-					app.nextProfessionProfileDialogVisible = true
-					findNextProfessionProfile(app.nextProfessionProfileTabId);//查找下序资料
-				},
-				//根据tab切换下序资料（我发起的、需要我发送的）
-				getNextProfessionProfileByTabId: function(tabId){
-					app.nextProfessionProfileTabId = tabId
-					var nextProfessionProfileTabs = app.nextProfessionProfileTabs
-					for(var i = 0; i < nextProfessionProfileTabs.length; i++){
-						if(i == tabId){
-							nextProfessionProfileTabs[i].style = 'nav-item nav-link active'
+					},
+					//显示下序资料dialog
+					showNextProfessionProfileDialog: function(){
+						app.nextProfessionProfileDialogVisible = true
+						findNextProfessionProfile(app.nextProfessionProfileTabId);//查找下序资料
+					},
+					//根据tab切换下序资料（我发起的、需要我发送的）
+					getNextProfessionProfileByTabId: function(tabId){
+						app.nextProfessionProfileTabId = tabId
+						var nextProfessionProfileTabs = app.nextProfessionProfileTabs
+						for(var i = 0; i < nextProfessionProfileTabs.length; i++){
+							if(i == tabId){
+								nextProfessionProfileTabs[i].style = 'nav-item nav-link active'
+							}else{
+								nextProfessionProfileTabs[i].style = 'nav-item nav-link'
+							}
+						}
+						app.nextProfessionProfileTabs = nextProfessionProfileTabs
+						findNextProfessionProfile(tabId);//查找上序资料列表
+						if(tabId == 1){
+							app.addNextProfessionProfileHidden = true
 						}else{
-							nextProfessionProfileTabs[i].style = 'nav-item nav-link'
+							app.addNextProfessionProfileHidden = false
 						}
-					}
-					app.nextProfessionProfileTabs = nextProfessionProfileTabs
-					findNextProfessionProfile(tabId);//查找上序资料列表
-					if(tabId == 1){
-						app.addNextProfessionProfileHidden = true
-					}else{
-						app.addNextProfessionProfileHidden = false
-					}
-				},
-				//显示文件树对话框
-				openProfileTreeDialog: function(){
-					app.fileList = []
-					app.profileTreeDialogVisible = true
-					findFilesByProjectId();//查找文件树内容
-				},
-				uploadDocs: function (params) {
-					//TODO OSS文件上传可以在前端直接配置
-					console.log(params.file.name)
-				},
-				beforeUploadDoc: function (file) {
-					console.log("beforeUploadDoc function")
-					console.log(file)
-				},
-				handleChange(file, fileList) {
-					console.log(file)
-					console.log(fileList)
-					// this.fileList = fileList.slice(-3);
-					this.fileList = fileList;
-				},
-				//接收上序文件
-				acceptPreviousProfile: function (professionProfile) {
-					professionProfile.dealFlag = 0;//接收
-					professionProfile.dealOpinions = "接收";
-					var ajaxData = {}
-					ajaxData.professionProfile = encodeURI(JSON.stringify(professionProfile))
-					console.log(professionProfile)
-					updateProfessionProfile(ajaxData);//更新专业文件数据
-					this.$message({
-						message: '接收成功',
-						type: 'success'
-					});
-				},
-				//退回上序文件
-				refusePreviousProfile: function (professionProfile) {
-					this.$prompt('请输入驳回意见', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					}).then(({ value }) => {
-						professionProfile.dealFlag = 1;//驳回
-						professionProfile.dealOpinions = value;
+					},
+					//显示文件树对话框
+					openProfileTreeDialog: function(){
+						app.fileList = []
+						app.profileTreeDialogVisible = true
+						findFilesByProjectId();//查找文件树内容
+					},
+					uploadDocs: function (params) {
+						//TODO OSS文件上传可以在前端直接配置
+						console.log(params.file.name)
+					},
+					beforeUploadDoc: function (file) {
+						console.log("beforeUploadDoc function")
+						console.log(file)
+					},
+					handleChange(file, fileList) {
+						console.log(file)
+						console.log(fileList)
+						// this.fileList = fileList.slice(-3);
+						this.fileList = fileList;
+					},
+					//接收上序文件
+					acceptPreviousProfile: function (professionProfile) {
+						professionProfile.dealFlag = 0;//接收
+						professionProfile.dealOpinions = "接收";
 						var ajaxData = {}
 						ajaxData.professionProfile = encodeURI(JSON.stringify(professionProfile))
+						console.log(professionProfile)
 						updateProfessionProfile(ajaxData);//更新专业文件数据
 						this.$message({
-							message: '驳回成功',
+							message: '接收成功',
 							type: 'success'
 						});
-					}).catch(() => {
-						this.$message({
-							type: 'info',
-							message: '取消输入'
+					},
+					//退回上序文件
+					refusePreviousProfile: function (professionProfile) {
+						this.$prompt('请输入驳回意见', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+						}).then(({ value }) => {
+							professionProfile.dealFlag = 1;//驳回
+							professionProfile.dealOpinions = value;
+							var ajaxData = {}
+							ajaxData.professionProfile = encodeURI(JSON.stringify(professionProfile))
+							updateProfessionProfile(ajaxData);//更新专业文件数据
+							this.$message({
+								message: '驳回成功',
+								type: 'success'
+							});
+						}).catch(() => {
+							this.$message({
+								type: 'info',
+								message: '取消输入'
+							});
 						});
+					},
+					//添加我需要的上序文件
+					addPreviousProfileClick:function () {
+						var projects = app.projects
+						var departments = new Array()
+						for(var i = 0; i< projects.length; i++){
+							if(projects[i].id != app.projectId){
+								var department = {};
+								department.id = projects[i].id
+								department.departmentName = projects[i].departmentName
+								departments.push(department)
+							}
+						}
+						app.departments = departments
+						console.log(app.departments)
+						app.addPreviousProfileDialogVisible = true;
+					},
+					//保存我添加的需要别人提供给我的上序文件
+					saveAddPreviousProfileDialog: function () {
+						var ajaxData = {}
+						ajaxData.content = app.content
+						ajaxData.selectProjectIds = app.selectDepartments
+						ajaxData.projectId = app.projectId
+						addPreviousProfessionProfile(ajaxData);//添加我需要别人提供给我的上序资料
+						app.departments = null
+						app.content = null
+					},
+					//添加我发布的下序资料
+					addNextProfessionProfileClick:function () {
+						var projects = app.projects
+						var departments = new Array()
+						for(var i = 0; i< projects.length; i++){
+							if(projects[i].id != app.projectId){
+								var department = {};
+								department.id = projects[i].id
+								department.departmentName = projects[i].departmentName
+								departments.push(department)
+							}
+						}
+						app.nextProfessionProjects = departments
+						app.addNextProfessionProfileDialogVisible = true;
+						findFilesByProjectIdAddToNextProfessionProfileList();//查找文件树内容，用于给下序文件list
+					},
+					//保存我发布的下序资料
+					saveAddNextProfessionProfileDialog:function () {
+						var ajaxData = {}
+						ajaxData.content = app.nextProfessionProfileContent
+						ajaxData.selectProjectIds = app.selectDepartmentsOfNextProfessionProfile
+						ajaxData.selectProfiles = app.selectProfiles
+						ajaxData.projectId = app.projectId
+						addNextProfessionProfile(ajaxData);//添加我发给别人的下序资料
+						app.nextProfessionProfileContent = null
+						app.selectDepartmentsOfNextProfessionProfile = null
+						app.selectProfiles = null
+					},
+					//设计人员点击事件
+					designerReviewProcessClick:function (taskAssignmentId) {
+						app.taskAssignmentId = taskAssignmentId
+						findReviewProcessByTaskAssignmentId();//查询审核流程数据
+						app.reviewProcessDialogVisible = true
+						app.designerOpinionDisable = false
+						setDisable("designerOpinionDisable")
+					},
+					//复核人员点击事件
+					reviewerReviewProcessClick:function (taskAssignmentId) {
+						app.taskAssignmentId = taskAssignmentId
+						findReviewProcessByTaskAssignmentId();//查询审核流程数据
+						app.reviewProcessDialogVisible = true
+						setDisable("reviewerOpioionDisable")
+					},
+					//审核人员点击事件
+					inspectorReviewProcessClick:function (taskAssignmentId) {
+						app.taskAssignmentId = taskAssignmentId
+						findReviewProcessByTaskAssignmentId();//查询审核流程数据
+						app.reviewProcessDialogVisible = true
+						setDisable("inspectorOpionionDisable")
+					},
+					//审定人员点击事件
+					validationerReviewProcessClick:function (taskAssignmentId) {
+						app.taskAssignmentId = taskAssignmentId
+						findReviewProcessByTaskAssignmentId();//查询审核流程数据
+						app.reviewProcessDialogVisible = true
+						setDisable("validationerOpioionDisable")
+					},
+					//保存送审流程内容
+					saveReviewProcessData: function(){
+						saveReviewProcessDataFunction();//保存送审内容
+					},
+					fileChange1: function(target){
+						var form = document.getElementById("fileUpload1");
+						var url = "/crud/profile/uploadFile?projectId=" + app.projectId
+						var postData = new FormData(form);
+						app.uploading = true;
+						$("#msg").html("处理中...");
+						$.ajax({
+							url: url,
+							type: "POST",
+							data: postData,
+							contentType: false,
+							processData: false,
+							success: function (result) {
+								if (result.code == 200) {
+									findFilesByProjectId()
+								}else{
+								}
+							},
+							error: function () {
+								alert("处理失败！");
+							}
+						});
+					},
+					downloadFile: function(ossFileUrl, name){
+						downloadFunction(ossFileUrl, name)
+					},
+					//下载送审流程文件
+					downloadReviewProcessFile: function(ossFileUrl, name){
+						downloadFunction(ossFileUrl, name)
+					},
+					//送审流程文件上传
+					reviewProcessFileChange: function () {
+						var form = document.getElementById("reviewProcessFileUpload");
+						var url = "/crud/reviewProcess/uploadFile?taskAssignmentId=" + app.taskAssignmentId
+						var postData = new FormData(form);
+						app.uploading = true;
+						$("#msg").html("处理中...");
+						$.ajax({
+							url: url,
+							type: "POST",
+							data: postData,
+							contentType: false,
+							processData: false,
+							success: function (result) {
+								if (result.code == 200) {
+									findReviewProcessByTaskAssignmentId()
+								}else{
+								}
+							},
+							error: function () {
+								alert("处理失败！");
+							}
+						});
+					},
+					profileChange (id) {
+						this.getPreviousProfileByTabId(id)
+					},
+					nextProfessionProfileChange (id) {
+						this.getNextProfessionProfileByTabId(id)
+					}
+				}
+
+			})
+
+			var projectList =[[ ${projectList}]]
+			var departmentId =[[ ${departmentId}]]
+			console.log(projectList)
+			console.log(departmentId)
+
+			app.projects = projectList
+			app.projectSummaryId = projectList[0].projectSummaryId
+			app.currentProjectSummaryId = projectList[0].projectSummaryId
+
+			app.departmentId = departmentId
+
+			for(var i = 0; i < projectList.length; i++){
+				if(projectList[i].deltag == "m-a cur"){
+					app.projectId = projectList[i].id
+				}
+			}
+
+			findByProjectId();//根据分项目查询该分项目下的任务分配情况
+			findProjectSummaryById()//查看项目详细信息
+
+			/**
+			 * 根据分项目查询该分项目下的任务分配情况
+			 */
+			function findByProjectId() {
+				var ajaxData = {}
+				ajaxData.currentPage = app.currentPageTaskAssignmentListData
+				ajaxData.pageSize = app.pageSizeTaskAssignmentListData
+				ajaxData.projectId = app.projectId
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/taskAssignment/findByProjectId",
+					success: function (result) {
+						if(result.code == 200){
+							app.taskAssignmentListData=result.data.list
+							app.totalTaskAssignmentListData=result.data.totalCount
+						}else{
+							console.log("updatePrincipal 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 根据部门id查找人员项目信息
+			 */
+			function findUserProjectsByDeptIdAndRole(){
+				var ajaxData = {}
+				ajaxData.departmentId = app.departmentId
+				ajaxData.selectUserRole = app.selectUserRole
+				ajaxData.currentPage = app.currentPageUserProjectsTableData
+				ajaxData.pageSize = app.pageSizeUserProjectsTableData
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/userProject/findUserProjectsByDeptIdAndRole",
+					success: function (result) {
+						if(result.code == 200){
+							app.userProjectsTableData=result.data.list
+							app.totalUserProjectsTableData = result.data.totalCount
+							console.log(result.data.totalCount)
+							console.log(result.data.list)
+						}else{
+							console.log("findUserProjectsByDeptIdAndRole 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 编辑分任务的设计、复核、审核、审定人员
+			 * @param ajaxData
+			 */
+			function editEngineer(ajaxData, that){
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/taskAssignment/editEngineer",
+					success: function (result) {
+						if(result.code == 200){
+							showEditSuccessMessgae(that);//显示设计、复核、审核、审定编辑成功消息
+							app.selectTaskId = null
+							app.selectUserRole = null
+							app.userProjectsDialogVisible = false
+							findByProjectId();//根据分项目查询该分项目下的任务分配情况
+						}else{
+							console.log("editEngineer 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 显示编辑成功消息
+			 * @param that
+			 */
+			function showEditSuccessMessgae(that){
+				if("designer" == app.selectUserRole){
+					that.$message({
+						message: "设计人员编辑成功",
+						type: 'success'
 					});
-				},
-				//添加我需要的上序文件
-				addPreviousProfileClick:function () {
-					var projects = app.projects
-					var departments = new Array()
-					for(var i = 0; i< projects.length; i++){
-						if(projects[i].id != app.projectId){
-							var department = {};
-							department.id = projects[i].id
-							department.departmentName = projects[i].departmentName
-							departments.push(department)
+				}else if("reviewer" == app.selectUserRole){
+					that.$message({
+						message: "复核人员编辑成功",
+						type: 'success'
+					});
+				}else if("inspector" == app.selectUserRole){
+					that.$message({
+						message: "审核人员编辑成功",
+						type: 'success'
+					});
+				}else if("validationer" == app.selectUserRole){
+					that.$message({
+						message: "审定人员编辑成功",
+						type: 'success'
+					});
+				}
+
+
+			}
+
+			/**
+			 * 查找上序资料列表
+			 * @param projectId
+			 * @param flag
+			 */
+			function findPreviousProfile(flag){
+				var ajaxData = {}
+				ajaxData.projectId = app.projectId
+				var url = "/crud/previousProfile/findMyReceivedPreviousProfile"	//我收到的上序资料
+				if(flag == 1){
+					url = "/crud/previousProfile/findMyInitiatedPreviousProfile" //我主动需要的上序资料
+				}
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: url,
+					success: function (result) {
+						if(result.code == 200){
+							app.previousProfileTableData = result.data.list
+							app.totalpreviousProfileTableData=result.data.totalCount
+						}else{
+							console.log("findPreviousProfile 返回值失败")
 						}
+
 					}
-					app.departments = departments
-					console.log(app.departments)
-					app.addPreviousProfileDialogVisible = true;
-				},
-				//保存我添加的需要别人提供给我的上序文件
-				saveAddPreviousProfileDialog: function () {
-					var ajaxData = {}
-					ajaxData.content = app.content
-					ajaxData.selectProjectIds = app.selectDepartments
-					ajaxData.projectId = app.projectId
-					addPreviousProfessionProfile(ajaxData);//添加我需要别人提供给我的上序资料
-					app.departments = null
-					app.content = null
-				},
-				//添加我发布的下序资料
-				addNextProfessionProfileClick:function () {
-					var projects = app.projects
-					var departments = new Array()
-					for(var i = 0; i< projects.length; i++){
-						if(projects[i].id != app.projectId){
-							var department = {};
-							department.id = projects[i].id
-							department.departmentName = projects[i].departmentName
-							departments.push(department)
+				})
+			}
+
+			/**
+			 * 查找下序资料列表
+			 * @param projectId
+			 * @param flag
+			 */
+			function findNextProfessionProfile(flag){
+				var ajaxData = {}
+				ajaxData.projectId = app.projectId
+				var url = "/crud/previousProfile/findMySubmitProfileToNextProfession"	//我发起的下序资料
+				if(flag == 1){
+					url = "/crud/previousProfile/findMyNeededProfileToNextProfession" //别人向我要的资料
+				}
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: url,
+					success: function (result) {
+						if(result.code == 200){
+							app.nextProfessionProfileTableData = result.data.list
+							app.totalNextProfessionProfileTableData = result.data.list
+
+						}else{
+							console.log("findNextProfessionProfile 返回值失败")
 						}
+
 					}
-					app.nextProfessionProjects = departments
-					app.addNextProfessionProfileDialogVisible = true;
-					findFilesByProjectIdAddToNextProfessionProfileList();//查找文件树内容，用于给下序文件list
-				},
-				//保存我发布的下序资料
-				saveAddNextProfessionProfileDialog:function () {
-					var ajaxData = {}
-					ajaxData.content = app.nextProfessionProfileContent
-					ajaxData.selectProjectIds = app.selectDepartmentsOfNextProfessionProfile
-					ajaxData.selectProfiles = app.selectProfiles
-					ajaxData.projectId = app.projectId
-					addNextProfessionProfile(ajaxData);//添加我发给别人的下序资料
-					app.nextProfessionProfileContent = null
-					app.selectDepartmentsOfNextProfessionProfile = null
-					app.selectProfiles = null
-				},
-				//设计人员点击事件
-				designerReviewProcessClick:function (taskAssignmentId) {
-					app.taskAssignmentId = taskAssignmentId
-					findReviewProcessByTaskAssignmentId();//查询审核流程数据
-					app.reviewProcessDialogVisible = true
+				})
+			}
+
+
+			/**
+			 * 查找文件树
+			 */
+			function findFilesByProjectId(){
+				var ajaxData = {}
+				ajaxData.projectId = app.projectId
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/profile/findFilesByProjectId",
+					success: function (result) {
+						if(result.code == 200){
+							app.fileList = result.data
+						}else{
+							console.log("findFilesByProjectId 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 查找文件树内容，用于给下序文件list
+			 */
+			function findFilesByProjectIdAddToNextProfessionProfileList(){
+				var ajaxData = {}
+				ajaxData.projectId = app.projectId
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/profile/findFilesByProjectId",
+					success: function (result) {
+						if(result.code == 200){
+							app.profileTrees = result.data
+						}else{
+							console.log("findFilesByProjectId 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 更新专业文件数据，接收、驳回
+			 */
+			function updateProfessionProfile(ajaxData){
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/previousProfile/update",
+					success: function (result) {
+						if(result.code == 200){
+							findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
+						}else{
+							console.log("updateProfessionProfile 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 *  添加我需要别人提供给我的上序资料
+			 */
+			function addPreviousProfessionProfile(ajaxData){
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/previousProfile/addPreviousProfessionProfile",
+					traditional: true,
+					success: function (result) {
+						if(result.code == 200){
+							app.addPreviousProfileDialogVisible = false
+							findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
+						}else{
+							console.log("addPreviousProfessionProfile 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 添加我发给别人的下序资料
+			 */
+			function addNextProfessionProfile(ajaxData){
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/previousProfile/addNextProfessionProfile",
+					traditional: true,
+					success: function (result) {
+						if(result.code == 200){
+							app.addNextProfessionProfileDialogVisible = false
+							findNextProfessionProfile(app.nextProfessionProfileTabId);//查找下序资料列表
+						}else{
+							console.log("addNextProfessionProfile 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 查询审核流程数据
+			 */
+			function findReviewProcessByTaskAssignmentId(){
+				app.reviewProcessData = {}
+				app.reviewProcessFileNames = []
+				var ajaxData = {}
+				ajaxData.taskAssignmentId = app.taskAssignmentId
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/reviewProcess/findByTaskAssignmentId",
+					traditional: true,
+					success: function (result) {
+						if(result.code == 200){
+							if(result.data != null){
+								app.reviewProcessData = result.data
+								var reviewProcessFileNames = JSON.parse(result.data.file)
+								app.reviewProcessFileNames = reviewProcessFileNames
+							}
+
+
+						}else{
+							console.log("findReviewProcessByTaskAssignmentId 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 保存送审流程内容
+			 */
+			function saveReviewProcessDataFunction(){
+				var ajaxData = {}
+				ajaxData.reviewProcessData =  encodeURI(JSON.stringify(app.reviewProcessData))
+				ajaxData.taskAssignmentId = app.taskAssignmentId
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/reviewProcess/saveReviewProcessData",
+					traditional: true,
+					success: function (result) {
+						if(result.code == 200){
+							app.reviewProcessDialogVisible = false
+							app.reviewProcessData = {}
+							app.reviewProcessFileNames = []
+							findByProjectId();//根据分项目查询该分项目下的任务分配情况
+						}else{
+							console.log("saveReviewProcessDataFunction 返回值失败")
+						}
+
+					}
+				})
+			}
+
+			/**
+			 * 设置可见与不可见
+			 */
+			function setDisable(disabledElement){
+				if(disabledElement == "designerOpinionDisable"){
 					app.designerOpinionDisable = false
-					setDisable("designerOpinionDisable")
-				},
-				//复核人员点击事件
-				reviewerReviewProcessClick:function (taskAssignmentId) {
-					app.taskAssignmentId = taskAssignmentId
-					findReviewProcessByTaskAssignmentId();//查询审核流程数据
-					app.reviewProcessDialogVisible = true
-					setDisable("reviewerOpioionDisable")
-				},
-				//审核人员点击事件
-				inspectorReviewProcessClick:function (taskAssignmentId) {
-					app.taskAssignmentId = taskAssignmentId
-					findReviewProcessByTaskAssignmentId();//查询审核流程数据
-					app.reviewProcessDialogVisible = true
-					setDisable("inspectorOpionionDisable")
-				},
-				//审定人员点击事件
-				validationerReviewProcessClick:function (taskAssignmentId) {
-					app.taskAssignmentId = taskAssignmentId
-					findReviewProcessByTaskAssignmentId();//查询审核流程数据
-					app.reviewProcessDialogVisible = true
-					setDisable("validationerOpioionDisable")
-				},
-				//保存送审流程内容
-				saveReviewProcessData: function(){
-					saveReviewProcessDataFunction();//保存送审内容
-				},
-				fileChange1: function(target){
-					var form = document.getElementById("fileUpload1");
-					var url = "/crud/profile/uploadFile?projectId=" + app.projectId
-					var postData = new FormData(form);
-					app.uploading = true;
-					$("#msg").html("处理中...");
-					$.ajax({
-						url: url,
-						type: "POST",
-						data: postData,
-						contentType: false,
-						processData: false,
-						success: function (result) {
-							if (result.code == 200) {
-								findFilesByProjectId()
-							}else{
+					app.reviewerOpioionDisable = true
+					app.inspectorOpionionDisable = true
+					app.validationerOpioionDisable = true
+				}else if(disabledElement == "reviewerOpioionDisable"){
+					app.designerOpinionDisable = true
+					app.reviewerOpioionDisable = false
+					app.inspectorOpionionDisable = true
+					app.validationerOpioionDisable = true
+				}else if(disabledElement == "inspectorOpionionDisable"){
+					app.designerOpinionDisable = true
+					app.reviewerOpioionDisable = true
+					app.inspectorOpionionDisable = false
+					app.validationerOpioionDisable = true
+				}else if(disabledElement == "validationerOpioionDisable"){
+					app.designerOpinionDisable = true
+					app.reviewerOpioionDisable = true
+					app.inspectorOpionionDisable = true
+					app.validationerOpioionDisable = false
+				}
+
+
+			}
+
+
+			/**
+			 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
+			 */
+			function findAllProjectSummary(){
+				var ajaxData = {}
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/projectSummary/findAll",
+					success: function (result) {
+						if(result.code == 200){
+							var projectsSummaryLiShow = result.data
+							for(var i = 0; i < projectsSummaryLiShow.length; i++){
+								if(i == 0){
+									app.currentProjectSummaryId = projectsSummaryLiShow[i].id
+									projectsSummaryLiShow[i].deltag = 'm-a cur'
+								}else{
+									projectsSummaryLiShow[i].deltag = ''
+								}
 							}
-						},
-						error: function () {
-							alert("处理失败！");
-						}
-					});
-				},
-				downloadFile: function(ossFileUrl, name){
-					downloadFunction(ossFileUrl, name)
-				},
-				//下载送审流程文件
-				downloadReviewProcessFile: function(ossFileUrl, name){
-					downloadFunction(ossFileUrl, name)
-				},
-				//送审流程文件上传
-				reviewProcessFileChange: function () {
-					var form = document.getElementById("reviewProcessFileUpload");
-					var url = "/crud/reviewProcess/uploadFile?taskAssignmentId=" + app.taskAssignmentId
-					var postData = new FormData(form);
-					app.uploading = true;
-					$("#msg").html("处理中...");
-					$.ajax({
-						url: url,
-						type: "POST",
-						data: postData,
-						contentType: false,
-						processData: false,
-						success: function (result) {
-							if (result.code == 200) {
-								findReviewProcessByTaskAssignmentId()
-							}else{
-							}
-						},
-						error: function () {
-							alert("处理失败！");
-						}
-					});
-				},
+							app.projects=projectsSummaryLiShow
+							findProjectSummaryById();//按照总项目id查找总项目详细信息
+							findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
 
-			}
-
-		})
-
-		var projectList =[[ ${projectList}]]
-		var departmentId =[[ ${departmentId}]]
-		console.log(projectList)
-		console.log(departmentId)
-
-		app.projects = projectList
-		app.projectSummaryId = projectList[0].projectSummaryId
-		app.currentProjectSummaryId = projectList[0].projectSummaryId
-
-		app.departmentId = departmentId
-
-		for(var i = 0; i < projectList.length; i++){
-			if(projectList[i].deltag == "m-a cur"){
-				app.projectId = projectList[i].id
-			}
-		}
-
-		findByProjectId();//根据分项目查询该分项目下的任务分配情况
-		findProjectSummaryById()//查看项目详细信息
-
-		/**
-		 * 根据分项目查询该分项目下的任务分配情况
-		 */
-		function findByProjectId() {
-			var ajaxData = {}
-			ajaxData.currentPage = app.currentPageTaskAssignmentListData
-			ajaxData.pageSize = app.pageSizeTaskAssignmentListData
-			ajaxData.projectId = app.projectId
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/taskAssignment/findByProjectId",
-				success: function (result) {
-					if(result.code == 200){
-						app.taskAssignmentListData=result.data.list
-						app.totalTaskAssignmentListData=result.data.totalCount
-					}else{
-						console.log("updatePrincipal 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 根据部门id查找人员项目信息
- 		 */
-		function findUserProjectsByDeptIdAndRole(){
-			var ajaxData = {}
-			ajaxData.departmentId = app.departmentId
-			ajaxData.selectUserRole = app.selectUserRole
-			ajaxData.currentPage = app.currentPageUserProjectsTableData
-			ajaxData.pageSize = app.pageSizeUserProjectsTableData
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/userProject/findUserProjectsByDeptIdAndRole",
-				success: function (result) {
-					if(result.code == 200){
-						app.userProjectsTableData=result.data.list
-						app.totalUserProjectsTableData = result.data.totalCount
-						console.log(result.data.totalCount)
-						console.log(result.data.list)
-					}else{
-						console.log("findUserProjectsByDeptIdAndRole 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 编辑分任务的设计、复核、审核、审定人员
-		 * @param ajaxData
-		 */
-		function editEngineer(ajaxData, that){
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/taskAssignment/editEngineer",
-				success: function (result) {
-					if(result.code == 200){
-						showEditSuccessMessgae(that);//显示设计、复核、审核、审定编辑成功消息
-						app.selectTaskId = null
-						app.selectUserRole = null
-						app.userProjectsDialogVisible = false
-						findByProjectId();//根据分项目查询该分项目下的任务分配情况
-					}else{
-						console.log("editEngineer 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 显示编辑成功消息
-		 * @param that
-		 */
-		function showEditSuccessMessgae(that){
-			if("designer" == app.selectUserRole){
-				that.$message({
-					message: "设计人员编辑成功",
-					type: 'success'
-				});
-			}else if("reviewer" == app.selectUserRole){
-				that.$message({
-					message: "复核人员编辑成功",
-					type: 'success'
-				});
-			}else if("inspector" == app.selectUserRole){
-				that.$message({
-					message: "审核人员编辑成功",
-					type: 'success'
-				});
-			}else if("validationer" == app.selectUserRole){
-				that.$message({
-					message: "审定人员编辑成功",
-					type: 'success'
-				});
-			}
-
-
-		}
-
-		/**
-		 * 查找上序资料列表
-		 * @param projectId
-		 * @param flag
-		 */
-		function findPreviousProfile(flag){
-			var ajaxData = {}
-			ajaxData.projectId = app.projectId
-			var url = "/crud/previousProfile/findMyReceivedPreviousProfile"	//我收到的上序资料
-			if(flag == 1){
-				url = "/crud/previousProfile/findMyInitiatedPreviousProfile" //我主动需要的上序资料
-			}
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: url,
-				success: function (result) {
-					if(result.code == 200){
-						app.previousProfileTableData = result.data.list
-						app.totalpreviousProfileTableData=result.data.totalCount
-					}else{
-						console.log("findPreviousProfile 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 查找下序资料列表
-		 * @param projectId
-		 * @param flag
-		 */
-		function findNextProfessionProfile(flag){
-			var ajaxData = {}
-			ajaxData.projectId = app.projectId
-			var url = "/crud/previousProfile/findMySubmitProfileToNextProfession"	//我发起的下序资料
-			if(flag == 1){
-				url = "/crud/previousProfile/findMyNeededProfileToNextProfession" //别人向我要的资料
-			}
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: url,
-				success: function (result) {
-					if(result.code == 200){
-						app.nextProfessionProfileTableData = result.data.list
-						app.totalNextProfessionProfileTableData = result.data.list
-
-					}else{
-						console.log("findNextProfessionProfile 返回值失败")
-					}
-
-				}
-			})
-		}
-
-
-		/**
-		 * 查找文件树
-		 */
-		function findFilesByProjectId(){
-			var ajaxData = {}
-			ajaxData.projectId = app.projectId
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/profile/findFilesByProjectId",
-				success: function (result) {
-					if(result.code == 200){
-						app.fileList = result.data
-					}else{
-						console.log("findFilesByProjectId 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 查找文件树内容，用于给下序文件list
-		 */
-		function findFilesByProjectIdAddToNextProfessionProfileList(){
-			var ajaxData = {}
-			ajaxData.projectId = app.projectId
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/profile/findFilesByProjectId",
-				success: function (result) {
-					if(result.code == 200){
-						app.profileTrees = result.data
-					}else{
-						console.log("findFilesByProjectId 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 更新专业文件数据，接收、驳回
-		 */
-		function updateProfessionProfile(ajaxData){
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/previousProfile/update",
-				success: function (result) {
-					if(result.code == 200){
-						findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
-					}else{
-						console.log("updateProfessionProfile 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 *  添加我需要别人提供给我的上序资料
-		 */
-		function addPreviousProfessionProfile(ajaxData){
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/previousProfile/addPreviousProfessionProfile",
-				traditional: true,
-				success: function (result) {
-					if(result.code == 200){
-						app.addPreviousProfileDialogVisible = false
-						findPreviousProfile(app.previousProfileTabId);//查找上序资料列表
-					}else{
-						console.log("addPreviousProfessionProfile 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 添加我发给别人的下序资料
-		 */
-		function addNextProfessionProfile(ajaxData){
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/previousProfile/addNextProfessionProfile",
-				traditional: true,
-				success: function (result) {
-					if(result.code == 200){
-						app.addNextProfessionProfileDialogVisible = false
-						findNextProfessionProfile(app.nextProfessionProfileTabId);//查找下序资料列表
-					}else{
-						console.log("addNextProfessionProfile 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 查询审核流程数据
-		 */
-		function findReviewProcessByTaskAssignmentId(){
-			app.reviewProcessData = {}
-			app.reviewProcessFileNames = []
-			var ajaxData = {}
-			ajaxData.taskAssignmentId = app.taskAssignmentId
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/reviewProcess/findByTaskAssignmentId",
-				traditional: true,
-				success: function (result) {
-					if(result.code == 200){
-						if(result.data != null){
-							app.reviewProcessData = result.data
-							var reviewProcessFileNames = JSON.parse(result.data.file)
-							app.reviewProcessFileNames = reviewProcessFileNames
+						}else{
+							console.log("返回值失败")
 						}
 
-
-					}else{
-						console.log("findReviewProcessByTaskAssignmentId 返回值失败")
 					}
-
-				}
-			})
-		}
-
-		/**
-		 * 保存送审流程内容
-		 */
-		function saveReviewProcessDataFunction(){
-			var ajaxData = {}
-			ajaxData.reviewProcessData =  encodeURI(JSON.stringify(app.reviewProcessData))
-			ajaxData.taskAssignmentId = app.taskAssignmentId
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/reviewProcess/saveReviewProcessData",
-				traditional: true,
-				success: function (result) {
-					if(result.code == 200){
-						app.reviewProcessDialogVisible = false
-						app.reviewProcessData = {}
-						app.reviewProcessFileNames = []
-						findByProjectId();//根据分项目查询该分项目下的任务分配情况
-					}else{
-						console.log("saveReviewProcessDataFunction 返回值失败")
-					}
-
-				}
-			})
-		}
-
-		/**
-		 * 设置可见与不可见
-		 */
-		function setDisable(disabledElement){
-			if(disabledElement == "designerOpinionDisable"){
-				app.designerOpinionDisable = false
-				app.reviewerOpioionDisable = true
-				app.inspectorOpionionDisable = true
-				app.validationerOpioionDisable = true
-			}else if(disabledElement == "reviewerOpioionDisable"){
-				app.designerOpinionDisable = true
-				app.reviewerOpioionDisable = false
-				app.inspectorOpionionDisable = true
-				app.validationerOpioionDisable = true
-			}else if(disabledElement == "inspectorOpionionDisable"){
-				app.designerOpinionDisable = true
-				app.reviewerOpioionDisable = true
-				app.inspectorOpionionDisable = false
-				app.validationerOpioionDisable = true
-			}else if(disabledElement == "validationerOpioionDisable"){
-				app.designerOpinionDisable = true
-				app.reviewerOpioionDisable = true
-				app.inspectorOpionionDisable = true
-				app.validationerOpioionDisable = false
+				})
 			}
 
-
-		}
-
-
-		var topBar = new Vue({
-			el: '#topBar',
-			data: {
-				activeIndex2: '4',
-			},
-			methods: {
-				handleSelect(key, keyPath) {
-					console.log(key, keyPath);
-				}
-			}
-		})
-
-		/**
-		 * 查找所有项目，将项目名字赋值给li，然后将class赋予一个变量
-		 */
-		function findAllProjectSummary(){
-			var ajaxData = {}
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/projectSummary/findAll",
-				success: function (result) {
-					if(result.code == 200){
-						var projectsSummaryLiShow = result.data
-						for(var i = 0; i < projectsSummaryLiShow.length; i++){
-							if(i == 0){
-								app.currentProjectSummaryId = projectsSummaryLiShow[i].id
-								projectsSummaryLiShow[i].deltag = 'm-a cur'
-							}else{
-								projectsSummaryLiShow[i].deltag = ''
-							}
+			/**
+			 * 下载
+			 */
+			function downloadFunction(ossFileUrl, name) {
+				var url = '/crud/previousProfile/dwnSavedFile?fileName=' + encodeURI(ossFileUrl);
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', url, true);        // 也可以使用POST方式，根据接口
+				// xhr.responseType = "blob";    // 返回类型blob
+				xhr.responseType = "text";    // 返回类型blob
+				// 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+				xhr.onload = function () {
+					// 请求完成
+					if (this.status === 200) {
+						// var blob = this.response;
+						let res = xhr.responseText;
+						// let blob = new Blob([res], {type: 'text/xml'});
+						let blob = new Blob([res], {type: 'text'});
+						var reader = new FileReader();
+						//TODO 文件下载不能下pdf、dwg文件
+						reader.readAsDataURL(blob);    // 转换为base64，可以直接放入a表情href
+						reader.onload = function (e) {
+							// 转换完成，创建一个a标签用于下载
+							var a = document.createElement('a');
+							a.download = name;
+							a.href = e.target.result;
+							$("body").append(a);    // 修复firefox中无法触发click
+							a.click();
+							$(a).remove();
 						}
-						app.projects=projectsSummaryLiShow
-						findProjectSummaryById();//按照总项目id查找总项目详细信息
-						findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
-
-					}else{
-						console.log("返回值失败")
 					}
+				};
+				// 发送ajax请求
+				xhr.send()
+			}
 
-				}
-			})
-		}
+			/**
+			 * 查询项目信息
+			 */
+			function findProjectSummaryById(){
+				var ajaxData = {}
+				ajaxData.id = app.currentProjectSummaryId
+				$.ajax({
+					data: ajaxData,
+					type: "GET",
+					url: "/crud/projectSummary/findById/",
+					success: function (result) {
+						if(result.code == 200){
+							app.project=result.data
+						}else{
+							console.log("返回值失败 findProjectSummaryById")
+						}
 
-		/**
-		 * 下载
-		 */
-		function downloadFunction(ossFileUrl, name) {
-			var url = '/crud/previousProfile/dwnSavedFile?fileName=' + encodeURI(ossFileUrl);
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', url, true);        // 也可以使用POST方式，根据接口
-			// xhr.responseType = "blob";    // 返回类型blob
-			xhr.responseType = "text";    // 返回类型blob
-			// 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
-			xhr.onload = function () {
-				// 请求完成
-				if (this.status === 200) {
-					// var blob = this.response;
-					let res = xhr.responseText;
-					// let blob = new Blob([res], {type: 'text/xml'});
-					let blob = new Blob([res], {type: 'text'});
-					var reader = new FileReader();
-					//TODO 文件下载不能下pdf、dwg文件
-					reader.readAsDataURL(blob);    // 转换为base64，可以直接放入a表情href
-					reader.onload = function (e) {
-						// 转换完成，创建一个a标签用于下载
-						var a = document.createElement('a');
-						a.download = name;
-						a.href = e.target.result;
-						$("body").append(a);    // 修复firefox中无法触发click
-						a.click();
-						$(a).remove();
 					}
-				}
-			};
-			// 发送ajax请求
-			xhr.send()
-		}
+				})
+			}
 
-		/**
-		 * 查询项目信息
-		 */
-		function findProjectSummaryById(){
-			var ajaxData = {}
-			ajaxData.id = app.currentProjectSummaryId
-			$.ajax({
-				data: ajaxData,
-				type: "GET",
-				url: "/crud/projectSummary/findById/",
-				success: function (result) {
-					if(result.code == 200){
-						app.project=result.data
-					}else{
-						console.log("返回值失败 findProjectSummaryById")
-					}
-
-				}
-			})
-		}
-
-
-
-
-
-
-	</script>
+		</script>
+	</div>
 </div>
 </body>
 </html>
