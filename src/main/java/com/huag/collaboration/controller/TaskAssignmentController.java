@@ -5,15 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.huag.collaboration.entities.Project;
-import com.huag.collaboration.entities.ProjectSummary;
-import com.huag.collaboration.entities.TaskAssignment;
-import com.huag.collaboration.entities.User;
+import com.huag.collaboration.entities.*;
 import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.TaskAssignmentMapper;
 import com.huag.collaboration.mapper.UserMapper;
 import com.huag.collaboration.utils.RequestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,6 +108,19 @@ public class TaskAssignmentController {
         return result;
 
 
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/taskAssignment/findById")
+    public BaseResponse<TaskAssignment> findFilesByProjectId(HttpServletRequest request){
+        BaseResponse<TaskAssignment> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        if(StringUtils.isNotBlank(id)){
+            TaskAssignment taskAssignment = taskAssignmentMapper.findById(Integer.valueOf(id));
+            result.setData(taskAssignment);
+        }
+        result.code = 200;
+        return result;
     }
 
 
