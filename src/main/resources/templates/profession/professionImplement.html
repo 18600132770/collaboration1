@@ -19,30 +19,52 @@
 	<!-- <link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet"> -->
 	<!-- <link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet"> -->
 	<link href="asserts/css/new-style.css" th:href="@{/asserts/css/new-style.css}" rel="stylesheet">
+
+	<style>
+		.el-menu-vertical-demo:not(.el-menu--collapse) {
+			/* width: 200px; */
+			min-height: 400px;
+		}
+		.el-menu-vertical-demo .el-menu-item.is-active {
+			color: #fff;
+			background: #409EFF;
+		}
+	</style>
 </head>
 
 <body>
 <div id="flw">
-	<style>
-		.el-menu-vertical-demo:not(.el-menu--collapse) {
-			width: 200px;
-			min-height: 400px;
-		}
-	</style>
-
-
-
 	<div layout:fragment="content">
 		<div class="dsource-wrap">
-
 			<el-container>
 				<el-aside width="250px">
 					<div class="project-title">
-						<span>协同部门</span>
+						<span>项目列表</span>
+						<el-tooltip class="item" effect="dark" content="添加项目" placement="bottom">
+							<el-button type="text" icon="el-icon-plus" size="small" @click="addProjectClick"></el-button>
+						</el-tooltip>
 					</div>
 					<!-- 左侧  -->
-					<el-scrollbar class="dictionary-l">
-						<ul class="manager-nav dictionary-nav">
+					<el-scrollbar class="dictionary-l" style="height: calc(100% - 51px);">
+						<el-menu
+							ref="elMenu"
+							:default-active="'0-0'"
+							:default-openeds="[0]"
+							class="el-menu-vertical-demo">
+							<el-submenu :index="index" v-for="project, index in projects" :key="index">
+								<template slot="title">
+									<span>{{project.projectName}}</span>
+								</template>
+								<el-menu-item 
+									:index="`${index}-${i}`" 
+									v-for="item, i in project.children" 
+									:key="`${index}-${i}`"
+									@click="showProjectById(item.id)"
+								>{{item.departmentName}}</el-menu-item>
+							</el-submenu>
+						</el-menu>
+
+						<!-- <ul class="manager-nav dictionary-nav">
 							<li 
 								class="m-a" 
 								v-for="project, key in projects" 
@@ -50,9 +72,9 @@
 								:key="key" 
 								:class="{'active': projectId === project.id }"
 							>
-								<a :class="project.deltag" >{{project.departmentName}}</a>
+								<a :class="project.deltag" >{{project.projectName}}</a>
 							</li>
-						</ul>
+						</ul> -->
 					</el-scrollbar>
 				</el-aside>
 				<el-main>
@@ -82,13 +104,13 @@
 						</div>
 	
 						<nav class="navbar navbar-light bg-light">
-							<label style="display: inline-block;">项目编号：{{project.projectNum}}</label>
-							<label style="display: inline-block;">项目名称：{{project.projectName}}</label>
-							<label style="display: inline-block;">项目阶段：{{project.designPhase}}</label>
-							<label style="display: inline-block;">开始时间：{{project.startTime}}</label>
-							<label style="display: inline-block;">截止时间：{{project.stopTime}}</label>
-							<label style="display: inline-block;">负责人：{{project.principal}}</label>
-							<label style="display: inline-block;">总工：{{project.chiefEngineer}}</label>
+							<span style="display: inline-block;">项目编号：{{project.projectNum}}</span>
+							<span style="display: inline-block;">项目名称：{{project.projectName}}</span>
+							<span style="display: inline-block;">项目阶段：{{project.designPhase}}</span>
+							<span style="display: inline-block;">开始时间：{{project.startTime}}</span>
+							<span style="display: inline-block;">截止时间：{{project.stopTime}}</span>
+							<span style="display: inline-block;">负责人：{{project.principal}}</span>
+							<span style="display: inline-block;">总工：{{project.chiefEngineer}}</span>
 						</nav>
 		
 						<div class="ds-table-wrap" >
@@ -155,6 +177,11 @@
 									</el-table-column>
 									<el-table-column  label="截止时间">
 										<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
+									</el-table-column>
+									<el-table-column label="操作">
+										<template slot-scope="scope">
+											<el-button type="primary" size="mini" @click="showFlowChart(scope.row.id)">审批</el-button>
+										</template>
 									</el-table-column>
 								</el-table>
 								<el-pagination class="txtCenter pagination"
@@ -544,16 +571,6 @@
 
 			<!-- 送审流程 -->
 			<el-dialog title="送审流程" :visible.sync="reviewProcessDialogVisible" width="50%">
-				<form action='saveReviewProcessFile' enctype='multipart/form-data' method='post' id="reviewProcessFileUpload">
-					<el-upload class="upload-demo" action="saveReviewProcessFile" id="filename1" name='file' ref="upload" :auto-upload='false'
-							   :on-change='reviewProcessFileChange' accept="">
-						<el-button size="small" type="primary" :disabled="designerOpinionDisable">点击上传</el-button>
-					</el-upload>
-				</form>
-				<div  role="tablist" v-for="profile, key in reviewProcessFileNames" :key="key">
-					<el-link type="primary" @click="downloadReviewProcessFile(profile.url, profile.name)" style="color: #00a0e8">{{profile.name}}</el-link>
-				</div>
-
 				<el-form ref="form" :model="form" label-width="110px">
 					<el-form-item label="设计意见">
 						<el-input type="textarea" v-model="reviewProcessData.designerOpinion" :disabled="designerOpinionDisable"></el-input>
@@ -568,12 +585,163 @@
 						<el-input type="textarea" v-model="reviewProcessData.validationerOpioion" :disabled="validationerOpioionDisable"></el-input>
 					</el-form-item>
 				</el-form>
-				<div class="modal-footer">
-					<button  class="btn btn-primary" @click="saveReviewProcessData">送审</button>
+				<el-form action='saveReviewProcessFile' enctype='multipart/form-data' method='post' id="reviewProcessFileUpload" label-width="110px">
+					<el-form-item>
+						<el-upload class="upload-demo" action="saveReviewProcessFile" id="filename1" name='file' ref="upload" :auto-upload='false'
+									:on-change='reviewProcessFileChange' accept="">
+							<el-button size="small" type="primary" :disabled="designerOpinionDisable">点击上传</el-button>
+						</el-upload>
+					</el-form-item>
+				</el-form>
+				<div  role="tablist" v-for="profile, key in reviewProcessFileNames" :key="key">
+					<el-link type="primary" @click="downloadReviewProcessFile(profile.url, profile.name)" style="color: #00a0e8">{{profile.name}}</el-link>
+				</div>
+				<div class="modal-footer" slot="footer">
+					<el-button type="primary" size="small" @click="saveReviewProcessData">送审</el-button>
+					<el-button size="small" @click="reviewProcessDialogVisible = false">取消</el-button>
+				</div>
+			</el-dialog>
+
+			<!-- 添加项目Modal -->
+			<el-dialog
+				title="添加项目"
+				:visible.sync="dialogAddProjectVisible"
+				width="600px"
+			>
+				<el-form
+					label-width="100px"
+					:model="addProject"
+					label-suffix="："
+					size="small"
+				>
+					<el-form-item label="项目编号">
+						<el-input
+							v-model="addProject.projectNum"
+							placeholder="请输入项目编号"
+							clearable
+						></el-input>
+					</el-form-item>
+					<el-form-item label="项目名称">
+						<el-input
+							v-model="addProject.projectName"
+							placeholder="请输入项目名称"
+							clearable
+						></el-input>
+					</el-form-item>
+					<el-form-item label="设计阶段">
+						<el-input
+							v-model="addProject.designPhase"
+							placeholder="请输入设计阶段"
+							clearable
+						></el-input>
+					</el-form-item>
+					<el-form-item label="开始时间">
+						<el-date-picker
+							v-model="addProject.startTime"
+							type="date"
+							placeholder="选择日期"
+						></el-date-picker>
+					</el-form-item>
+					<el-form-item label="截止时间">
+						<el-date-picker
+							v-model="addProject.stopTime"
+							type="date"
+							placeholder="截止时间"
+						></el-date-picker>
+					</el-form-item>
+					<el-form-item label="项目负责人">
+						<el-select
+							v-model="principalModalInput"
+							filterable
+							placeholder="请选择"
+						>
+							<el-option
+								v-for="item in principals"
+								:key="item.principalId"
+								:label="item.principal"
+								:value="item.principalId"
+							></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="项目总工">
+						<el-select
+							v-model="chiefEngineerModalInput"
+							filterable
+							placeholder="请选择"
+						>
+							<el-option
+								v-for="item in chiefEngineers"
+								:key="item.chiefEngineerId"
+								:label="item.chiefEngineer"
+								:value="item.chiefEngineerId"
+							></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="分派部门">
+						<el-select
+							v-model="selectDepartments"
+							multiple
+							placeholder="请选择"
+						>
+							<el-option
+								v-for="department in departments"
+								:key="department.id"
+								:label="department.departmentName"
+								:value="department.id"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</el-form>
+				
+				<div slot="footer" class="txtCenter">
+					<el-button size="small" type="primary" class="btn btn-primary" @click="saveAddProject">
+						保存
+					</el-button>
+					<el-button size="small" @click="dialogAddProjectVisible = false">取消</el-button>
 				</div>
 			</el-dialog>
 
 		</div>
+
+		<el-drawer
+			title="审批流程"
+			:visible.sync="drawer"
+			@opened="drawerOpend"
+			direction="rtl">
+			<div class="progress" style="padding: 10px;">
+				<el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
+					<el-tab-pane label="流程详情" name="first">
+						<el-timeline style="margin-left: 20px;" :reverse="false">
+							<el-timeline-item
+								v-for="(activity, index) in activities"
+								:key="index"
+								:timestamp="activity.timestamp" hide-timestamp
+								:color="activity.content ? '#409eff' : ''"
+							>
+								<div class="timeline-content">
+									<header>
+										<div>{{activity.label}}</div> {{activity.timestamp}}
+									</header>
+									<div v-if="activity.label.indexOf('节点') === -1">
+										<p>{{activity.person}}进行了审批</p>
+										<p>{{activity.label}}意见：{{activity.content}}</p>
+									</div>
+									<div v-if="activity.event && !activity.content">
+										<el-button size="mini" @click="handleProcessClick(activity.label)">审核</el-button>
+									</div>
+								</div>
+							</el-timeline-item>
+						</el-timeline>
+					</el-tab-pane>
+					<el-tab-pane label="流程图" name="second">
+						<div id="chart" style="width: 100%;">
+							<svg id="svg-canvas" width="400" height="500"></svg>
+						</div>
+					</el-tab-pane>
+				</el-tabs>
+			</div>
+		</el-drawer>
 	</div>
 
 	<div layout:fragment="jscontent">
@@ -587,6 +755,8 @@
 		<!-- <script type="text/javascript" src="asserts/js/const.js" th:src="@{/asserts/js/const.js}"></script> -->
 		<!-- <script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script> -->
 
+		<script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/d3/5.16.0/d3.min.js" th:src="@{https://cdn.bootcdn.net/ajax/libs/d3/5.16.0/d3.min.js}"></script>
+		<script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/dagre-d3/0.6.4/dagre-d3.min.js" th:src="@{https://cdn.bootcdn.net/ajax/libs/dagre-d3/0.6.4/dagre-d3.min.js}"></script>
 
 		<script>
 			feather.replace()
@@ -595,6 +765,8 @@
 		<script th:inline="javascript" type="text/javascript">
 
 			const cityOptions = ['上海', '北京', '广州', '深圳'];
+
+			appheader.activeIndex2 = 4
 
 			var app = new Vue({
 				el: '#app',
@@ -666,12 +838,12 @@
 							id: 1,
 							name: "信息列表",
 							style:"nav-item nav-link active"
-						},
+						}/* ,
 						{
 							id: 2,
 							name: "流程图",
 							style:"nav-item nav-link"
-						}
+						} */
 					],
 					previousProfileTabs: [
 						{
@@ -705,9 +877,84 @@
 					isIndeterminate: true,
 					activeName: '收文',
 
-					profileType: 0
+					profileType: 0,
+
+					principals: [],
+					chiefEngineers: [],
+					departments: [],
+					dialogAddProjectVisible: false,
+					principalModalInput: null,
+          chiefEngineerModalInput: null,
+					selectDepartments: null,
+					addProject: {},
+
+					drawer: false,
+					activeName: 'first',
+
+					activities: [
+						{
+							label: '开始节点',
+							content: '活动按期开始',
+							timestamp: '2018-04-10'
+						}, 
+						{
+							label: '设计',
+							person: '',
+							content: '通过审核',
+							timestamp: '2018-04-11',
+							event: true
+						}, 
+						{
+							label: '复核',
+							person: '',
+							content: '创建成功',
+							timestamp: '2018-04-12',
+							event: true
+						}, 
+						{
+							label: '审核',
+							person: '',
+							content: '创建成功',
+							timestamp: '2018-04-13',
+							event: true
+						}, 
+						{
+							label: '审定',
+							person: '',
+							content: '创建成功',
+							timestamp: '2018-04-14',
+							event: true
+						}, 
+						{
+							label: '结束节点',
+							content: '创建成功',
+							timestamp: '2018-04-15'
+						}
+					],
+
+					dataset: {
+						nodes: [
+							{id: 0,label: "开始",shape: "rect"},
+							{id: 1,label: "设计",shape: "diamond"},
+							{id: 2,label: "复核",shape: "diamond"},
+							{id: 3,label: "审核",shape: "diamond"},
+							{id: 4,label: "审定",shape: "diamond"},
+							{id: 5,label: "结束",shape: "rect"}
+						],
+						edges: [
+							{source: 0,target: 1,label: ""},
+							{source: 1,target: 2,label: ""},
+							{source: 2,target: 3,label: "正常"},
+							{source: 3,target: 4,label: "不正常"},
+							{source: 4,target: 5,label: "不正常"}
+						]
+					}
+				},
+				mounted () {
+					this.findAllProjectSummary()
 				},
 				methods: {
+					findAllProjectSummary,
 					handleSizeChangeTaskAssignmentListData(val) {
 						console.log(`每页 ${val} 条`);
 						app.pageSizeTaskAssignmentListData = val
@@ -756,11 +1003,11 @@
 					},
 					showProjectById: function(id){
 						// console.log("应该显示 " + id)
-						app.currentProjectSummaryId = id
+						// app.currentProjectSummaryId = id
 						var ajaxData = {}
 						ajaxData.projectId = id
 						//更改li颜色
-						var myProjects = app.projects
+						/* var myProjects = app.projects
 						for(var i = 0; i < myProjects.length; i++){
 							if(myProjects[i].id == id){
 								myProjects[i].deltag = 'm-a cur'
@@ -772,7 +1019,10 @@
 							}
 						}
 						app.projects = myProjects
-						app.fileList = []
+						app.fileList = [] */
+
+						app.projectId = id
+						findByProjectId();//根据分项目查询该分项目下的任务分配情况
 					},
 					switchNavigationBar: function (id) {
 						var navigationBars = app.navigationBars
@@ -1114,9 +1364,21 @@
 					},
 					nextProfessionProfileChange (id) {
 						this.getNextProfessionProfileByTabId(id)
-					}
-				}
+					},
+					addProjectClick,
+					saveAddProject: function () {
+						addProject(this) //通过Modal框添加新的项目
+					},
 
+					handleTabClick,
+
+					initGraph,
+
+					showFlowChart,
+					getFlowChartData,
+
+					handleProcessClick
+				}
 			})
 
 			var projectList =[[ ${projectList}]]
@@ -1126,7 +1388,7 @@
 
 			app.projects = projectList
 			app.projectSummaryId = projectList[0].projectSummaryId
-			app.currentProjectSummaryId = projectList[0].projectSummaryId
+			// app.currentProjectSummaryId = projectList[0].projectSummaryId
 
 			app.departmentId = departmentId
 
@@ -1136,8 +1398,8 @@
 				}
 			}
 
-			findByProjectId();//根据分项目查询该分项目下的任务分配情况
-			findProjectSummaryById()//查看项目详细信息
+			// findByProjectId();//根据分项目查询该分项目下的任务分配情况
+			// findProjectSummaryById()//查看项目详细信息
 
 			/**
 			 * 根据分项目查询该分项目下的任务分配情况
@@ -1424,6 +1686,20 @@
 								app.reviewProcessData = result.data
 								var reviewProcessFileNames = JSON.parse(result.data.file)
 								app.reviewProcessFileNames = reviewProcessFileNames
+
+								app.activities[0].content = app.reviewProcessData.designerOpinion
+								app.activities[0].timestamp = app.reviewProcessData.designerCreateTime
+
+								app.activities[1].content = app.reviewProcessData.reviewerOpioion
+								app.activities[1].timestamp = app.reviewProcessData.reviewerCreateTime
+
+								app.activities[2].content = app.reviewProcessData.inspectorOpionion
+								app.activities[2].timestamp = app.reviewProcessData.inspectorCreateTime
+
+								app.activities[3].content = app.reviewProcessData.validationerOpioion
+								app.activities[3].timestamp = app.reviewProcessData.validationerCreateTime
+
+
 							}
 
 
@@ -1503,17 +1779,21 @@
 					success: function (result) {
 						if(result.code == 200){
 							var projectsSummaryLiShow = result.data
-							for(var i = 0; i < projectsSummaryLiShow.length; i++){
+							/* for(var i = 0; i < projectsSummaryLiShow.length; i++){
 								if(i == 0){
-									app.currentProjectSummaryId = projectsSummaryLiShow[i].id
+									app.currentProjectSummaryId = projectsSummaryLiShow[i].children[0].id
 									projectsSummaryLiShow[i].deltag = 'm-a cur'
 								}else{
 									projectsSummaryLiShow[i].deltag = ''
 								}
-							}
+							} */
 							app.projects=projectsSummaryLiShow
+							app.currentProjectSummaryId = projectsSummaryLiShow[0].id
+							let departmentId = projectsSummaryLiShow[0].children[0].id
+							app.showProjectById(departmentId)
+
 							findProjectSummaryById();//按照总项目id查找总项目详细信息
-							findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
+							// findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
 
 						}else{
 							console.log("返回值失败")
@@ -1579,6 +1859,331 @@
 				})
 			}
 
+			function addProjectClick () {
+				app.dialogAddProjectVisible = true
+				findProjectSummaryPrincipals() //查找所有可以担任负责人的人选
+				findProjectSummaryChiefEngineers() //查询所有可以当总项目总工的人选
+				getDepartments() //查询所有部门信息
+			}
+
+			/**
+			* 查询所有可以当总项目总负责人的人选
+			*/
+			function findProjectSummaryPrincipals() {
+			var ajaxData = {}
+			ajaxData.currentDepartmentId = 1
+			$.ajax({
+				data: ajaxData,
+				type: 'GET',
+				url: '/crud/user/findProjectSummaryPrincipals',
+				success: function (result) {
+					if (result.code == 200) {
+						var users = result.data
+						var principals = []
+						for (var i = 0; i < users.length; i++) {
+							var principal = {}
+							principal.principal = users[i].username
+							principal.principalId = users[i].id
+							principals[i] = principal
+						}
+						app.principals = principals
+					} else {
+						console.log('findProjectSummaryPrincipals 返回值失败')
+					}
+				},
+			})
+		}
+
+		/**
+			* 查询所有可以当总项目总工的人选
+			*/
+		function findProjectSummaryChiefEngineers() {
+			var ajaxData = {}
+			ajaxData.currentDepartmentId = 1
+			$.ajax({
+				data: ajaxData,
+				type: 'GET',
+				url: '/crud/user/findProjectSummaryChiefEngineers',
+				success: function (result) {
+					if (result.code == 200) {
+						var users = result.data
+						var chiefEngineers = []
+						for (var i = 0; i < users.length; i++) {
+							var chiefEngineer = {}
+							chiefEngineer.chiefEngineer = users[i].username
+							chiefEngineer.chiefEngineerId = users[i].id
+							chiefEngineers[i] = chiefEngineer
+						}
+						app.chiefEngineers = chiefEngineers
+					} else {
+						console.log('findAllChiefEngineer 返回值失败')
+					}
+				},
+			})
+		}
+
+		/**
+			* 查询所有所信息，将值赋给li
+			*/
+		function getDepartments() {
+			$.ajax({
+				data: null,
+				type: 'GET',
+				url: '/crud/department/findAll',
+				success: function (result) {
+					if (result.code == 200) {
+						app.departments = result.data
+					} else {
+						console.log('getDepartments 返回值失败')
+					}
+				},
+			})
+		}
+
+		/**
+		* 通过Modal框添加新的项目
+		* */
+		function addProject(that) {
+			var ajaxData = {}
+			var addProject = app.addProject
+			addProject.principalId = app.principalModalInput
+			addProject.chiefEngineerId = app.chiefEngineerModalInput
+
+			var selectDepartments = app.selectDepartments
+			console.log(selectDepartments.length)
+			console.log(selectDepartments[0])
+
+			if (addProject.projectNum == null || addProject.projectNum == '') {
+				that.$message({
+					message: '项目编号不能为空',
+					type: 'warning',
+				})
+			} else if (
+				addProject.projectName == null ||
+				addProject.projectName == ''
+			) {
+				that.$message({
+					message: '项目名称不能为空',
+					type: 'warning',
+				})
+			} else if (
+				addProject.designPhase == null ||
+				addProject.designPhase == ''
+			) {
+				that.$message({
+					message: '设计阶段不能为空',
+					type: 'warning',
+				})
+			} else if (
+				addProject.startTime == null ||
+				addProject.startTime == ''
+			) {
+				that.$message({
+					message: '开始时间不能为空',
+					type: 'warning',
+				})
+			} else if (
+				addProject.stopTime == null ||
+				addProject.stopTime == ''
+			) {
+				that.$message({
+					message: '结束时间不能为空',
+					type: 'warning',
+				})
+			} else if (
+				addProject.principalId == null ||
+				addProject.principalId == ''
+			) {
+				that.$message({
+					message: '负责人不能为空',
+					type: 'warning',
+				})
+			} else if (
+				addProject.chiefEngineerId == null ||
+				addProject.chiefEngineerId == ''
+			) {
+				that.$message({
+					message: '总工不能为空',
+					type: 'warning',
+				})
+			} else if (
+				app.selectDepartments == null ||
+				app.selectDepartments.length == 0
+			) {
+				that.$message({
+					message: '分派部门不能为空',
+					type: 'warning',
+				})
+			} else {
+				ajaxData.selectDepartments = app.selectDepartments
+				ajaxData.projectSummary = encodeURI(
+					JSON.stringify(app.addProject)
+				)
+				$.ajax({
+					data: ajaxData,
+					type: 'GET',
+					url: 'projectSummary/addProject/',
+					traditional: true,
+					success: function (result) {
+						if (result.code == 200) {
+							findAllProjectSummary()
+							app.dialogAddProjectVisible = false
+							app.addProject = {}
+							app.principalModalInput = null
+							app.chiefEngineerModalInput = null
+							app.principals = {}
+							app.chiefEngineers = {}
+							app.selectDepartments = null
+							app.departments = {}
+							that.$message({
+								message: '项目添加成功',
+								type: 'success',
+							})
+						} else {
+							console.log('返回值失败 addProject')
+						}
+					},
+				})
+			}
+		}
+
+
+		function handleTabClick () {}
+
+		function initGraph (dataset) {
+			// 创建 graph 对象
+			let g = new dagreD3.graphlib.Graph();
+			//设置图
+			g.setGraph({
+				rankdir:'TB',
+				// align:'DL',
+				// align:'DL',
+				nodesep: 80,
+				edgesep:100,
+				ranksep: 80,
+				marginx:50,
+				marginy:50
+			});
+			dataset.nodes.forEach(item => {
+				g.setNode(item.id, {
+					//节点标签
+					label: item.label,
+					//节点形状
+					shape: item.shape,
+					//节点样式
+					style: "fill:#fff;stroke:#000",
+					width: 70,
+					height: 30
+				})
+			})
+			dataset.edges.forEach(item => {
+					g.setEdge(item.source,item.target, {
+							//边标签
+							label: '',
+							//边样式
+							style: "fill:#fff;stroke:#333;stroke-width:1.5px"
+						})
+				})
+			// 创建渲染器
+			let render = new dagreD3.render();
+			// 选择 svg 并添加一个g元素作为绘图容器.
+			let svgGroup = d3.select('svg').append('g');
+			// 在绘图容器上运行渲染器生成流程图.
+			render(svgGroup, g);
+		}
+		
+		function drawerOpend () {
+			app.initGraph(app.dataset)
+		}
+
+		function showFlowChart (id) {
+			app.drawer = true
+			app.taskAssignmentId = id
+			app.getFlowChartData(id)
+
+			// 获取审批意见
+			findReviewProcessByTaskAssignmentId()
+		}
+
+		function getFlowChartData (id) {
+			// var postData = new FormData(form);
+			$.ajax({
+				url: '/crud/taskAssignment/findById?id=' + id,
+				type: "GET",
+				// data: postData,
+				contentType: false,
+				processData: false,
+				success: function (result) {
+					if (result.code == 200) {
+						let temp = result.data
+						app.activities = [
+						{
+							label: '开始节点',
+							content: '活动按期开始',
+							timestamp: temp.startTime
+						}, 
+						{
+							label: '设计',
+							person: temp.designer,
+							content: '',
+							timestamp: '',
+							event: true
+						}, 
+						{
+							label: '复核',
+							person: temp.reviewer,
+							content: '',
+							timestamp: '',
+							event: true
+						}, 
+						{
+							label: '审核',
+							person: temp.inspector,
+							content: '',
+							timestamp: '',
+							event: true
+						}, 
+						{
+							label: '审定',
+							person: temp.validationer,
+							content: '',
+							timestamp: '',
+							event: true
+						}, 
+						{
+							label: '结束节点',
+							content: '',
+							timestamp: temp.stopTime
+						}
+					]
+
+					}else{
+					}
+				},
+				error: function () {
+					alert("处理失败！");
+				}
+			});
+		}
+
+		function handleProcessClick (type) {
+			switch (type) {
+				case '设计':
+					app.designerReviewProcessClick(app.taskAssignmentId)
+					break;
+				case '复核':
+					app.reviewerReviewProcessClick(app.taskAssignmentId)
+
+					break
+				case '审核':
+					app.inspectorReviewProcessClick(app.taskAssignmentId)
+					break
+				case '审定':
+					app.validationerReviewProcessClick(app.taskAssignmentId)
+					break
+			}
+
+		}
 		</script>
 	</div>
 </div>

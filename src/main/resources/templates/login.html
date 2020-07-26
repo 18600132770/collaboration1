@@ -10,8 +10,14 @@
 		<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
 		<!-- Custom styles for this template -->
 		<link href="asserts/css/signin.css" th:href="@{/asserts/css/signin.css}" rel="stylesheet">
+		<style>
+			.bg {
+				background: url(https://oa.cnki.net/web/Assests/images/bg.png);
+    		background-size: 100% 100%;
+			}
+		</style>
 	</head>
-	<body class="text-center">
+	<body class="text-center" class="bg">
 		<form class="form-signin" action="project/dashboard.html" th:action="@{/user/login}" method="post">
 			<img class="mb-4" th:src="@{/asserts/img/bootstrap-solid.svg}" src="asserts/img/bootstrap-solid.svg" alt="" width="72" height="72">
 			<h1 class="h3 mb-3 font-weight-normal" th:text="#{login.tip}">Please sign in</h1>

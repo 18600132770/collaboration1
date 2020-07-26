@@ -37,7 +37,7 @@ public class ProfessionProjectController {
      */
     @GetMapping("/professions")
     public String  list(Model model){
-        return "profession/list";
+        return "profession/professionImplement";
     }
 
 
