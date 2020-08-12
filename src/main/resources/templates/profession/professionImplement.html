@@ -48,9 +48,12 @@
 					<el-scrollbar class="dictionary-l" style="height: calc(100% - 51px);">
 						<el-menu
 							ref="elMenu"
-							:default-active="'0-0'"
-							:default-openeds="[0]"
-							class="el-menu-vertical-demo">
+							:default-active="selectMenuIndex"
+							class="el-menu-vertical-demo"
+							@select="onMenuSelect"
+							@open="onOpen"
+							:default-openeds="defaultOpeneds"
+						>
 							<el-submenu :index="index" v-for="project, index in projects" :key="index">
 								<template slot="title">
 									<span>{{project.projectName}}</span>
@@ -247,19 +250,19 @@
 
 
 			<!-- 任务分配modal -->
-			<el-dialog title="任务分配" :visible.sync="addTaskAssignmentDialogVisible" width="30%">
-				<el-form size="small" label-width="100px" label-suffix="：">
+			<el-dialog title="添加任务" :visible.sync="addTaskAssignmentDialogVisible" width="600px">
+				<el-form size="small" label-width="130px" label-suffix="：">
 					<el-form-item label="任务名称">
-						<el-input placeholder="请输入任务名称" clearable v-model="addTaskAssignment.taskName"></el-input>
+						<el-input placeholder="请输入任务名称" clearable v-model="addTaskAssignment.taskName" style="width: 300px;"></el-input>
 					</el-form-item>
 					<el-form-item label="任务级别">
-						<el-input placeholder="请输入任务级别" clearable v-model="addTaskAssignment.taskLevel"></el-input>
+						<el-input placeholder="请输入任务级别" clearable v-model="addTaskAssignment.taskLevel" style="width: 300px;"></el-input>
 					</el-form-item>
 					<el-form-item label="开始时间">
-						<el-date-picker	v-model="addTaskAssignment.startTime" type="date" placeholder="选择日期"></el-date-picker>
+						<el-date-picker	v-model="addTaskAssignment.startTime" type="date" placeholder="选择日期" style="width: 300px;"></el-date-picker>
 					</el-form-item>
 					<el-form-item label="截止时间">
-						<el-date-picker	v-model="addTaskAssignment.stopTime" type="date" placeholder="选择日期"></el-date-picker>
+						<el-date-picker	v-model="addTaskAssignment.stopTime" type="date" placeholder="选择日期" style="width: 300px;"></el-date-picker>
 					</el-form-item>
 				</el-form>
 				<div slot="footer" class="txtCenter">
@@ -609,7 +612,7 @@
 				width="600px"
 			>
 				<el-form
-					label-width="100px"
+					label-width="130px"
 					:model="addProject"
 					label-suffix="："
 					size="small"
@@ -619,6 +622,7 @@
 							v-model="addProject.projectNum"
 							placeholder="请输入项目编号"
 							clearable
+							style="width: 300px;"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="项目名称">
@@ -626,6 +630,7 @@
 							v-model="addProject.projectName"
 							placeholder="请输入项目名称"
 							clearable
+							style="width: 300px;"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="设计阶段">
@@ -633,6 +638,7 @@
 							v-model="addProject.designPhase"
 							placeholder="请输入设计阶段"
 							clearable
+							style="width: 300px;"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="开始时间">
@@ -640,6 +646,7 @@
 							v-model="addProject.startTime"
 							type="date"
 							placeholder="选择日期"
+							style="width: 300px;"
 						></el-date-picker>
 					</el-form-item>
 					<el-form-item label="截止时间">
@@ -647,6 +654,7 @@
 							v-model="addProject.stopTime"
 							type="date"
 							placeholder="截止时间"
+							style="width: 300px;"
 						></el-date-picker>
 					</el-form-item>
 					<el-form-item label="项目负责人">
@@ -654,6 +662,7 @@
 							v-model="principalModalInput"
 							filterable
 							placeholder="请选择"
+							style="width: 300px;"
 						>
 							<el-option
 								v-for="item in principals"
@@ -668,6 +677,7 @@
 							v-model="chiefEngineerModalInput"
 							filterable
 							placeholder="请选择"
+							style="width: 300px;"
 						>
 							<el-option
 								v-for="item in chiefEngineers"
@@ -682,6 +692,7 @@
 							v-model="selectDepartments"
 							multiple
 							placeholder="请选择"
+							style="width: 300px;"
 						>
 							<el-option
 								v-for="department in departments"
@@ -948,7 +959,10 @@
 							{source: 3,target: 4,label: "不正常"},
 							{source: 4,target: 5,label: "不正常"}
 						]
-					}
+					},
+
+					selectMenuIndex: '0-0',
+					defaultOpeneds: [0]
 				},
 				mounted () {
 					this.findAllProjectSummary()
@@ -1377,7 +1391,11 @@
 					showFlowChart,
 					getFlowChartData,
 
-					handleProcessClick
+					handleProcessClick,
+
+					// 菜单选中事件
+					onMenuSelect,
+					onOpen
 				}
 			})
 
@@ -2183,6 +2201,13 @@
 					break
 			}
 
+		}
+
+		function onMenuSelect (index) {
+			this.selectMenuIndex = index
+		}
+		function onOpen (index) {
+			this.defaultOpeneds = [index]
 		}
 		</script>
 	</div>
