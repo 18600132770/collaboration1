@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
-<html lang="en" 
-    xmlns:th="http://www.thymeleaf.org/xhtml" 
-    xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" 
-    layout:decorate="layout/index">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org/xhtml"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorate="layout/index"
+>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
     <title>协同平台</title>
     <!-- <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet"> -->
@@ -18,107 +23,412 @@
     <!-- <link href="asserts/css/myManager.css" th:href="@{/asserts/css/myManager.css}" rel="stylesheet"> -->
     <!-- <link href="asserts/css/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet"> -->
 
-    <link href="asserts/css/style.css" th:href="@{/asserts/css/style.css}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
+    <link
+      href="asserts/css/style.css"
+      th:href="@{/asserts/css/style.css}"
+      rel="stylesheet"
+    />
+    <link
+      href="asserts/css/all.css"
+      th:href="@{/asserts/css/all.css}"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600"
+      rel="stylesheet"
+    />
 
-
+    <style>
+        .index-banner {
+            margin-top: 0;
+        }
+    </style>
 
     <!-- <link href="asserts/scss/abstracts/myCutWord.css" th:href="@{/asserts/css/myCutWord.css}" rel="stylesheet"> -->
-    
+  </head>
+  <!-- is-boxed has-animations -->
+  <body class="">
+    <div layout:fragment="content">
+      <div id="header" style="display: none;">
+        <div class="index-wrap">
+          <div id="logo">
+            <a href="javascript:;">
+              <h1>协同平台</h1>
+            </a>
+          </div>
+          <div class="index-nav-wrap">
+            <ul class="main-nav">
+              <!-- <li class="has-dropdown">
+                <a href="javascript:;"
+                  >大数据产品<i class="icon-arrow-down"></i>
+                </a>
 
+                <div class="main-nav-dropdown">
+                  <div class="main-nav-p">
+                    <div class="title">分析</div>
+                    <a href="https://data.qq.com/product/mta"
+                      >腾讯移动分析（MTA）</a
+                    >
+                    <a href="https://data.qq.com/product/ta"
+                      >网站数据分析（TA）</a
+                    >
+                    <a href="https://data.qq.com/product/h5">HTML5数据分析</a>
+                    <a href="https://data.qq.com/product/wx">微信小程序分析</a>
+                  </div>
+                  <div class="main-nav-p" style="width: 220px;">
+                    <div class="title">工具</div>
+                    <a href="https://data.qq.com/product/xg"
+                      >腾讯移动推送（信鸽）</a
+                    >
+                    <a
+                      href="https://www.qcloud.com/product/postgresql.html"
+                      target="_blank"
+                      >云数据库（TencentDB for PostgreSQL）</a
+                    >
+                  </div>
+                  <div class="main-nav-p">
+                    <div class="title">平台</div>
+                    <a
+                      href="https://www.qcloud.com/product/tbds.html"
+                      target="_blank"
+                      >大数据处理套件</a
+                    >
+                    <a
+                      href="https://data.qq.com/product/oceanus"
+                      target="_blank"
+                      >大数据流处理分析平台（Oceanus）</a
+                    >
+                    <a href="http://tuijian.qq.com/" target="_blank"
+                      >腾讯智能推荐</a
+                    >
+                  </div>
+                </div>
+              </li> -->
+              <!-- <li>
+                <a href="https://data.qq.com/reports">报告</a>
+              </li>
+              <li>
+                <a href="https://data.qq.com/blog">博客</a>
+              </li> -->
+              <li>
+                <a th:href="@{/user/login}">登录</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="index-banner" style="height: calc(100vh - 207px);">
+        <div class="index-banner-text-wrap banner-0 active">
+          <div class="index-banner-text">
+            <img
+              class="slideUp"
+              th:src="@{/asserts/img/banner-text-2-1.png}"
+              style="height: 60px;"
+              alt=""
+            />
+            <div class="split"></div>
+          </div>
+        </div>
 
-</head>
-<!-- is-boxed has-animations -->
-<body class="">
-<div layout:fragment="content">
+        <div id="particles-js" style="height: 100%; width: 100%;"></div>
+      </div>
 
-    <div class="body-wrap">
+      <div class="index-bright" style="height: 142px;">
+        <div class="index-wrap">
+          <ul class="bd-report-list" id="reportList">
+            <li>
+              <a
+                href="javascript:;"
+                target="_blank"
+              >
+                <i class="icon-index-1-1"></i>
+                <p class="index-head">协同平台介绍</p>
+                <div class="index-desc">海量数据，无限未来</div>
+              </a>
+            </li>
+            <li>
+              <a
+                href="javascript:;"
+                target="_blank"
+              >
+                <i class="icon-index-1-2"></i>
+                <p class="index-head">协同平台</p>
+                <div class="index-desc">海量数据，无限未来</div>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:;" target="_blank">
+                <i class="icon-index-1-3"></i>
+                <p class="index-head">数据报告</p>
+                <div class="index-desc">海量数据，无限未来</div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="body-wrap" style="display: none;">
         <div class="hero-figure anime-element" style="display: none;">
-            <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
-                <rect width="528" height="396" style="fill:transparent;" />
-            </svg>
-            <div class="hero-figure-box hero-figure-box-01" data-rotation="45deg"></div>
-            <div class="hero-figure-box hero-figure-box-02" data-rotation="-45deg"></div>
-            <div class="hero-figure-box hero-figure-box-03" data-rotation="0deg"></div>
-            <div class="hero-figure-box hero-figure-box-04" data-rotation="-135deg"></div>
-            <div class="hero-figure-box hero-figure-box-05"></div>
-            <div class="hero-figure-box hero-figure-box-06"></div>
-            <div class="hero-figure-box hero-figure-box-07"></div>
-            <div class="hero-figure-box hero-figure-box-08" data-rotation="-22deg"></div>
-            <div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
-            <div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
+          <svg
+            class="placeholder"
+            width="528"
+            height="396"
+            viewBox="0 0 528 396"
+          >
+            <rect width="528" height="396" style="fill: transparent;" />
+          </svg>
+          <div
+            class="hero-figure-box hero-figure-box-01"
+            data-rotation="45deg"
+          ></div>
+          <div
+            class="hero-figure-box hero-figure-box-02"
+            data-rotation="-45deg"
+          ></div>
+          <div
+            class="hero-figure-box hero-figure-box-03"
+            data-rotation="0deg"
+          ></div>
+          <div
+            class="hero-figure-box hero-figure-box-04"
+            data-rotation="-135deg"
+          ></div>
+          <div class="hero-figure-box hero-figure-box-05"></div>
+          <div class="hero-figure-box hero-figure-box-06"></div>
+          <div class="hero-figure-box hero-figure-box-07"></div>
+          <div
+            class="hero-figure-box hero-figure-box-08"
+            data-rotation="-22deg"
+          ></div>
+          <div
+            class="hero-figure-box hero-figure-box-09"
+            data-rotation="-52deg"
+          ></div>
+          <div
+            class="hero-figure-box hero-figure-box-10"
+            data-rotation="-50deg"
+          ></div>
         </div>
         <main>
-            <section class="hero">
-                <div class="container">
-                    <div class="hero-inner">
-                        <div class="hero-copy">
-                            <h1 class="hero-title mt-0">协同管理系统</h1>
-                            <p class="hero-paragraph">协同成为可能</p>
-                            <div class="hero-cta"><a class="button button-primary" href="#">了解更多</a><a class="button" href="#">更多了解</a></div>
-                        </div>
-                        <div class="hero-figure anime-element">
-                            <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
-                                <rect width="528" height="396" style="fill:transparent;" />
-                            </svg>
-                            <div class="hero-figure-box hero-figure-box-01" data-rotation="45deg"></div>
-                            <div class="hero-figure-box hero-figure-box-02" data-rotation="-45deg"></div>
-                            <div class="hero-figure-box hero-figure-box-03" data-rotation="0deg"></div>
-                            <div class="hero-figure-box hero-figure-box-04" data-rotation="-135deg"></div>
-                            <div class="hero-figure-box hero-figure-box-05"></div>
-                            <div class="hero-figure-box hero-figure-box-06"></div>
-                            <div class="hero-figure-box hero-figure-box-07"></div>
-                            <div class="hero-figure-box hero-figure-box-08" data-rotation="-22deg"></div>
-                            <div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
-                            <div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
-                        </div>
-                    </div>
+          <section class="hero">
+            <div class="container">
+              <div class="hero-inner">
+                <div class="hero-copy">
+                  <h1 class="hero-title mt-0">协同管理系统</h1>
+                  <p class="hero-paragraph">协同成为可能</p>
+                  <div class="hero-cta">
+                    <a class="button button-primary" href="#">了解更多</a
+                    ><a class="button" href="#">更多了解</a>
+                  </div>
                 </div>
-            </section>
+                <div class="hero-figure anime-element">
+                  <svg
+                    class="placeholder"
+                    width="528"
+                    height="396"
+                    viewBox="0 0 528 396"
+                  >
+                    <rect width="528" height="396" style="fill: transparent;" />
+                  </svg>
+                  <div
+                    class="hero-figure-box hero-figure-box-01"
+                    data-rotation="45deg"
+                  ></div>
+                  <div
+                    class="hero-figure-box hero-figure-box-02"
+                    data-rotation="-45deg"
+                  ></div>
+                  <div
+                    class="hero-figure-box hero-figure-box-03"
+                    data-rotation="0deg"
+                  ></div>
+                  <div
+                    class="hero-figure-box hero-figure-box-04"
+                    data-rotation="-135deg"
+                  ></div>
+                  <div class="hero-figure-box hero-figure-box-05"></div>
+                  <div class="hero-figure-box hero-figure-box-06"></div>
+                  <div class="hero-figure-box hero-figure-box-07"></div>
+                  <div
+                    class="hero-figure-box hero-figure-box-08"
+                    data-rotation="-22deg"
+                  ></div>
+                  <div
+                    class="hero-figure-box hero-figure-box-09"
+                    data-rotation="-52deg"
+                  ></div>
+                  <div
+                    class="hero-figure-box hero-figure-box-10"
+                    data-rotation="-50deg"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-
-            <!-- <div class="feature-icon">
+          <!-- <div class="feature-icon">
                 <img th:src="@{/asserts/images/feature-icon-01.svg}" alt="Feature 01">
             </div> -->
-
-
         </main>
+      </div>
     </div>
-</div>
 
-<!-- <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script> -->
-<!-- <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script> -->
+    <!-- <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script> -->
+    <!-- <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script> -->
 
-<!-- <script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script> -->
-<!-- <script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script> -->
-<!-- <script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script> -->
 
-<!-- <script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script> -->
-<!-- <script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script> -->
-<!-- <script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script> -->
-<!-- <script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script> -->
-<!-- <script type="text/javascript" src="asserts/element2.10.1/js/main.min.js" th:src="@{/asserts/element2.10.1/js/main.min.js}"></script> -->
-<!-- <script type="text/javascript" src="asserts/js/main.min.js" th:src="@{/asserts/js/main.min.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/js/vue.js" th:src="@{/asserts/js/vue.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/js/iconfont.js" th:src="@{/asserts/js/iconfont.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/element2.10.1/index.js" th:src="@{/asserts/element2.10.1/index.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/element2.10.1/js/main.min.js" th:src="@{/asserts/element2.10.1/js/main.min.js}"></script> -->
+    <!-- <script type="text/javascript" src="asserts/js/main.min.js" th:src="@{/asserts/js/main.min.js}"></script> -->
+    <div layout:fragment="jscontent">
+        <script
+        type="text/javascript"
+        src="/asserts/js/particles.min.js"
+        th:src="@{/asserts/js/particles.min.js}"
+        th:inline="javascript"
+        ></script>
 
-
-
-<script type="text/javascript" th:inline="javascript">
-
-    var app = new Vue({
-        el: '#app',
-        data: {
+        <script type="text/javascript" th:inline="javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
             activeIndex2: '1',
-        },
-        methods: {
+            },
+            methods: {
             handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+                console.log(key, keyPath)
+            },
+            },
+        })
+        </script>
+
+        <script type="text/javascript" th:inline="javascript">
+        particlesJS(
+            'particles-js',
+            {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800,
+                    },
+                },
+                color: {
+                    value: '#827397',
+                },
+                shape: {
+                    type: 'circle',
+                    stroke: {
+                        width: 0,
+                        color: '#000000',
+                    },
+                    polygon: {
+                        nb_sides: 5,
+                    },
+                    image: {
+                        src: 'img/github.svg',
+                        width: 100,
+                        height: 100,
+                    },
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false,
+                    },
+                },
+                size: {
+                    value: 5,
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 10,
+                        size_min: 0.1,
+                        sync: false,
+                    },
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#827397',
+                    opacity: 0.4,
+                    width: 1,
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    attract: {
+                        enable: false,
+                        rotateX: 600,
+                        rotateY: 1200,
+                    },
+                },
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'bubble'// [/* "grab",  */"bubble"/* , 'repulse' */],
+                    },
+                    onclick: {
+                        enable: false,
+                        mode: 'push',
+                    },
+                    resize: true,
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                        opacity: 1,
+                        },
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 6,
+                        duration: 2,
+                        opacity: .4,
+                        speed: 3,
+                    },
+                    repulse: {
+                        distance: 200,
+                    },
+                    push: {
+                        particles_nb: 4,
+                    },
+                    remove: {
+                        particles_nb: 2,
+                    },
+                },
+            },
+            retina_detect: true,
+            config_demo: {
+                hide_card: false,
+                background_color: '#b61924',
+                background_image: '',
+                background_position: '50% 50%',
+                background_repeat: 'no-repeat',
+                background_size: 'cover',
+            },
             }
-        }
-    })
-
-</script>
-
-
-</body>
-
+        )
+        </script>
+    </div>
+  </body>
 </html>
