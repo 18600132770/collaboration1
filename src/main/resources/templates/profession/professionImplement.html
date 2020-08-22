@@ -40,8 +40,8 @@
 				<el-aside width="250px">
 					<div class="project-title">
 						<span>项目列表</span>
-						<el-tooltip class="item" effect="dark" content="添加项目" placement="bottom">
-							<el-button type="text" icon="el-icon-plus" size="small" @click="addProjectClick"></el-button>
+						<el-tooltip v-if="false" class="item" effect="dark" content="添加项目" placement="bottom">
+							<el-button v-if="false" type="text" icon="el-icon-plus" size="small" @click="addProjectClick"></el-button>
 						</el-tooltip>
 					</div>
 					<!-- 左侧  -->
@@ -256,7 +256,11 @@
 						<el-input placeholder="请输入任务名称" clearable v-model="addTaskAssignment.taskName" style="width: 300px;"></el-input>
 					</el-form-item>
 					<el-form-item label="任务级别">
-						<el-input placeholder="请输入任务级别" clearable v-model="addTaskAssignment.taskLevel" style="width: 300px;"></el-input>
+						<!-- <el-input placeholder="请输入任务级别" clearable v-model="addTaskAssignment.taskLevel" style="width: 300px;"></el-input> -->
+						<el-select clearable v-model="addTaskAssignment.taskLevel" style="width: 300px;">
+							<el-option label="紧急" value="紧急"></el-option>
+							<el-option label="正常" value="正常"></el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item label="开始时间">
 						<el-date-picker	v-model="addTaskAssignment.startTime" type="date" placeholder="选择日期" style="width: 300px;"></el-date-picker>
