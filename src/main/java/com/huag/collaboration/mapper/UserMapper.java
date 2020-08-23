@@ -59,4 +59,11 @@ public interface UserMapper {
      */
     int updateUserTripStateByUsername(@Param("username")String username, @Param("tripState")String tripState);
 
+    /**
+     * 根据员工唯一cardId识别，例如mayun02
+     * @param cardId
+     * @return
+     */
+    User findByCardId(String cardId);
+
 }

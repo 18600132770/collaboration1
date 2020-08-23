@@ -22,6 +22,10 @@ public interface ProjectMapper {
 
     List<Project> findProjectByDepartmentId(Integer departmentId);
 
+    List<Project> findByProjectUserName(String username);
+
+    List<Project> findByAdmin();
+
 
     /**
      * 按照总项目id查询

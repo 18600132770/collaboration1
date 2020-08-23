@@ -13,6 +13,7 @@ import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProjectMapper;
 import com.huag.collaboration.mapper.ProjectSubitemMapper;
+import com.huag.collaboration.mapper.ProjectSummaryMapper;
 import com.huag.collaboration.utils.DateUtils;
 import com.huag.collaboration.utils.RequestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +41,9 @@ public class ProjectController {
 
     @Autowired
     ProjectSubitemMapper projectSubitemMapper;
+
+    @Autowired
+    ProjectSummaryMapper projectSummaryMapper;
 
     /**
      * 页面跳转
@@ -247,15 +251,54 @@ public class ProjectController {
      * @param request
      * @return
      */
+//    @ResponseBody
+//    @RequestMapping(value = "/project/findProjectByDepartmentId")
+//    public BaseResponse<Object> findProjectByDepartmentId(HttpServletRequest request){
+//        BaseResponse<Object> result = new BaseResponse<>();
+//        String departmentId = String.valueOf(request.getParameter("departmentId"));
+//        int currentPage = RequestUtils.getCurrentPage(request);
+//        int pageSize = RequestUtils.getPageSize(request);
+//        Page<Object> page = PageHelper.startPage(currentPage, pageSize);
+//        List<Project> projects = projectMapper.findProjectByDepartmentId(Integer.valueOf(departmentId));
+//        projects.forEach(project ->{
+//            if(project.getStopTime() != null && project.getStartTime() != null){
+//                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
+//                project.setLeftTime(dateDifferenceByDay + "");
+//            }
+//        });
+//        PageInfo<Project> pageInfo = new PageInfo<>(projects, pageSize);
+//
+//
+//        int pages = pageInfo.getPages();
+//        long total = pageInfo.getTotal();
+//        PageBaseResponse response = new PageBaseResponse(projects, currentPage,
+//                pageSize, pages, total);
+//        result.code = 200;
+//        result.setData(response);
+//        return result;
+//    }
+
     @ResponseBody
     @RequestMapping(value = "/project/findProjectByDepartmentId")
     public BaseResponse<Object> findProjectByDepartmentId(HttpServletRequest request){
+        Object user = request.getSession().getAttribute("loginUser");
         BaseResponse<Object> result = new BaseResponse<>();
         String departmentId = String.valueOf(request.getParameter("departmentId"));
         int currentPage = RequestUtils.getCurrentPage(request);
         int pageSize = RequestUtils.getPageSize(request);
         Page<Object> page = PageHelper.startPage(currentPage, pageSize);
-        List<Project> projects = projectMapper.findProjectByDepartmentId(Integer.valueOf(departmentId));
+
+        List<Project> projects = projectMapper.findByProjectUserName(user.toString());
+
+        String username = user.toString();
+        if("admin".equals(username)){
+            projects = projectMapper.findByAdmin();
+        }else{
+            projects = projectMapper.findByProjectUserName(user.toString());
+        }
+
+
+        //List<Project> projects = projectMapper.findProjectByDepartmentId(Integer.valueOf(departmentId));
         projects.forEach(project ->{
             if(project.getStopTime() != null && project.getStartTime() != null){
                 Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(project.getStopTime(), project.getStartTime());
@@ -263,6 +306,7 @@ public class ProjectController {
             }
         });
         PageInfo<Project> pageInfo = new PageInfo<>(projects, pageSize);
+
 
         int pages = pageInfo.getPages();
         long total = pageInfo.getTotal();

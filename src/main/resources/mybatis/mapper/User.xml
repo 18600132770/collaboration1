@@ -66,4 +66,10 @@
          where username = #{username}
     </insert>
 
+    <select id="findByCardId" resultType="com.huag.collaboration.entities.User">
+        SELECT * FROM user where cardId = #{cardId}
+         and
+            (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+    </select>
+
 </mapper>

@@ -38,6 +38,44 @@
         SELECT * FROM project where projectName like "%"#{projectName}"%" and (deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
 
+    <select id="findByProjectUserName" resultType="com.huag.collaboration.entities.Project">
+        select t1.projectName, t2.username as principal, t3.username chiefEngineer,
+        t1.startTime, t1.stopTime, t1.leftTime
+        from
+        (
+        select * from projectSummary
+        where id in
+        (
+        select projectSummaryId
+        from project
+        where principalId = (select id from user where cardId =  #{username})
+        or chiefEngineerId = (select id from user where cardId = #{username})
+        )
+        or principalId = (select id from user where cardId = #{username})
+        or chiefEngineerId = (select id from user where cardId = #{username})
+        ) t1
+        left join (select * from user) t2
+        on t1.principalId = t2.id
+        left join (select * from user) t3
+        on t1.chiefEngineerId = t3.id
+        order by t1.id asc
+    </select>
+
+
+
+    <select id="findByAdmin" resultType="com.huag.collaboration.entities.Project">
+        select t1.projectName, t2.username as principal, t3.username chiefEngineer,
+        t1.startTime, t1.stopTime, t1.leftTime
+        from
+        projectSummary t1
+        left join (select * from user) t2
+        on t1.principalId = t2.id
+        left join (select * from user) t3
+        on t1.chiefEngineerId = t3.id
+        where (t1.deltag <![CDATA[ <> ]]> '1' or t1.deltag is null)
+        order by t1.id asc
+    </select>
+
     <select id="findProjectByDepartmentId" resultType="com.huag.collaboration.entities.Project">
         select
         projectTemp2.id, projectTemp2.projectSummaryId, projectTemp2.projectNum, projectTemp2.projectName, projectTemp2.designPhase,
