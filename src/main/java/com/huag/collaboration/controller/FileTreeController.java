@@ -54,4 +54,23 @@ public class FileTreeController {
         return result;
     }
 
+    /**
+     * 文件树-某项目新增文件夹目录
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/fileTree/addFileTreeOfProjectSummary")
+    public BaseResponse<ProjectSummaryFileTree> addFileTreeOfProjectSummary(HttpServletRequest request){
+        BaseResponse<ProjectSummaryFileTree> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        String folderName = String.valueOf(request.getParameter("folderName"));
+        ProjectSummaryFileTree projectSummaryFileTree = new ProjectSummaryFileTree();
+        projectSummaryFileTree.setProjectSummaryId(Integer.valueOf(id));
+        projectSummaryFileTree.setFileTreeName(folderName);
+        projectSummaryFileTreeMapper.insert(projectSummaryFileTree);
+        result.code = 200;
+        return result;
+    }
+
 }

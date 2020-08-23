@@ -6,7 +6,9 @@
 
 
     <select id="findByProjectSummaryId" resultType="com.huag.collaboration.entities.fileTree.ProjectSummaryFileTree">
-         select t1.id, t1.projectSummaryId, t2.name as fileTreeName, t1.fileTreeId
+         select t1.id, t1.projectSummaryId,
+            if((t2.name is null or t2.name = ''), t1.fileTreeName, t2.name) as fileTreeName,
+            t1.fileTreeId
          from projectSummaryFileTree t1 left join fileTree t2
          on t1.fileTreeId = t2.id
          where projectSummaryId = #{projectSummaryId}
