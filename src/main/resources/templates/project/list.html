@@ -40,7 +40,63 @@
 			.table-operate {
 				display: flex;
 				justify-content: space-between;
-			}
+      }
+      
+      .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
+      }
+
+      .custom-tree-node > span:first-child {
+        background-color: #409EFF;
+        padding: 2px 5px;
+        color: #fff;
+      }
+
+      .add-project {
+        display: flex;
+      }
+      .tree-container {
+        padding: 10px;
+        width: 300px;
+      }
+      .tree-container .el-tree {
+        width: 100%;
+      }
+      .tree-container .el-tree-node {
+        margin: 10px 0;
+      }
+      /* .file-tree .el-tree-node__children:before {
+        content: "";
+        position: absolute;
+        top: -13px;
+        bottom: 16px;
+        left: 17px;
+        width: 1px;
+        border-left: 1px dashed #3150b0;
+      }
+      .file-tree .el-tree-node__children .custom-tree-node:before, 
+      .file-tree .el-tree-node__children .el-tree-node__label:before {
+        content: "";
+        position: absolute;
+        left: -26px;
+        top: 16px;
+        height: 1px;
+        width: 24px;
+        border-top: 1px dashed #3150b0;
+      }
+
+      .file-tree .el-tree-node__content {
+        position: relative;
+        margin-bottom: 12px;
+        height: auto;
+        padding: 0!important;
+      } */
+
 		</style>
   </head>
 
@@ -378,107 +434,120 @@
 				<el-dialog
 					title="添加项目"
 					:visible.sync="dialogAddProjectVisible"
-					width="600px"
-				>
-					<el-form
-						label-width="130px"
-						:model="addProject"
-						label-suffix="："
-						size="small"
-					>
-						<el-form-item label="项目编号">
-							<el-input
-								v-model="addProject.projectNum"
-								placeholder="请输入项目编号"
-								clearable
-								style="width: 300px;"
-							></el-input>
-						</el-form-item>
-						<el-form-item label="项目名称">
-							<el-input
-								v-model="addProject.projectName"
-								placeholder="请输入项目名称"
-								clearable
-								style="width: 300px;"
-							></el-input>
-						</el-form-item>
-						<el-form-item label="设计阶段">
-							<el-input
-								v-model="addProject.designPhase"
-								placeholder="请输入设计阶段"
-								clearable
-								style="width: 300px;"
-							></el-input>
-						</el-form-item>
-						<el-form-item label="开始时间">
-							<el-date-picker
-								v-model="addProject.startTime"
-								type="date"
-								placeholder="选择日期"
-								style="width: 300px;"
-							></el-date-picker>
-						</el-form-item>
-						<el-form-item label="截止时间">
-							<el-date-picker
-								v-model="addProject.stopTime"
-								type="date"
-								placeholder="截止时间"
-								style="width: 300px;"
-							></el-date-picker>
-						</el-form-item>
-						<el-form-item label="项目负责人">
-							<el-select
-								v-model="principalModalInput"
-								filterable
-								placeholder="请选择"
-								style="width: 300px;"
-							>
-								<el-option
-									v-for="item in principals1"
-									:key="item.principalId"
-									:label="item.principal"
-									:value="item.principalId"
-								></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="项目总工">
-							<el-select
-								v-model="chiefEngineerModalInput"
-								filterable
-								placeholder="请选择"
-								style="width: 300px;"
-							>
-								<el-option
-									v-for="item in chiefEngineers1"
-									:key="item.chiefEngineerId"
-									:label="item.chiefEngineer"
-									:value="item.chiefEngineerId"
-								></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="分派部门">
-							<el-select
-								v-model="selectDepartments"
-								multiple
-								placeholder="请选择"
-								style="width: 300px;"
-							>
-								<el-option
-									v-for="department in departments"
-									:key="department.id"
-									:label="department.departmentName"
-									:value="department.id"
-								>
-								</el-option>
-							</el-select>
-						</el-form-item>
-					</el-form>
+					:width="currentProjectId ? '800px' : '600px'"
+        >
+          <div class="add-project">
+            <el-form
+              label-width="130px"
+              :model="addProject"
+              label-suffix="："
+              size="small"
+              :disabled="currentProjectId"
+            >
+              <el-form-item label="项目编号">
+                <el-input
+                  v-model="addProject.projectNum"
+                  placeholder="请输入项目编号"
+                  clearable
+                  style="width: 300px;"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="项目名称">
+                <el-input
+                  v-model="addProject.projectName"
+                  placeholder="请输入项目名称"
+                  clearable
+                  style="width: 300px;"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="设计阶段">
+                <el-input
+                  v-model="addProject.designPhase"
+                  placeholder="请输入设计阶段"
+                  clearable
+                  style="width: 300px;"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="开始时间">
+                <el-date-picker
+                  v-model="addProject.startTime"
+                  type="date"
+                  placeholder="选择日期"
+                  style="width: 300px;"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item label="截止时间">
+                <el-date-picker
+                  v-model="addProject.stopTime"
+                  type="date"
+                  placeholder="截止时间"
+                  style="width: 300px;"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item label="项目负责人">
+                <el-select
+                  v-model="principalModalInput"
+                  filterable
+                  placeholder="请选择"
+                  style="width: 300px;"
+                >
+                  <el-option
+                    v-for="item in principals1"
+                    :key="item.principalId"
+                    :label="item.principal"
+                    :value="item.principalId"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="项目总工">
+                <el-select
+                  v-model="chiefEngineerModalInput"
+                  filterable
+                  placeholder="请选择"
+                  style="width: 300px;"
+                >
+                  <el-option
+                    v-for="item in chiefEngineers1"
+                    :key="item.chiefEngineerId"
+                    :label="item.chiefEngineer"
+                    :value="item.chiefEngineerId"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="分派部门">
+                <el-select
+                  v-model="selectDepartments"
+                  multiple
+                  placeholder="请选择"
+                  style="width: 300px;"
+                >
+                  <el-option
+                    v-for="department in departments"
+                    :key="department.id"
+                    :label="department.departmentName"
+                    :value="department.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            
+            <div v-if="currentProjectId" class="tree-container">
+              <p>文件树：</p>
+              <el-scrollbar style="height: 358px">
+                <file-tree :project-id="currentProjectId"></file-tree>
+              </el-scrollbar>
+            </div>
+          </div>
 					
 					<div slot="footer" class="txtCenter">
-						<el-button size="small" type="primary" class="btn btn-primary" @click="saveAddProject">
-							保存
+						<el-button v-if="!currentProjectId" size="small" type="primary" class="btn btn-primary" @click="saveAddProject">
+							下一步
+            </el-button>
+            <el-button v-if="!currentProjectId" size="small" @click="dialogAddProjectVisible = false">取消</el-button>
+            <el-button v-if="currentProjectId" size="small" type="primary" class="btn btn-primary" @click="dialogAddProjectVisible = false">
+							完成
 						</el-button>
-						<el-button size="small" @click="dialogAddProjectVisible = false">取消</el-button>
 					</div>
 				</el-dialog>
 				</div>
@@ -524,6 +593,8 @@
       <script>
         feather.replace()
       </script>
+
+      <script th:src="@{/asserts/js/components/fileTree.js}"></script>
 
       <script type="text/javascript">
 				window.searchKeyWord = ''
@@ -582,7 +653,9 @@
 						chiefEngineerModalInput: null,
 						selectDepartments: null,
 						chiefEngineers1: [],
-						principals1: [],
+            principals1: [],
+            currentProjectId: null
+            
           },
           methods: {
             handleSizeChange(val) {
@@ -1118,15 +1191,18 @@
 								if (result.code == 200) {
 									// findAllProjectSummary()
 									// 获取项目列表
-									findProjectByDepartmentId(1)
-									app.dialogAddProjectVisible = false
+									// findProjectByDepartmentId(1)
+									// app.dialogAddProjectVisible = false
 									app.addProject = {}
 									/* app.principalModalInput = null
 									app.chiefEngineerModalInput = null
 									app.principals = {}
 									app.chiefEngineers = {}
 									app.selectDepartments = null
-									app.departments = {} */
+                  app.departments = {} */
+                  
+                  app.currentProjectId = result.data.id
+
 									that.$message({
 										message: '项目添加成功',
 										type: 'success',
