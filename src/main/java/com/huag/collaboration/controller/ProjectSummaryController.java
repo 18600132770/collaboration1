@@ -5,10 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectEnum;
 import com.huag.collaboration.entities.ProjectSummary;
+import com.huag.collaboration.entities.fileTree.FileTree;
+import com.huag.collaboration.entities.fileTree.ProjectSummaryFileTree;
 import com.huag.collaboration.entities.query.BaseResponse;
-import com.huag.collaboration.mapper.ProjectMapper;
-import com.huag.collaboration.mapper.ProjectSummaryMapper;
-import com.huag.collaboration.mapper.TaskAssignmentMapper;
+import com.huag.collaboration.mapper.*;
 import com.huag.collaboration.utils.DateUtils;
 import com.huag.collaboration.utils.JSONUtils;
 import org.apache.commons.lang3.builder.ToStringExclude;
@@ -41,6 +41,12 @@ public class ProjectSummaryController {
 
     @Autowired
     TaskAssignmentMapper taskAssignmentMapper;
+
+    @Autowired
+    FileTreeMapper fileTreeMapper;
+
+    @Autowired
+    ProjectSummaryFileTreeMapper projectSummaryFileTreeMapper;
 
     /**
      * ajax请求，查询所有数据
@@ -145,7 +151,19 @@ public class ProjectSummaryController {
             projectMapper.insert(project);
         }
 
+        //新建项目时把该项目文件树模板加进去
+        List<FileTree> fileTreeList = fileTreeMapper.findAll();
+        for (FileTree fileTree :
+                fileTreeList) {
+            System.out.println(fileTree.getId());
+            ProjectSummaryFileTree projectSummaryFileTree = new ProjectSummaryFileTree();
+            projectSummaryFileTree.setProjectSummaryId(projectSummaryId);
+            projectSummaryFileTree.setFileTreeId(fileTree.getId());
+            projectSummaryFileTreeMapper.insert(projectSummaryFileTree);
+        }
+
         result.code = 200;
+        result.setData(projectSummary);
         return result;
     }
 
@@ -171,6 +189,7 @@ public class ProjectSummaryController {
         result.setData(null);
         return result;
     }
+
 
     /**
      * 更新分项目设计阶段

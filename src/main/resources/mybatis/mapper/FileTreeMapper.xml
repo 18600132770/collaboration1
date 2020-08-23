@@ -6,7 +6,9 @@
 
 
     <select id="findAll" resultType="com.huag.collaboration.entities.fileTree.FileTree">
-        select * from fileTree order by id asc
+        select * from fileTree
+        where (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+        order by id asc
     </select>
 
 
