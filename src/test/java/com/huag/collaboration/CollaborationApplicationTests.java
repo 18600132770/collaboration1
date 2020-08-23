@@ -9,6 +9,7 @@ import com.huag.collaboration.entities.ProfessionalProfile;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.TaskAssignment;
 import com.huag.collaboration.entities.User;
+import com.huag.collaboration.entities.fileTree.FileTree;
 import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.mapper.*;
 import com.huag.collaboration.utils.DateUtils;
@@ -50,6 +51,9 @@ public class CollaborationApplicationTests {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    FileTreeMapper fileTreeMapper;
 
     @Test
     public void test1() {
@@ -235,6 +239,12 @@ public class CollaborationApplicationTests {
             System.out.println(project);
         });
 
+    }
+
+    @Test
+    public void test21(){
+        List<FileTree> fileTreeList = fileTreeMapper.findAll();
+        System.out.println(fileTreeList);
     }
 
 
