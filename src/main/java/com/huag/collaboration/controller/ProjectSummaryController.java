@@ -221,6 +221,11 @@ public class ProjectSummaryController {
         projectMapper.update(project);
     }
 
+    /**
+     * 项目信息-项目按照用户角色来显示
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/projectSummary/findByRoles")
     public BaseResponse<Object> findByRoles(HttpServletRequest request){
@@ -258,5 +263,21 @@ public class ProjectSummaryController {
     }
 
 
+
+    @ResponseBody
+    @RequestMapping(value = "/projectSummary/update")
+    public BaseResponse<ProjectSummary> save(HttpServletRequest request) throws Exception{
+        BaseResponse<ProjectSummary> result = new BaseResponse<>();
+        String projectStr = URLDecoder.decode(String.valueOf(request.getParameter("projectSummary")), "UTF-8");
+        ProjectSummary projectSummary = JSONObject.toJavaObject(JSON.parseObject(projectStr), ProjectSummary.class);
+        if(projectSummary.getId() == null || "".equals(projectSummary.getId())){
+            projectSummaryMapper.insert(projectSummary);
+        }else{
+            projectSummaryMapper.update(projectSummary);
+        }
+        result.code = 200;
+        result.setData(projectSummary);
+        return result;
+    }
 
 }
