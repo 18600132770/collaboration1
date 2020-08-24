@@ -321,7 +321,7 @@ public class CollaborationApplicationTests {
 
     @Test
     public void test23(){
-        List<ProjectSummary> list = projectSummaryMapper.findByRoles("mayun");
+        List<ProjectSummary> list = projectSummaryMapper.findByProjectName("马");
         list.forEach(projectSummary -> {
             System.out.println(projectSummary);
         });

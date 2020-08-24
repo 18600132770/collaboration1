@@ -16,6 +16,7 @@ import com.huag.collaboration.mapper.*;
 import com.huag.collaboration.utils.DateUtils;
 import com.huag.collaboration.utils.JSONUtils;
 import com.huag.collaboration.utils.RequestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -227,21 +228,27 @@ public class ProjectSummaryController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/projectSummary/findByRoles")
-    public BaseResponse<Object> findByRoles(HttpServletRequest request){
+    @RequestMapping(value = "/projectSummary/findByProjectNameAndRoles")
+    public BaseResponse<Object> findByProjectNameAndRoles(HttpServletRequest request) throws Exception{
         Object user = request.getSession().getAttribute("loginUser");
         BaseResponse<Object> result = new BaseResponse<>();
         int currentPage = RequestUtils.getCurrentPage(request);
         int pageSize = RequestUtils.getPageSize(request);
         Page<Object> page = PageHelper.startPage(currentPage, pageSize);
 
+        String projectName = String.valueOf(request.getParameter("projectName"));
+        projectName = URLDecoder.decode(projectName, "UTF-8");
+        if (StringUtils.isBlank(projectName) || "null".equals(projectName)){
+            projectName = "";
+        }
+
         List<ProjectSummary> projectsSummaryList;
 
         String username = user.toString();
         if("admin".equals(username)){
-            projectsSummaryList = projectSummaryMapper.findAll();
+            projectsSummaryList = projectSummaryMapper.findByProjectName(projectName);
         }else{
-            projectsSummaryList = projectSummaryMapper.findByRoles(user.toString());
+            projectsSummaryList = projectSummaryMapper.findByProjectNameAndRoles(user.toString(), projectName);
         }
 
         projectsSummaryList.forEach(projectSummary -> {
@@ -250,6 +257,8 @@ public class ProjectSummaryController {
                 projectSummary.setLeftTime(dateDifferenceByDay + "");
             }
         });
+
+        System.out.println(projectsSummaryList);
 
         PageInfo<ProjectSummary> pageInfo = new PageInfo<>(projectsSummaryList, pageSize);
 
@@ -277,6 +286,42 @@ public class ProjectSummaryController {
         }
         result.code = 200;
         result.setData(projectSummary);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/projectSummary/findByProjectName")
+    public BaseResponse<Object> findByProjectName(HttpServletRequest request) throws Exception{
+        BaseResponse<Object> result = new BaseResponse<>();
+        String projectName = String.valueOf(request.getParameter("projectName"));
+        projectName = URLDecoder.decode(projectName, "UTF-8");
+
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
+        Page<Object> page = PageHelper.startPage(currentPage, pageSize);
+
+        List<ProjectSummary> projectSummaryList = new ArrayList<>();
+        if(StringUtils.isNotBlank(projectName)){
+            projectSummaryList = projectSummaryMapper.findByProjectName(projectName);
+        }
+
+        projectSummaryList.forEach(projectSummary -> {
+            if (projectSummary.getStartTime() != null && projectSummary.getStopTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(projectSummary.getStopTime(), projectSummary.getStartTime());
+                projectSummary.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+
+
+        PageInfo<ProjectSummary> pageInfo = new PageInfo<>(projectSummaryList, pageSize);
+
+        int pages = pageInfo.getPages();
+        long total = pageInfo.getTotal();
+        PageBaseResponse response = new PageBaseResponse(projectSummaryList, currentPage,
+                pageSize, pages, total);
+        result.code = 200;
+        result.setData(response);
+
         return result;
     }
 

@@ -42,4 +42,8 @@ public interface ProjectSummaryMapper {
      */
     List<ProjectSummary> findByRoles(String username);
 
+    List<ProjectSummary> findByProjectNameAndRoles(String username, String projectName);
+
+    List<ProjectSummary> findByProjectName(String projectName);
+
 }
