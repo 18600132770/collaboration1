@@ -36,4 +36,10 @@ public interface ProjectSummaryMapper {
      */
     public int update(ProjectSummary projectSummary);
 
+    /**
+     * 根据用户角色查询
+     * @return
+     */
+    List<ProjectSummary> findByRoles(String username);
+
 }

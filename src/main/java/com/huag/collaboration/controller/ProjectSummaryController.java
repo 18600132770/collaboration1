@@ -2,15 +2,20 @@ package com.huag.collaboration.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectEnum;
 import com.huag.collaboration.entities.ProjectSummary;
+import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.fileTree.FileTree;
 import com.huag.collaboration.entities.fileTree.ProjectSummaryFileTree;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.*;
 import com.huag.collaboration.utils.DateUtils;
 import com.huag.collaboration.utils.JSONUtils;
+import com.huag.collaboration.utils.RequestUtils;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -214,6 +219,42 @@ public class ProjectSummaryController {
             project.setCurrentProcess(100);
         }
         projectMapper.update(project);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/projectSummary/findByRoles")
+    public BaseResponse<Object> findByRoles(HttpServletRequest request){
+        Object user = request.getSession().getAttribute("loginUser");
+        BaseResponse<Object> result = new BaseResponse<>();
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
+        Page<Object> page = PageHelper.startPage(currentPage, pageSize);
+
+        List<ProjectSummary> projectsSummaryList;
+
+        String username = user.toString();
+        if("admin".equals(username)){
+            projectsSummaryList = projectSummaryMapper.findAll();
+        }else{
+            projectsSummaryList = projectSummaryMapper.findByRoles(user.toString());
+        }
+
+        projectsSummaryList.forEach(projectSummary -> {
+            if (projectSummary.getStartTime() != null && projectSummary.getStopTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(projectSummary.getStopTime(), projectSummary.getStartTime());
+                projectSummary.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+
+        PageInfo<ProjectSummary> pageInfo = new PageInfo<>(projectsSummaryList, pageSize);
+
+        int pages = pageInfo.getPages();
+        long total = pageInfo.getTotal();
+        PageBaseResponse response = new PageBaseResponse(projectsSummaryList, currentPage,
+                pageSize, pages, total);
+        result.code = 200;
+        result.setData(response);
+        return result;
     }
 
 
