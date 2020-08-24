@@ -325,4 +325,16 @@ public class ProjectSummaryController {
         return result;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/projectSummary/delete")
+    public BaseResponse<ProjectSummary> delete(HttpServletRequest request){
+        BaseResponse<ProjectSummary> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        ProjectSummary projectSummary = projectSummaryMapper.findById(Integer.valueOf(id));
+        projectSummary.setDeltag("1");
+        projectSummaryMapper.update(projectSummary);
+        result.code = 200;
+        return result;
+    }
+
 }
