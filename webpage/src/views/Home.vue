@@ -62,7 +62,7 @@
                 <a href="https://data.qq.com/blog">关于</a>
             </li>
             <li>
-              <a th:href="@{/user/login}">登录</a>
+              <router-link :to="'/login'">登录</router-link>
             </li>
           </ul>
         </div>

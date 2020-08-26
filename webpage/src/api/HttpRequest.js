@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { setToken, getToken } from './token'
-import { Message } from 'element-ui'
+import { message } from 'ant-design-vue'
 
 export default class HttpRequest {
   constructor (baseUrl = '') {
@@ -63,13 +63,13 @@ export default class HttpRequest {
       res => {
         // 请求响应后销毁请求实例
         this.destroy(url)
-        let { data } = res
+        const { data } = res
         // code 验证
-        let { code } = data
+        const { code } = data
         if (code !== 200) {
           // 无权限
           if (code === 403) {
-            Message({
+            message({
               showClose: true,
               message: data.msg || '没有权限!',
               type: 'error'
@@ -80,7 +80,7 @@ export default class HttpRequest {
           // 错误401 token无效 删除token 返回鉴权中心(登录页)
           if (code === 401) {
             // 其他错误 处理
-            Message({
+            message({
               showClose: true,
               message: '登录超时，请重新登录！',
               type: 'warning'
@@ -89,7 +89,7 @@ export default class HttpRequest {
               process.env.NODE_ENV === 'development' ? '/#/login' : '/login'
           }
           if (code === 500) {
-            Message({
+            message({
               showClose: true,
               message: data.msg || '服务器错误!',
               type: 'error'
@@ -97,7 +97,7 @@ export default class HttpRequest {
             return Promise.reject(data)
           }
           if (code === 406) {
-            Message({
+            message({
               showClose: true,
               message: data.msg || '请求参数不正确!',
               type: 'error'
@@ -121,10 +121,10 @@ export default class HttpRequest {
 
         if (error && error.response) {
           // 响应错误处理
-          let { data, status } = error.response
+          const { data, status } = error.response
           // http状态码
           if (status === 500) {
-            Message({
+            message({
               showClose: true,
               message: '服务器错误，请稍后重试',
               type: 'error'
@@ -135,7 +135,7 @@ export default class HttpRequest {
           }
           // 无权限
           if (data && data.status === 403) {
-            Message({
+            message({
               showClose: true,
               message: data.message || '没有权限!',
               type: 'error'
@@ -147,7 +147,7 @@ export default class HttpRequest {
             return Promise.reject(data)
           }
         } else if (error && error.code === 'ECONNABORTED') {
-          Message.error('请求超时，请检查网络后刷新页面重试')
+          message.error('请求超时，请检查网络后刷新页面重试')
         }
 
         return Promise.reject(error)
@@ -158,7 +158,7 @@ export default class HttpRequest {
   request (options) {
     const instance = axios.create()
     // 合并options
-    let headers = Object.assign(this.getCommonConfig().headers, options.headers)
+    const headers = Object.assign(this.getCommonConfig().headers, options.headers)
     options = Object.assign(this.getCommonConfig(), options)
     options.headers = headers
     // 注册拦截器
