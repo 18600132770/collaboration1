@@ -147,7 +147,7 @@
 										v-model="searchKey"
 										size="small"
 									></el-input>
-									<el-button size="small" class="select-btn" @click="searchClick">查找</el-button>
+									<el-button size="small" type="primary" class="select-btn" clearable @clear="searchClick" @click="searchClick">查找</el-button>
 								</div>
 							</div>
 
@@ -241,12 +241,17 @@
                     </div>
                   </template>
                 </el-table-column>
-                <!--<el-table-column label="操作" min-width="100">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-button class="btn-line btn-0 cur" size="mini"><a :href="'/crud/project/'+scope.row.id">编辑</a></el-button>-->
-                <!--<el-button class="btn-line btn-0" size="mini" @click="deleteProjectClick(scope.row.id)">删除</el-button>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
+                <el-table-column label="操作" min-width="70">
+                  <template slot-scope="scope">
+                    <!-- <el-button type="primary" size="mini">编辑</el-button> -->
+                    <!-- <el-popconfirm
+                      title="确定删除该项目吗？"
+                      @onConfirm="alert('0000');deleteProjectClick(scope.row.id)"
+                    > -->
+                      <el-button slot="reference" type="danger" @click="deleteProjectClick(scope.row.id)" size="mini">删除</el-button>
+                    <!-- </el-popconfirm> -->
+                  </template>
+                </el-table-column>
               </el-table>
               <el-pagination
                 class="txtCenter"
@@ -461,12 +466,20 @@
                 ></el-input>
               </el-form-item>
               <el-form-item label="设计阶段">
-                <el-input
+                <el-select
                   v-model="addProject.designPhase"
-                  placeholder="请输入设计阶段"
-                  clearable
+                  filterable
+                  placeholder="请选择设计阶段"
                   style="width: 300px;"
-                ></el-input>
+                  size="small"
+                >
+                  <el-option
+                    v-for="item in designPhases"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="开始时间">
                 <el-date-picker
@@ -657,18 +670,26 @@
             currentProjectId: null
             
           },
+          mounted () {
+            this.findProjectByDepartmentId()
+          },
           methods: {
+            // 查询项目列表信息
+            findProjectByDepartmentId,
+            // 删除项目
+            deleteProjectClick,
+
             handleSizeChange(val) {
-              console.log(`每页 ${val} 条`)
               app.pageSize = val
-              findProjectBySearchKeyWordAndDeptId(app.currentPage, app.pageSize)
+              this.findProjectByDepartmentId()
             },
             handleCurrentChange(val) {
-              console.log(`当前页: ${val}`)
-              findProjectBySearchKeyWordAndDeptId(val, app.pageSize)
+              this.currentPage = val
+              this.findProjectByDepartmentId()
             },
             searchClick: function () {
-              findProjectBySearchKeyWordAndDeptId(app.currentPage, app.pageSize)
+              this.currentPage = 1
+              this.findProjectByDepartmentId()
             },
             getProjectByDepartment: function (departmentId) {
               var departments = app.departments
@@ -681,7 +702,7 @@
               }
               app.departments = departments
               app.currentDepartmentId = departmentId
-              findProjectByDepartmentId(departmentId) //根据所名称查询项目
+              // findProjectByDepartmentId(departmentId) //根据所名称查询项目
             },
             saveDesignPhase: function () {
               editDesignPhaseAjaxFunction(this)
@@ -1015,7 +1036,7 @@
         }
 
         /**
-         * 根据searchKeyWord和deptId查询
+         * 根据searchKeyWord和deptId查询 TODO delete
          */
         function findProjectBySearchKeyWordAndDeptId(currentPage, pageSize) {
           var ajaxData = {}
@@ -1026,7 +1047,6 @@
           } else {
             ajaxData.projectName = encodeURI('')
           }
-          ajaxData.departmentId = app.currentDepartmentId
           var type = 'GET'
           var url = 'project/findByProjectNameAndDeptId'
           sendAjax(ajaxData, type, url)
@@ -1037,13 +1057,14 @@
          */
         function findProjectByDepartmentId(departmentId) {
           var ajaxData = {}
-          ajaxData.currentPage = app.currentPage
-          ajaxData.pageSize = app.pageSize
-          ajaxData.departmentId = departmentId
+          ajaxData.currentPage = this.currentPage
+          ajaxData.pageSize = this.pageSize
+          ajaxData.projectName = this.searchKey
+          // ajaxData.departmentId = departmentId
           $.ajax({
             data: ajaxData,
             type: 'GET',
-            url: '/crud/project/findProjectByDepartmentId',
+            url: '/crud/projectSummary/findByProjectNameAndRoles',
             success: function (result) {
               if (result.code == 200) {
                 app.tableData = result.data.list
@@ -1070,7 +1091,7 @@
                   if (i == 0) {
                     departments[i].style = 'nav-item nav-link active'
                     app.currentDepartmentId = departments[i].id
-                    findProjectByDepartmentId(departments[i].id) //根据所id查询项目
+                    // findProjectByDepartmentId(departments[i].id) //根据所id查询项目
                   } else {
                     departments[i].style = 'nav-item nav-link'
                   }
@@ -1189,9 +1210,8 @@
 							traditional: true,
 							success: function (result) {
 								if (result.code == 200) {
-									// findAllProjectSummary()
 									// 获取项目列表
-									// findProjectByDepartmentId(1)
+									app.findProjectByDepartmentId()
 									// app.dialogAddProjectVisible = false
 									app.addProject = {}
 									/* app.principalModalInput = null
@@ -1271,6 +1291,39 @@
 					})
 				}
 
+        /**
+          * 删除项目
+          */
+        function deleteProjectClick (id) {
+          let _this = this 
+          let ajaxData = {
+            id
+          }
+          this.$confirm('此操作将永久删除该项目, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            $.ajax({
+              data: ajaxData,
+              type: 'GET',
+              url: '/crud/projectSummary/delete',
+              success: function (result) {
+                if (result.code == 200) {
+                  _this.$message.success('删除项目成功')
+                  _this.findProjectByDepartmentId()
+                } else {
+                  _this.$message.errir('删除项目失败')
+                }
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });          
+          });
+        }
       </script>
 		</div>
   </body>
