@@ -2,15 +2,21 @@ package com.huag.collaboration.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.ProjectEnum;
 import com.huag.collaboration.entities.ProjectSummary;
+import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.fileTree.FileTree;
 import com.huag.collaboration.entities.fileTree.ProjectSummaryFileTree;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.*;
 import com.huag.collaboration.utils.DateUtils;
 import com.huag.collaboration.utils.JSONUtils;
+import com.huag.collaboration.utils.RequestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -216,6 +222,119 @@ public class ProjectSummaryController {
         projectMapper.update(project);
     }
 
+    /**
+     * 项目信息-项目按照用户角色来显示
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/projectSummary/findByProjectNameAndRoles")
+    public BaseResponse<Object> findByProjectNameAndRoles(HttpServletRequest request) throws Exception{
+        Object user = request.getSession().getAttribute("loginUser");
+        BaseResponse<Object> result = new BaseResponse<>();
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
+        Page<Object> page = PageHelper.startPage(currentPage, pageSize);
 
+        String projectName = String.valueOf(request.getParameter("projectName"));
+        projectName = URLDecoder.decode(projectName, "UTF-8");
+        if (StringUtils.isBlank(projectName) || "null".equals(projectName)){
+            projectName = "";
+        }
+
+        List<ProjectSummary> projectsSummaryList;
+
+        String username = user.toString();
+        if("admin".equals(username)){
+            projectsSummaryList = projectSummaryMapper.findByProjectName(projectName);
+        }else{
+            projectsSummaryList = projectSummaryMapper.findByProjectNameAndRoles(user.toString(), projectName);
+        }
+
+        projectsSummaryList.forEach(projectSummary -> {
+            if (projectSummary.getStartTime() != null && projectSummary.getStopTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(projectSummary.getStopTime(), projectSummary.getStartTime());
+                projectSummary.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+
+        System.out.println(projectsSummaryList);
+
+        PageInfo<ProjectSummary> pageInfo = new PageInfo<>(projectsSummaryList, pageSize);
+
+        int pages = pageInfo.getPages();
+        long total = pageInfo.getTotal();
+        PageBaseResponse response = new PageBaseResponse(projectsSummaryList, currentPage,
+                pageSize, pages, total);
+        result.code = 200;
+        result.setData(response);
+        return result;
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "/projectSummary/update")
+    public BaseResponse<ProjectSummary> save(HttpServletRequest request) throws Exception{
+        BaseResponse<ProjectSummary> result = new BaseResponse<>();
+        String projectStr = URLDecoder.decode(String.valueOf(request.getParameter("projectSummary")), "UTF-8");
+        ProjectSummary projectSummary = JSONObject.toJavaObject(JSON.parseObject(projectStr), ProjectSummary.class);
+        if(projectSummary.getId() == null || "".equals(projectSummary.getId())){
+            projectSummaryMapper.insert(projectSummary);
+        }else{
+            projectSummaryMapper.update(projectSummary);
+        }
+        result.code = 200;
+        result.setData(projectSummary);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/projectSummary/findByProjectName")
+    public BaseResponse<Object> findByProjectName(HttpServletRequest request) throws Exception{
+        BaseResponse<Object> result = new BaseResponse<>();
+        String projectName = String.valueOf(request.getParameter("projectName"));
+        projectName = URLDecoder.decode(projectName, "UTF-8");
+
+        int currentPage = RequestUtils.getCurrentPage(request);
+        int pageSize = RequestUtils.getPageSize(request);
+        Page<Object> page = PageHelper.startPage(currentPage, pageSize);
+
+        List<ProjectSummary> projectSummaryList = new ArrayList<>();
+        if(StringUtils.isNotBlank(projectName)){
+            projectSummaryList = projectSummaryMapper.findByProjectName(projectName);
+        }
+
+        projectSummaryList.forEach(projectSummary -> {
+            if (projectSummary.getStartTime() != null && projectSummary.getStopTime() != null){
+                Long dateDifferenceByDay = DateUtils.getDateDifferenceByDay(projectSummary.getStopTime(), projectSummary.getStartTime());
+                projectSummary.setLeftTime(dateDifferenceByDay + "");
+            }
+        });
+
+
+        PageInfo<ProjectSummary> pageInfo = new PageInfo<>(projectSummaryList, pageSize);
+
+        int pages = pageInfo.getPages();
+        long total = pageInfo.getTotal();
+        PageBaseResponse response = new PageBaseResponse(projectSummaryList, currentPage,
+                pageSize, pages, total);
+        result.code = 200;
+        result.setData(response);
+
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/projectSummary/delete")
+    public BaseResponse<ProjectSummary> delete(HttpServletRequest request){
+        BaseResponse<ProjectSummary> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        ProjectSummary projectSummary = projectSummaryMapper.findById(Integer.valueOf(id));
+        projectSummary.setDeltag("1");
+        projectSummaryMapper.update(projectSummary);
+        result.code = 200;
+        return result;
+    }
 
 }

@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.huag.collaboration.entities.ProfessionalProfile;
-import com.huag.collaboration.entities.Project;
-import com.huag.collaboration.entities.TaskAssignment;
-import com.huag.collaboration.entities.User;
+import com.huag.collaboration.entities.*;
 import com.huag.collaboration.entities.fileTree.FileTree;
 import com.huag.collaboration.entities.fileTree.ProjectSummaryFileTree;
 import com.huag.collaboration.entities.mapping.UserProjectMapping;
@@ -58,6 +55,9 @@ public class CollaborationApplicationTests {
 
     @Autowired
     ProjectSummaryFileTreeMapper projectSummaryFileTreeMapper;
+
+    @Autowired
+    ProjectSummaryMapper projectSummaryMapper;
 
     @Test
     public void test1() {
@@ -318,5 +318,14 @@ public class CollaborationApplicationTests {
 
 
     }
+
+    @Test
+    public void test23(){
+        List<ProjectSummary> list = projectSummaryMapper.findByProjectName("马");
+        list.forEach(projectSummary -> {
+            System.out.println(projectSummary);
+        });
+    }
+
 
 }
