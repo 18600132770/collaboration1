@@ -175,7 +175,7 @@
                 </el-table-column>
                 <el-table-column label="设计阶段">
                   <template slot-scope="scope">
-                    <div @click="editDesignPhaseClick(scope.row.id)">
+                    <div @click="editDesignPhaseClick(scope.row)">
                       <span style="color: #080fe8;">
                         <el-link type="primary"
                           >{{ scope.row.designPhase }}</el-link
@@ -186,7 +186,7 @@
                 </el-table-column>
                 <el-table-column label="负责人">
                   <template slot-scope="scope">
-                    <div @click="editProjectPrincipalClick(scope.row.id)">
+                    <div @click="editProjectPrincipalClick(scope.row)">
                       <span style="color: #080fe8;">
                         <el-link type="primary"
                           >{{ scope.row.principal }}</el-link
@@ -197,7 +197,7 @@
                 </el-table-column>
                 <el-table-column label="总工">
                   <template slot-scope="scope">
-                    <div @click="editProjectChiefEngineerClick(scope.row.id)">
+                    <div @click="editProjectChiefEngineerClick(scope.row)">
                       <span style="color: #e85205;">
                         <el-link type="warning"
                           >{{ scope.row.chiefEngineer }}</el-link
@@ -232,7 +232,7 @@
                 </el-table-column>
                 <el-table-column label="紧急程度">
                   <template slot-scope="scope">
-                    <div @click="editEmergencyLevelClick(scope.row.id)">
+                    <div @click="editEmergencyLevelClick(scope.row)">
                       <span style="color: #080fe8;">
                         <el-link type="primary"
                           >{{ scope.row.emergencyLevel }}</el-link
@@ -293,7 +293,7 @@
           <div class="form-group">
             <label>负责人：</label>
             <el-select
-              v-model="principalNameModalInput"
+              v-model="currentRow.principalId"
               filterable
               placeholder="请选择"
 							style="width: 70%;"
@@ -301,9 +301,9 @@
             >
               <el-option
                 v-for="item in principals"
-                :key="item.value"
+                :key="+item.value"
                 :label="item.label"
-                :value="item.value"
+                :value="+item.value"
               ></el-option>
             </el-select>
           </div>
@@ -330,7 +330,7 @@
           <div class="form-group">
             <label>设计阶段：</label>
             <el-select
-              v-model="degignPhaseModalInput"
+              v-model="currentRow.designPhase"
               filterable
               placeholder="请选择"
 							style="width: 70%;"
@@ -345,7 +345,7 @@
             </el-select>
           </div>
           <div slot="footer" class="modal-footer">
-            <el-button size="small" type="primary" class="btn btn-primary" @click="saveDesignPhase">
+            <el-button size="small" type="primary" class="btn btn-primary" @click="editSubmit">
               保存
             </el-button>
           </div>
@@ -414,7 +414,7 @@
           <div class="form-group">
             <label>总工：</label>
             <el-select
-              v-model="chiefEngineerNameModalInput"
+              v-model="currentRow.chiefEngineerId"
               filterable
               placeholder="请选择"
 							style="width: 70%;"
@@ -422,9 +422,9 @@
             >
               <el-option
                 v-for="item in chiefEngineers"
-                :key="item.value"
+                :key="item.id"
                 :label="item.label"
-                :value="item.value"
+                :value="item.id"
               ></el-option>
             </el-select>
           </div>
@@ -667,17 +667,29 @@
 						selectDepartments: null,
 						chiefEngineers1: [],
             principals1: [],
-            currentProjectId: null
+            currentProjectId: null,
             
+            currentRow: {}
           },
           mounted () {
             this.findProjectByDepartmentId()
+            // 查询所有负责人
+            this.findAllPrincipals() //询所有可以当负责人的人选
+            this.findAllChiefEngineers() //查询所有可以当总工的人选
           },
           methods: {
             // 查询项目列表信息
             findProjectByDepartmentId,
             // 删除项目
             deleteProjectClick,
+            // 编辑
+            handleEdit,
+            editSubmit,
+
+            // 查询所有负责人
+            findAllPrincipals,
+            //查询所有可以当总工的人选
+            findAllChiefEngineers, 
 
             handleSizeChange(val) {
               app.pageSize = val
@@ -744,11 +756,12 @@
               }
               app.dialogEditChiefEngineerVisible = false
             },
-            editDesignPhaseClick: function (id) {
+            editDesignPhaseClick: function (row) {
               //点击编辑设计阶段
               app.dialogEditDesignPhaseVisible = true
-              app.designPhaseIdModalInput = id
-              var ajaxData = {}
+              this.currentRow = row
+              // app.designPhaseIdModalInput = id
+              /* var ajaxData = {}
               ajaxData.projectId = id
               $.ajax({
                 data: ajaxData,
@@ -761,12 +774,13 @@
                     console.log('findByProjectId 返回值失败')
                   }
                 },
-              })
+              }) */
             },
-            editEmergencyLevelClick: function (id) {
-              //点击编辑紧急程度
+            //点击编辑紧急程度
+            editEmergencyLevelClick: function (row) {
               app.dialogEditEmergencyLevelVisible = true
-              app.designEmergencyLevelIdModalInput = id
+              this.currentRow = row
+              /* app.designEmergencyLevelIdModalInput = id
               var ajaxData = {}
               ajaxData.projectId = id
               $.ajax({
@@ -780,14 +794,14 @@
                     console.log('findByProjectId 返回值失败')
                   }
                 },
-              })
+              }) */
             },
-            editProjectPrincipalClick: function (id) {
-              //点击编辑负责人
+            //点击编辑负责人
+            editProjectPrincipalClick: function (row) {
               app.dialogEditPrincipalVisible = true
-              app.principalIdModalInput = id
-              findAllPrincipals() //询所有可以当负责人的人选
-              var ajaxData = {}
+              this.currentRow = row
+              // app.principalIdModalInput = id
+              /* var ajaxData = {}
               ajaxData.projectId = id
               $.ajax({
                 data: ajaxData,
@@ -802,14 +816,15 @@
                     console.log('findByProjectId 返回值失败')
                   }
                 },
-              })
+              }) */
             },
-            editProjectChiefEngineerClick: function (id) {
+            editProjectChiefEngineerClick: function (row) {
               //点击编辑总工
               app.dialogEditChiefEngineerVisible = true
-              app.chiefEngineerIdModalInput = id
-              findAllChiefEngineers() //查询所有可以当总工的人选
-              var ajaxData = {}
+              this.currentRow = row
+              // app.chiefEngineerIdModalInput = id
+              
+              /* var ajaxData = {}
               ajaxData.projectId = id
               $.ajax({
                 data: ajaxData,
@@ -824,7 +839,7 @@
                     console.log('findByProjectId 返回值失败')
                   }
                 },
-              })
+              }) */
             },
             indexMethod: function (index) {
               return index + 1
@@ -984,7 +999,7 @@
          */
         function findAllPrincipals() {
           var ajaxData = {}
-          ajaxData.currentDepartmentId = app.currentDepartmentId
+          ajaxData.currentDepartmentId = 1 // app.currentDepartmentId
           $.ajax({
             data: ajaxData,
             type: 'GET',
@@ -995,7 +1010,7 @@
                 var principals = []
                 for (var i = 0; i < users.length; i++) {
                   var principal = {}
-                  principal.value = users[i].id
+                  principal.value = +users[i].id
                   principal.label = users[i].username
                   principals[i] = principal
                 }
@@ -1012,7 +1027,7 @@
          */
         function findAllChiefEngineers() {
           var ajaxData = {}
-          ajaxData.currentDepartmentId = app.currentDepartmentId
+          ajaxData.currentDepartmentId = 1 // app.currentDepartmentId
           $.ajax({
             data: ajaxData,
             type: 'GET',
@@ -1323,6 +1338,37 @@
               message: '已取消删除'
             });          
           });
+        }
+      
+        /**
+         * 编辑项目
+          */
+        function handleEdit (row) {
+          this.currentRow = row
+        }
+        function editSubmit () {
+          let ajaxData = {
+            projectSummary: JSON.stringify(this.currentRow)
+          }
+          $.ajax({
+              data: ajaxData,
+              type: 'GET',
+              url: '/crud/projectSummary/update ',
+              success: function (result) {
+                if (result.code == 200) {
+                  _this.$message.success('编辑项目成功')
+                  
+                  _this.dialogEditPrincipalVisible = false,
+                  _this.dialogEditDesignPhaseVisible = false,
+                  _this.dialogEditEmergencyLevelVisible = false,
+                  _this.dialogEditChiefEngineerVisible = false,
+
+                  _this.findProjectByDepartmentId()
+                } else {
+                  _this.$message.errir('编辑项目失败')
+                }
+              }
+            })
         }
       </script>
 		</div>
