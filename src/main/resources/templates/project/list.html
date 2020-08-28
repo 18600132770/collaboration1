@@ -308,7 +308,7 @@
             </el-select>
           </div>
           <div slot="footer" class="modal-footer">
-            <el-button size="small" type="primary" class="btn btn-primary" @click="savePrincipal">保存</el-button>
+            <el-button size="small" type="primary" class="btn btn-primary" @click="editSubmit">保存</el-button>
           </div>
         </el-dialog>
 
@@ -384,7 +384,7 @@
             </el-select>
           </div>
           <div slot="footer" class="modal-footer">
-            <el-button size="small" type="primary" class="btn btn-primary" @click="saveEmergencyLevel">
+            <el-button size="small" type="primary" class="btn btn-primary" @click="editSubmit">
               保存
             </el-button>
           </div>
@@ -429,7 +429,7 @@
             </el-select>
           </div>
           <div slot="footer" class="modal-footer">
-            <el-button size="small" type="primary" class="btn btn-primary" @click="saveChiefEngineer">
+            <el-button size="small" type="primary" class="btn btn-primary" @click="editSubmit">
               保存
             </el-button>
           </div>
@@ -1347,13 +1347,14 @@
           this.currentRow = row
         }
         function editSubmit () {
+          const _this = this
           let ajaxData = {
             projectSummary: JSON.stringify(this.currentRow)
           }
           $.ajax({
               data: ajaxData,
               type: 'GET',
-              url: '/crud/projectSummary/update ',
+              url: '/crud/projectSummary/update',
               success: function (result) {
                 if (result.code == 200) {
                   _this.$message.success('编辑项目成功')
