@@ -3,7 +3,7 @@
  * @Author: supercheney
  * @Date: 2020-08-22 15:06:45
  * @LastEditors: supercheney
- * @LastEditTime: 2020-08-23 23:59:08
+ * @LastEditTime: 2020-08-28 23:29:50
  * @FilePath: \collaboration1\src\main\resources\static\asserts\js\components\fileTree.js
  */
 
@@ -120,6 +120,11 @@ Vue.component('file-tree', {
   mounted () {
     this.getFileTreeData()
   },
+  watch: {
+    projectId () {
+      this.getFileTreeData()
+    }
+  },
   methods: {
     getFileTreeData,
     addFileFolder,
@@ -146,10 +151,10 @@ function getFileTreeData () {
             item.isLeaf = true
           }
         })
-        _this.treeData[0].children.push({
+       /*  _this.treeData[0].children.push({
           id: 100,
           fileTreeName: '测试'
-        })
+        }) */
       } else {
         console.log('treeData 返回值失败')
       }

@@ -241,9 +241,9 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" min-width="70">
+                <el-table-column label="操作" min-width="100px">
                   <template slot-scope="scope">
-                    <!-- <el-button type="primary" size="mini">编辑</el-button> -->
+                    <el-button type="primary" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
                     <!-- <el-popconfirm
                       title="确定删除该项目吗？"
                       @onConfirm="alert('0000');deleteProjectClick(scope.row.id)"
@@ -435,9 +435,9 @@
           </div>
 				</el-dialog>
 				
-				<!-- 添加项目Modal -->
+				<!-- 添加编辑项目Modal -->
 				<el-dialog
-					title="添加项目"
+					:title="isEdit ? '编辑项目' : '添加项目'"
 					:visible.sync="dialogAddProjectVisible"
 					:width="currentProjectId ? '800px' : '600px'"
         >
@@ -447,7 +447,7 @@
               :model="addProject"
               label-suffix="："
               size="small"
-              :disabled="currentProjectId"
+              :disabled="currentProjectId && !isEdit"
             >
               <el-form-item label="项目编号">
                 <el-input
@@ -553,7 +553,7 @@
             </div>
           </div>
 					
-					<div slot="footer" class="txtCenter">
+					<div slot="footer" class="txtCenter" v-if="!isEdit">
 						<el-button v-if="!currentProjectId" size="small" type="primary" class="btn btn-primary" @click="saveAddProject">
 							下一步
             </el-button>
@@ -561,7 +561,13 @@
             <el-button v-if="currentProjectId" size="small" type="primary" class="btn btn-primary" @click="dialogAddProjectVisible = false">
 							完成
 						</el-button>
-					</div>
+          </div>
+          <div slot="footer" class="txtCenter" v-if="isEdit">
+            <el-button size="small" type="primary" class="btn btn-primary" @click="editProjectSubmit">
+							确定
+            </el-button>
+            <el-button size="small" @click="dialogAddProjectVisible = false">取消</el-button>
+          </div>
 				</el-dialog>
 				</div>
 			</div>
@@ -669,7 +675,8 @@
             principals1: [],
             currentProjectId: null,
             
-            currentRow: {}
+            currentRow: {},
+            isEdit: false
           },
           mounted () {
             this.findProjectByDepartmentId()
@@ -685,6 +692,7 @@
             // 编辑
             handleEdit,
             editSubmit,
+            editProjectSubmit,
 
             // 查询所有负责人
             findAllPrincipals,
@@ -852,7 +860,8 @@
         })
 
 				getDepartments() //查询所有所信息
-				
+				findProjectSummaryPrincipals() //查找所有可以担任负责人的人选
+				findProjectSummaryChiefEngineers() //查询所有可以当总项目总工的人选
 
         function sendAjax(ajaxData, type, url) {
           $.ajax({
@@ -1134,9 +1143,8 @@
 
         function addProjectClick () {
 					app.dialogAddProjectVisible = true
-					findProjectSummaryPrincipals() //查找所有可以担任负责人的人选
-					findProjectSummaryChiefEngineers() //查询所有可以当总项目总工的人选
-					// getDepartments() //查询所有部门信息
+          // getDepartments() //查询所有部门信息
+          this.isEdit = false
 				}
 
 				/**
@@ -1344,10 +1352,19 @@
          * 编辑项目
           */
         function handleEdit (row) {
+          console.log(row)
+          this.isEdit = true
+          this.currentProjectId = row.id
           this.currentRow = row
+          this.dialogAddProjectVisible = true
+          this.addProject = Object.assign({}, row)
+          this.principalModalInput = row.principalId
+          this.chiefEngineerModalInput = row.chiefEngineerId
+          this.selectDepartments = []
         }
         function editSubmit () {
           const _this = this
+
           let ajaxData = {
             projectSummary: JSON.stringify(this.currentRow)
           }
@@ -1359,10 +1376,11 @@
                 if (result.code == 200) {
                   _this.$message.success('编辑项目成功')
                   
-                  _this.dialogEditPrincipalVisible = false,
-                  _this.dialogEditDesignPhaseVisible = false,
-                  _this.dialogEditEmergencyLevelVisible = false,
-                  _this.dialogEditChiefEngineerVisible = false,
+                  _this.dialogEditPrincipalVisible = false
+                  _this.dialogEditDesignPhaseVisible = false
+                  _this.dialogEditEmergencyLevelVisible = false
+                  _this.dialogEditChiefEngineerVisible = false
+                  _this.dialogAddProjectVisible = false
 
                   _this.findProjectByDepartmentId()
                 } else {
@@ -1370,6 +1388,15 @@
                 }
               }
             })
+        }
+
+        function editProjectSubmit () {
+          this.currentRow = Object.assign(this.currentRow, this.addProject)
+          this.currentRow.principalId = this.principalModalInput
+          this.currentRow.chiefEngineerId = this.chiefEngineerModalInput
+          this.currentRow.selectDepartments = this.selectDepartments
+
+          this.editSubmit()
         }
       </script>
 		</div>
