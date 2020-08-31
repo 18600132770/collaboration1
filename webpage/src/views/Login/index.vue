@@ -1,59 +1,68 @@
 <template>
   <div class="login-wrap">
     <div class="login">
-      <div class="login-top">
-        <a href="#" class="login-logo"></a>
-        <p class="logi-t-p">中国知网大数据融合应用平台</p>
-      </div>
-      <div class="login-box">
-        <a-form :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
-          <!-- <input type="hidden" name="_csrf" th:value="${_csrf.token}"> -->
-          <!-- 使用单点登录 登录系统的时候，需要将此行代码注释掉 -->
-          <!-- <input type="hidden" name="return" th:value="${returnurl}"> -->
-          <!-- <div style="margin-bottom: 12px;color:red;" th:text="${MSG}"></div> -->
-          <div
-            style="text-align: left;margin-bottom: 12px;color: red;font-size: 14px;"
-            v-if="showError"
-          >用户名或密码错误</div>
+      <div class="login-box d-flex container">
+        <a-row>
+          <a-col :span="12">
+            <div class="logo-title">
+              <div class="login-top">
+                <a href="javascript:;" class="login-logo"></a>
+                <p class="logi-t-p">协同办公</p>
+              </div>
+            </div>
+          </a-col>
+          <a-col :span="12">
+            <div class="login-form">
+              <a-form  layout="horizontal" :wrapper-col="{ span: 24 }">
+                <!-- <input type="hidden" name="_csrf" th:value="${_csrf.token}"> -->
+                <!-- 使用单点登录 登录系统的时候，需要将此行代码注释掉 -->
+                <!-- <input type="hidden" name="return" th:value="${returnurl}"> -->
+                <!-- <div style="margin-bottom: 12px;color:red;" th:text="${MSG}"></div> -->
+                <div
+                  style="text-align: left;margin-bottom: 12px;color: red;font-size: 14px;"
+                  v-if="showError"
+                >用户名或密码错误</div>
 
-          <a-form-item label="用户名">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-user" />
-            </svg>
-            <a-input autofocus placeholder="用户名" name="username" v-model="username"></a-input>
-          </a-form-item>
-          <a-form-item label="密码">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-password" />
-            </svg>
-            <a-input type="password" placeholder="密码" name="password" v-model="password"></a-input>
-          </a-form-item>
-          <a-form-item label="验证码" v-show="showcode">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-key" />
-            </svg>
-            <img
-              v-bind:src="imageCodeUrl"
-              id="ImageCatpcha"
-              @click="getCaptcha"
-              alt="正在加载"
-              class="yzm"
-            />
-            <a-input placeholder="验证码" v-model="code" class="dis-table" name="code"></a-input>
-          </a-form-item>
-          <a-form-item>
-            <!--<el-button type="submit" @click="submitForm('ruleForm2')" class="login-btn">登录</el-button>-->
-            <a-button
-              type="primary"
-              @click="handleLogin"
-            >
-              <span>登录</span>
-            </a-button>
-            <input type="hidden" name="time" />
-            <input type="hidden" name="md5" />
-          </a-form-item>
-          <!-- <div  class="forget-a"><a href="#">忘记密码</a></div>-->
-        </a-form>
+                <a-form-item>
+                  <a-input autofocus placeholder="用户名" name="username" v-model="username">
+                    <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
+                  </a-input>
+                </a-form-item>
+                <a-form-item>
+                  <a-input type="password" placeholder="密码" name="password" v-model="password">
+                    <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)" />
+                  </a-input>
+                </a-form-item>
+                <a-form-item v-show="showcode">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-key" />
+                  </svg>
+                  <img
+                    v-bind:src="imageCodeUrl"
+                    id="ImageCatpcha"
+                    @click="getCaptcha"
+                    alt="正在加载"
+                    class="yzm"
+                  />
+                  <a-input placeholder="验证码" v-model="code" class="dis-table" name="code"></a-input>
+                </a-form-item>
+                <a-form-item>
+                  <!--<el-button type="submit" @click="submitForm('ruleForm2')" class="login-btn">登录</el-button>-->
+                  <a-button
+                    class="login-form-button"
+                    type="primary"
+                    @click="handleLogin"
+                  >
+                    <span>登录</span>
+                  </a-button>
+                  <input type="hidden" name="time" />
+                  <input type="hidden" name="md5" />
+                </a-form-item>
+                <!-- <div  class="forget-a"><a href="#">忘记密码</a></div>-->
+              </a-form>
+            </div>
+          </a-col>
+        </a-row>
       </div>
     </div>
   </div>
@@ -153,7 +162,7 @@ export default {
 <style lang="less">
 .login-wrap {
   height: 100%;
-  // background: url('~@/assets/images/login/login-bj.jpg') no-repeat center;
+  background: url('~@/assets/images/login-bg.jpeg') no-repeat center;
   background-size: cover;
 }
 .login-top {
@@ -169,10 +178,12 @@ export default {
 }
 .login-logo {
   display: inline-block;
-  width: 144px;
-  height: 47px;
+  width: 72px;
+  height: 72px;
   vertical-align: middle;
   background: url('~@/assets/images/logo.png') no-repeat;
+  background-size:  100% 100%;
+  margin-right: 25px;
 }
 .logi-t-p {
   display: inline-block;
@@ -181,10 +192,12 @@ export default {
   font-size: 36px;
   font-weight: normal;
   color: #fff;
+  margin: 0;
 }
 .login-box {
-  width: 534px; /* height: 444px; */
-  min-height: 360px;
+  width: 860px;
+  // width: 534px; /* height: 444px; */
+  min-height: 400px;
   margin: 55px auto 0;
   background: #fff;
   border: 1px solid #e4e4e4;
@@ -264,5 +277,31 @@ export default {
 }
 [v-cloak] {
   display: none !important;
+}
+
+.logo-title {
+  height: 400px;
+  background-color: #1890ff;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  .login-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.login-form {
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .ant-form {
+    width: 80%;
+  }
+}
+.login-form-button {
+  width: 100%;
 }
 </style>
