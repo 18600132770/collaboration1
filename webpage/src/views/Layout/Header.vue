@@ -76,7 +76,7 @@ const navList = [
   },
   {
     title: '专业协同',
-    linkUrl: contextRoot + 'professions',
+    linkUrl: contextRoot + 'professional',
     active: false,
     childrens: []
   },
