@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huag.collaboration.mapper.TaskReviewProcessMapper">
+
+    <insert id="insert" parameterType="com.huag.collaboration.entities.TaskReviewProcess" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO taskReviewProcess( taskAssignmentId, role, file, reviewOpinion, reviewPassedFlag, rejectLevel, createTime, updateTime, orderNum, deltag)
+        VALUES ( #{taskAssignmentId}, #{role}, #{file}, #{reviewOpinion}, #{reviewPassedFlag}, #{rejectLevel}, #{createTime}, #{updateTime}, #{orderNum}, #{deltag})
+    </insert>
+
+    <select id="findById" resultType="com.huag.collaboration.entities.TaskReviewProcess">
+        select * from taskReviewProcess where id = #{id}
+    </select>
+
+    <select id="findByTaskAssignmentId" resultType="com.huag.collaboration.entities.TaskReviewProcess">
+        select * from taskReviewProcess where taskAssignmentId = #{taskAssignmentId}
+        order by orderNum asc
+    </select>
+
+    <insert id="update">
+        update taskReviewProcess set
+        taskAssignmentId = #{taskAssignmentId},
+        role = #{role},
+        file = #{file},
+        reviewOpinion = #{reviewOpinion},
+        reviewPassedFlag = #{reviewPassedFlag},
+        rejectLevel = #{rejectLevel},
+        createTime = #{createTime},
+        updateTime = #{updateTime},
+        orderNum = #{orderNum},
+        deltag = #{deltag}
+        where id = #{id}
+    </insert>
+
+
+</mapper>

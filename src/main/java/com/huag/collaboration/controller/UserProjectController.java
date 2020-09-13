@@ -146,7 +146,7 @@ public class UserProjectController {
 
 
     /**
-     *
+     * 根据部门id和分工角色查询可用员工
      * @param request
      * @return
      * @throws Exception
@@ -160,8 +160,6 @@ public class UserProjectController {
 
         String departmentId = String.valueOf(request.getParameter("departmentId"));
         String selectUserRole = String.valueOf(request.getParameter("selectUserRole"));
-
-        System.out.println("departmentId: " + departmentId);
 
         List<String> usernameList = new ArrayList<>();
         Set<String> set = new HashSet<>();

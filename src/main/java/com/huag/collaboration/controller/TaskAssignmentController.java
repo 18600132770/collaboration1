@@ -9,6 +9,7 @@ import com.huag.collaboration.entities.*;
 import com.huag.collaboration.entities.base.PageBaseResponse;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.TaskAssignmentMapper;
+import com.huag.collaboration.mapper.TaskReviewProcessMapper;
 import com.huag.collaboration.mapper.UserMapper;
 import com.huag.collaboration.utils.RequestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,9 @@ public class TaskAssignmentController {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    TaskReviewProcessMapper taskReviewProcessMapper;
+
     @ResponseBody
     @RequestMapping(value = "/taskAssignment/findByProjectId")
     public BaseResponse<Object> findByProjectId(HttpServletRequest request){
@@ -57,7 +61,7 @@ public class TaskAssignmentController {
     }
 
     /**
-     * ajax请求
+     * 分项目添加任务
      * @param request
      * @return
      */
@@ -75,6 +79,22 @@ public class TaskAssignmentController {
         taskAssignment.setStopTime(stopTime);
         taskAssignment.setFinishedLevel(0);
         taskAssignmentMapper.insert(taskAssignment);
+
+        int taskAssignmentId = taskAssignment.getId();
+
+        /**
+         * 创建任务时，插入审批流程
+         */
+        Configueations configueations = new Configueations();
+        String[] taskReviewProcessRoles = configueations.getTaskReviewProcessRoles();
+        for (int i = 0; i < taskReviewProcessRoles.length; i ++){
+            TaskReviewProcess taskReviewProcess = new TaskReviewProcess();
+            taskReviewProcess.setTaskAssignmentId(taskAssignmentId);
+            taskReviewProcess.setRole(taskReviewProcessRoles[i]);
+            taskReviewProcess.setOrderNum(i);
+            taskReviewProcessMapper.insert(taskReviewProcess);
+        }
+
         result.code = 200;
         return result;
     }
@@ -118,6 +138,26 @@ public class TaskAssignmentController {
         if(StringUtils.isNotBlank(id)){
             TaskAssignment taskAssignment = taskAssignmentMapper.findById(Integer.valueOf(id));
             result.setData(taskAssignment);
+        }
+        result.code = 200;
+        return result;
+    }
+
+
+    /**
+     * 删除任务
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/taskAssignment/delete")
+    public BaseResponse<TaskAssignment> deleteTaskAssigment(HttpServletRequest request){
+        BaseResponse<TaskAssignment> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        if(StringUtils.isNotBlank(id)){
+            TaskAssignment taskAssignment = taskAssignmentMapper.findById(Integer.valueOf(id));
+            taskAssignment.setDeltag("1");
+            taskAssignmentMapper.update(taskAssignment);
         }
         result.code = 200;
         return result;
