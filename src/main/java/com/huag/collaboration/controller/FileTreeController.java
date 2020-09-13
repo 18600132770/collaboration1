@@ -38,37 +38,18 @@ public class FileTreeController {
         return result;
     }
 
-    /**
-     * 根据新增项目信息查询项目树
-     * @param request
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/fileTree/findFileTreeByProjectSummaryId")
-    public BaseResponse<List<ProjectSummaryFileTree>> findFileTreeByProjectSummaryId(HttpServletRequest request){
-        BaseResponse<List<ProjectSummaryFileTree>> result = new BaseResponse<>();
-        String id = String.valueOf(request.getParameter("id"));
-        List<ProjectSummaryFileTree> projectSummaryFileTrees = projectSummaryFileTreeMapper.findByProjectSummaryId(Integer.valueOf(id));
-        result.code = 200;
-        result.setData(projectSummaryFileTrees);
-        return result;
-    }
 
     /**
-     * 文件树-某项目新增文件夹目录
+     * 删除文件树模板中的分支
      * @param request
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/fileTree/addFileTreeOfProjectSummary")
-    public BaseResponse<ProjectSummaryFileTree> addFileTreeOfProjectSummary(HttpServletRequest request){
+    @RequestMapping(value = "/fileTree/delete")
+    public BaseResponse<ProjectSummaryFileTree> deleteFileTree(HttpServletRequest request){
         BaseResponse<ProjectSummaryFileTree> result = new BaseResponse<>();
         String id = String.valueOf(request.getParameter("id"));
-        String folderName = String.valueOf(request.getParameter("folderName"));
-        ProjectSummaryFileTree projectSummaryFileTree = new ProjectSummaryFileTree();
-        projectSummaryFileTree.setProjectSummaryId(Integer.valueOf(id));
-        projectSummaryFileTree.setFileTreeName(folderName);
-        projectSummaryFileTreeMapper.insert(projectSummaryFileTree);
+        fileTreeMapper.delete(Integer.valueOf(id));
         result.code = 200;
         return result;
     }

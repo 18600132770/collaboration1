@@ -1,8 +1,6 @@
 package com.huag.collaboration.controller;
 
-import com.huag.collaboration.entities.ProfessionalProfile;
-import com.huag.collaboration.entities.Profile;
-import com.huag.collaboration.entities.Project;
+import com.huag.collaboration.entities.fileTree.Profile;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfileMapper;
 import com.huag.collaboration.utils.OSSUtils;
@@ -16,9 +14,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.List;
 
 /**

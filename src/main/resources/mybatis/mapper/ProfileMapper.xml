@@ -5,18 +5,18 @@
 <mapper namespace="com.huag.collaboration.mapper.ProfileMapper">
 
 
-    <insert id="insert" parameterType="com.huag.collaboration.entities.Profile" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.huag.collaboration.entities.fileTree.Profile" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
-            profile(name, url, projectId, createUser, createTime, updateTime, deltag)
+            profile(name, url, projectId, fileTreeId, createUser, createTime, updateTime, deltag)
          VALUES
-             (#{name}, #{url}, #{projectId}, #{createUser}, now(), now(), #{deltag})
+             (#{name}, #{url}, #{projectId}, #{fileTreeId}, #{createUser}, now(), now(), #{deltag})
     </insert>
 
-    <select id="findById" resultType="com.huag.collaboration.entities.Profile">
+    <select id="findById" resultType="com.huag.collaboration.entities.fileTree.Profile">
         select * from profile where id = #{id}
     </select>
 
-    <select id="findByProjectId" resultType="com.huag.collaboration.entities.Profile">
+    <select id="findByProjectId" resultType="com.huag.collaboration.entities.fileTree.Profile">
         select * from profile where projectId = #{projectId}
     </select>
 
@@ -26,6 +26,12 @@
         createUser = #{createUser}, updateTime =now(), deltag = #{deltag}
         where id = #{id}
     </insert>
+
+    <select id="findByFileTreeId" resultType="com.huag.collaboration.entities.fileTree.Profile">
+        select * from profile where fileTreeId = #{fileTreeId}
+    </select>
+
+
 
 
 </mapper>

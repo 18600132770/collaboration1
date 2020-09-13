@@ -14,21 +14,31 @@
 
     <select id="findById" resultType="com.huag.collaboration.entities.ProjectSummary">
         select
-            a.id, a.projectNum, a.projectName, a.designPhase, a.principalId, b.username principal, a.chiefEngineerId, c.username chiefEngineer,
-            a.startTime, a.stopTime, a.leftTime, a.deltag, a.createTime, a.updateTime
-        from projectSummary a, user b, user c
+        t1.id,
+        t1.projectNum,
+        t1.projectName,
+        t1.designPhase,
+        t1.principalId,
+        t1.chiefEngineerId,
+        t2.username as principal,
+        t3.username chiefEngineer,
+        t1.startTime,
+        t1.stopTime,
+        t1.leftTime,
+        t1.createTime,
+        t1.updateTime,
+        t1.deltag
+        from
+        (
+        SELECT * FROM projectSummary
         where
-            a.principalId = b.id
-        and
-            a.chiefEngineerId = c.id
-        and
-		    (a.deltag <![CDATA[ <> ]]> '1' or a.deltag is null)
-		and
-		    (b.deltag <![CDATA[ <> ]]> '1' or b.deltag is null)
-		and
-		    (c.deltag <![CDATA[ <> ]]> '1' or c.deltag is null)
-        and
-            a.id = #{id}
+        (deltag <![CDATA[ <> ]]> '1' or deltag is null)
+        and id = #{id}
+        ) t1
+        left join (select * from user) t2
+        on t1.principalId = t2.id
+        left join (select * from user) t3
+        on t1.chiefEngineerId = t3.id
 
     </select>
 
@@ -124,12 +134,33 @@
     </select>
 
     <select id="findByProjectName" resultType="com.huag.collaboration.entities.ProjectSummary">
+        select
+        t1.id,
+        t1.projectNum,
+        t1.projectName,
+        t1.designPhase,
+        t1.principalId,
+        t1.chiefEngineerId,
+        t2.username as principal,
+        t3.username chiefEngineer,
+        t1.startTime,
+        t1.stopTime,
+        t1.leftTime,
+        t1.createTime,
+        t1.updateTime,
+        t1.deltag
+        from
+        (
         SELECT * FROM projectSummary
         where
         (deltag <![CDATA[ <> ]]> '1' or deltag is null)
         and projectName like "%"#{projectName}"%"
-        order by
-        createTime asc
+        ) t1
+        left join (select * from user) t2
+        on t1.principalId = t2.id
+        left join (select * from user) t3
+        on t1.chiefEngineerId = t3.id
+        order by t1.id asc
     </select>
 
 </mapper>

@@ -1,6 +1,6 @@
 package com.huag.collaboration.mapper;
 
-import com.huag.collaboration.entities.Profile;
+import com.huag.collaboration.entities.fileTree.Profile;
 
 import java.util.List;
 
@@ -36,4 +36,5 @@ public interface ProfileMapper {
      */
     List<Profile> findById(Integer id);
 
+    List<Profile> findByFileTreeId(Integer fileTreeId);
 }

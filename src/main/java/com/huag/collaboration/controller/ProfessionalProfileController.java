@@ -3,10 +3,9 @@ package com.huag.collaboration.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huag.collaboration.entities.ProfessionalProfile;
-import com.huag.collaboration.entities.Profile;
+import com.huag.collaboration.entities.fileTree.Profile;
 import com.huag.collaboration.entities.Project;
 import com.huag.collaboration.entities.base.PageBaseResponse;
-import com.huag.collaboration.entities.mapping.UserProjectMapping;
 import com.huag.collaboration.entities.query.BaseResponse;
 import com.huag.collaboration.mapper.ProfessionalProfileMapper;
 import com.huag.collaboration.mapper.ProfileMapper;
@@ -25,9 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 专业文件

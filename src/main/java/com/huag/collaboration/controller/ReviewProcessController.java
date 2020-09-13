@@ -3,7 +3,7 @@ package com.huag.collaboration.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.huag.collaboration.entities.Profile;
+import com.huag.collaboration.entities.fileTree.Profile;
 import com.huag.collaboration.entities.ReviewProcess;
 import com.huag.collaboration.entities.TaskAssignment;
 import com.huag.collaboration.entities.query.BaseResponse;

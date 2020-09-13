@@ -11,5 +11,6 @@ import java.util.List;
 public interface FileTreeMapper {
 
     public List<FileTree> findAll();
+    int delete(Integer id);
 
 }

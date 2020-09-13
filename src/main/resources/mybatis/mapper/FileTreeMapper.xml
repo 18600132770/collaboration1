@@ -11,6 +11,10 @@
         order by id asc
     </select>
 
+    <insert id="delete">
+        update fileTree set deltag = 1 where id = #{id}
+    </insert>
+
 
 
 

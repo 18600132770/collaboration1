@@ -14,4 +14,6 @@ public interface ProjectSummaryFileTreeMapper {
 
     public List<ProjectSummaryFileTree> findByProjectSummaryId(Integer projectSummaryId);
 
+    int delete(Integer id);
+
 }

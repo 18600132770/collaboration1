@@ -22,6 +22,10 @@
              (#{projectSummaryId}, #{fileTreeName}, #{fileTreeId}, #{deltag})
     </insert>
 
+    <insert id="delete">
+        update projectSummaryFileTree set deltag = 1 where id = #{id}
+    </insert>
+
 
 
 
