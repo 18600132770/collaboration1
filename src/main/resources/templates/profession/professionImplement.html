@@ -141,7 +141,7 @@
 									</el-table-column>
 									<el-table-column label="设计">
 										<template slot-scope="scope">
-											<div @click="editDesignerClick(scope.row.id)">
+											<div @click="editDesignerClick(scope.row)">
 													<span  style="color: #080fe8">
 													<el-link type="primary">{{ scope.row.designer }}</el-link>
 												</span>
@@ -150,7 +150,7 @@
 									</el-table-column>
 									<el-table-column  label="复核">
 										<template slot-scope="scope">
-											<div @click="editReviewerClick(scope.row.id)">
+											<div @click="editReviewerClick(scope.row)">
 													<span  style="color: #080fe8">
 													<el-link type="primary">{{ scope.row.reviewer }}</el-link>
 												</span>
@@ -159,7 +159,7 @@
 									</el-table-column>
 									<el-table-column  label="审核">
 										<template slot-scope="scope">
-											<div @click="editInspectorClick(scope.row.id)">
+											<div @click="editInspectorClick(scope.row)">
 													<span  style="color: #080fe8">
 													<el-link type="primary">{{ scope.row.inspector }}</el-link>
 												</span>
@@ -168,7 +168,7 @@
 									</el-table-column>
 									<el-table-column  label="审定">
 										<template slot-scope="scope">
-											<div @click="editValidationerClick(scope.row.id)">
+											<div @click="editValidationerClick(scope.row)">
 													<span  style="color: #080fe8">
 													<el-link type="primary">{{ scope.row.validationer }}</el-link>
 												</span>
@@ -181,9 +181,10 @@
 									<el-table-column  label="截止时间">
 										<template slot-scope="scope"><span>{{ scope.row.stopTime }}</span></template>
 									</el-table-column>
-									<el-table-column label="操作">
+									<el-table-column label="操作" width="150">
 										<template slot-scope="scope">
 											<el-button type="primary" size="mini" @click="showFlowChart(scope.row.id)">审批</el-button>
+											<el-button type="danger" size="mini" @click="deleteTask(scope.row.id)">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -819,6 +820,7 @@
 					nextProfessionProfileTabId: 0,
 					taskAssignmentId: null,
 					projectSummaryId: null,
+					currentDepartmentId: null,
 					departmentId: null,
 					projectId: null,
 					selectTaskId: null,
@@ -1094,29 +1096,33 @@
 						})
 					},
 					//编辑设计人员
-					editDesignerClick: function (taskId) {
-						app.selectTaskId = taskId
+					editDesignerClick: function (row) {
+						app.currentDepartmentId = row.departmentId
+						app.selectTaskId = row.id
 						app.selectUserRole = "designer"
 						app.userProjectsDialogVisible = true
 						findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
 					},
 					//编辑复核人员
-					editReviewerClick: function (taskId) {
-						app.selectTaskId = taskId
+					editReviewerClick: function (row) {
+						app.currentDepartmentId = row.departmentId
+						app.selectTaskId = row.id
 						app.selectUserRole = "reviewer"
 						app.userProjectsDialogVisible = true
 						findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
 					},
 					//编辑审核人员
-					editInspectorClick: function (taskId) {
-						app.selectTaskId = taskId
+					editInspectorClick: function (row) {
+						app.currentDepartmentId = row.departmentId
+						app.selectTaskId = row.id
 						app.selectUserRole = "inspector"
 						app.userProjectsDialogVisible = true
 						findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
 					},
 					//编辑审定人员
-					editValidationerClick: function (taskId) {
-						app.selectTaskId = taskId
+					editValidationerClick: function (row) {
+						app.currentDepartmentId = row.departmentId
+						app.selectTaskId = row
 						app.selectUserRole = "validationer"
 						app.userProjectsDialogVisible = true
 						findUserProjectsByDeptIdAndRole();//根据部门id查找人员项目信息
@@ -1124,7 +1130,7 @@
 					//保存选中的人员
 					saveUser: function(username){
 						var ajaxData = {}
-						ajaxData.departmentId = app.departmentId
+						ajaxData.departmentId = app.currentDepartmentId
 						ajaxData.selectTaskId = app.selectTaskId
 						ajaxData.selectUserRole = app.selectUserRole
 						ajaxData.username = encodeURI(JSON.stringify(username))
@@ -1395,6 +1401,9 @@
 					showFlowChart,
 					getFlowChartData,
 
+					// 删除任务
+					deleteTask,
+
 					handleProcessClick,
 
 					// 菜单选中事件
@@ -1403,22 +1412,22 @@
 				}
 			})
 
-			var projectList =[[ ${projectList}]]
-			var departmentId =[[ ${departmentId}]]
-			console.log(projectList)
-			console.log(departmentId)
+			// var projectList =[[ ${projectList}]]
+			// var departmentId =[[ ${departmentId}]]
+			// console.log(projectList)
+			// console.log(departmentId)
 
-			app.projects = projectList
-			app.projectSummaryId = projectList[0].projectSummaryId
+			// app.projects = projectList || []
+			// app.projectSummaryId = projectList[0].projectSummaryId
 			// app.currentProjectSummaryId = projectList[0].projectSummaryId
 
-			app.departmentId = departmentId
+			// app.departmentId = departmentId
 
-			for(var i = 0; i < projectList.length; i++){
+			/* for(var i = 0; i < projectList.length; i++){
 				if(projectList[i].deltag == "m-a cur"){
 					app.projectId = projectList[i].id
 				}
-			}
+			} */
 
 			// findByProjectId();//根据分项目查询该分项目下的任务分配情况
 			// findProjectSummaryById()//查看项目详细信息
@@ -1452,7 +1461,7 @@
 			 */
 			function findUserProjectsByDeptIdAndRole(){
 				var ajaxData = {}
-				ajaxData.departmentId = app.departmentId
+				ajaxData.departmentId = app.currentDepartmentId
 				ajaxData.selectUserRole = app.selectUserRole
 				ajaxData.currentPage = app.currentPageUserProjectsTableData
 				ajaxData.pageSize = app.pageSizeUserProjectsTableData
@@ -1893,7 +1902,7 @@
 			*/
 			function findProjectSummaryPrincipals() {
 			var ajaxData = {}
-			ajaxData.currentDepartmentId = 1
+			ajaxData.currentDepartmentId = app.currentDepartmentId
 			$.ajax({
 				data: ajaxData,
 				type: 'GET',
@@ -1921,7 +1930,7 @@
 			*/
 		function findProjectSummaryChiefEngineers() {
 			var ajaxData = {}
-			ajaxData.currentDepartmentId = 1
+			ajaxData.currentDepartmentId = app.currentDepartmentId
 			$.ajax({
 				data: ajaxData,
 				type: 'GET',
@@ -2185,6 +2194,37 @@
 				error: function () {
 					alert("处理失败！");
 				}
+			});
+		}
+
+		function deleteTask (id) {
+			let _this = this 
+			let ajaxData = {
+				id
+			}
+			this.$confirm('此操作将永久删除该任务, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				$.ajax({
+					data: ajaxData,
+					type: 'POST',
+					url: '/crud/taskAssignment/delete',
+					success: function (result) {
+						if (result.code == 200) {
+							_this.$message.success('删除任务成功')
+							findByProjectId()
+						} else {
+							_this.$message.errir('删除项目失败')
+						}
+					}
+				})
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				});          
 			});
 		}
 
