@@ -418,13 +418,13 @@
               filterable
               placeholder="请选择"
 							style="width: 70%;"
-							size="small"
+              size="small"
             >
               <el-option
                 v-for="item in chiefEngineers"
-                :key="item.id"
+                :key="item.value"
                 :label="item.label"
-                :value="item.id"
+                :value="item.value"
               ></el-option>
             </el-select>
           </div>
@@ -829,7 +829,7 @@
             editProjectChiefEngineerClick: function (row) {
               //点击编辑总工
               app.dialogEditChiefEngineerVisible = true
-              this.currentRow = row
+              app.currentRow = Object.assign({}, row) 
               // app.chiefEngineerIdModalInput = id
               
               /* var ajaxData = {}
@@ -1364,7 +1364,6 @@
         }
         function editSubmit () {
           const _this = this
-
           let ajaxData = {
             projectSummary: JSON.stringify(this.currentRow)
           }
