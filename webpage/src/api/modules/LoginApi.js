@@ -3,11 +3,11 @@ import { initFormData } from '../../utils'
 
 class LoginApi extends BaseApi {
   login (data) {
-    return this.post('/user/login', initFormData(data), {})
+    return this.post({ url: '/user/login', data: initFormData(data) })
   }
 
   logout () {
-    return this.get('/logout1', initFormData({}), {})
+    return this.get({ url: '/logout1', data: initFormData({}) })
   }
 }
 

@@ -81,8 +81,8 @@ export default {
 
       showcode: getCookie('showcode') === 1,
       activeName: 'first',
-      username: '',
-      password: '',
+      username: 'admin',
+      password: '123456',
       md5: '',
       time: '',
       showError: '',
@@ -120,20 +120,21 @@ export default {
 
       LoginApi.login(data)
         .then(resp => {
-          if (resp.code === 200) {
-            // 登录成功跳转到首页
-            _this.$router.push({ path: _this.loginPreUrl })
+          // if (resp.code === 200) {
+          // 登录成功跳转到首页
+          // _this.$router.push({ path: _this.loginPreUrl })
+          _this.$router.push({ path: '/' })
 
-            // if (resp.data) _this.setUsername(resp.data.username)
-            // else _this.setUsername(_this.username)
+          // if (resp.data) _this.setUsername(resp.data.username)
+          // else _this.setUsername(_this.username)
 
-            // 将csrfToken放入缓存中
-            // const { csrf } = resp
-            // setToken(csrf, 'CSRF-TOKEN')
+          // 将csrfToken放入缓存中
+          // const { csrf } = resp
+          // setToken(csrf, 'CSRF-TOKEN')
 
-            // 获取用户信息
-            // this.getUserInfo()
-          }
+          // 获取用户信息
+          // this.getUserInfo()
+          // }
         })
         .catch(error => {
           if (error) {
