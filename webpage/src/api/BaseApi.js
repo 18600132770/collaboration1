@@ -8,12 +8,12 @@ export default class BaseApi {
     this.http = new HttpRequest(baseUrl)
   }
 
-  get (url, params = {}) {
-    return this.http.request({ url, method: 'GET', params })
+  get (params) {
+    return this.http.request(Object.assign({ method: 'GET' }, params))
   }
 
-  post (url, data = {}, params = {}, headers = {}) {
-    return this.http.request({ url, method: 'POST', data, params, headers })
+  post (data) {
+    return this.http.request(Object.assign({ method: 'POST' }, data))
   }
 
   all (...request) {
