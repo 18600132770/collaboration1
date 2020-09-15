@@ -70,7 +70,7 @@ public class ProjectSummaryFileController {
         String folderName = String.valueOf(request.getParameter("folderName"));
         ProjectSummaryFileTree projectSummaryFileTree = new ProjectSummaryFileTree();
         projectSummaryFileTree.setProjectSummaryId(Integer.valueOf(id));
-        projectSummaryFileTree.setFileTreeName(folderName);
+        projectSummaryFileTree.setName(folderName);
         projectSummaryFileTreeMapper.insert(projectSummaryFileTree);
         result.code = 200;
         return result;

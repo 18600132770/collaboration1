@@ -7,7 +7,7 @@
 
     <select id="findByProjectSummaryId" resultType="com.huag.collaboration.entities.fileTree.ProjectSummaryFileTree">
          select t1.id, t1.projectSummaryId,
-            if((t2.name is null or t2.name = ''), t1.fileTreeName, t2.name) as fileTreeName,
+            if((t2.name is null or t2.name = ''), t1.name, t2.name) as name,
             t1.fileTreeId
          from projectSummaryFileTree t1 left join fileTree t2
          on t1.fileTreeId = t2.id
@@ -17,9 +17,9 @@
 
     <insert id="insert" parameterType="com.huag.collaboration.entities.fileTree.ProjectSummaryFileTree" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
-            projectSummaryFileTree(projectSummaryId, fileTreeName, fileTreeId, deltag)
+            projectSummaryFileTree(projectSummaryId, name, fileTreeId, deltag)
          VALUES
-             (#{projectSummaryId}, #{fileTreeName}, #{fileTreeId}, #{deltag})
+             (#{projectSummaryId}, #{name}, #{fileTreeId}, #{deltag})
     </insert>
 
     <insert id="delete">

@@ -18,7 +18,7 @@ public class ProjectSummaryFileTree {
 
     private Integer id;
     private Integer projectSummaryId;   //项目id
-    private String fileTreeName;    //文件树名称
+    private String name;        //文件树名称
     private Integer fileTreeId; //文件树id
     private List<Profile> profileList; //该分支下的文件集合
     private String deltag;
