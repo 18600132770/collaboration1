@@ -5,23 +5,41 @@
 <mapper namespace="com.huag.collaboration.mapper.TaskAssignmentMapper">
 
     <select id="findByProjectId" resultType="com.huag.collaboration.entities.TaskAssignment">
+        select tmp1.id,
+        tmp1.taskName,
+        tmp1.projectId,
+        tmp1.finishedLevel,
+        tmp1.designerId,
+        tmp1.reviewerId,
+        tmp1.inspectorId,
+        tmp1.validationerId,
+        u1.username as designer,
+        u2.username as reviewer,
+        u3.username as inspector,
+        u4.username as validationer,
+        p1.departmentId as departmentId,
+        d1.departmentName as departmentName,
+        tmp1.taskLevel,
+        tmp1.startTime,
+        tmp1.stopTime,
+        tmp1.createtTime,
+        tmp1.updateTime
+        from taskAssignment tmp1
+        left join user u1
+        on tmp1.designerId = u1.id
+        left join user u2
+        on tmp1.reviewerId = u2.id
+        left join user u3
+        on tmp1.inspectorId = u3.id
+        left join user u4
+        on tmp1.validationerId = u4.id
+        left join project p1
+        on tmp1.projectId = p1.id
+        left join department d1
+        on d1.id = p1.departmentId
+        where tmp1.projectId = #{projectId}
+        and (tmp1.deltag <![CDATA[ <> ]]> '1' or tmp1.deltag is null)
 
-        select t4.id, t4.taskName, t4.finishedLevel, t4.taskLevel, t4.designer_u1 designer, t4.reviewer_u2 reviewer, t4.inspector_u3 inspector,  u4.username validationer,
-        t4.startTime, t4.stopTime
-        from
-        (
-            select t3.*, u3.username inspector_u3 from
-            (
-                select t2.*, u2.username reviewer_u2 from
-                (
-                    select t1.*, u1.username designer_u1
-                    from taskAssignment t1 left join user u1 on t1.designerId = u1.id
-                    where t1.projectId = #{projectId}
-                    and
-                    (t1.deltag <![CDATA[ <> ]]> '1' or t1.deltag is null)
-                ) as t2 left join user u2 on t2.reviewerId = u2.id
-            ) as t3 left join user u3 on t3.inspectorId = u3.id
-        ) as t4 left join user u4 on t4.validationerId = u4.id
     </select>
 
     <insert id="insert" parameterType="com.huag.collaboration.entities.TaskAssignment" useGeneratedKeys="true" keyProperty="id">
