@@ -3,7 +3,7 @@
  * @Author: supercheney
  * @Date: 2020-08-22 15:06:45
  * @LastEditors: supercheney
- * @LastEditTime: 2020-08-28 23:29:50
+ * @LastEditTime: 2020-09-16 23:43:42
  * @FilePath: \collaboration1\src\main\resources\static\asserts\js\components\fileTree.js
  */
 
@@ -16,7 +16,9 @@ Vue.component('file-tree', {
   },
   template: 
     `<div>
-      <el-button type="primary" size="mini" @click="addFileFolder">添加文件夹</el-button>
+      <div style="text-align: right;">
+        <el-button type="primary" size="mini" @click="addFileFolder">添加文件夹</el-button>
+      </div>
       <el-tree
         class="file-tree"
         :data="treeData"
@@ -30,16 +32,14 @@ Vue.component('file-tree', {
             <el-button
               v-if="node.level === 1"
               type="text"
-              size="small"
               icon="el-icon-upload"
               @click="() => append(data)">
             </el-button>
             <el-button
               v-if="data.deltag !== '0'"
               type="text"
-              size="small"
               icon="el-icon-delete-solid"
-              @click="() => remove(node, data)">
+              @click="() => removeNode(node, data)">
             </el-button>
           </span>
         </span>
@@ -60,7 +60,37 @@ Vue.component('file-tree', {
         
         <span slot="footer" class="txtCenter">
           <el-button size="small" type="primary" @click="addFolderSubmit">确定</el-button>
-          <el-button size="small" type="primary" @click="addFolderVisible = false">取消</el-button>
+          <el-button size="small" @click="addFolderVisible = false">取消</el-button>
+        </span>
+      </el-dialog>
+
+      <el-dialog
+					title="上传文件"
+					:visible.sync="uploadVisible"
+          width="600px"
+          append-to-body
+        >
+
+        <el-form ref="form" label-width="120px" size="small">
+          <el-form-item label="选择文件：" prop="name">
+            <el-upload
+              ref="uploadfile"
+              class="upload-demo"
+              drag
+              action
+              :http-request="uploadFile"
+              :auto-upload="false"
+              multiple>
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <!--<div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+            </el-upload>
+          </el-form-item>
+        </el-form>
+        
+        <span slot="footer" class="txtCenter">
+          <el-button size="small" type="primary" @click="uploadSubmit">确定</el-button>
+          <el-button size="small" @click="uploadVisible = false">取消</el-button>
         </span>
       </el-dialog>
       
@@ -105,7 +135,8 @@ Vue.component('file-tree', {
       data: JSON.parse(JSON.stringify(data)),
       treeData: [],
       defaultProps: {
-        label: 'fileTreeName'
+        label: 'name',
+        children: 'profileList'
       },
 
       addFolderVisible: false,
@@ -114,7 +145,10 @@ Vue.component('file-tree', {
       },
       addFolderRules: {
         name: [{required: true, message: '文件夹名不能为空', trigger: 'blur'}]
-      }
+      },
+
+      uploadVisible: false,
+      currentFolderId: '' // 上传文件时选中的文件夹的id
     }
   },
   mounted () {
@@ -128,7 +162,14 @@ Vue.component('file-tree', {
   methods: {
     getFileTreeData,
     addFileFolder,
-    addFolderSubmit
+    addFolderSubmit,
+
+    // 删除
+    removeNode,
+    // 上传文件
+    uploadFile,
+    uploadSubmit,
+    append
   }
 })
 
@@ -191,4 +232,57 @@ function addFolderSubmit () {
       })
     }
   })
+}
+
+function removeNode (node, data) {
+  let ajaxData = {
+    id: data.id,
+  }
+  $.ajax({
+    data: ajaxData,
+    type: 'GET',
+    url: '/crud/projectSummary/deleteFileTreeOfProjectSummary',
+    success: function (result) {
+      if (result.code == 200) {
+        _this.$message.success('删除文件夹成功')
+        _this.addFolderVisible = false
+        _this.getFileTreeData()
+      } else {
+        console.log('treeData 返回值失败')
+      }
+    }
+  })
+}
+
+function append (data) {
+  this.uploadVisible = true
+  this.currentFolderId = data.id
+}
+
+function uploadFile (params) {
+  let file = params.file
+  let formData = new FormData()
+
+  formData.append('file', file)
+  formData.append('id', this.currentFolderId)
+  $.ajax({
+    data: formData,
+    type: 'POST',
+    url: '/crud/projectSummaryFileTree/uploadFile',
+    contentType: false, //'multipart/form-data' ,
+    processData: false,
+    success: function (result) {
+      if (result.code == 200) {
+        _this.$message.success('上传文件成功')
+        _this.uploadVisible = false
+        _this.getFileTreeData()
+      } else {
+        console.log('treeData 返回值失败')
+      }
+    }
+  })
+}
+
+function uploadSubmit () {
+  this.$refs.uploadfile.submit()
 }
