@@ -2,6 +2,7 @@ package com.huag.collaboration.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.huag.collaboration.entities.Configueations;
 import com.huag.collaboration.entities.ProjectSummary;
 import com.huag.collaboration.entities.TaskAssignment;
 import com.huag.collaboration.entities.TaskReviewProcess;
@@ -46,6 +47,12 @@ public class TaskReviewProcessController {
         return result;
     }
 
+    /**
+     * 任务审批（填写审核意见，驳回，审核通过）
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping(value = "/taskReviewProcess/update")
     public BaseResponse<TaskReviewProcess> updateTaskReviewProcess(HttpServletRequest request) throws Exception{
@@ -56,17 +63,32 @@ public class TaskReviewProcessController {
             taskReviewProcessMapper.insert(taskReviewProcess);
         }else{
             taskReviewProcessMapper.update(taskReviewProcess);
-            //TODO 如果用户点击了驳回，那么审批流程从头开始。例如： 设计->复核->审核->审定  更新为：设计->复核->设计->复核->审核->审定。
-            Integer taskAssignmentId = taskReviewProcess.getTaskAssignmentId(); //任务id
-            Integer id = taskReviewProcess.getId();//审批流程id
-            List<TaskReviewProcess> taskReviewProcessList = taskReviewProcessMapper.findByTaskAssignmentId(taskAssignmentId);
-            int orderNum = 0;
-            for (int i = 0; i < taskReviewProcessList.size(); i ++){
-                TaskReviewProcess javaBean = taskReviewProcessList.get(i);
-                if(javaBean.getId() == id){
-                    //TODO 判断本次是拒绝了吗，上次是否也是拒绝，如果上次是空，本次是拒绝，那么下边另加流程
+            if(!taskReviewProcess.getReviewPassedFlag()){    //审核不通过
+                // 如果用户点击了驳回，那么审批流程从头开始。例如： 设计->复核->审核->审定  更新为：设计->复核->设计->复核->审核->审定。
+                Integer taskAssignmentId = taskReviewProcess.getTaskAssignmentId(); //任务id
+                Integer id = taskReviewProcess.getId();//审批流程id
+                List<TaskReviewProcess> taskReviewProcessList = taskReviewProcessMapper.findByTaskAssignmentId(taskAssignmentId);
+                for (int i = 0; i < taskReviewProcessList.size(); i ++){
+                    TaskReviewProcess javaBean = taskReviewProcessList.get(i);
+                    if(javaBean.getId() > id){
+                        // 判断本次是拒绝了吗，上次是否也是拒绝，如果上次是空，本次是拒绝，那么下边另加流程
+                        javaBean.setDeltag("1");
+                        taskReviewProcessMapper.update(javaBean);
+                    }
+                }
+                /**
+                 * 新建不通过后边的流程，从设计开始
+                 */
+                Configueations configueations = new Configueations();
+                String[] taskReviewProcessRoles = configueations.getTaskReviewProcessRoles();
+                for (int i = 0; i < taskReviewProcessRoles.length; i ++){
+                    TaskReviewProcess taskReviewProcessNewProcess = new TaskReviewProcess();
+                    taskReviewProcessNewProcess.setTaskAssignmentId(taskAssignmentId);
+                    taskReviewProcessNewProcess.setRole(taskReviewProcessRoles[i]);
+                    taskReviewProcessMapper.insert(taskReviewProcessNewProcess);
                 }
             }
+
         }
         result.code = 200;
         result.setData(taskReviewProcess);
