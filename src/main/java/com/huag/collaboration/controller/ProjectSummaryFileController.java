@@ -48,7 +48,7 @@ public class ProjectSummaryFileController {
         String id = String.valueOf(request.getParameter("id"));
         List<ProjectSummaryFileTree> projectSummaryFileTrees = projectSummaryFileTreeMapper.findByProjectSummaryId(Integer.valueOf(id));
         projectSummaryFileTrees.forEach(projectSummaryFileTree -> {
-            Integer fileTreeId = projectSummaryFileTree.getFileTreeId();
+            Integer fileTreeId = projectSummaryFileTree.getId();
             List<Profile> profileList = profileMapper.findByFileTreeId(fileTreeId);
             projectSummaryFileTree.setProfileList(profileList);
         });
