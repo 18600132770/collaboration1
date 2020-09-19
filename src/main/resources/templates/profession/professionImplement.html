@@ -29,6 +29,38 @@
 			color: #fff;
 			background: #409EFF;
 		}
+
+		.custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
+      }
+
+      .custom-tree-node > span:first-child {
+        text-overflow: ellipsis;
+        background-color: #409EFF;
+        padding: 2px 5px;
+        color: #fff;
+        width: 200px;
+        overflow: hidden;
+      }
+
+      .add-project {
+        display: flex;
+      }
+      .tree-container {
+        padding: 10px;
+        width: 300px;
+      }
+      .tree-container .el-tree {
+        width: 100%;
+      }
+      .tree-container .el-tree-node {
+        margin: 10px 0;
+      }
 	</style>
 </head>
 
@@ -62,7 +94,7 @@
 									:index="`${index}-${i}`" 
 									v-for="item, i in project.children" 
 									:key="`${index}-${i}`"
-									@click="showProjectById(item.id)"
+									@click="showProjectById(item)"
 								>{{item.departmentName}}</el-menu-item>
 							</el-submenu>
 						</el-menu>
@@ -479,16 +511,19 @@
 					<el-upload class="upload-demo" action="saveFile" id="filename1" name='file' ref="upload" :auto-upload='false'
 								   :on-change='fileChange1' accept="">
 							<a href="#" class="btn-line">
-								<svg class="icon" aria-hidden="true">
+								<!-- <svg class="icon" aria-hidden="true">
 									<use xlink:href="#icon-upload"></use>
-								</svg>
+								</svg> -->
 								<span>上传文件</span>
 							</a>
 						</el-upload>
 				</form>
-				<div  role="tablist" v-for="profile, key in fileList" :key="key">
+				<!-- <div  role="tablist" v-for="profile, key in fileList" :key="key">
 					<el-link type="primary" @click="downloadFile(profile.url, profile.name)" style="color: #00a0e8">{{profile.name}}</el-link>
-				</div>
+				</div> -->
+				<el-scrollbar style="height: 358px">
+					<file-tree :project-id="currentProjectSummaryId"></file-tree>
+				</el-scrollbar>
 			</el-dialog>
 
 			<!-- 添加上序文件Modal -->
@@ -778,6 +813,8 @@
 			feather.replace()
 		</script>
 
+		<script th:src="@{/asserts/js/components/fileTree.js}"></script>
+
 		<script th:inline="javascript" type="text/javascript">
 
 			const cityOptions = ['上海', '北京', '广州', '深圳'];
@@ -1021,11 +1058,11 @@
 					handleCurrentChange(val) {
 						console.log(`当前页: ${val}`);
 					},
-					showProjectById: function(id){
+					showProjectById: function(item){
 						// console.log("应该显示 " + id)
-						// app.currentProjectSummaryId = id
+						app.currentProjectSummaryId = item.projectSummaryId
 						var ajaxData = {}
-						ajaxData.projectId = id
+						ajaxData.projectId = item.id
 						//更改li颜色
 						/* var myProjects = app.projects
 						for(var i = 0; i < myProjects.length; i++){
@@ -1041,7 +1078,9 @@
 						app.projects = myProjects
 						app.fileList = [] */
 
-						app.projectId = id
+						findProjectSummaryById()
+
+						app.projectId = item.id
 						findByProjectId();//根据分项目查询该分项目下的任务分配情况
 					},
 					switchNavigationBar: function (id) {
@@ -1705,11 +1744,12 @@
 				app.reviewProcessData = {}
 				app.reviewProcessFileNames = []
 				var ajaxData = {}
-				ajaxData.taskAssignmentId = app.taskAssignmentId
+				ajaxData.id = app.taskAssignmentId
 				$.ajax({
 					data: ajaxData,
 					type: "GET",
-					url: "/crud/reviewProcess/findByTaskAssignmentId",
+					// url: "/crud/reviewProcess/findByTaskAssignmentId",
+					url: "/crud/taskReviewProcess/findByTaskAssignmentId",
 					traditional: true,
 					success: function (result) {
 						if(result.code == 200){
@@ -1821,9 +1861,9 @@
 							app.projects=projectsSummaryLiShow
 							app.currentProjectSummaryId = projectsSummaryLiShow[0].id
 							let departmentId = projectsSummaryLiShow[0].children[0].id
-							app.showProjectById(departmentId)
+							app.showProjectById(projectsSummaryLiShow[0].children[0])
 
-							findProjectSummaryById();//按照总项目id查找总项目详细信息
+							// findProjectSummaryById();//按照总项目id查找总项目详细信息
 							// findProjectsByProjectSummaryId();//按照总项目id查找分项目详细信息
 
 						}else{
@@ -1878,7 +1918,7 @@
 				$.ajax({
 					data: ajaxData,
 					type: "GET",
-					url: "/crud/projectSummary/findById/",
+					url: "/crud/projectSummary/findById",
 					success: function (result) {
 						if(result.code == 200){
 							app.project=result.data

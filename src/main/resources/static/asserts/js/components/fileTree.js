@@ -3,7 +3,7 @@
  * @Author: supercheney
  * @Date: 2020-08-22 15:06:45
  * @LastEditors: supercheney
- * @LastEditTime: 2020-09-16 23:43:42
+ * @LastEditTime: 2020-09-19 17:28:36
  * @FilePath: \collaboration1\src\main\resources\static\asserts\js\components\fileTree.js
  */
 
@@ -237,6 +237,11 @@ function addFolderSubmit () {
 function removeNode (node, data) {
   let ajaxData = {
     id: data.id,
+  }
+  if (data.url) {
+    ajaxData.type = 'file'
+  } else {
+    ajaxData.type = 'folder'
   }
   $.ajax({
     data: ajaxData,
