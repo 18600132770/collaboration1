@@ -32,4 +32,5 @@ public interface TaskReviewProcessMapper {
      */
     int update(TaskReviewProcess taskReviewProcess);
 
+    TaskReviewProcess findById(Integer valueOf);
 }

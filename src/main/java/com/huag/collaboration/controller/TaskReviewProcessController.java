@@ -26,6 +26,15 @@ import java.util.List;
 @Controller
 public class TaskReviewProcessController {
 
+    /**
+     * 角色
+     * 设计：designer
+     * 复核：reviewer
+     * 审核：inspector
+     * 审定：validationer
+     */
+    public static String[] taskReviewProcessRoles = new String[]{"designer", "reviewer", "inspector", "validationer"};
+
     @Autowired
     TaskReviewProcessMapper taskReviewProcessMapper;
 
@@ -62,8 +71,11 @@ public class TaskReviewProcessController {
         if(taskReviewProcess.getId() == null || "".equals(taskReviewProcess.getId())){
             taskReviewProcessMapper.insert(taskReviewProcess);
         }else{
-            taskReviewProcessMapper.update(taskReviewProcess);
-            if(!taskReviewProcess.getReviewPassedFlag()){    //审核不通过
+
+            if(taskReviewProcess.getReviewPassedFlag() != null && !taskReviewProcess.getReviewPassedFlag()){    //审核不通过
+                taskReviewProcess.setReviewButtonShowFlag(false);
+                taskReviewProcessMapper.update(taskReviewProcess);
+
                 // 如果用户点击了驳回，那么审批流程从头开始。例如： 设计->复核->审核->审定  更新为：设计->复核->设计->复核->审核->审定。
                 Integer taskAssignmentId = taskReviewProcess.getTaskAssignmentId(); //任务id
                 Integer id = taskReviewProcess.getId();//审批流程id
@@ -79,19 +91,60 @@ public class TaskReviewProcessController {
                 /**
                  * 新建不通过后边的流程，从设计开始
                  */
-                Configueations configueations = new Configueations();
-                String[] taskReviewProcessRoles = configueations.getTaskReviewProcessRoles();
                 for (int i = 0; i < taskReviewProcessRoles.length; i ++){
                     TaskReviewProcess taskReviewProcessNewProcess = new TaskReviewProcess();
                     taskReviewProcessNewProcess.setTaskAssignmentId(taskAssignmentId);
                     taskReviewProcessNewProcess.setRole(taskReviewProcessRoles[i]);
+                    if(i == 0){
+                        taskReviewProcessNewProcess.setReviewButtonShowFlag(true);
+                    }
                     taskReviewProcessMapper.insert(taskReviewProcessNewProcess);
+                }
+            }else if(taskReviewProcess.getReviewPassedFlag() != null && taskReviewProcess.getReviewPassedFlag()){ //审核通过
+                taskReviewProcess.setReviewButtonShowFlag(false);
+                taskReviewProcessMapper.update(taskReviewProcess);
+
+                //用户点击了通过，审核流程进入下一个阶段，下一个阶段的reviewButtonShowFlag的状态改为true
+                Integer taskAssignmentId = taskReviewProcess.getTaskAssignmentId();
+                Integer id = taskReviewProcess.getId();
+                List<TaskReviewProcess> taskReviewProcessList = taskReviewProcessMapper.findByTaskAssignmentId(taskAssignmentId);
+                for (int i = 0; i < taskReviewProcessList.size(); i ++){
+                    TaskReviewProcess javaBean = taskReviewProcessList.get(i);
+                    if(javaBean.getId() > id){
+                        javaBean.setReviewButtonShowFlag(true);
+                        taskReviewProcessMapper.update(javaBean);
+                        break;
+                    }
+                }
+
+                if(taskReviewProcessList == null || taskReviewProcessList.size() == 0){
+                    // TODO
+                    System.out.println("整个审批流程结束了");
                 }
             }
 
         }
         result.code = 200;
         result.setData(taskReviewProcess);
+        return result;
+    }
+
+
+    /**
+     * 根据任务审批流程id查询
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/taskReviewProcess/findById")
+    public BaseResponse<TaskReviewProcess> findById(HttpServletRequest request){
+        BaseResponse<TaskReviewProcess> result = new BaseResponse<>();
+        String id = String.valueOf(request.getParameter("id"));
+        if(StringUtils.isNotBlank(id)){
+            TaskReviewProcess taskReviewProcess = taskReviewProcessMapper.findById(Integer.valueOf(id));
+            result.setData(taskReviewProcess);
+        }
+        result.code = 200;
         return result;
     }
 

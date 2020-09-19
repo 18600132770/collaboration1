@@ -5,8 +5,8 @@
 <mapper namespace="com.huag.collaboration.mapper.TaskReviewProcessMapper">
 
     <insert id="insert" parameterType="com.huag.collaboration.entities.TaskReviewProcess" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO taskReviewProcess( taskAssignmentId, role, file, reviewOpinion, reviewPassedFlag, rejectLevel, createTime, updateTime, orderNum, deltag)
-        VALUES ( #{taskAssignmentId}, #{role}, #{file}, #{reviewOpinion}, #{reviewPassedFlag}, #{rejectLevel}, #{createTime}, #{updateTime}, #{orderNum}, #{deltag})
+        INSERT INTO taskReviewProcess( taskAssignmentId, role, file, reviewOpinion, reviewPassedFlag, reviewButtonShowFlag, rejectLevel, createTime, updateTime, orderNum, deltag)
+        VALUES ( #{taskAssignmentId}, #{role}, #{file}, #{reviewOpinion}, #{reviewPassedFlag}, #{reviewButtonShowFlag}, #{rejectLevel}, #{createTime}, #{updateTime}, #{orderNum}, #{deltag})
     </insert>
 
     <select id="findById" resultType="com.huag.collaboration.entities.TaskReviewProcess">
@@ -15,7 +15,7 @@
 
     <select id="findByTaskAssignmentId" resultType="com.huag.collaboration.entities.TaskReviewProcess">
         select * from taskReviewProcess where taskAssignmentId = #{taskAssignmentId}
-        order by orderNum asc
+        order by id asc
     </select>
 
     <insert id="update">
@@ -25,6 +25,7 @@
         file = #{file},
         reviewOpinion = #{reviewOpinion},
         reviewPassedFlag = #{reviewPassedFlag},
+        reviewButtonShowFlag = #{reviewButtonShowFlag},
         rejectLevel = #{rejectLevel},
         createTime = #{createTime},
         updateTime = #{updateTime},

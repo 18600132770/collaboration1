@@ -31,6 +31,15 @@ import java.util.List;
 @Controller
 public class TaskAssignmentController {
 
+    /**
+     * 角色
+     * 设计：designer
+     * 复核：reviewer
+     * 审核：inspector
+     * 审定：validationer
+     */
+    public static String[] taskReviewProcessRoles = new String[]{"designer", "reviewer", "inspector", "validationer"};
+
     @Autowired
     TaskAssignmentMapper taskAssignmentMapper;
 
@@ -85,13 +94,15 @@ public class TaskAssignmentController {
         /**
          * 创建任务时，插入审批流程
          */
-        Configueations configueations = new Configueations();
-        String[] taskReviewProcessRoles = configueations.getTaskReviewProcessRoles();
         for (int i = 0; i < taskReviewProcessRoles.length; i ++){
             TaskReviewProcess taskReviewProcess = new TaskReviewProcess();
             taskReviewProcess.setTaskAssignmentId(taskAssignmentId);
             taskReviewProcess.setRole(taskReviewProcessRoles[i]);
             taskReviewProcess.setOrderNum(i);
+            // 创建时，第一个设计人员显示审核按钮
+            if(i == 0){
+                taskReviewProcess.setReviewButtonShowFlag(true);
+            }
             taskReviewProcessMapper.insert(taskReviewProcess);
         }
 

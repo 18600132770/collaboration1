@@ -44,7 +44,8 @@ public class TaskReviewProcess {
     private String reviewOpinion;//审核意见
 
     private Boolean reviewPassedFlag; //审核是否通过，null：还未审核，true:审核通过，false：审核不通过。
-                                      // null时本流程此处有审核按钮
+
+    private Boolean reviewButtonShowFlag; //审核按钮显示标志。为true显示审核按钮
 
     private Integer rejectLevel; //驳回级别
 
