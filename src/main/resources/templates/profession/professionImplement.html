@@ -615,16 +615,16 @@
 			<!-- 送审流程 -->
 			<el-dialog title="送审流程" :visible.sync="reviewProcessDialogVisible" width="50%">
 				<el-form ref="form" :model="form" label-width="110px">
-					<el-form-item label="设计意见">
+					<el-form-item label="设计意见" v-if="!designerOpinionDisable">
 						<el-input type="textarea" v-model="reviewProcessData.designerOpinion" :disabled="designerOpinionDisable"></el-input>
 					</el-form-item>
-					<el-form-item label="复核意见">
+					<el-form-item label="复核意见" v-if="!reviewerOpioionDisable">
 						<el-input type="textarea" v-model="reviewProcessData.reviewerOpioion" :disabled="reviewerOpioionDisable"></el-input>
 					</el-form-item>
-					<el-form-item label="审核意见">
+					<el-form-item label="审核意见" v-if="!inspectorOpionionDisable">
 						<el-input type="textarea" v-model="reviewProcessData.inspectorOpionion" :disabled="inspectorOpionionDisable"></el-input>
 					</el-form-item>
-					<el-form-item label="审定意见">
+					<el-form-item label="审定意见" v-if="!validationerOpioionDisable">
 						<el-input type="textarea" v-model="reviewProcessData.validationerOpioion" :disabled="validationerOpioionDisable"></el-input>
 					</el-form-item>
 				</el-form>
@@ -641,6 +641,7 @@
 				</div>
 				<div class="modal-footer" slot="footer">
 					<el-button type="primary" size="small" @click="saveReviewProcessData">送审</el-button>
+					<el-button type="primary" size="small" @click="saveReviewProcessData">驳回</el-button>
 					<el-button size="small" @click="reviewProcessDialogVisible = false">取消</el-button>
 				</div>
 			</el-dialog>
@@ -1749,7 +1750,7 @@
 					data: ajaxData,
 					type: "GET",
 					// url: "/crud/reviewProcess/findByTaskAssignmentId",
-					url: "/crud/taskReviewProcess/findByTaskAssignmentId",
+					url: "/crud/taskReviewProcess/findById",
 					traditional: true,
 					success: function (result) {
 						if(result.code == 200){
