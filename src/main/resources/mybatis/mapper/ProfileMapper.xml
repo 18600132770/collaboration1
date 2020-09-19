@@ -27,8 +27,13 @@
         where id = #{id}
     </insert>
 
+    <insert id="delete">
+        update profile set deltag = 1 where id = #{id}
+    </insert>
+
     <select id="findByFileTreeId" resultType="com.huag.collaboration.entities.fileTree.Profile">
         select * from profile where fileTreeId = #{fileTreeId}
+        and ( deltag <![CDATA[ <> ]]> '1' or deltag is null)
     </select>
 
 

@@ -37,4 +37,6 @@ public interface ProfileMapper {
     List<Profile> findById(Integer id);
 
     List<Profile> findByFileTreeId(Integer fileTreeId);
+
+    void delete(Integer valueOf);
 }

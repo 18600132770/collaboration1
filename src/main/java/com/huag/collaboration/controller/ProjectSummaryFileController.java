@@ -7,6 +7,7 @@ import com.huag.collaboration.mapper.FileTreeMapper;
 import com.huag.collaboration.mapper.ProfileMapper;
 import com.huag.collaboration.mapper.ProjectSummaryFileTreeMapper;
 import com.huag.collaboration.utils.OSSUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,7 +79,7 @@ public class ProjectSummaryFileController {
 
     /**
      * 删除某个项目下的文件树分支
-     * 传递参数：分支id
+     * type:file\folder
      * @param request
      * @return
      */
@@ -87,7 +88,16 @@ public class ProjectSummaryFileController {
     public BaseResponse<ProjectSummaryFileTree> deleteFileTreeOfProjectSummary(HttpServletRequest request){
         BaseResponse<ProjectSummaryFileTree> result = new BaseResponse<>();
         String id = String.valueOf(request.getParameter("id"));
-        projectSummaryFileTreeMapper.delete(Integer.valueOf(id));
+        String type = String.valueOf(request.getParameter("type"));
+        if(StringUtils.isNotBlank(type) && "file".equals(type)){
+            profileMapper.delete(Integer.valueOf(id));
+            result.msg = "success";
+        }else if(StringUtils.isNotBlank(type) && "folder".equals(type)){
+            projectSummaryFileTreeMapper.delete(Integer.valueOf(id));
+            result.msg = "success";
+        }else {
+            result.msg = "未传入type(file，folder)";
+        }
         result.code = 200;
         return result;
     }
