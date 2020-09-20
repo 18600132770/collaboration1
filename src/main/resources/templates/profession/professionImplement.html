@@ -643,8 +643,8 @@
 					<el-link type="primary" @click="downloadReviewProcessFile(profile.url, profile.name)" style="color: #00a0e8">{{profile.name}}</el-link>
 				</div>
 				<div class="modal-footer" slot="footer">
-					<el-button type="primary" size="small" @click="saveReviewProcessData">送审</el-button>
-					<el-button type="primary" size="small" @click="saveReviewProcessData">驳回</el-button>
+					<el-button type="primary" size="small" @click="saveReviewProcessData(true)">送审</el-button>
+					<el-button type="primary" size="small" @click="saveReviewProcessData(false)">驳回</el-button>
 					<!-- <el-button size="small" @click="reviewProcessDialogVisible = false">取消</el-button> -->
 				</div>
 			</el-dialog>
@@ -1413,10 +1413,11 @@
 						setDisable("validationerOpioionDisable")
 					},
 					//保存送审流程内容
-					saveReviewProcessData: function(){
+					saveReviewProcessData: function(reviewPassedFlag){
 						// saveReviewProcessDataFunction();
 						//保存送审内容
 						var ajaxData = {}
+						app.reviewProcessData.reviewPassedFlag = reviewPassedFlag
 						// ajaxData.reviewProcessData =  encodeURI(JSON.stringify(app.reviewProcessData))
 						// ajaxData.taskAssignmentId = app.taskAssignmentId
 						ajaxData.projectSummary = encodeURI(JSON.stringify(app.reviewProcessData))
@@ -1432,7 +1433,7 @@
 									app.reviewProcessFileNames = []
 									// findByProjectId();//根据分项目查询该分项目下的任务分配情况
 									app.getFlowChartData(app.taskAssignmentId) // 获取流程详情
-									app.$message.success('送审成功')
+									app.$message.success(reviewPassedFlag ? '送审成功' : '驳回成功')
 								}else{
 									console.log("saveReviewProcessDataFunction 返回值失败")
 								}
