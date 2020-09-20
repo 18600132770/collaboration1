@@ -619,16 +619,16 @@
 			<el-dialog title="送审流程" :visible.sync="reviewProcessDialogVisible" width="50%">
 				<el-form ref="form" :model="form" label-width="110px" label-suffix="：">
 					<el-form-item label="设计意见" v-if="!designerOpinionDisable">
-						<el-input type="textarea" v-model="reviewProcessData.designerOpinion" :disabled="designerOpinionDisable"></el-input>
+						<el-input type="textarea" v-model="reviewProcessData.reviewOpinion" :disabled="designerOpinionDisable"></el-input>
 					</el-form-item>
 					<el-form-item label="复核意见" v-if="!reviewerOpioionDisable">
-						<el-input type="textarea" v-model="reviewProcessData.reviewerOpioion" :disabled="reviewerOpioionDisable"></el-input>
+						<el-input type="textarea" v-model="reviewProcessData.reviewOpinion" :disabled="reviewerOpioionDisable"></el-input>
 					</el-form-item>
 					<el-form-item label="审核意见" v-if="!inspectorOpionionDisable">
-						<el-input type="textarea" v-model="reviewProcessData.inspectorOpionion" :disabled="inspectorOpionionDisable"></el-input>
+						<el-input type="textarea" v-model="reviewProcessData.reviewOpinion" :disabled="inspectorOpionionDisable"></el-input>
 					</el-form-item>
 					<el-form-item label="审定意见" v-if="!validationerOpioionDisable">
-						<el-input type="textarea" v-model="reviewProcessData.validationerOpioion" :disabled="validationerOpioionDisable"></el-input>
+						<el-input type="textarea" v-model="reviewProcessData.reviewOpinion" :disabled="validationerOpioionDisable"></el-input>
 					</el-form-item>
 				</el-form>
 				<el-form action='saveReviewProcessFile' enctype='multipart/form-data' method='post' id="reviewProcessFileUpload" label-width="110px">
@@ -780,14 +780,14 @@
 						>
 							<div class="timeline-content">
 								<header>
-									<div>{{activity.role | approve}}</div> {{activity.timestamp}}
+									<div>{{activity.role}}</div> {{activity.timestamp}}
 								</header>
-								<div v-if="activity.role !== 'start' && activity.role !== 'end'">
-									<p>{{activity.person}}进行了审批</p>
-									<p>{{activity.label}}意见：{{activity.content}}</p>
+								<div v-if="activity.role !== '开始节点' && activity.role !== 'end'">
+									<p>{{activity.username}}进行了审批</p>
+									<p>{{activity.role}}意见：{{activity.reviewOpinion}}</p>
 								</div>
-								<div v-if="!activity.reviewPassedFlag && (activity.role !== 'start' && activity.role !== 'end')">
-									<el-button size="mini" @click="handleProcessClick(activity.role, activity.id)">审核</el-button>
+								<div v-if="!activity.reviewPassedFlag && (activity.role !== '开始节点' && activity.role !== 'end')">
+									<el-button size="mini" @click="handleProcessClick(activity.role, activity)">审核</el-button>
 								</div>
 							</div>
 						</el-timeline-item>
@@ -800,7 +800,7 @@
 
 
 				<el-tabs v-if="false" v-model="activeName" type="card" @tab-click="handleTabClick">
-					<el-tab-pane label="流程详情" name="first">
+					<el-tab-pane label="流程详情" name="first">{{activities}}
 						<el-timeline style="margin-left: 20px;" :reverse="false">
 							<el-timeline-item
 								v-for="(activity, index) in activities"
@@ -810,14 +810,14 @@
 							>
 								<div class="timeline-content">
 									<header>
-										<div>{{activity.role | approve}}</div> {{activity.timestamp}}
+										<div>{{activity.role}}</div> {{activity.timestamp}}
 									</header>
 									<div v-if="activity.role !== 'start' && activity.role !== 'end'">
 										<p>{{activity.person}}进行了审批</p>
-										<p>{{activity.label}}意见：{{activity.content}}</p>
+										<p>{{activity.role}}意见：{{activity.content}}</p>
 									</div>
 									<div v-if="!activity.reviewPassedFlag && (activity.role !== 'start' && activity.role !== 'end')">
-										<el-button size="mini" @click="handleProcessClick(activity.role, activity.id)">审核</el-button>
+										<el-button size="mini" @click="handleProcessClick(activity.role, activity)">审核</el-button>
 									</div>
 								</div>
 							</el-timeline-item>
@@ -985,6 +985,8 @@
 
 					activities: [],
 					activeProcessId: null,
+
+					currentProjectSummaryId: '',
 
 					/* activities: [
 						{
@@ -1384,7 +1386,7 @@
 					//设计人员点击事件
 					designerReviewProcessClick:function (taskAssignmentId) {
 						app.taskAssignmentId = taskAssignmentId
-						findReviewProcessByTaskAssignmentId();//查询审核流程数据
+						// findReviewProcessByTaskAssignmentId();//查询审核流程数据
 						app.reviewProcessDialogVisible = true
 						app.designerOpinionDisable = false
 						setDisable("designerOpinionDisable")
@@ -1392,21 +1394,21 @@
 					//复核人员点击事件
 					reviewerReviewProcessClick:function (taskAssignmentId) {
 						app.taskAssignmentId = taskAssignmentId
-						findReviewProcessByTaskAssignmentId();//查询审核流程数据
+						// findReviewProcessByTaskAssignmentId();//查询审核流程数据
 						app.reviewProcessDialogVisible = true
 						setDisable("reviewerOpioionDisable")
 					},
 					//审核人员点击事件
 					inspectorReviewProcessClick:function (taskAssignmentId) {
 						app.taskAssignmentId = taskAssignmentId
-						findReviewProcessByTaskAssignmentId();//查询审核流程数据
+						// findReviewProcessByTaskAssignmentId();//查询审核流程数据
 						app.reviewProcessDialogVisible = true
 						setDisable("inspectorOpionionDisable")
 					},
 					//审定人员点击事件
 					validationerReviewProcessClick:function (taskAssignmentId) {
 						app.taskAssignmentId = taskAssignmentId
-						findReviewProcessByTaskAssignmentId();//查询审核流程数据
+						// findReviewProcessByTaskAssignmentId();//查询审核流程数据
 						app.reviewProcessDialogVisible = true
 						setDisable("validationerOpioionDisable")
 					},
@@ -1417,7 +1419,7 @@
 						var ajaxData = {}
 						// ajaxData.reviewProcessData =  encodeURI(JSON.stringify(app.reviewProcessData))
 						// ajaxData.taskAssignmentId = app.taskAssignmentId
-						ajax.projectSummary = encodeURI(JSON.stringify(app.reviewProcessData))
+						ajaxData.projectSummary = encodeURI(JSON.stringify(app.reviewProcessData))
 						$.ajax({
 							data: ajaxData,
 							type: "POST",
@@ -1428,7 +1430,8 @@
 									app.reviewProcessDialogVisible = false
 									app.reviewProcessData = {}
 									app.reviewProcessFileNames = []
-									findByProjectId();//根据分项目查询该分项目下的任务分配情况
+									// findByProjectId();//根据分项目查询该分项目下的任务分配情况
+									app.getFlowChartData(app.taskAssignmentId) // 获取流程详情
 								}else{
 									console.log("saveReviewProcessDataFunction 返回值失败")
 								}
@@ -2251,7 +2254,7 @@
 			this.getFlowChartData(id)
 
 			// 获取审批意见
-			findReviewProcessByTaskAssignmentId()
+			// findReviewProcessByTaskAssignmentId()
 		}
 
 		function getFlowChartData (id) {
@@ -2268,7 +2271,7 @@
 					if (result.code == 200) {
 						let temp = result.data
 						_this.activities = [{
-							role: 'start'
+							role: '开始节点'
 						}].concat(temp)
 						console.log(_this.activities)
 						app.drawer = true
@@ -2353,20 +2356,22 @@
 			});
 		}
 
-		function handleProcessClick (type, id) {
-			this.activeProcessId = id // 当前点击审核的流程id
+		function handleProcessClick (type, activityItem) {
+			this.activeProcessId = activityItem.id // 当前点击审核的流程id
+			debugger
+			this.reviewProcessData = activityItem
 			switch (type) {
-				case 'designer':
+				case '设计':
 					app.designerReviewProcessClick(app.taskAssignmentId)
 					break;
-				case 'reviewer':
+				case '复核':
 					app.reviewerReviewProcessClick(app.taskAssignmentId)
 
 					break
-				case 'inspector':
+				case '审核':
 					app.inspectorReviewProcessClick(app.taskAssignmentId)
 					break
-				case 'validationer':
+				case '审定':
 					app.validationerReviewProcessClick(app.taskAssignmentId)
 					break
 			}
