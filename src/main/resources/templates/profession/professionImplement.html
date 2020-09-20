@@ -782,7 +782,7 @@
 								<header>
 									<div>{{activity.roleChName}}</div> {{activity.timestamp}}
 								</header>
-								<div v-if="activity.roleChName !== '开始节点' && activity.role !== 'end'">
+								<div v-if="activity.roleChName !== '开始节点' && activity.role !== 'end' && activity.reviewPassedFlag !== null">
 									<p>{{activity.username}}进行了审批</p>
 									<p v-if="activity.reviewOpinion">{{activity.roleChName}}意见：{{activity.reviewOpinion}}</p>
 								</div>
