@@ -64,7 +64,7 @@ public class TaskReviewProcessController {
         map.put("validationer", "审定");
         if(StringUtils.isNotBlank(id)){
             List<TaskReviewProcess> taskReviewProcesseList = taskReviewProcessMapper.findByTaskAssignmentId(Integer.valueOf(id));
-            taskReviewProcesseList.forEach(taskReviewProcess -> taskReviewProcess.setRole(map.get(taskReviewProcess.getRole())));
+            taskReviewProcesseList.forEach(taskReviewProcess -> taskReviewProcess.setRoleChName(map.get(taskReviewProcess.getRole())));
             result.setData(taskReviewProcesseList);
         }
         result.code = 200;
@@ -83,11 +83,19 @@ public class TaskReviewProcessController {
         BaseResponse<TaskReviewProcess> result = new BaseResponse<>();
         String projectStr = URLDecoder.decode(String.valueOf(request.getParameter("projectSummary")), "UTF-8");
         TaskReviewProcess taskReviewProcess = JSONObject.toJavaObject(JSON.parseObject(projectStr), TaskReviewProcess.class);
+        System.out.println("进入更新状态");
+        String reviewOpinion = taskReviewProcess.getReviewOpinion();
+        System.out.println(reviewOpinion);
+        System.out.println(taskReviewProcess.getReviewPassedFlag());
+        System.out.println("-----");
+        System.out.println(taskReviewProcess);
         if(taskReviewProcess.getId() == null || "".equals(taskReviewProcess.getId())){
             taskReviewProcessMapper.insert(taskReviewProcess);
+            System.out.println("insert");
         }else{
 
             if(taskReviewProcess.getReviewPassedFlag() != null && !taskReviewProcess.getReviewPassedFlag()){    //审核不通过
+                System.out.println("审核不通过。。。。");
                 taskReviewProcess.setReviewButtonShowFlag(false);
                 taskReviewProcessMapper.update(taskReviewProcess);
 
@@ -116,6 +124,7 @@ public class TaskReviewProcessController {
                     taskReviewProcessMapper.insert(taskReviewProcessNewProcess);
                 }
             }else if(taskReviewProcess.getReviewPassedFlag() != null && taskReviewProcess.getReviewPassedFlag()){ //审核通过
+                System.out.println("审核通过.....");
                 taskReviewProcess.setReviewButtonShowFlag(false);
                 taskReviewProcessMapper.update(taskReviewProcess);
 
@@ -136,6 +145,8 @@ public class TaskReviewProcessController {
                     // TODO 整个审批流程结束了，但是接下来什么操作还不清楚
                     System.out.println("整个审批流程结束了");
                 }
+            }else{
+                System.out.println("啥状态，没设置...");
             }
 
         }

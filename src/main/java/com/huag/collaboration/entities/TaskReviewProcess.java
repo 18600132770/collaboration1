@@ -25,6 +25,7 @@ public class TaskReviewProcess {
      * 审定：validationer
      */
     private String role;
+    private String roleChName;
 
     /**
      * 用户名
