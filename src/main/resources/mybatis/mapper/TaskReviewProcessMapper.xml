@@ -14,8 +14,63 @@
     </select>
 
     <select id="findByTaskAssignmentId" resultType="com.huag.collaboration.entities.TaskReviewProcess">
-        select * from taskReviewProcess where taskAssignmentId = #{taskAssignmentId}
-        order by id asc
+        select task.id,
+        task.taskAssignmentId,
+        task.role,
+        case when role = 'designer'     then tmp2.designer
+        when role = 'reviewer'     then tmp2.reviewer
+        when role = 'inspector'    then tmp2.inspector
+        when role = 'validationer' then tmp2.validationer
+        end as username,
+        task.file,
+        task.reviewOpinion,
+        task.reviewPassedFlag,
+        task.reviewButtonShowFlag,
+        task.rejectLevel,
+        task.createTime,
+        task.updateTime,
+        task.orderNum,
+        task.deltag
+        from taskReviewProcess task
+        left join (
+        select tmp1.id,
+        tmp1.taskName,
+        tmp1.projectId,
+        tmp1.finishedLevel,
+        tmp1.designerId,
+        tmp1.reviewerId,
+        tmp1.inspectorId,
+        tmp1.validationerId,
+        u1.username as designer,
+        u2.username as reviewer,
+        u3.username as inspector,
+        u4.username as validationer,
+        p1.departmentId as departmentId,
+        d1.departmentName as departmentName,
+        tmp1.taskLevel,
+        tmp1.startTime,
+        tmp1.stopTime,
+        tmp1.createtTime,
+        tmp1.updateTime
+        from taskAssignment tmp1
+        left join user u1
+        on tmp1.designerId = u1.id
+        left join user u2
+        on tmp1.reviewerId = u2.id
+        left join user u3
+        on tmp1.inspectorId = u3.id
+        left join user u4
+        on tmp1.validationerId = u4.id
+        left join project p1
+        on tmp1.projectId = p1.id
+        left join department d1
+        on d1.id = p1.departmentId
+        where (tmp1.deltag <![CDATA[ <> ]]> '1' or tmp1.deltag is null)
+        ) tmp2
+        on task.taskAssignmentId = tmp2.id
+        where task.taskAssignmentId = #{taskAssignmentId}
+        order by task.id asc
+
     </select>
 
     <insert id="update">

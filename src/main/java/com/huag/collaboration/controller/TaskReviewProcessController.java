@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 任务审批流程
@@ -48,8 +50,21 @@ public class TaskReviewProcessController {
     public BaseResponse<List<TaskReviewProcess>> findFilesByProjectId(HttpServletRequest request){
         BaseResponse<List<TaskReviewProcess>> result = new BaseResponse<>();
         String id = String.valueOf(request.getParameter("id"));
+        Map<String, String> map = new HashMap<>();
+        /**
+         * 角色
+         * 设计：designer
+         * 复核：reviewer
+         * 审核：inspector
+         * 审定：validationer
+         */
+        map.put("designer", "设计");
+        map.put("reviewer", "复核");
+        map.put("inspector", "审核");
+        map.put("validationer", "审定");
         if(StringUtils.isNotBlank(id)){
             List<TaskReviewProcess> taskReviewProcesseList = taskReviewProcessMapper.findByTaskAssignmentId(Integer.valueOf(id));
+            taskReviewProcesseList.forEach(taskReviewProcess -> taskReviewProcess.setRole(map.get(taskReviewProcess.getRole())));
             result.setData(taskReviewProcesseList);
         }
         result.code = 200;

@@ -27,6 +27,11 @@ public class TaskReviewProcess {
     private String role;
 
     /**
+     * 用户名
+     */
+    private String username;
+
+    /**
      * json串
      * [
      *     {

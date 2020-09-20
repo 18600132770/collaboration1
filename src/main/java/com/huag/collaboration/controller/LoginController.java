@@ -47,6 +47,26 @@ public class LoginController {
         }
     }
 
+    @PostMapping(value = "/user/loginWithoutRedirect")
+    public String loginWithoutRedirect(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        Map<String, Object> map,
+                        HttpSession session){
+        User user = userMapper.findByCardId(username);
+        boolean flag = false;
+        if(user != null && StringUtil.isNotEmpty(username) && username.equals(user.getCardId())){
+            flag = true;
+        }
+        if("admin".endsWith(username) && "123456".equals(password)){
+            session.setAttribute("loginUser", username);
+        }else if(flag){
+            session.setAttribute("loginUser", user.getCardId());
+        }else{
+            map.put("msg", "用户名或密码错误");
+        }
+        return null;
+    }
+
     @GetMapping("/redirectToMain")
     public String redirectToMain(){
         return "redirect:/main.html";
