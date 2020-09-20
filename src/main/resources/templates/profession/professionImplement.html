@@ -776,17 +776,17 @@
 							v-for="(activity, index) in activities"
 							:key="index"
 							:timestamp="activity.timestamp" hide-timestamp
-							:color="activity.reviewPassedFlag === false ? '#E6A23C' : activity.reviewPassedFlag ? '#67C23A' : '#409eff'"
+							:color="activity.reviewPassedFlag === false ? '#F56C6C' : activity.reviewPassedFlag ? '#67C23A' : ''"
 						>
 							<div class="timeline-content">
 								<header>
-									<div>{{activity.role}}</div> {{activity.timestamp}}
+									<div>{{activity.roleChName}}</div> {{activity.timestamp}}
 								</header>
-								<div v-if="activity.role !== '开始节点' && activity.role !== 'end'">
+								<div v-if="activity.roleChName !== '开始节点' && activity.role !== 'end'">
 									<p>{{activity.username}}进行了审批</p>
-									<p>{{activity.role}}意见：{{activity.reviewOpinion}}</p>
+									<p v-if="activity.reviewOpinion">{{activity.roleChName}}意见：{{activity.reviewOpinion}}</p>
 								</div>
-								<div v-if="!activity.reviewPassedFlag && (activity.role !== '开始节点' && activity.role !== 'end')">
+								<div v-if="activity.reviewButtonShowFlag && (activity.roleChName !== '开始节点' && activity.roleChName !== 'end')">
 									<el-button size="mini" @click="handleProcessClick(activity.role, activity)">审核</el-button>
 								</div>
 							</div>
@@ -2273,7 +2273,8 @@
 					if (result.code == 200) {
 						let temp = result.data
 						_this.activities = [{
-							role: '开始节点'
+							roleChName: '开始节点',
+							reviewPassedFlag: temp[0].reviewPassedFlag
 						}].concat(temp)
 						console.log(_this.activities)
 						app.drawer = true
@@ -2362,17 +2363,17 @@
 			this.activeProcessId = activityItem.id // 当前点击审核的流程id
 			this.reviewProcessData = activityItem
 			switch (type) {
-				case '设计':
+				case 'designer':
 					app.designerReviewProcessClick(app.taskAssignmentId)
 					break;
-				case '复核':
+				case 'reviewer':
 					app.reviewerReviewProcessClick(app.taskAssignmentId)
 
 					break
-				case '审核':
+				case 'inspector':
 					app.inspectorReviewProcessClick(app.taskAssignmentId)
 					break
-				case '审定':
+				case 'validationer':
 					app.validationerReviewProcessClick(app.taskAssignmentId)
 					break
 			}
