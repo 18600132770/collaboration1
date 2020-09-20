@@ -1432,6 +1432,7 @@
 									app.reviewProcessFileNames = []
 									// findByProjectId();//根据分项目查询该分项目下的任务分配情况
 									app.getFlowChartData(app.taskAssignmentId) // 获取流程详情
+									app.$message.success('送审成功')
 								}else{
 									console.log("saveReviewProcessDataFunction 返回值失败")
 								}
@@ -2358,7 +2359,6 @@
 
 		function handleProcessClick (type, activityItem) {
 			this.activeProcessId = activityItem.id // 当前点击审核的流程id
-			debugger
 			this.reviewProcessData = activityItem
 			switch (type) {
 				case '设计':
