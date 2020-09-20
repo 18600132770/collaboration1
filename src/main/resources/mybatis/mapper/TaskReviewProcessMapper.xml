@@ -69,6 +69,7 @@
         ) tmp2
         on task.taskAssignmentId = tmp2.id
         where task.taskAssignmentId = #{taskAssignmentId}
+        and (task.deltag <![CDATA[ <> ]]> '1' or task.deltag is null)
         order by task.id asc
 
     </select>
