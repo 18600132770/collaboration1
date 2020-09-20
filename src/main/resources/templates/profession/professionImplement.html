@@ -207,6 +207,9 @@
 											</div>
 										</template>
 									</el-table-column>
+									<el-table-column label="送审文件">
+
+									</el-table-column>
 									<el-table-column  label="开始时间">
 										<template slot-scope="scope"><span>{{ scope.row.startTime }}</span></template>
 									</el-table-column>
@@ -614,7 +617,7 @@
 
 			<!-- 送审流程 -->
 			<el-dialog title="送审流程" :visible.sync="reviewProcessDialogVisible" width="50%">
-				<el-form ref="form" :model="form" label-width="110px">
+				<el-form ref="form" :model="form" label-width="110px" label-suffix="：">
 					<el-form-item label="设计意见" v-if="!designerOpinionDisable">
 						<el-input type="textarea" v-model="reviewProcessData.designerOpinion" :disabled="designerOpinionDisable"></el-input>
 					</el-form-item>
@@ -642,7 +645,7 @@
 				<div class="modal-footer" slot="footer">
 					<el-button type="primary" size="small" @click="saveReviewProcessData">送审</el-button>
 					<el-button type="primary" size="small" @click="saveReviewProcessData">驳回</el-button>
-					<el-button size="small" @click="reviewProcessDialogVisible = false">取消</el-button>
+					<!-- <el-button size="small" @click="reviewProcessDialogVisible = false">取消</el-button> -->
 				</div>
 			</el-dialog>
 
@@ -762,25 +765,59 @@
 			@opened="drawerOpend"
 			direction="rtl">
 			<div class="progress" style="padding: 10px;">
-				<el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
+				<el-radio-group size="small" v-model="activeName">
+					<el-radio-button label="first">流程详情</el-radio-button>
+					<el-radio-button label="second">流程图</el-radio-button>
+				</el-radio-group>
+
+				<el-scrollbar v-show="activeName === 'first'" style="height: calc(100vh - 125px);">
+					<el-timeline style="margin-top: 30px;margin-left: 20px; height: 100%;" :reverse="false">
+						<el-timeline-item
+							v-for="(activity, index) in activities"
+							:key="index"
+							:timestamp="activity.timestamp" hide-timestamp
+							:color="activity.reviewPassedFlag === false ? '#E6A23C' : activity.reviewPassedFlag ? '#67C23A' : '#409eff'"
+						>
+							<div class="timeline-content">
+								<header>
+									<div>{{activity.role | approve}}</div> {{activity.timestamp}}
+								</header>
+								<div v-if="activity.role !== 'start' && activity.role !== 'end'">
+									<p>{{activity.person}}进行了审批</p>
+									<p>{{activity.label}}意见：{{activity.content}}</p>
+								</div>
+								<div v-if="!activity.reviewPassedFlag && (activity.role !== 'start' && activity.role !== 'end')">
+									<el-button size="mini" @click="handleProcessClick(activity.role, activity.id)">审核</el-button>
+								</div>
+							</div>
+						</el-timeline-item>
+					</el-timeline>
+				</el-scrollbar>
+
+				<div id="chart" style="width: 100%; height: calc(100vh - 125px);">
+					<svg id="svg-canvas" width="400" height="100%"></svg>
+				</div>
+
+
+				<el-tabs v-if="false" v-model="activeName" type="card" @tab-click="handleTabClick">
 					<el-tab-pane label="流程详情" name="first">
 						<el-timeline style="margin-left: 20px;" :reverse="false">
 							<el-timeline-item
 								v-for="(activity, index) in activities"
 								:key="index"
 								:timestamp="activity.timestamp" hide-timestamp
-								:color="activity.content ? '#409eff' : ''"
+								:color="activity.reviewPassedFlag === false ? '#E6A23C' : activity.reviewPassedFlag ? '#67C23A' : '#409eff'"
 							>
 								<div class="timeline-content">
 									<header>
-										<div>{{activity.label}}</div> {{activity.timestamp}}
+										<div>{{activity.role | approve}}</div> {{activity.timestamp}}
 									</header>
-									<div v-if="activity.label.indexOf('节点') === -1">
+									<div v-if="activity.role !== 'start' && activity.role !== 'end'">
 										<p>{{activity.person}}进行了审批</p>
 										<p>{{activity.label}}意见：{{activity.content}}</p>
 									</div>
-									<div v-if="activity.event && !activity.content">
-										<el-button size="mini" @click="handleProcessClick(activity.label)">审核</el-button>
+									<div v-if="!activity.reviewPassedFlag && (activity.role !== 'start' && activity.role !== 'end')">
+										<el-button size="mini" @click="handleProcessClick(activity.role, activity.id)">审核</el-button>
 									</div>
 								</div>
 							</el-timeline-item>
@@ -788,7 +825,7 @@
 					</el-tab-pane>
 					<el-tab-pane label="流程图" name="second">
 						<div id="chart" style="width: 100%;">
-							<svg id="svg-canvas" width="400" height="500"></svg>
+							<svg id="svg-canvas" width="400" height="600"></svg>
 						</div>
 					</el-tab-pane>
 				</el-tabs>
@@ -946,7 +983,10 @@
 					drawer: false,
 					activeName: 'first',
 
-					activities: [
+					activities: [],
+					activeProcessId: null,
+
+					/* activities: [
 						{
 							label: '开始节点',
 							content: '活动按期开始',
@@ -985,7 +1025,7 @@
 							content: '创建成功',
 							timestamp: '2018-04-15'
 						}
-					],
+					] */
 
 					dataset: {
 						nodes: [
@@ -998,10 +1038,15 @@
 						],
 						edges: [
 							{source: 0,target: 1,label: ""},
+							
+							{source: 4,target: 1,label: "驳回"},
+							{source: 3,target: 1,label: "驳回"},
+							{source: 2,target: 1,label: "驳回"},
 							{source: 1,target: 2,label: ""},
-							{source: 2,target: 3,label: "正常"},
-							{source: 3,target: 4,label: "不正常"},
-							{source: 4,target: 5,label: "不正常"}
+
+							{source: 2,target: 3,label: ""},
+							{source: 3,target: 4,label: ""},
+							{source: 4,target: 5,label: ""},
 						]
 					},
 
@@ -1367,7 +1412,29 @@
 					},
 					//保存送审流程内容
 					saveReviewProcessData: function(){
-						saveReviewProcessDataFunction();//保存送审内容
+						// saveReviewProcessDataFunction();
+						//保存送审内容
+						var ajaxData = {}
+						// ajaxData.reviewProcessData =  encodeURI(JSON.stringify(app.reviewProcessData))
+						// ajaxData.taskAssignmentId = app.taskAssignmentId
+						ajax.projectSummary = encodeURI(JSON.stringify(app.reviewProcessData))
+						$.ajax({
+							data: ajaxData,
+							type: "POST",
+							url: "/crud/taskReviewProcess/update",
+							traditional: true,
+							success: function (result) {
+								if(result.code == 200){
+									app.reviewProcessDialogVisible = false
+									app.reviewProcessData = {}
+									app.reviewProcessFileNames = []
+									findByProjectId();//根据分项目查询该分项目下的任务分配情况
+								}else{
+									console.log("saveReviewProcessDataFunction 返回值失败")
+								}
+
+							}
+						})
 					},
 					fileChange1: function(target){
 						var form = document.getElementById("fileUpload1");
@@ -1600,7 +1667,6 @@
 						}else{
 							console.log("findPreviousProfile 返回值失败")
 						}
-
 					}
 				})
 			}
@@ -1741,11 +1807,11 @@
 			/**
 			 * 查询审核流程数据
 			 */
-			function findReviewProcessByTaskAssignmentId(){
+			function findReviewProcessByTaskAssignmentId(processId){
 				app.reviewProcessData = {}
 				app.reviewProcessFileNames = []
 				var ajaxData = {}
-				ajaxData.id = app.taskAssignmentId
+				ajaxData.id = app.activeProcessId || 27 // app.taskAssignmentId
 				$.ajax({
 					data: ajaxData,
 					type: "GET",
@@ -1759,7 +1825,7 @@
 								var reviewProcessFileNames = JSON.parse(result.data.file)
 								app.reviewProcessFileNames = reviewProcessFileNames
 
-								app.activities[0].content = app.reviewProcessData.designerOpinion
+								/* app.activities[0].content = app.reviewProcessData.designerOpinion
 								app.activities[0].timestamp = app.reviewProcessData.designerCreateTime
 
 								app.activities[1].content = app.reviewProcessData.reviewerOpioion
@@ -1769,7 +1835,7 @@
 								app.activities[2].timestamp = app.reviewProcessData.inspectorCreateTime
 
 								app.activities[3].content = app.reviewProcessData.validationerOpioion
-								app.activities[3].timestamp = app.reviewProcessData.validationerCreateTime
+								app.activities[3].timestamp = app.reviewProcessData.validationerCreateTime */
 
 
 							}
@@ -2128,11 +2194,11 @@
 			//设置图
 			g.setGraph({
 				rankdir:'TB',
+				align:'UL',
 				// align:'DL',
-				// align:'DL',
-				nodesep: 80,
-				edgesep:100,
-				ranksep: 80,
+				// nodesep: 80,
+				// edgesep:100,
+				ranksep: 30,
 				marginx:50,
 				marginy:50
 			});
@@ -2143,25 +2209,36 @@
 					//节点形状
 					shape: item.shape,
 					//节点样式
-					style: "fill:#fff;stroke:#000",
-					width: 70,
-					height: 30
+					style: "fill:#409EFF;stroke:#409EFF",
+					labelStyle:'fill: #fff',
+					width: 40,
+					height: 10
 				})
 			})
 			dataset.edges.forEach(item => {
 					g.setEdge(item.source,item.target, {
 							//边标签
-							label: '',
+							label: item.label,
+							labelStyle: item.label === '驳回' ? 'fill:#F56C6C' : 'fill:#409EFF',
 							//边样式
-							style: "fill:#fff;stroke:#333;stroke-width:1.5px"
+							style: (item.label === '驳回' ? 'stroke:#F56C6C;' : "stroke:#409EFF;") + 'fill:#fff;stroke-width:1.5px',
+							arrowhead: 'vee',
+							arrowheadStyle: item.label === '驳回' ? 'fill:#F56C6C' : 'fill:#409EFF'
 						})
 				})
 			// 创建渲染器
 			let render = new dagreD3.render();
 			// 选择 svg 并添加一个g元素作为绘图容器.
 			let svgGroup = d3.select('svg').append('g');
+			// 建立拖拽缩放
+			let zoom = d3.zoom()
+					.on("zoom", function () {
+						svgGroup.attr("transform", d3.event.transform);
+					});
+			d3.select('svg').call(zoom);
 			// 在绘图容器上运行渲染器生成流程图.
 			render(svgGroup, g);
+
 		}
 		
 		function drawerOpend () {
@@ -2169,18 +2246,20 @@
 		}
 
 		function showFlowChart (id) {
-			app.drawer = true
+			// app.drawer = true
 			app.taskAssignmentId = id
-			app.getFlowChartData(id)
+			this.getFlowChartData(id)
 
 			// 获取审批意见
 			findReviewProcessByTaskAssignmentId()
 		}
 
 		function getFlowChartData (id) {
+			const _this = this
 			// var postData = new FormData(form);
 			$.ajax({
-				url: '/crud/taskAssignment/findById?id=' + id,
+				// url: '/crud/taskAssignment/findById?id=' + id,
+				url: '/crud/taskReviewProcess/findByTaskAssignmentId?id=' + id,
 				type: "GET",
 				// data: postData,
 				contentType: false,
@@ -2188,7 +2267,12 @@
 				success: function (result) {
 					if (result.code == 200) {
 						let temp = result.data
-						app.activities = [
+						_this.activities = [{
+							role: 'start'
+						}].concat(temp)
+						console.log(_this.activities)
+						app.drawer = true
+						/* app.activities = [
 						{
 							label: '开始节点',
 							content: '活动按期开始',
@@ -2227,7 +2311,7 @@
 							content: '',
 							timestamp: temp.stopTime
 						}
-					]
+					] */
 
 					}else{
 					}
@@ -2269,19 +2353,20 @@
 			});
 		}
 
-		function handleProcessClick (type) {
+		function handleProcessClick (type, id) {
+			this.activeProcessId = id // 当前点击审核的流程id
 			switch (type) {
-				case '设计':
+				case 'designer':
 					app.designerReviewProcessClick(app.taskAssignmentId)
 					break;
-				case '复核':
+				case 'reviewer':
 					app.reviewerReviewProcessClick(app.taskAssignmentId)
 
 					break
-				case '审核':
+				case 'inspector':
 					app.inspectorReviewProcessClick(app.taskAssignmentId)
 					break
-				case '审定':
+				case 'validationer':
 					app.validationerReviewProcessClick(app.taskAssignmentId)
 					break
 			}
@@ -2294,6 +2379,19 @@
 		function onOpen (index) {
 			this.defaultOpeneds = [index]
 		}
+
+		Vue.filter('approve', function (value) {
+			if (!value) return ''
+			const roles = {
+				start: '开始节点',
+				designer: '设计',
+				reviewer: '复核',
+				inspector: '审核',
+				validationer: '审定',
+				end: '结束节点'
+			}
+			return roles[value]
+		})
 		</script>
 	</div>
 </div>
