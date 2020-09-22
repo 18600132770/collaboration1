@@ -3,7 +3,7 @@
  * @Author: supercheney
  * @Date: 2020-08-22 15:06:45
  * @LastEditors: supercheney
- * @LastEditTime: 2020-09-19 17:28:36
+ * @LastEditTime: 2020-09-22 21:59:55
  * @FilePath: \collaboration1\src\main\resources\static\asserts\js\components\fileTree.js
  */
 
@@ -27,12 +27,21 @@ Vue.component('file-tree', {
         :props="defaultProps"
         :expand-on-click-node="false">
         <span class="custom-tree-node" slot-scope="{ node, data }">
-          <span>{{ node.label }}</span>
+          <span>
+          <i v-if="node.level === 1" class="el-icon-folder"></i> 
+          <i v-if="node.level > 1"class="el-icon-document"></i>
+          {{ node.label }}</span>
           <span>
             <el-button
               v-if="node.level === 1"
               type="text"
               icon="el-icon-upload"
+              @click="() => append(data)">
+            </el-button>
+            <el-button
+              v-if="node.level === 1"
+              type="text"
+              icon="el-icon-edit"
               @click="() => append(data)">
             </el-button>
             <el-button
@@ -281,6 +290,8 @@ function uploadFile (params) {
         _this.$message.success('上传文件成功')
         _this.uploadVisible = false
         _this.getFileTreeData()
+        
+        _this.$refs.uploadfile.clearFiles()
       } else {
         console.log('treeData 返回值失败')
       }

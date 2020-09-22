@@ -532,7 +532,7 @@
 			<!-- 添加上序文件Modal -->
 			<el-dialog title="添加我需要的上序文件" :visible.sync="addPreviousProfileDialogVisible" width="30%">
 				<el-form size="small" label-suffix="：" label-width="100px">
-					<el-form-item label="上序分项目">
+					<el-form-item label="上序专业">
 						<el-select v-model="selectDepartments" multiple placeholder="请选择">
 							<el-option
 									v-for="department in departments"
@@ -558,7 +558,7 @@
 					<el-form-item label="内容">
 						<el-input v-model="nextProfessionProfileContent"  placeholder="请输入内容"></el-input>
 					</el-form-item>
-					<el-form-item label="下序分项目">
+					<el-form-item label="下序专业">
 						<el-select v-model="selectDepartmentsOfNextProfessionProfile" multiple placeholder="请选择"  style="width: 80%">
 							<el-option
 									v-for="department in nextProfessionProjects"
@@ -568,7 +568,7 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="文件">
+					<el-form-item label="专业文件">
 						<el-select v-model="selectProfiles" multiple placeholder="请选择"  style="width: 80%">
 							<el-option
 									v-for="profile in profileTrees"

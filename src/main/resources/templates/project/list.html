@@ -53,10 +53,10 @@
 
       .custom-tree-node > span:first-child {
         text-overflow: ellipsis;
-        background-color: #409EFF;
+        /* background-color: #409EFF; */
         padding: 2px 5px;
-        color: #fff;
-        width: 200px;
+        /* color: #fff; */
+        width: 160px;
         overflow: hidden;
       }
 
@@ -187,7 +187,7 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="负责人">
+                <el-table-column label="项目负责人">
                   <template slot-scope="scope">
                     <div @click="editProjectPrincipalClick(scope.row)">
                       <span style="color: #080fe8;">
@@ -198,7 +198,7 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="总工">
+                <el-table-column label="项目总工">
                   <template slot-scope="scope">
                     <div @click="editProjectChiefEngineerClick(scope.row)">
                       <span style="color: #e85205;">
