@@ -31,3 +31,4 @@ build/
 .vscode/
 .history
 webpage/node_modules
+web/node_modules
