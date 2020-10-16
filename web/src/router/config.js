@@ -48,6 +48,11 @@ const options = {
               path: 'analysis',
               name: '分析页',
               component: () => import('@/pages/dashboard/analysis'),
+            },
+            {
+              path: 'datascreen',
+              name: '数据大屏',
+              component: () => import('@/pages/dashboard/datascreen'),
             }
           ]
         },
@@ -229,6 +234,11 @@ const options = {
         }
       ]
     },
+    {
+      path: '/largedatascreen',
+      name: '数据可视化系统',
+      component: () => import('@/pages/largeDataScreen')
+    }
   ]
 }
 
