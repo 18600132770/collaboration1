@@ -13,7 +13,7 @@
           </template>
           <template v-else>
             <a-card>
-              <img slot="cover" src="http://www.lanlanwork.com/blog/content/uploadfile/201706/ee1f1497428179.png" height="154"/>
+              <img slot="cover" src="~@/assets/img/bigscreen/datascreen.png" height="164"/>
               <a-card-meta title="数据大屏">
                 <div slot="description">
                   城镇中有那么多的酒馆，她却偏偏走进了我的酒馆
