@@ -57,6 +57,26 @@ const options = {
           ]
         },
         {
+          path: 'projectmgmt',
+          name: '项目管理',
+          meta: {
+            icon: 'table'
+          },
+          redirect: '/projectmgmt/list',
+          component: PageView,
+          children: [
+            {
+              path: 'list',
+              name: '项目列表',
+              meta: {
+                icon: 'table',
+                invisible: true
+              },
+              component: () => import('@/pages/projectMgmt'),
+            }
+          ]
+        },
+        {
           path: 'form',
           name: '表单页',
           meta: {
