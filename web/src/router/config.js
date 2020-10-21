@@ -75,6 +75,26 @@ const options = {
               component: () => import('@/pages/projectMgmt'),
             }
           ]
+        },//src\pages\collaboration\TaskMgmt.vue
+        {
+          path: 'collaboration',
+          name: '专业协同',
+          meta: {
+            icon: 'table'
+          },
+          redirect: '/collaboration/taskmgmt',
+          component: PageView,
+          children: [
+            {
+              path: 'taskmgmt',
+              name: '任务管理',
+              meta: {
+                icon: 'table',
+                invisible: true
+              },
+              component: () => import('@/pages/collaboration'),
+            }
+          ]
         },
         {
           path: 'form',
