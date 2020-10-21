@@ -61,7 +61,8 @@ function modifyVars(color) {
     'layout-trigger-background': menuColors[2],
     'btn-danger-bg': error[4],
     'btn-danger-border': error[4],
-    ...ANTD.theme[theme.mode]
+    ...ANTD.theme[theme.mode],
+    'border-radius-base': '2px',
   }
 }
 
