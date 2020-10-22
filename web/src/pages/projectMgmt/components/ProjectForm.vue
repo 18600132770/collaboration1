@@ -64,7 +64,7 @@
         <a-select-option value="dizhi">地质所</a-select-option>
       </a-select>
     </a-form-model-item>
-    <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+    <a-form-model-item :wrapper-col="{ span: 15, offset: 9 }">
       <a-button type="primary" @click="onSubmit">
         {{$t('nextStep')}}
       </a-button>

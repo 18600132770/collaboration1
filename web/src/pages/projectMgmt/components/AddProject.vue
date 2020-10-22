@@ -4,7 +4,7 @@
       $t('add')
     }}</a-button>
     <a-modal v-model="visible" :title="$t('add')" :width="900" :footer="null">
-      <StepForm></StepForm>
+      <StepForm @close="close"></StepForm>
     </a-modal>
   </span>
 </template>
@@ -22,12 +22,16 @@ export default {
     }
   },
   methods: {
-    addNew
+    addNew,
+    close
   }
 }
 
 function addNew() {
   this.visible = true
+}
+function close () {
+  this.visible = false
 }
 </script>
 

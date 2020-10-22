@@ -6,8 +6,9 @@
       show-icon
       :default-selected-keys="['0-0-0']"
     >
-      <template slot="folder" slot-scope="{ expanded, children }">
-        <a-icon v-if="children.length > 0" :type="expanded ? 'folder-open' : 'folder'" />
+      <template slot="folder" slot-scope="{ expanded, children, isLeaf }">
+        <a-icon v-if="!isLeaf" :type="expanded ? 'folder-open' : 'folder'" />
+        <a-icon v-else type="file" />
       </template>
       <template slot="custom" slot-scope="item">
         <span>{{ item.title }}</span>
@@ -35,13 +36,14 @@ const treeData = [
     key: '0-0',
     scopedSlots: {title: 'custom', icon: 'folder'},
     children: [
-      { title: 'leaf', key: '0-0-0', isLeaf: true, scopedSlots: {title: 'custom'}},
-      { title: 'leaf', key: '0-0-1', isLeaf: true, scopedSlots: {title: 'custom'}},
+      { title: 'leaf', key: '0-0-0', isLeaf: true, scopedSlots: {title: 'custom', icon: 'folder'}},
+      { title: 'leaf', key: '0-0-1', isLeaf: true, scopedSlots: {title: 'custom', icon: 'folder'}},
     ],
   },
 ];
 
 export default {
+  i18n: require('../i18n'),
   data() {
     return {
       treeData,
@@ -59,7 +61,7 @@ export default {
     },
     append () {},
     edit () {},
-    remove () {}
+    remove () {},
   },
 };
 </script>
@@ -67,13 +69,20 @@ export default {
 <style lang="less" scoped>
   .file-tree {
     position: relative;
-    height: 552px;
     /deep/.ant-tree li .ant-tree-node-content-wrapper {
-      width: 100%;
+      width: calc(100% - 24px);
       .ant-tree-title {
         width: 100%;
         // display: flex;
         // justify-content: space-between;
+      }
+    }
+    /deep/ .ant-tree {
+      .ant-space {
+        float: right;
+      }
+      .ant-btn-sm {
+        font-size: 12px;
       }
     }
   }

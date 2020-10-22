@@ -31,6 +31,8 @@ module.exports = {
       nextStep: '下一步',
       preStep: '上一步',
       submit: '提交',
+      success: '添加成功',
+      finish: '关闭'
     },
     HK: {
       

@@ -95,6 +95,12 @@ export default {
       return this.$store.state.setting.systemName
     }
   },
+  mounted () {
+    this.form.setFieldsValue({
+      name: 'admin',
+      password: '888888',
+    })
+  },
   methods: {
     ...mapMutations('account', ['setUser', 'setPermissions', 'setRoles']),
     onSubmit (e) {

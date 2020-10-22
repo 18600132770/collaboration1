@@ -7,7 +7,7 @@
     </a-steps>
     <div class="content">
       <ProjectForm v-if="current === 0" @nextStep="nextStep"></ProjectForm>
-      <FileTree v-if="current === 1" @nextStep="nextStep" @prevStep="prevStep"></FileTree>
+      <UploadFile v-if="current === 1" @nextStep="nextStep" @prevStep="prevStep"></UploadFile>
       <step3 v-if="current === 2" @prevStep="prevStep" @finish="finish"></step3>
     </div>
   </a-card>
@@ -15,13 +15,13 @@
 
 <script>
 import ProjectForm from './ProjectForm'
-import FileTree from './FileTree'
+import UploadFile from './UploadFile'
 import Step3 from './Step3'
 
 export default {
   name: 'StepForm',
   i18n: require('../i18n'),
-  components: {ProjectForm, FileTree, Step3},
+  components: {ProjectForm, UploadFile, Step3},
   data () {
     return {
       current: 0
@@ -44,7 +44,8 @@ export default {
       }
     },
     finish () {
-      this.current = 0
+      // this.current = 0
+      this.$emit('close')
     }
   }
 }

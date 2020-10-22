@@ -60,7 +60,7 @@ const options = {
           path: 'projectmgmt',
           name: '项目管理',
           meta: {
-            icon: 'table'
+            icon: 'project'
           },
           redirect: '/projectmgmt/list',
           component: PageView,
@@ -69,7 +69,7 @@ const options = {
               path: 'list',
               name: '项目列表',
               meta: {
-                icon: 'table',
+                icon: 'project',
                 invisible: true
               },
               component: () => import('@/pages/projectMgmt'),
@@ -80,7 +80,7 @@ const options = {
           path: 'collaboration',
           name: '专业协同',
           meta: {
-            icon: 'table'
+            icon: 'reconciliation'
           },
           redirect: '/collaboration/taskmgmt',
           component: PageView,
@@ -89,7 +89,7 @@ const options = {
               path: 'taskmgmt',
               name: '任务管理',
               meta: {
-                icon: 'table',
+                icon: 'reconciliation',
                 invisible: true
               },
               component: () => import('@/pages/collaboration'),

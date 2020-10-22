@@ -4,7 +4,7 @@
       <div class="operator">
         <AddProject></AddProject>
         <!-- <a-button @click="addNew" type="primary" icon="plus">{{$t('add')}}</a-button> -->
-        <a-input-search placeholder="input search text" style="width: 250px" @search="onSearch" />
+        <a-input-search :placeholder="$t('enterKeywords')" style="width: 250px" @search="onSearch" />
       </div>
       <standard-table
         :columns="columns"
