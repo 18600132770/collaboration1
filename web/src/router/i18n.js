@@ -11,7 +11,16 @@ module.exports = {
       dashboard: {
         name: 'Dashboard',
         workplace: {name: '工作台'},
-        analysis: {name: '分析頁'}
+        analysis: {name: '分析頁'},
+        datascreen: {name: '數據大屏'}
+      },
+      projectmgmt: {
+        name: '項目管理',
+        list: {name: '項目列表'}
+      },
+      collaboration: {
+        name: '專業協同',
+        taskmgmt: {name: '任務管理'}
       },
       form: {
         name: '表單頁',

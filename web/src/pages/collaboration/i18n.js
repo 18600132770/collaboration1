@@ -9,7 +9,6 @@ module.exports = {
       chiefEngineer: '总工',
       startTime: '开始时间',
       endTime: '结束时间',
-
       projectList: '项目列表',
       taskList: '任务列表',
       upperOrderData: '上序资料',
@@ -34,7 +33,22 @@ module.exports = {
       principal: '負責人',
       chiefEngineer: '總工',
       startTime: '開始時間',
-      endTime: '結束時間'
+      endTime: '結束時間',
+      projectList: '項目列表',
+      taskList: '任務列表',
+      upperOrderData: '上序資料',
+      preface: '提下序',
+      proFiles: '專業文件',
+      approve: '審批',
+      delete: '刪除',
+      taskName: '任務名稱',
+      taskLevel: '任務級別',
+      design: '設計',
+      review: '復核',
+      verify: '審核',
+      approval: '審定',
+      fileForReview: '送審文件',
+      operate: '操作'
     },
     US: {
       projectInfo: 'Project Info',
@@ -44,7 +58,22 @@ module.exports = {
       principal: 'Principal',
       chiefEngineer: 'Chief Engineer',
       startTime: 'Start Time',
-      endTime: 'End Time'
+      endTime: 'End Time',
+      projectList: 'Project List',
+      taskList: 'Task List',
+      upperOrderData: 'Upper Order Data',
+      preface: 'Preface',
+      proFiles: 'ProFiles',
+      approve: 'Approve',
+      delete: 'Delete',
+      taskName: 'TaskName',
+      taskLevel: 'TaskLevel',
+      design: 'Design',
+      review: 'Review',
+      verify: 'Verify',
+      approval: 'Approval',
+      fileForReview: 'File For Review',
+      operate: 'Operate'
     },
   }
 }

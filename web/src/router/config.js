@@ -75,7 +75,7 @@ const options = {
               component: () => import('@/pages/projectMgmt'),
             }
           ]
-        },//src\pages\collaboration\TaskMgmt.vue
+        },
         {
           path: 'collaboration',
           name: '专业协同',
