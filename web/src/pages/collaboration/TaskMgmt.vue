@@ -51,12 +51,12 @@
             <div>
               <div class="operator">
                 <div class="title">{{$t('taskList')}}</div>
-                <div>
+                <a-space>
                   <a-button @click="addNew" type="primary" icon="plus">新建任务</a-button>
                   <a-button icon="arrow-up">{{$t('upperOrderData')}}</a-button>
                   <a-button icon="arrow-down">{{$t('preface')}}</a-button>
                   <a-button icon="file">{{$t('proFiles')}}</a-button>
-                </div>
+                </a-space>
               </div>
               <standard-table
                 :columns="columns"
@@ -250,6 +250,9 @@ export default {
     .title {
       margin-bottom: 0;
       line-height: 2;
+    }
+    .space {
+      margin-left: 8px;
     }
   }
 </style>
