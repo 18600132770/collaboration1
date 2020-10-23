@@ -97,10 +97,27 @@ const options = {
           ]
         },
         {
+          path: 'staffworkinfo',
+          name: '人员工作信息',
+          meta: {
+            icon: 'solution'
+          },
+          component: PageView
+        },
+        {
+          path: 'personnelmgmt',
+          name: '人员管理',
+          meta: {
+            icon: 'team'
+          },
+          component: PageView
+        },
+        {
           path: 'form',
           name: '表单页',
           meta: {
             icon: 'form',
+            invisible: true
           },
           component: PageView,
           children: [
@@ -125,7 +142,8 @@ const options = {
           path: 'list',
           name: '列表页',
           meta: {
-            icon: 'table'
+            icon: 'table',
+            invisible: true
           },
           component: PageView,
           children: [
@@ -175,7 +193,8 @@ const options = {
           path: 'details',
           name: '详情页',
           meta: {
-            icon: 'profile'
+            icon: 'profile',
+            invisible: true
           },
           component: BlankView,
           children: [
@@ -196,6 +215,7 @@ const options = {
           name: '结果页',
           meta: {
             icon: 'check-circle-o',
+            invisible: true
           },
           component: PageView,
           children: [
@@ -216,6 +236,7 @@ const options = {
           name: '异常页',
           meta: {
             icon: 'warning',
+            invisible: true
           },
           component: BlankView,
           children: [
@@ -240,7 +261,8 @@ const options = {
           path: 'components',
           name: '内置组件',
           meta: {
-            icon: 'appstore-o'
+            icon: 'appstore-o',
+            invisible: true
           },
           component: PageView,
           children: [
