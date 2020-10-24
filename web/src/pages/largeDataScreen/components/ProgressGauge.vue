@@ -87,7 +87,7 @@ function initBarChart() {
 }
 
 function updateChart() {
-  let value = 45
+  let value = 81
   let title = '已完成'
 
   let option = {

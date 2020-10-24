@@ -80,21 +80,26 @@ function initBarChart() {
 }
 
 function updateChart() {
-  var NO2_data = [502, 205, 332, 281, 398, 214, 344]
-  var O3_data = [281, 398, 214, 179, 289, 356, 422]
+  var NO2_data = [4020, 4050, 3320, 2810, 3980, 4140, 3440, 3050, 3410, 2890, 3560, 3280 ]
+  var O3_data = [2810, 3980, 2140, 1790, 2890, 3560, 4220, 3560, 2381, 3220 ]
   var date_list = [
-    '2020-01',
-    '2020-02',
-    '2020-03',
-    '2020-04',
-    '2020-05',
-    '2020-06',
-    '2020-07',
+    '01',
+    '02',
+    '03',
+    '04',
+    '05',
+    '06',
+    '07',
+    '08',
+    '09',
+    '10',
+    '11',
+    '12',
   ]
 
   let option = {
     legend: {
-      data: ['项目一', '项目一'],
+      data: ['2019年', '2020年'],
       textStyle: {
         color: '#fff',
         align: 'right',
@@ -131,7 +136,7 @@ function updateChart() {
       },
     },
     grid: {
-      top: '5%',
+      top: '15%',
       left: '8%',
       right: '8%',
       bottom: '12%',
@@ -191,13 +196,13 @@ function updateChart() {
     ],
     series: [
       {
-        name: 'NO2',
+        name: '2019年',
         type: 'line',
         // smooth: true, //是否平滑
         showAllSymbol: true,
         // symbol: 'image://./static/images/guang-circle.png',
         symbol: 'circle',
-        symbolSize: 10,
+        symbolSize: 5,
         lineStyle: {
           normal: {
             color: '#6c50f3',
@@ -252,13 +257,13 @@ function updateChart() {
         data: NO2_data,
       },
       {
-        name: 'O3',
+        name: '2020年',
         type: 'line',
         // smooth: true, //是否平滑
         showAllSymbol: true,
         // symbol: 'image://./static/images/guang-circle.png',
         symbol: 'circle',
-        symbolSize: 10,
+        symbolSize: 5,
         lineStyle: {
           normal: {
             color: '#00ca95',

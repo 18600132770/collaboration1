@@ -84,27 +84,31 @@ function initBarChart() {
 }
 
 function updateChart() {
-  let data = [582, 421.2, 622.1, 625.3, 265, 224]
+  let data = [50,	42,	51,	6.3, 3]
+  let data1 = [81.69934641,	68.23529412,	86.77419355,	123.5294118,	88.23529412]
+  // let sum = [50,	42,	51,	6.3, 3].reduce((s, item) => {
+  //   return s + item
+  // }, 0)
   let indicator = [
     {
       name: '机械',
-      max: 1000,
+      max: 100,
     },
     {
       name: '人工',
-      max: 1000,
+      max: 100,
     },
     {
       name: '材料',
-      max: 1000,
+      max: 100,
     },
     {
       name: '其他成本',
-      max: 1000,
+      max: 100,
     },
     {
       name: '管理费',
-      max: 1000,
+      max: 100,
     }
   ]
 
@@ -145,14 +149,14 @@ function updateChart() {
     },
     series: [
       {
-        // name: '家庭融合包',
         type: 'radar',
-        data: [data],
+        data: [data1],
         // value:14,
         label: {
           show: true,
           formatter: function (params) {
-            return params.value + '万'
+            console.log(params)
+            return data[params.dimensionIndex] + '亿'
           },
           color: '#8E88FE',
           // position:[-20,-10,-10,-10],
@@ -170,124 +174,126 @@ function updateChart() {
           borderColor: '#F2F063',
         },
         areaStyle: {
-          color: '#7D77F1',
-          opacity: 0.6,
+          color: '#ff7e5f',
+          opacity: 0.3,
         },
+        zlevel: 100
       },
       {
         type: 'radar',
-        data: [[1000, 1000, 1000, 1000, 1000, 1000]],
+        data: [[100, 100, 100, 100, 100, 100]],
         symbol: 'none',
         lineStyle: {
-          width: 0,
+          width: 1,
+          opacity: 0.3
         },
         itemStyle: {
-          color: '#4175F5',
+          color: '#56ab2f',
         },
 
         areaStyle: {
-          color: '#4175F5',
-          opacity: 0.06,
-        },
-      },
-      {
-        type: 'radar',
-        data: [[900, 900, 900, 900, 900, 900]],
-
-        symbol: 'none',
-        lineStyle: {
-          width: 0,
-        },
-        itemStyle: {
-          color: '#2C72C8',
-        },
-
-        areaStyle: {
-          color: '#2C72C8',
-          opacity: 0.12,
-        },
-      },
-      {
-        type: 'radar',
-        data: [[800, 800, 800, 800, 800, 800]],
-
-        symbol: 'none',
-        lineStyle: {
-          width: 0,
-        },
-        itemStyle: {
-          color: '#4175F5',
-        },
-
-        areaStyle: {
-          color: '#4175F5',
-          opacity: 0.18,
-        },
-      },
-      {
-        type: 'radar',
-        data: [[700, 700, 700, 700, 700, 700]],
-
-        symbol: 'none',
-        lineStyle: {
-          width: 0,
-        },
-        itemStyle: {
-          color: '#4175F5',
-        },
-
-        areaStyle: {
-          color: '#4175F5',
-          opacity: 0.19,
-        },
-      },
-      {
-        type: 'radar',
-        data: [[600, 600, 600, 600, 600, 600]],
-
-        symbol: 'none',
-        lineStyle: {
-          width: 0,
-        },
-        itemStyle: {
-          color: '#4175F5',
-        },
-
-        areaStyle: {
-          color: '#4175F5',
-          opacity: 0.17,
-        },
-      },
-      {
-        type: 'radar',
-        data: [[500, 500, 500, 500, 500, 500]],
-        symbol: 'none',
-        lineStyle: {
-          width: 0,
-        },
-        itemStyle: {
-          color: '#4175F5',
-        },
-
-        areaStyle: {
-          color: '#4175F5',
+          color: '#56ab2f',
           opacity: 0.16,
         },
       },
       {
         type: 'radar',
-        data: [[400, 400, 400, 400, 400, 400]],
+        data: [[90, 90, 90, 90, 90, 90]],
 
         symbol: 'none',
         lineStyle: {
           width: 0,
         },
         itemStyle: {
-          color: '#4175F5',
+          color: '#2C72C8',
         },
 
         areaStyle: {
-          color: '#4175F5',
+          color: '#56ab2f',
+          opacity: 0.12,
+        },
+      },
+      {
+        type: 'radar',
+        data: [[80, 80, 80, 80, 80, 80]],
+
+        symbol: 'none',
+        lineStyle: {
+          width: 0,
+        },
+        itemStyle: {
+          color: '#56ab2f',
+        },
+
+        areaStyle: {
+          color: '#56ab2f',
+          opacity: 0.18,
+        },
+      },
+      {
+        type: 'radar',
+        data: [[70, 70, 70, 70, 70, 70]],
+
+        symbol: 'none',
+        lineStyle: {
+          width: 0,
+        },
+        itemStyle: {
+          color: '#56ab2f',
+        },
+
+        areaStyle: {
+          color: '#56ab2f',
+          opacity: 0.19,
+        },
+      },
+      {
+        type: 'radar',
+        data: [[60, 60, 60, 60, 60, 60]],
+
+        symbol: 'none',
+        lineStyle: {
+          width: 0,
+        },
+        itemStyle: {
+          color: '#56ab2f',
+        },
+
+        areaStyle: {
+          color: '#56ab2f',
+          opacity: 0.17,
+        },
+      },
+      {
+        type: 'radar',
+        data: [[50, 50, 50, 50, 50, 50]],
+        symbol: 'none',
+        lineStyle: {
+          width: 0,
+        },
+        itemStyle: {
+          color: '#56ab2f',
+        },
+
+        areaStyle: {
+          color: '#56ab2f',
+          opacity: 0.16,
+        },
+      },
+      {
+        type: 'radar',
+        data: [[40, 40, 40, 40, 40, 40]],
+
+        symbol: 'none',
+        lineStyle: {
+          width: 0,
+        },
+        itemStyle: {
+          color: '#56ab2f',
+        },
+
+        areaStyle: {
+          color: '#56ab2f',
           opacity: 0.13,
         },
       },

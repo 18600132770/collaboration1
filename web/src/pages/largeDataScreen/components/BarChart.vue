@@ -81,6 +81,9 @@ function initBarChart () {
 }
 
 function updateChart () {
+  let data = [9, 19, 18, 16, 15, 15, 13, 12].reverse()
+  let data1 = [161, 186, 181, 175, 160, 152, 140, 123].reverse()
+
   let option = {
     // backgroundColor: '#031245',
     "textStyle": {
@@ -118,7 +121,7 @@ function updateChart () {
         "left": 20,
         "right": 20,
         "bottom": 10,
-        "top": 20
+        "top": 30
     },
     "xAxis": {
         "nameTextStyle": {
@@ -149,14 +152,15 @@ function updateChart () {
             },
             "show": true
         },
-        "data": ["2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08"],
+        "data": ["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"].reverse(),
         "type": "category"
     },
     "yAxis": {
+        "name": "亿元",
         "nameTextStyle": {
             "color": "#c0c3cd",
-            "padding": [0, 0, -10, 0],
-            "fontSize": 14
+            "padding": [0, 0, -10, -15],
+            "fontSize": 10
         },
         "axisLabel": {
             "color": "#c0c3cd",
@@ -183,11 +187,10 @@ function updateChart () {
                 "type": "dashed"
             },
             "show": true
-        },
-        "name": ""
+        }
     },
     "series": [{
-        "data": [200, 85, 112, 275, 305, 415, 741, 405],
+        "data": data,
         "type": "bar",
         "barMaxWidth": "auto",
         "barWidth": 20,
@@ -212,7 +215,8 @@ function updateChart () {
             "show": true,
             "position": "top",
             "distance": 10,
-            "color": "#fff"
+            "color": "#fff",
+            fontSize: 12
         }
     }, {
         "data": [1, 1, 1, 1, 1, 1, 1, 1],
@@ -222,7 +226,7 @@ function updateChart () {
         "symbolOffset": [0, "50%"],
         "symbolSize": [20, 12]
     }, {
-        "data": [200, 85, 112, 275, 305, 415, 741, 405],
+        "data": data,
         "type": "pictorialBar",
         "barMaxWidth": "20",
         "symbolPosition": "end",
@@ -231,7 +235,7 @@ function updateChart () {
         "symbolSize": [20, 10],
         "zlevel": 2
     }, {
-        "data": [741, 741, 741, 741, 741, 741, 741, 741],
+        "data": data1,
         "type": "bar",
         "barMaxWidth": "auto",
         "barWidth": 20,
@@ -246,14 +250,21 @@ function updateChart () {
         "symbolSize": [20, 12],
         "zlevel": -2
     }, {
-        "data": [741, 741, 741, 741, 741, 741, 741, 741],
+        "data": data1,
         "type": "pictorialBar",
         "barMaxWidth": "20",
         "symbolPosition": "end",
         "symbol": "diamond",
         "symbolOffset": [0, "-50%"],
         "symbolSize": [20, 10],
-        "zlevel": -1
+        "zlevel": -1,
+        "label": {
+            "show": true,
+            "position": "top",
+            "distance": 10,
+            "color": "#fff",
+            fontSize: 12
+        }
     }],
     "tooltip": {
       "trigger": "axis",

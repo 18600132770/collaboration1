@@ -81,7 +81,7 @@ function initBarChart () {
 }
 
 function updateChart () {
-  var salvProName =["安徽项目","河南项目","浙江项目","湖北项目","贵州项目","江西项目","江苏项目","四川项目"];
+  var salvProName =["京广高速","渤海大桥","央视二号楼","雄安城轨","贵阳地铁","京西污水厂","长江疏浚","北京七环"];
   var salvProValue =[100,81,54,44,35,17,74,72];
   var salvProMax =[];//背景按最大值
   for (let i = 0; i < salvProValue.length; i++) {
@@ -158,7 +158,10 @@ function updateChart () {
                 },
             },
             barWidth: 10,
-            data: salvProValue
+            data: salvProValue,
+            label: {
+              formatter: '{b}%'
+            }
         },
         {
             name: '背景',

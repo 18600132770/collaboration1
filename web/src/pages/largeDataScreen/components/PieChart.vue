@@ -86,42 +86,45 @@ function initBarChart() {
 function updateChart() {
   var seriesData = [
     {
-      name: '项目一',
+      name: '铁路',
       value: '40000',
     },
     {
-      name: '项目二',
+      name: '轨道交通',
       value: '40000',
     },
     {
-      name: '项目三',
+      name: '市政',
       value: '53000',
     },
     {
-      name: '项目四',
+      name: '路桥',
       value: '40000',
     },
     {
-      name: '项目五',
+      name: '房建',
       value: '60000',
     },
     {
-      name: '项目六',
+      name: '环保',
       value: '10000',
     },
     {
-      name: '项目七',
+      name: '水运',
       value: '20000',
     },
   ]
-  var legendData = ['项目一', '项目二', '项目三', '项目四', '项目五', '项目六', '项目七']
+  seriesData = seriesData.sort(function (a, b) {
+    return a.value - b.value
+  })
+  var legendData = ['铁路', '轨道交通', '市政', '路桥', '房建', '环保', '水运']
   var colorList = [
+    '#FDB36A',
     '#73DDFF',
     '#73ACFF',
     '#FDD56A',
-    '#FDB36A',
-    '#FD866A',
     '#9E87FF',
+    '#FD866A',
     '#58D5FF',
   ]
   let option = {

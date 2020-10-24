@@ -1,22 +1,24 @@
 <template>
   <div class="container">
     <header class="header">
-      <span>工程建设中心</span>
+      <span>智慧运营管理中心</span>
     </header>
     <section class="main">
       <div class="left">
         <div class="chart-container">
-          <header>项目完成度</header>
+          <header>目标管理</header>
           <section>
             <ProgressGauge class="width-50"></ProgressGauge>
             <div class="remaining-days">
-              <div>剩余天数</div>
-              <div><span>234</span> 天</div>
+              <div>目标营业收入</div>
+              <div><span>200</span> 亿</div>
+              <div>已完成营业收入</div>
+              <div><span>161.781</span> 亿</div>
             </div>
           </section>
         </div>
         <div class="chart-container">
-          <header>项目月总投入</header>
+          <header>经营状况（净利润/营业收入）</header>
           <section>
             <BarChart></BarChart>
           </section>
@@ -32,17 +34,17 @@
         <div class="chart-container total-card">
           <div class="card-item">
             <div>
-              总投入<span>1234</span>万元
+              合同总额<span>328</span>亿元
             </div>
           </div>
           <div class="card-item">
             <div>
-              项目数量<span>7</span>个
+              项目数量<span>715</span>个
             </div>
           </div>
           <div class="card-item">
             <div>
-              计划<span>1000</span>天
+              员工人数<span>4280</span>人
             </div>
           </div>
         </div>
@@ -53,19 +55,19 @@
       </div>
       <div class="right">
         <div class="chart-container">
-          <header>项目进度</header>
+          <header>重点项目</header>
           <section>
             <VerBarChart></VerBarChart>
           </section>
         </div>
         <div class="chart-container">
-          <header>投入占比</header>
+          <header>行业板块占比</header>
           <section>
             <PieChart></PieChart>
           </section>
         </div>
         <div class="chart-container">
-          <header>费用分类</header>
+          <header>成本分析</header>
           <section>
             <RadarChart></RadarChart>
           </section>
@@ -195,13 +197,15 @@ export default {
     > div {
       width: 100%;
       color: @chart-title-color;
-      padding: 10px 0;
-      font-size: 20px;
+      padding: 0;
+      font-size: 16px;
       font-weight: 600;
-      &:last-child {
-        text-align: center;
+      &:last-child, &:nth-child(2){
+        text-align: right;
+        margin-right: 35px;
       }
       span {
+        text-align: center;
         font-size: 30px;
       }
     }
