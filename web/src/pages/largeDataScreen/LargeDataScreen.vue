@@ -7,15 +7,29 @@
       <div class="left">
         <div class="chart-container">
           <header>目标管理</header>
-          <section>
-            <ProgressGauge class="width-50"></ProgressGauge>
-            <div class="remaining-days">
-              <div>目标营业收入</div>
-              <div><span>200</span> 亿</div>
-              <div>已完成营业收入</div>
-              <div><span>161.781</span> 亿</div>
+          <!-- height: calc(100% - 30px); -->
+          <!-- <a-carousel :autoplay="true">
+            <div> -->
+              <section class="circle-pregress">
+                <ProgressGauge class="width-50"></ProgressGauge>
+                <div class="remaining-days">
+                  <div>目标营业收入</div>
+                  <div><span>200</span> 亿</div>
+                  <div>已完成营业收入</div>
+                  <div><span>161.781</span> 亿</div>
+                </div>
+              </section>
+            <!-- </div>
+            <div>
+              <section class="circle-pregress">
+                <ProgressGauge1 class="width-50"></ProgressGauge1>
+                <div class="remaining-days">
+                  <div>总合同额</div>
+                  <div><span>483</span> 亿</div>
+                </div>
+              </section>
             </div>
-          </section>
+          </a-carousel> -->
         </div>
         <div class="chart-container">
           <header>经营状况（净利润/营业收入）</header>
@@ -83,6 +97,7 @@ import ChinaMap from './components/ChinaMap'
 import LineChart from './components/LineChart'
 import VerBarChart from './components/VerBarChart'
 import ProgressGauge from './components/ProgressGauge'
+// import ProgressGauge1 from './components/ProgressGauge1'
 import PieChart from './components/PieChart'
 import RadarChart from './components/RadarChart'
 
@@ -94,6 +109,7 @@ export default {
     LineChart,
     VerBarChart,
     ProgressGauge,
+    // ProgressGauge1,
     PieChart,
     RadarChart
   },
@@ -151,10 +167,11 @@ export default {
             font-weight: 600;
             font-size: 18px;
           }
-          section {
+          section.circle-pregress {
             width: 100%;
             height: calc(100% - 46px);
             display: flex;
+            
           }
         }
         // border: 1px solid #ddd;
@@ -179,6 +196,9 @@ export default {
           flex: 1;
         }
       }
+    }
+    /deep/ .ant-carousel .slick-dots {
+      display: none !important;
     }
   }
 

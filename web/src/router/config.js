@@ -300,6 +300,11 @@ const options = {
       path: '/largedatascreen',
       name: '数据可视化系统',
       component: () => import('@/pages/largeDataScreen')
+    },
+    {
+      path: '/projectdatascreen',
+      name: '项目信息可视化',
+      component: () => import('@/pages/largeDataScreen/ProjectDataScreen')
     }
   ]
 }

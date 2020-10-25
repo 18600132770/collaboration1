@@ -1,6 +1,6 @@
 
 <template>
-  <div id="progress-gauge" :style="{ height: height, width: width }"></div>
+  <div id="progress-gauge1" :style="{ height: height, width: width }"></div>
 </template>
 
 <script>
@@ -8,8 +8,11 @@
 import echarts from 'echarts'
 
 export default {
-  name: 'ProgressGauge',
+  name: 'ProgressGauge1',
   props: {
+    id: {
+      type: String
+    },
     percentData: {
       type: Object,
       // required: true
@@ -79,7 +82,7 @@ export default {
 }
 
 function initBarChart() {
-  this.myChart = echarts.init(document.getElementById('progress-gauge'))
+  this.myChart = echarts.init(document.getElementById('progress-gauge1'))
 
   setTimeout(this.startTimer, 0)
 
@@ -87,7 +90,7 @@ function initBarChart() {
 }
 
 function updateChart() {
-  let value = 81
+  let value = 45
   let title = '已完成'
 
   let option = {
@@ -273,7 +276,7 @@ function onResize() {
 </script>
 
 <style lang="less" scoped>
-  #progress-gauge {
+  #progress-gauge1 {
     height: 180px !important;
     > div {
       height: 100%;
