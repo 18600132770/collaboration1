@@ -79,7 +79,8 @@
         </a-col>
         <a-col class="gutter-row" :span="8">
           <div class="gutter-box">
-            https://gallery.echartsjs.com/editor.html?c=xnUHWTiDTY&v=3
+            <!-- https://gallery.echartsjs.com/editor.html?c=xnUHWTiDTY&v=3 -->
+            <ProjectProgress></ProjectProgress>
           </div>
         </a-col>
       </a-row>
@@ -92,8 +93,16 @@
           </div>
         </a-col>
         <a-col class="gutter-row" :span="16">
-          <div class="gutter-box">
-            col-6
+          <div class="gutter-box bg-transparent">
+            <a-row style="height: 100%;">
+              <!-- 绩表 -->
+              <a-col :span="10" style="height: 100%;">
+                <PerformanceTimeline></PerformanceTimeline>
+              </a-col>
+              <a-col :span="14" style="height: 100%;">
+                <ScrollList></ScrollList>
+              </a-col>
+            </a-row>
           </div>
         </a-col>
       </a-row>
@@ -105,13 +114,13 @@
           </div>
         </a-col>
         <a-col class="gutter-row" :span="8">
-          <div class="gutter-box">
-            col-6
+          <div class="gutter-box bg-transparent">
+            <NewsScrollList></NewsScrollList>
           </div>
         </a-col>
         <a-col class="gutter-row" :span="8">
-          <div class="gutter-box">
-            col-6
+          <div class="gutter-box bg-transparent">
+            <InfoAnnouncements></InfoAnnouncements>
           </div>
         </a-col>
       </a-row>
@@ -121,8 +130,22 @@
 
 <script>
 import PieLineChart from './components/PieLineChart'
+import PerformanceTimeline from './components/PerformanceTimeline'
+import ScrollList from './components/ScrollList'
+import InfoAnnouncements from './components/InfoAnnouncements'
+import NewsScrollList from './components/NewsScrollList'
+import ProjectProgress from './components/ProjectProgress'
+
+
 export default {
-  components: {PieLineChart}
+  components: {
+    PieLineChart, 
+    PerformanceTimeline, 
+    ScrollList, 
+    InfoAnnouncements,
+    NewsScrollList,
+    ProjectProgress
+  }
 }
 </script>
 
@@ -170,17 +193,17 @@ export default {
         .gutter-box {
           height: 100%;
           background-color: #2E3347;
-          height: 20vh;
+          height: 19vh;
         }
         &:last-child {
           margin-bottom: 0;
         }
       }
       .card.row-2 .gutter-box {
-        height: 29vh;
+        height: 27vh;
       }
       .card.row-3 .gutter-box {
-        height: 37vh;
+        height: 36vh;
       }
       .card.row-1 {
         .gutter-box {
@@ -237,6 +260,24 @@ export default {
         top: 7%;
         color: #fff; 
         font-weight: 600; 
+      }
+    }
+  }
+
+ @media screen and (min-width: 1920px) {
+    .container {
+      section.section {
+        .card {
+          .gutter-box {
+            height: 20vh;
+          }
+        }
+        .card.row-2 .gutter-box {
+          height: 28vh;
+        }
+        .card.row-3 .gutter-box {
+          height: 39vh;
+        }
       }
     }
   }

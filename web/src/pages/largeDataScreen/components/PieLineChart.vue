@@ -94,7 +94,7 @@ function updateChart() {
   ]
 
    var datas = {
-     value: 78,
+     value: 95,
      company: "%",
      ringColor: [{
          offset: 0,
@@ -155,8 +155,8 @@ function updateChart() {
     },
     grid: {
       top: '15%',
-      left: '0%',
-      right: '0%',
+      left: '10',
+      right: '10',
       bottom: '12%',
       // containLabel: true
     },
