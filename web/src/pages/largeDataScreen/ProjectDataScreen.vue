@@ -79,7 +79,7 @@
         </a-col>
         <a-col class="gutter-row" :span="8">
           <div class="gutter-box">
-            col-6
+            https://gallery.echartsjs.com/editor.html?c=xnUHWTiDTY&v=3
           </div>
         </a-col>
       </a-row>
@@ -87,7 +87,7 @@
       <a-row :gutter="16" class="card row-2">
         <a-col class="gutter-row" :span="8">
           <div class="gutter-box bg-transparent" style="position: relative;">
-            <div style="font-size: 14px; position: absolute; left: 25%; top: 7%;color: #fff; font-weight: 600;">进度折线图</div>
+            <div class="line-chart-title">进度折线图</div>
             <PieLineChart></PieLineChart>
           </div>
         </a-col>
@@ -136,8 +136,8 @@ export default {
 
   .container {
     padding: 15px 20px;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: #24293D;
     .header {
       height: @header-height;
@@ -158,7 +158,7 @@ export default {
         span {
           font-size: 28px;
           font-weight: 600;
-          color: #ffffff;
+          color: @chart-title-color;
           margin-left: 20px;
         }
       }
@@ -172,12 +172,15 @@ export default {
           background-color: #2E3347;
           height: 20vh;
         }
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
       .card.row-2 .gutter-box {
-        height: 25vh;
+        height: 29vh;
       }
       .card.row-3 .gutter-box {
-        height: 36vh;
+        height: 37vh;
       }
       .card.row-1 {
         .gutter-box {
@@ -226,6 +229,14 @@ export default {
             }
           }
         }
+      }
+      .line-chart-title {
+        font-size: 14px; 
+        position: absolute; 
+        left: 25%; 
+        top: 7%;
+        color: #fff; 
+        font-weight: 600; 
       }
     }
   }
