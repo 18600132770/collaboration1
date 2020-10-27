@@ -277,7 +277,7 @@ function loadMarkers () {
       }
     }
     .section {
-      padding: 10px 0;
+      padding: 12px 0;
       .card {
         margin-bottom: 16px;
         .gutter-box {
@@ -379,6 +379,35 @@ function loadMarkers () {
         }
         .card.row-3 .gutter-box {
           height: 39vh;
+        }
+        .card.row-1 {
+          .gutter-box {
+            /deep/ .main-num {
+              .ant-statistic-title {
+                font-size: 18px;
+                color: #EFF4F9;
+              }
+              .ant-statistic-content-value {
+                font-size: 38px;
+              }
+            }
+            /deep/ .sub {
+              height: 50%;
+              .ant-statistic-title {
+                font-size: 14px;
+                margin-bottom: 10px;
+              }
+              .ant-statistic-content-value {
+                font-size: 18px;
+                color: #EFF4F9;
+                margin-top: 20px;
+              }
+              .ant-statistic-content-suffix {
+                color: #EFF4F9;
+                font-size: 12px;
+              }
+            }
+          }
         }
       }
     }

@@ -3,8 +3,8 @@
  * @Description: 高德地图
  * @Author: chenfengtao
  * @Date: 2020-08-17 14:44:34
- * @LastEditors: chenfengtao
- * @LastEditTime: 2020-10-27 10:49:24
+ * @LastEditors: supercheney
+ * @LastEditTime: 2020-10-27 21:17:00
 -->
 <template>
   <div id="map-container"></div>
@@ -13,6 +13,8 @@
 <script>
 // https://lbs.amap.com/
 import AMapLoader from '@amap/amap-jsapi-loader'
+
+import markerIcon from '@/assets/img/bigscreen/marker.png'
 
 export default {
   name: 'BaseMap',
@@ -72,7 +74,7 @@ function initMap () {
       _this.map = new AMap.Map('map-container', {
         zoom: 5,
         center: [108.93, 34.27],
-        mapStyle: 'amap://styles/darkblue', //设置地图的显示样式
+        mapStyle: 'amap://styles/blue', //设置地图的显示样式 https://lbs.amap.com/api/javascript-api/example/personalized-map/set-theme-style/?sug_index=0
       })
 
       // 缩放组件
@@ -115,7 +117,7 @@ function addMarker (data) {
   const _this = this
   var marker = new window.AMap.Marker({
     position: lnglat,
-    // icon: type === '事件' ? event : place,
+    icon: markerIcon, // type === '事件' ? event : place,
     // offset: new window.AMap.Pixel(-20, -35),
     label: {
       content: `<div class="marker-label">${name}</div>`,
@@ -210,20 +212,20 @@ function initInfoWindow () {
   background-color: white;
   white-space: nowrap;
   cursor: default;
-  margin-left: -5px;
-  padding: 0 12px 0 16px;
-  font-size: 13px;
+  margin-left: 8px;
+  padding: 0 12px 0 12px;
+  font-size: 12px;
   height: 20px;
   line-height: 20px;
   border-radius: 10px;
   vertical-align: middle;
-  font-weight: bold;
-  border: 1px solid #a62b1d;
+  // font-weight: bold;
+  border: 1px solid #DBB019;
 }
-.amap-marker-label:hover {
-  background: #a62b1d;
-  color: #fff;
-}
+// .amap-marker-label:hover {
+//   background: #a62b1d;
+//   color: #fff;
+// }
 .amap-info-content {
   padding: 20px 10px 10px 10px;
 }
