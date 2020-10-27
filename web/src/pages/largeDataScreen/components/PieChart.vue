@@ -114,6 +114,36 @@ function updateChart() {
       value: '20000',
     },
   ]
+  var seriesData1 = [
+    {
+      name: '房建',
+      value: '30000',
+    },
+    {
+      name: '铁路',
+      value: '20000',
+    },
+    {
+      name: '轨道交通',
+      value: '20000',
+    },
+    {
+      name: '市政',
+      value: '33000',
+    },
+    {
+      name: '路桥',
+      value: '20000',
+    },
+    {
+      name: '水运',
+      value: '10000',
+    },
+    {
+      name: '环保',
+      value: '5000',
+    }
+  ]
   seriesData = seriesData.sort(function (a, b) {
     return a.value - b.value
   })
@@ -128,15 +158,25 @@ function updateChart() {
     '#58D5FF',
   ]
   let option = {
-    title: {
-      text: '项目',
-      x: 'center',
-      y: 'center',
-      textStyle: {
-        color: '#fff',
-      },
-    },
+    title:[{
+      subtext: '合同额',
+      left: '25%',
+      top: '78%',
+      textAlign: 'center',
+      subtextStyle:{
+        color: '#fff'
+      }
+    }, {
+      subtext: '净利润',
+      left: '75%',
+      top: '78%',
+      textAlign: 'center',
+      subtextStyle:{
+        color: '#fff'
+      }
+    }],
     tooltip: {
+      show: true,
       trigger: 'item',
       borderColor: 'rgba(255,255,255,.3)',
       backgroundColor: 'rgba(13,5,30,.6)',
@@ -148,7 +188,7 @@ function updateChart() {
           '' +
           parms.data.name +
           '</br>' +
-          '投入：' +
+          '合同额：' +
           parms.data.value +
           '万元</br>' +
           '占比：' +
@@ -173,11 +213,11 @@ function updateChart() {
       {
         type: 'pie',
         z: 3,
-        center: ['50%', '50%'],
-        radius: ['25%', '45%'],
+        center: ['25%', '50%'],
+        radius: ['28%', '45%'],
         clockwise: true,
-        avoidLabelOverlap: true,
-        hoverOffset: 15,
+        avoidLabelOverlap: false,
+        hoverOffset: 10,
         itemStyle: {
           normal: {
             color: function (params) {
@@ -186,88 +226,94 @@ function updateChart() {
           },
         },
         label: {
-          show: true,
-          position: 'outside',
-          formatter: '{a|{d}%}\n{hr|}',
-          rich: {
-            hr: {
-              backgroundColor: 't',
-              borderRadius: 3,
-              width: 3,
-              height: 3,
-              padding: [3, 3, 0, -12],
-            },
-            a: {
-              padding: [-30, 15, -20, 15],
-            },
+          show: false,
+          position: 'center',
+          formatter: function (parms) {
+            var str =
+              parms.data.name +
+              '\n' +
+              // '合同额：' +
+              parms.data.value +
+              '万元\n' +
+              // '占比：' +
+              parms.percent +
+              '%'
+            return str
           },
         },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '10',
+            fontWeight: 'bold'
+          }
+        },
         labelLine: {
-          normal: {
-            length: 20,
-            length2: 30,
-            lineStyle: {
-              width: 1,
-            },
-          },
+          show: false,
         },
         data: seriesData,
       },
       {
-        name: '第一层环',
         type: 'pie',
-        z: 2,
-        tooltip: {
-          show: false,
-        },
-        center: ['50%', '50%'],
-        radius: ['45%', '58%'],
-        hoverAnimation: false,
-        clockWise: false,
+        z: 3,
+        center: ['75%', '50%'],
+        radius: ['28%', '45%'],
+        clockwise: true,
+        avoidLabelOverlap: false,
+        hoverOffset: 10,
         itemStyle: {
           normal: {
-            // shadowBlur: 40,
-            // shadowColor: 'rgba(0, 255, 255,.3)',
-            color: 'rgba(1,15,80,.4)',
-          },
-          emphasis: {
-            color: 'rgba(1,15,80,.4)',
+            color: function (params) {
+              return colorList[params.dataIndex]
+            },
           },
         },
         label: {
           show: false,
-        },
-        data: [100],
-      },
-      {
-        name: '第二层环',
-        type: 'pie',
-        z: 1,
-        tooltip: {
-          show: false,
-        },
-        center: ['50%', '50%'],
-        radius: ['58%', '76%'],
-        hoverAnimation: false,
-        clockWise: false,
-        itemStyle: {
-          normal: {
-            // shadowBlur: 40,
-            // shadowColor: 'rgba(0, 255, 255,.3)',
-            color: 'rgba(0,15,69,.2)',
-          },
-          emphasis: {
-            color: 'rgba(0,15,69,.2)',
+          position: 'center',
+          formatter: function (parms) {
+            var str =
+              parms.data.name +
+              '\n' +
+              // '合同额：' +
+              parms.data.value +
+              '万元\n' +
+              // '占比：' +
+              parms.percent +
+              '%'
+            return str
           },
         },
-        label: {
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '10',
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
           show: false,
         },
-        data: [100],
-      },
+        data: seriesData1.sort(function (a, b) {
+          return a.value - b.value
+        }),
+      }
     ],
   }
   this.myChart.setOption(option, false)
+
+  /* const _this = this
+  let dataIndex = 0
+  setInterval(function () {
+    if (dataIndex > legendData.length - 1) {
+      dataIndex = 0
+    }
+    _this.myChart.dispatchAction({
+      type: 'showTip', // 触发的行为
+      dataIndex: dataIndex++
+    })
+    console.log('00', dataIndex)
+  }, 3000) */
 }
 
 function onResize() {

@@ -104,7 +104,6 @@ function updateChart() {
   var mapFeatures = echarts.getMap('china').geoJson.features
   //  console.log(mapFeatures)
   mapFeatures.forEach(function (v) {
-    console.info(v)
     // 地区名称
     var name = v.properties.name
     // 地区经纬度

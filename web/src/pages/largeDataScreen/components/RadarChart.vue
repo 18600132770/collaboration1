@@ -155,7 +155,6 @@ function updateChart() {
         label: {
           show: true,
           formatter: function (params) {
-            console.log(params)
             return data[params.dimensionIndex] + '亿'
           },
           color: '#8E88FE',

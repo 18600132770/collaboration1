@@ -70,8 +70,7 @@ export default {
     // 初始化柱状图
     initBarChart,
     updateChart,
-    onResize,
-    startTimer
+    onResize
   },
   beforeDestroy() {
     this.myChart && this.myChart.clear()
@@ -84,187 +83,96 @@ export default {
 function initBarChart() {
   this.myChart = echarts.init(document.getElementById('progress-gauge1'))
 
-  setTimeout(this.startTimer, 0)
-
   this.updateChart()
 }
 
 function updateChart() {
-  let value = 45
-  let title = '已完成'
+  const handred = 100
+  let point = 80.8
 
   let option = {
     title: {
-      text: `${title}\n${value}%`,
+      text: '已完成\n' + point + '%',
       x: 'center',
       y: 'center',
       textStyle: {
-        fontSize: 15,
-        color: '#ffffff',
+        fontWeight: 'normal',
+        color: '#15A3FF',
+        fontSize: '18',
       },
     },
+    tooltip: {
+      show: false,
+      formatter: function (params) {
+        return params.name + '：' + params.percent + ' %'
+      },
+    },
+    legend: {
+      show: false,
+      itemGap: 12,
+      data: ['占比', '剩余'],
+    },
+
     series: [
       {
-        type: 'gauge',
-        radius: '40%',
-        clockwise: false,
-        startAngle: '-80',
-        endAngle: '-439.9999',
-        splitNumber: 25,
-        detail: {
-          offsetCenter: [0, -20],
-          formatter: ' ',
-        },
-        pointer: {
-          show: false,
-        },
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: [
-              [0, '#2CFAFC'],
-              [50 / 100, '#00FFFF'],
-              [1, '#0E192D'],
-            ],
-            width: 6,
-          },
-        },
-        axisTick: {
-          show: false,
-        },
-        splitLine: {
-          show: true,
-          length: 32,
-          lineStyle: {
-            color: '#0E192D',
-            width: 6,
-          },
-        },
-        axisLabel: {
-          show: false,
-        },
-      },
-      {
-        name: '最内层虚线圈',
+        name: 'circle',
         type: 'pie',
-        radius: ['24%', '25%'],
-        hoverAnimation: false,
-        clockWise: false,
+        clockWise: true,
+        radius: ['50%', '66%'],
         itemStyle: {
           normal: {
-            color: 'red',
+            label: {
+              show: false,
+            },
+            labelLine: {
+              show: false,
+            },
           },
         },
-        label: {
-          show: false,
-        },
-        data: setdata(),
-      },
-      {
-        type: 'pie',
-        name: '内层细圆环',
-        radius: ['31%', '31.5%'],
         hoverAnimation: false,
-        clockWise: false,
-        itemStyle: {
-          normal: {
-            color: '#00FFFF',
+        data: [
+          {
+            value: point,
+            name: '占比',
+            itemStyle: {
+              normal: {
+                color: {
+                  // 颜色渐变
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: '#4FADFD', // 0% 处的颜色
+                    },
+                    {
+                      offset: 1,
+                      color: '#15A3FF', // 100% 处的颜色1
+                    },
+                  ],
+                },
+                label: {
+                  show: false,
+                },
+                labelLine: {
+                  show: false,
+                },
+              },
+            },
           },
-        },
-        label: {
-          show: false,
-        },
-        data: [100],
-      },
-      {
-        type: 'pie',
-        name: '外层细圆环',
-        radius: ['41%', '42%'],
-        hoverAnimation: false,
-        clockWise: false,
-        itemStyle: {
-          normal: {
-            color: '#00FFFF',
+          {
+            name: '剩余',
+            value: handred - point,
+            itemStyle: {
+              normal: {
+                color: 'rgba(255, 255, 255, .3)',
+              },
+            },
           },
-        },
-        label: {
-          show: false,
-        },
-        data: [100],
-      },
-      {
-        name: '大环',
-        type: 'gauge',
-        splitNumber: 35,
-        radius: '52%',
-        center: ['50%', '50%'],
-        startAngle: 90,
-        endAngle: -269.9999,
-        axisLine: {
-          show: false,
-          lineStyle: {
-            color: [[1, '#00FFFF']],
-          },
-        },
-        axisTick: {
-          show: false,
-        },
-        splitLine: {
-          show: true,
-          length: 6,
-          lineStyle: {
-            color: 'auto',
-            width: 1.5,
-          },
-        },
-        axisLabel: {
-          show: false,
-        },
-        detail: {
-          show: false,
-        },
+        ],
       },
     ],
   }
-  this.myChart.setOption(option, false)
-}
 
-function setdata() {
-  let dataArr = []
-  for (var i = 0; i < 100; i++) {
-    if (i % 2 === 0) {
-      dataArr.push({
-        name: (i + 1).toString(),
-        value: 10,
-        itemStyle: {
-          normal: {
-            color: 'rgb(0,255,255,.3)',
-          },
-        },
-      })
-    } else {
-      dataArr.push({
-        name: (i + 1).toString(),
-        value: 100,
-        itemStyle: {
-          normal: {
-            color: 'rgb(0,0,0,0)',
-            borderWidth: 0,
-            borderColor: 'rgba(0,255,255,1)',
-          },
-        },
-      })
-    }
-  }
-  return dataArr
-}
-function startTimer() {
-  const _this = this
-  this.timer = setInterval(() => {
-    let option = _this.myChart.getOption()
-    option.series[1].startAngle = option.series[1].startAngle - 1
-    _this.myChart.setOption(option)
-  }, 100)
+  this.myChart.setOption(option, false)
 }
 
 function onResize() {

@@ -69,7 +69,7 @@
       </div>
       <div class="right">
         <div class="chart-container">
-          <header>重点项目</header>
+          <header @click="linkToProject" style="cursor: pointer;">重点项目</header>
           <section>
             <VerBarChart></VerBarChart>
           </section>
@@ -116,6 +116,15 @@ export default {
   data () {
     return {
       
+    }
+  },
+  methods: {
+    linkToProject () {
+      const { href } = this.$router.resolve({
+        path: '/projectdatascreen'
+      })
+
+      window.open(href, '_blank')
     }
   }
 }
@@ -167,11 +176,12 @@ export default {
             font-weight: 600;
             font-size: 18px;
           }
-          section.circle-pregress {
+          section {
             width: 100%;
             height: calc(100% - 46px);
+          }
+          section.circle-pregress {
             display: flex;
-            
           }
         }
         // border: 1px solid #ddd;
