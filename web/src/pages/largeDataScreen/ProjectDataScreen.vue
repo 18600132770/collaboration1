@@ -5,7 +5,17 @@
         <div class="logo">企业LOGO</div>
         <span>项目信息实时监控</span>
       </div>
-      <div class="project-select"></div>
+      <div class="project-select">
+        <div>
+          <span style="padding-right: 10px">选择项目</span>
+          <a-select default-value="央视二号楼" style="width: 180px" @change="handleChange">
+            <a-select-option v-for="(item, index) in mapData" :key="index" :value="item.name">
+              {{item.name}}
+            </a-select-option>
+          </a-select>
+        </div>
+        <span class="date"><a-icon type="clock-circle" /> {{currentDate}}</span>
+      </div>
     </header>
     <section class="section">
       <a-row :gutter="16" class="card row-1">
@@ -110,7 +120,7 @@
       <a-row :gutter="16" class="card row-3">
         <a-col class="gutter-row" :span="8">
           <div class="gutter-box">
-            col-6
+            <BaseMap ref="baseMap" @map-complete="onMapComplete"></BaseMap>
           </div>
         </a-col>
         <a-col class="gutter-row" :span="8">
@@ -129,12 +139,15 @@
 </template>
 
 <script>
+import { format } from 'date-fns'
+
 import PieLineChart from './components/PieLineChart'
 import PerformanceTimeline from './components/PerformanceTimeline'
 import ScrollList from './components/ScrollList'
 import InfoAnnouncements from './components/InfoAnnouncements'
 import NewsScrollList from './components/NewsScrollList'
 import ProjectProgress from './components/ProjectProgress'
+import BaseMap from './components/BaseMap'
 
 
 export default {
@@ -144,8 +157,85 @@ export default {
     ScrollList, 
     InfoAnnouncements,
     NewsScrollList,
-    ProjectProgress
+    ProjectProgress,
+    BaseMap
+  },
+  data () {
+    return {
+      currentDate: format(new Date(), 'yyyy-MM-dd'),
+      markers: [],
+      mapData: [
+        {
+          name: '京广高速',
+          lnglat: [113.468138,23.620919],
+          description: '京广高速项目描述信息'
+        },
+        {
+          name: '渤海大桥',
+          lnglat: [120.870886,38.347367],
+          description: '渤海大桥项目描述信息'
+        },
+        {
+          name: '央视二号楼',
+          lnglat: [116.470745,39.920777],
+          description: '央视二号楼项目描述信息'
+        },
+        {
+          name: '雄安城轨',
+          lnglat: [115.938751,38.938429],
+          description: '雄安城轨项目描述信息'
+        },
+        {
+          name: '贵阳地铁',
+          lnglat: [106.656127,26.645833],
+          description: '贵阳地铁项目描述信息'
+        },
+        {
+          name: '京西污水厂',
+          lnglat: [116.104404,39.894421],
+          description: '京西污水厂项目描述信息'
+        },
+        {
+          name: '长江疏浚',
+          lnglat: [113.892129,30.238164],
+          description: '长江疏浚项目描述信息'
+        },
+        {
+          name: '北京七环',
+          lnglat: [116.963328,39.855438],
+          description: '北京七环项目描述信息'
+        },
+      ]
+    }
+  },
+  methods: {
+    handleChange,
+    loadMarkers,
+    onMapComplete
   }
+}
+
+function handleChange () {
+
+}
+
+function onMapComplete (flag) {
+  if (flag) {
+    // 加载marker
+    this.loadMarkers()
+  }
+}
+function loadMarkers () {
+  this.markers = []
+  if (!this.$refs.baseMap.map) return
+  this.$refs.baseMap.map.setCenter([116.470745,39.920777])
+  this.$refs.baseMap.map.clearMap()
+  this.mapData.forEach(item => {
+    if (item.lnglat.length > 0) {
+      let marker = this.$refs.baseMap.addMarker(item)
+      this.markers.push(marker)
+    }
+  })
 }
 </script>
 
@@ -260,6 +350,18 @@ export default {
         top: 7%;
         color: #fff; 
         font-weight: 600; 
+      }
+    }
+
+    .project-select {
+      width: 360px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #EFF4F9;
+      .date {
+        font-size: 12px;
+        font-weight: 600;
       }
     }
   }

@@ -18,7 +18,8 @@ const assetsCDN = {
     nprogress: 'NProgress',
     clipboard: 'ClipboardJS',
     '@antv/data-set': 'DataSet',
-    'js-cookie': 'Cookies'
+    'js-cookie': 'Cookies',
+    'AMap': 'AMap' // 高德地图配置
   },
   css: [
   ],
