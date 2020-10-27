@@ -7,29 +7,26 @@
       <div class="left">
         <div class="chart-container">
           <header>目标管理</header>
-          <!-- height: calc(100% - 30px); -->
-          <!-- <a-carousel :autoplay="true">
-            <div> -->
-              <section class="circle-pregress">
-                <ProgressGauge class="width-50"></ProgressGauge>
+          <section class="circle-pregress">
+            <ProgressGauge :percent-data="currentData" class="width-50"></ProgressGauge>
+            <!-- https://github.com/vueComponent/ant-design-vue/blob/master/components/vc-slick/src/default-props.js#L3 -->
+            <a-carousel  class="width-50" :autoplay="true" :after-change="onAfterChange">
+              <div>
                 <div class="remaining-days">
                   <div>目标营业收入</div>
                   <div><span>200</span> 亿</div>
                   <div>已完成营业收入</div>
                   <div><span>161.781</span> 亿</div>
                 </div>
-              </section>
-            <!-- </div>
-            <div>
-              <section class="circle-pregress">
-                <ProgressGauge1 class="width-50"></ProgressGauge1>
+              </div>
+              <div>
                 <div class="remaining-days">
                   <div>总合同额</div>
                   <div><span>483</span> 亿</div>
                 </div>
-              </section>
-            </div>
-          </a-carousel> -->
+              </div>
+            </a-carousel>
+          </section>
         </div>
         <div class="chart-container">
           <header>经营状况（净利润/营业收入）</header>
@@ -97,7 +94,6 @@ import ChinaMap from './components/ChinaMap'
 import LineChart from './components/LineChart'
 import VerBarChart from './components/VerBarChart'
 import ProgressGauge from './components/ProgressGauge'
-// import ProgressGauge1 from './components/ProgressGauge1'
 import PieChart from './components/PieChart'
 import RadarChart from './components/RadarChart'
 
@@ -109,13 +105,13 @@ export default {
     LineChart,
     VerBarChart,
     ProgressGauge,
-    // ProgressGauge1,
     PieChart,
     RadarChart
   },
   data () {
     return {
-      
+      progressData: [80.8, 60],
+      currentData: 80.8
     }
   },
   methods: {
@@ -125,6 +121,9 @@ export default {
       })
 
       window.open(href, '_blank')
+    },
+    onAfterChange (current) {
+      this.currentData = this.progressData[current]
     }
   }
 }
@@ -207,8 +206,19 @@ export default {
         }
       }
     }
-    /deep/ .ant-carousel .slick-dots {
-      display: none !important;
+    /deep/ .ant-carousel {
+      // height: calc(100% - 46px);
+      height: 100%;
+      .slick-slider, .slick-list, .slick-track, .slick-slide > div, .slick-slide > div > div {
+        height: 100%;
+      }
+      .circle-pregress {
+        height: 100% !important;
+      }
+
+      // .slick-dots {
+      //   display: none !important;
+      // }
     }
   }
 
@@ -217,19 +227,21 @@ export default {
   }
 
   .remaining-days {
-    width: 50%;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     color: #ffffff;
     align-items: center;
     justify-content: center;
+    padding: 15px;
     > div {
       width: 100%;
       color: @chart-title-color;
       padding: 0;
       font-size: 16px;
       font-weight: 600;
+      margin-right: 10px;
       &:last-child, &:nth-child(2){
         text-align: right;
         margin-right: 35px;

@@ -11,7 +11,7 @@ export default {
   name: 'ProgressGauge',
   props: {
     percentData: {
-      type: Object,
+      type: Number,
       // required: true
     },
   },
@@ -39,23 +39,11 @@ export default {
     },
   },
   watch: {
-    pieData() {
-      this.pieData
-        .map((item) => item.name)
-        .forEach((key) => {
-          this.legendSelected[key] = true
-        })
-    },
-    // lengend变化时请求接口
-    legendSelected() {
-      let type = []
-      for (let key in this.legendSelected) {
-        if (this.legendSelected[key]) {
-          type.push(key)
-        }
-      }
-      this.getWords(type.join(','), this.updateChart)
-    },
+    percentData() {
+
+      console.log('ppp', this.percentData)
+      this.updateChart(this.percentData)
+    }
   },
   mounted() {
     this.initBarChart()
@@ -83,12 +71,11 @@ function initBarChart() {
 
   // setTimeout(this.startTimer, 0)
 
-  this.updateChart()
+  this.updateChart(this.percentData)
 }
 
-function updateChart() {
+function updateChart(point) {
   const handred = 100
-  let point = 80.8
 
   let option = {
     title: {
@@ -223,7 +210,7 @@ function onResize() {
 
 <style lang="less" scoped>
 #progress-gauge {
-  height: 180px !important;
+  // height: 180px !important;
   > div {
     height: 100%;
   }
