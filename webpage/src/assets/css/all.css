@@ -602,7 +602,7 @@ textarea {
 }
 #logo {
   position: absolute;
-  background: url(../images/logo.png);
+  /* background: url(../images/logo.png); */
   background-size: 100% 100%;
   width: 156px;
   height: 34px;
