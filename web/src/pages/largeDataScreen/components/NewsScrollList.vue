@@ -1,15 +1,19 @@
 <template>
   <div class="list-wrapper">
-    <!-- <ul class="list-container list-header">
-      <li class="list-item">
-        <a-row>
-          <a-col :span="6">类型</a-col>
-          <a-col :span="12">主题</a-col>
-          <a-col :span="4">时间</a-col>
-        </a-row>
-      </li>
-    </ul> -->
-    <vueSeamless 
+    <a-carousel class="seamless-warp" :auto-play="true" :adaptive-height="true" :after-change="onChange">
+      <div class="carouse1-item" v-for="(item, index) in listData" :key="index">
+        <img :src="item.src" alt="">
+        <div class="text">
+          <div class="title">
+            {{item.title}}
+            <!-- <span style="float: right;">{{item.date}}</span> -->
+          </div>
+          <p class="num-color">{{item.content}}</p>
+        </div>
+      </div>
+    </a-carousel>
+    
+    <!-- <vueSeamless 
       :data="listData" 
       :class-option="{waitTime: 2000,step: 0.4}" 
       class="seamless-warp"
@@ -27,16 +31,16 @@
           </a-row>
         </li>
       </ul>
-    </vueSeamless>
+    </vueSeamless> -->
   </div>
 </template>
 
 <script>
-import vueSeamless from 'vue-seamless-scroll'
+// import vueSeamless from 'vue-seamless-scroll'
 export default {
   name: 'NewsScrollList',
   components: {
-    vueSeamless
+    // vueSeamless
   },
   data () {
     return {
@@ -64,45 +68,12 @@ export default {
           date: '2020-10-19',
           src: 'https://static.vsochina.com/newsfile/2019/0718/20190718023817275.jpg',
           content: 'SOM 建筑事务所与由城市规划师，景观设计师和社区智库组成的团队一起'
-        },
-        {
-          title: 'SOM 建筑事务所与由城市规划师',
-          date: '2020-10-20',
-          src: 'https://static.vsochina.com/newsfile/2019/0718/20190718023817275.jpg',
-          content: 'SOM 建筑事务所与由城市规划师，景观设计师和社区智库组成的团队一起'
-        },
-        {
-          title: 'SOM 建筑事务所与由城市规划师',
-          date: '2020-10-21',
-          src: 'https://static.vsochina.com/newsfile/2019/0718/20190718023817275.jpg',
-          content: 'SOM 建筑事务所与由城市规划师，景观设计师和社区智库组成的团队一起'
-        },
-        {
-          title: 'SOM 建筑事务所与由城市规划师',
-          date: '2020-10-22',
-          src: 'https://static.vsochina.com/newsfile/2019/0718/20190718023817275.jpg',
-          content: 'SOM 建筑事务所与由城市规划师，景观设计师和社区智库组成的团队一起'
-        },
-        {
-          title: 'SOM 建筑事务所与由城市规划师',
-          date: '2020-10-23',
-          src: 'https://static.vsochina.com/newsfile/2019/0718/20190718023817275.jpg',
-          content: 'SOM 建筑事务所与由城市规划师，景观设计师和社区智库组成的团队一起'
-        },
-        {
-          title: 'SOM 建筑事务所与由城市规划师',
-          date: '2020-10-24',
-          src: 'https://static.vsochina.com/newsfile/2019/0718/20190718023817275.jpg',
-          content: 'SOM 建筑事务所与由城市规划师，景观设计师和社区智库组成的团队一起'
-        },
-        {
-          title: 'SOM 建筑事务所与由城市规划师',
-          date: '2020-10-25',
-          src: 'https://static.vsochina.com/newsfile/2019/0718/20190718023817275.jpg',
-          content: 'SOM 建筑事务所与由城市规划师，景观设计师和社区智库组成的团队一起'
         }
       ]
     }
+  },
+  methods: {
+    onChange () {}
   }
 }
 </script>
@@ -119,26 +90,6 @@ export default {
       .list-item {
         color: #EFF4F9;
         padding: 8px;
-        .ant-col {
-          color: #757C8C;
-          font-size: 12px;
-          img {
-            width: 80%;
-            // height: 100%;
-          }
-          span {
-            font-size: 13px;
-            font-weight: 600;
-            color: #DBB019;
-            display: inline-block;
-            margin-bottom: 8px;
-          }
-          p {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-        }
         .num-color {
           color: #DBB019;
         }
@@ -164,5 +115,35 @@ export default {
   .seamless-warp {
     height: 100%;
     overflow: hidden;
+    .carouse1-item {
+      height: 36vh;
+      position: relative;
+      .text {
+        position: absolute;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, .5);
+        color: #EFF4F9;
+        height: 50px;
+        left: 0;
+        right: 0;
+        padding-left: 5px;
+        p {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 12px;
+        }
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      .title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #DBB019;
+        display: block;
+      }
+    }
   }
 </style>
