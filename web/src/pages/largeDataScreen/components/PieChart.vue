@@ -302,18 +302,28 @@ function updateChart() {
   }
   this.myChart.setOption(option, false)
 
-  /* const _this = this
+  const _this = this
   let dataIndex = 0
-  setInterval(function () {
-    if (dataIndex > legendData.length - 1) {
+  let timer = setInterval(function () {
+    /* if (dataIndex > legendData.length - 1) {
       dataIndex = 0
-    }
+    } */
     _this.myChart.dispatchAction({
-      type: 'showTip', // 触发的行为
-      dataIndex: dataIndex++
+      type: 'downplay', // 触发的行为
+      dataIndex: dataIndex
     })
-    console.log('00', dataIndex)
-  }, 3000) */
+
+    dataIndex = (dataIndex + 1) % legendData.length;
+
+    _this.myChart.dispatchAction({
+      type: 'highlight', // 触发的行为
+      dataIndex: dataIndex
+    })
+  }, 3000)
+
+  this.$once('hook:beforeDestroy', () => {            
+    clearInterval(timer);                                    
+  })
 }
 
 function onResize() {

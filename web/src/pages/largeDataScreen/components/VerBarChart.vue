@@ -1,6 +1,5 @@
-
 <template>
-  <div id="ver-bar-chart" :style="{height: height, width: width}"></div>
+  <div id="ver-bar-chart" :style="{ height: height, width: width }"></div>
 </template>
 
 <script>
@@ -13,38 +12,40 @@ export default {
     percentData: {
       type: Object,
       // required: true
-    }
+    },
   },
-  data () {
+  data() {
     return {
       barData: [],
       legendSelected: {},
       myChart: null,
 
       height: '100%',
-      width: '100%'
+      width: '100%',
     }
   },
   computed: {
-    pieData () {
+    pieData() {
       let temp = []
       for (let key in this.percentData) {
         temp.push({
           name: key,
-          value: this.percentData[key]
+          value: this.percentData[key],
         })
       }
       return temp
-    }
+    },
   },
   watch: {
-    pieData () {
-      this.pieData.map(item => item.name).forEach(key => {
-        this.legendSelected[key] = true
-      })
+    pieData() {
+      this.pieData
+        .map((item) => item.name)
+        .forEach((key) => {
+          this.legendSelected[key] = true
+        })
     },
     // lengend变化时请求接口
-    legendSelected () {
+    legendSelected() {
       let type = []
       for (let key in this.legendSelected) {
         if (this.legendSelected[key]) {
@@ -52,9 +53,9 @@ export default {
         }
       }
       this.getWords(type.join(','), this.updateChart)
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.initBarChart()
 
     window.addEventListener('resize', this.onResize)
@@ -64,124 +65,139 @@ export default {
     // 初始化柱状图
     initBarChart,
     updateChart,
-    onResize
+    onResize,
   },
-  beforeDestroy () {
+  beforeDestroy() {
     this.myChart && this.myChart.clear()
     this.myChart = null
-  }
+  },
 }
 
-function initBarChart () {
-  this.myChart = echarts.init(
-    document.getElementById('ver-bar-chart')
-  )
+function initBarChart() {
+  this.myChart = echarts.init(document.getElementById('ver-bar-chart'))
 
   this.updateChart()
 }
 
-function updateChart () {
-  var salvProName =["京广高速","渤海大桥","央视二号楼","雄安城轨","贵阳地铁","京西污水厂","长江疏浚","北京七环"];
-  var salvProValue =[100,81,54,44,35,17,74,72];
-  var salvProMax =[];//背景按最大值
+function updateChart() {
+  var salvProName = [
+    '京广高速',
+    '渤海大桥',
+    '央视二号楼',
+    '雄安城轨',
+    '贵阳地铁',
+    '京西污水厂',
+    '长江疏浚',
+    '北京七环',
+  ]
+  var salvProValue = [100, 81, 54, 44, 35, 17, 74, 72]
+  var salvProMax = [] //背景按最大值
   for (let i = 0; i < salvProValue.length; i++) {
-      salvProMax.push(salvProValue[0])
+    salvProMax.push(salvProValue[0])
   }
   let option = {
     grid: {
-        left: '2%',
-        right: '2%',
-        bottom: '2%',
-        top: '2%',
-        containLabel: true
+      left: '2%',
+      right: '2%',
+      bottom: '2%',
+      top: '2%',
+      containLabel: true,
     },
     tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'none'
-        },
-        formatter: function(params) {
-            return params[0].name  + ' : ' + params[0].value
-        }
+      trigger: 'axis',
+      axisPointer: {
+        type: 'none',
+      },
+      formatter: function(params) {
+        return params[0].name + ' : ' + params[0].value
+      },
     },
     xAxis: {
-        show: false,
-        type: 'value'
+      show: false,
+      type: 'value',
     },
-    yAxis: [{
+    yAxis: [
+      {
         type: 'category',
         inverse: true,
         axisLabel: {
-            show: true,
-            textStyle: {
-                color: '#fff'
-            },
+          show: true,
+          textStyle: {
+            color: '#fff',
+          },
         },
         splitLine: {
-            show: false
+          show: false,
         },
         axisTick: {
-            show: false
+          show: false,
         },
         axisLine: {
-            show: false
+          show: false,
         },
-        data: salvProName
-    }, {
+        data: salvProName,
+      },
+      {
         type: 'category',
         inverse: true,
         axisTick: 'none',
         axisLine: 'none',
         show: true,
         axisLabel: {
-            textStyle: {
-                color: '#ffffff',
-                fontSize: '12'
-            },
+          textStyle: {
+            color: '#ffffff',
+            fontSize: '12',
+          },
+          formatter: '{value}%'
         },
-        data:salvProValue
-    }],
-    series: [{
-            name: '值',
-            type: 'bar',
-            zlevel: 1,
-            itemStyle: {
-                normal: {
-                    barBorderRadius: 30,
-                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
-                        offset: 0,
-                        color: 'rgb(57,89,255,1)'
-                    }, {
-                        offset: 1,
-                        color: 'rgb(46,200,207,1)'
-                    }]),
-                },
-            },
-            barWidth: 10,
-            data: salvProValue,
-            label: {
-              formatter: '{b}%'
-            }
+        data: salvProValue,
+      },
+    ],
+    series: [
+      {
+        name: '值',
+        type: 'bar',
+        zlevel: 1,
+        itemStyle: {
+          normal: {
+            barBorderRadius: 30,
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+              {
+                offset: 0,
+                color: 'rgb(57,89,255,1)',
+              },
+              {
+                offset: 1,
+                color: 'rgb(46,200,207,1)',
+              },
+            ]),
+          },
         },
-        {
-            name: '背景',
-            type: 'bar',
-            barWidth: 10,
-            barGap: '-100%',
-            data: salvProMax,
-            itemStyle: {
-                normal: {
-                    color: 'rgba(24,31,68,1)',
-                    barBorderRadius: 30,
-                }
-            },
+        barWidth: 10,
+        data: salvProValue,
+        label: {
+          show: false
         },
-    ]
-};// this.myChart && this.myChart.clear()
+      },
+      {
+        name: '背景',
+        type: 'bar',
+        barWidth: 10,
+        barGap: '-100%',
+        data: salvProMax,
+        itemStyle: {
+          normal: {
+            color: 'rgba(24,31,68,1)',
+            barBorderRadius: 30,
+          },
+        },
+      },
+    ],
+  } // this.myChart && this.myChart.clear()
   this.myChart.setOption(option, false)
 }
 
-function onResize () {
+function onResize() {
   this.width = this.$el.offsetWidth
   this.height = this.$el.offsetHeight
 
@@ -189,6 +205,4 @@ function onResize () {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

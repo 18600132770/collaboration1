@@ -387,8 +387,6 @@ function onResize() {
   this.width = this.$el.offsetWidth - 20
   this.height = this.$el.offsetHeight
 
-  console.log(this.width)
-
   this.myChart && this.myChart.resize()
   this.progress && this.progress.resize()
 }

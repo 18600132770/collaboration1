@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <header class="header">
+    <header class="header" >
       <span>智慧运营管理中心</span>
     </header>
     <section class="main">
-      <div class="left">
+      <div class="left" >
         <div class="chart-container">
           <header>目标管理</header>
           <section class="circle-pregress">
@@ -41,7 +41,7 @@
           </section>
         </div>
       </div>
-      <div class="center">
+      <div class="center" >
         <div class="chart-container total-card">
           <div class="card-item">
             <div>
