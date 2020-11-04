@@ -101,15 +101,12 @@ function updateChart() {
   }
   let colors = [
     '#4150d8',
-    '#28bf7e',
-    '#ed7c2f',
-    '#f2a93b',
-    '#f9cf36',
-    '#4a5bdc',
-    '#4cd698',
-    '#f4914e',
-    '#fcb75b',
     '#ffe180',
+    '#fcb75b',
+    '#f9cf36',
+    '#f2a93b',
+    '#f4914e',
+    '#ed7c2f',
     '#b6c2ff',
     '#96edc1',
   ]
@@ -297,7 +294,7 @@ function updateProgressChart() {
   var baifenbi = [0.8]
   var grayBar = [1]
   var city = [
-    '收款进度'
+    '项目进度'
   ]
   let option = {
     color: ['#DBB019'],
