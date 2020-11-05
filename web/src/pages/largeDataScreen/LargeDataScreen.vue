@@ -21,7 +21,9 @@
               </div>
               <div>
                 <div class="remaining-days">
-                  <div>总合同额</div>
+                  <div>目标合同额</div>
+                  <div><span>805</span> 亿</div>
+                  <div>已签约总合同额</div>
                   <div><span>483</span> 亿</div>
                 </div>
               </div>
