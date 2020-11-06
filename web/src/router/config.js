@@ -305,6 +305,11 @@ const options = {
       path: '/projectdatascreen',
       name: '项目信息可视化',
       component: () => import('@/pages/largeDataScreen/ProjectDataScreen')
+    },
+    {
+      path: '/businessAnalysis',
+      name: '公司经营分析系统',
+      component: () => import('@/pages/largeDataScreen/businessAnalysis')
     }
   ]
 }

@@ -1,0 +1,2 @@
+import BusinessAnalysisScreen from './BusinessAnalysisScreen'
+export default BusinessAnalysisScreen

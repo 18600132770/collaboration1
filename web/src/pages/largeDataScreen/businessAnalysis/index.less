@@ -1,0 +1,139 @@
+@header-height: 80px;
+@chart-title-color: #fff;
+
+.container {
+  height: 100%;
+  width: 100%;
+  background-color: #282B32;
+  .header {
+    height: @header-height;
+    padding: 16px 16px 0;
+    .head-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      background-color: #18191E;
+      .logo {
+        border: 2px solid #DBB019;
+        width: 125px;
+        height: 40px;
+        color: #DBB019;
+        line-height: 40px;
+        text-align: center;
+      }
+      span {
+        font-size: 28px;
+        font-weight: 600;
+        color: @chart-title-color;
+        margin-left: 20px;
+        &:last-child {
+          font-size: 14px;
+          margin-right: 16px;
+        }
+      }
+    }
+  }
+  .main {
+    height: calc(100% - @header-height);
+    display: flex;
+
+    .left,
+    .right {
+      padding: 8px 8px 8px 16px;
+      display: flex;
+      flex-direction: column;
+      .chart-container {
+        margin: 8px 0;
+        flex: auto;
+        background-color: #18191E;
+        header {
+          height: 46px;
+          line-height: 46px;
+          color: @chart-title-color;
+          padding: 0 10px;
+          font-weight: 600;
+          font-size: 18px;
+        }
+        section {
+          width: 100%;
+          height: calc(100% - 46px);
+        }
+      }
+      // border: 1px solid #ddd;
+    }
+    .left {
+      width: 45%;
+      .chart-container {
+        &:first-child {
+          flex: 2;
+        }
+        &:last-child {
+          flex: 1;
+        }
+      }
+      .left-bottom {
+        background-color: #282B32;
+      }
+    }
+    .right {
+      width: 55%;
+      padding: 8px 16px 8px 8px;
+      .chart-container {
+        &:first-child {
+          flex: 1;
+        }
+        &:last-child {
+          flex: 2;
+        }
+      }
+      .right-top {
+        background-color: #282B32;
+      }
+    }
+    .left-bottom, .right-top {
+      display: flex;
+      justify-content: space-between;
+      background-color: #282B32;
+      > div {
+        width: calc(50% - 8px);
+        flex: auto;
+        background-color: #18191E;
+        &:first-child {
+          margin-right: 8px;
+        }
+        &:last-child {
+          margin-left: 8px;
+        }
+      }
+    }
+    .small-col {
+      height: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .container {
+    .main {
+      .left, .right {
+        .chart-container {
+          header {
+            height: 30px;
+            line-height: 30px;
+            color: @chart-title-color;
+            padding: 0 10px;
+            font-weight: 600;
+            font-size: 16px;
+          }
+          section {
+            height: calc(100% - 30px);
+          }
+        }
+      }
+      .small-col {
+        height: 280px;
+      }
+    }
+  }
+}
