@@ -31,7 +31,7 @@
           </section>
         </div>
         <div class="chart-container">
-          <header>经营状况（净利润/营业收入）</header>
+          <header @click="linkTo('/businessAnalysis')" style="cursor: pointer;">经营状况（净利润/营业收入）</header>
           <section>
             <BarChart></BarChart>
           </section>
@@ -68,7 +68,7 @@
       </div>
       <div class="right">
         <div class="chart-container">
-          <header @click="linkToProject" style="cursor: pointer;">重点项目</header>
+          <header @click="linkTo('/projectdatascreen')" style="cursor: pointer;">重点项目</header>
           <section>
             <VerBarChart></VerBarChart>
           </section>
@@ -117,9 +117,9 @@ export default {
     }
   },
   methods: {
-    linkToProject () {
+    linkTo (path) {
       const { href } = this.$router.resolve({
-        path: '/projectdatascreen'
+        path: path
       })
 
       window.open(href, '_blank')

@@ -20,6 +20,11 @@
 <script>
 const columns = [
   {
+    title: '部门',
+    dataIndex: 'department',
+    align: 'center'
+  },
+  {
     title: '合同总额',
     dataIndex: 'total',
     align: 'center'
@@ -53,6 +58,7 @@ for (let i = 0; i < 50; i++) {
     key: i,
     num: i + 1,
     total: `${num}`,
+    department: '桥隧院',
     received: num - 50,
     receivables: num,
     outstanding: 50,
