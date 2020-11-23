@@ -48,13 +48,25 @@ const options = {
               path: 'analysis',
               name: '分析页',
               component: () => import('@/pages/dashboard/analysis'),
-            },
-            {
-              path: 'datascreen',
-              name: '数据大屏',
-              component: () => import('@/pages/dashboard/datascreen'),
             }
           ]
+        },
+        {
+          path: 'datascreen',
+          name: '数据大屏',
+          meta: {
+            icon: 'fund'
+          },
+          redirect: '/datascreen/index',
+          component: BlankView,
+          children: [{
+            path: 'index',
+            name: '数据大屏',
+            meta: {
+              invisible: true
+            },
+            component: () => import('@/pages/dashboard/datascreen'),
+          }]
         },
         {
           path: 'projectmgmt',
@@ -111,6 +123,25 @@ const options = {
             icon: 'team'
           },
           component: PageView
+        },
+        {
+          path: 'warehousemgmt',
+          name: '物资管理',
+          meta: {
+            icon: 'home'
+          },
+          redirect: '/warehousemgmt/list',
+          component: PageView,
+          children: [
+            {
+              path: 'list',
+              name: '物资列表',
+              meta: {
+                // icon: 'project',
+              },
+              component: () => import('@/pages/warehouseMgmt'),
+            }
+          ]
         },
         {
           path: 'form',
