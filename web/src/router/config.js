@@ -310,6 +310,11 @@ const options = {
       path: '/businessAnalysis',
       name: '公司经营分析系统',
       component: () => import('@/pages/largeDataScreen/businessAnalysis')
+    },
+    {
+      path: '/humanresources',
+      name: '公司人力资源分析系统',
+      component: () => import('@/pages/largeDataScreen/humanResources')
     }
   ]
 }

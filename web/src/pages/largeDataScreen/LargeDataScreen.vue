@@ -37,7 +37,7 @@
           </section>
         </div>
         <div class="chart-container">
-          <header>人工投入曲线</header>
+          <header @click="linkTo('/humanresources')" style="cursor: pointer;">人工投入曲线</header>
           <section>
             <LineChart></LineChart>
           </section>
