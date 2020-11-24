@@ -4,7 +4,7 @@
  * @Author: chenfengtao
  * @Date: 2020-08-17 14:44:34
  * @LastEditors: supercheney
- * @LastEditTime: 2020-11-22 23:40:39
+ * @LastEditTime: 2020-11-24 22:13:03
 -->
 <template>
   <div id="map-container"></div>
@@ -45,7 +45,9 @@ export default {
     addMarker,
     onMarkerClick,
     // 初始化信息框
-    initInfoWindow
+    initInfoWindow,
+
+    initCircle
   },
   beforeDestroy () {
     // 销毁地图
@@ -97,6 +99,10 @@ function initMap () {
       _this.map.on('complete', function () {
         _this.$emit('map-complete', true)
       })
+
+      _this.initCircle(4000)
+      _this.initCircle(3000)
+      _this.initCircle(2000)
     })
     .catch((e) => {
       console.log(e)
@@ -167,6 +173,28 @@ function initInfoWindow () {
     offset: new AMap.Pixel(0, -45)
   })
   return infoWindow
+}
+
+function initCircle (radius) {
+  var circle = new window.AMap.Circle({
+    center: [108.93, 34.27],
+    radius: radius, //半径
+    borderWeight: 3,
+    strokeColor: "#FF33FF", 
+    strokeWeight: 6,
+    strokeOpacity: 0.2,
+    fillOpacity: 0.4,
+    strokeStyle: 'dashed',
+    strokeDasharray: [10, 10], 
+    // 线样式还支持 'dashed'
+    fillColor: '#1791fc',
+    zIndex: 50,
+  })
+
+  circle.setMap(this.map)
+
+  // 缩放地图到合适的视野级别
+  radius === 4000 && this.map.setFitView([ circle ])
 }
 </script>
 
