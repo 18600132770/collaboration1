@@ -140,6 +140,22 @@ const options = {
                 // icon: 'project',
               },
               component: () => import('@/pages/warehouseMgmt'),
+            },
+            {
+              path: 'inboundandoutboundlist',
+              name: '出入库列表',
+              meta: {
+                // icon: 'project',
+              },
+              component: () => import('@/pages/warehouseMgmt/InboundAndOutboundList'),
+            },
+            {
+              path: 'monthlysummary',
+              name: '月度出入库汇总',
+              meta: {
+                // icon: 'project',
+              },
+              component: () => import('@/pages/warehouseMgmt/MonthlySummary'),
             }
           ]
         },

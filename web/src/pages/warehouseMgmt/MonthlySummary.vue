@@ -2,11 +2,8 @@
   <a-card>
     <div>
       <div class="operator">
-        <span>
-          <AddProject></AddProject>
-          <a-button @click="addNew" type="primary" icon="plus" style="margin-left: 10px;">{{$t('import')}}</a-button>
-          <a-button @click="addNew" type="primary" icon="plus" style="margin-left: 10px;">{{$t('export')}}</a-button>
-        </span>
+        <AddProject></AddProject>
+        <!-- <a-button @click="addNew" type="primary" icon="plus">{{$t('add')}}</a-button> -->
         <a-input-search :placeholder="$t('enterKeywords')" style="width: 250px" @search="onSearch" />
       </div>
       <standard-table
@@ -17,7 +14,7 @@
         @change="onChange"
         @selectedRowChange="onSelectChange"
       >
-        <!-- <div slot="progress" slot-scope="{text}">
+        <div slot="progress" slot-scope="{text}">
           <div style="width: 120px">
             <a-progress :percent="+text" size="small" />
           </div>
@@ -29,7 +26,7 @@
           <a @click="deleteRecord(record.key)">
             <a-icon type="delete" />{{$t('delete')}}
           </a>
-        </div> -->
+        </div>
       </standard-table>
     </div>
   </a-card>
@@ -45,15 +42,15 @@ for (let i = 0; i < 100; i++) {
   dataSource.push({
     key: i,
     no: 'NO ' + i,
-    materialsName: 'DB插头外壳',
-    materialsType: '15芯，26芯',
-    materialsSupplier: '',
-    accountNum: '64',
-    materialsUnit: '个',
-    materialsUnitPrice: '1.2',
-    accountAmount: 76.8,
-    purchaseOrder: '',
-    materialsStorageLocation: '1好库房架11'
+    projectName: '项目一',
+    designPhase: '投标阶段',
+    principal: '张三',
+    chiefEngineer: '李四',
+    startTime: '2018-07-26',
+    endTime: '2021-07-26',
+    remainingDays: (Math.random() * 100 + 100).toFixed(0),
+    progress: (Math.random() * 100).toFixed(0),
+    emergencyLevel: '紧急'
   })
 }
 
@@ -65,40 +62,49 @@ export default {
     return {
       columns: [
         {
-          title: this.$t('materialsName'),
-          dataIndex: 'materialsName'
+          title: this.$t('projectNo'),
+          dataIndex: 'no'
         },
         {
-          title: this.$t('materialsType'),
-          dataIndex: 'materialsType'
+          title: this.$t('projectName'),
+          dataIndex: 'projectName'
         },
         {
-          title: this.$t('materialsSupplier'),
-          dataIndex: 'materialsSupplier',
+          title: this.$t('designPhase'),
+          dataIndex: 'designPhase',
         },
         {
-          title: this.$t('accountNum'),
-          dataIndex:'accountNum',
+          title: this.$t('principal'),
+          dataIndex:'principal',
         },
         {
-          title: this.$t('materialsUnit'),
-          dataIndex: 'materialsUnit',
+          title: this.$t('chiefEngineer'),
+          dataIndex: 'chiefEngineer',
         },
         {
-          title: this.$t('materialsUnitPrice'),
-          dataIndex: 'materialsUnitPrice',
+          title: this.$t('startTime'),
+          dataIndex: 'startTime',
         },
         {
-          title: this.$t('accountAmount'),
-          dataIndex: 'accountAmount',
+          title: this.$t('endTime'),
+          dataIndex: 'endTime',
         },
         {
-          title: this.$t('purchaseOrder'),
-          dataIndex: 'purchaseOrder',
+          title: this.$t('remainingDays'),
+          dataIndex: 'remainingDays',
         },
         {
-          title: this.$t('materialsStorageLocation'),
-          dataIndex: 'materialsStorageLocation',
+          title: this.$t('progress'),
+          dataIndex: 'progress',
+          scopedSlots: { customRender: 'progress' }
+        },
+        {
+          title: this.$t('emergencyLevel'),
+          dataIndex: 'emergencyLevel',
+        },
+        {
+          title: this.$t('operate'),
+          scopedSlots: { customRender: 'action' }
         }
       ],
       dataSource: dataSource,
