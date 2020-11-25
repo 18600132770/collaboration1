@@ -3,7 +3,7 @@
     <header class="header">
       <div class="head-title">
         <!-- <div class="logo"></div> -->
-        <span>公司人力资源分析系统</span>
+        <span>公司财务分析系统</span>
         <span class="date"><a-icon type="clock-circle" /> {{currentDate}}</span>
       </div>
     </header>
@@ -13,7 +13,15 @@
           <div class="small-col">
             <!-- <header>每月总应收款</header> -->
             <section>
-              <FunnelChart></FunnelChart>
+              <ProgressGauge :percent-data="currentData" class="width-50"></ProgressGauge>
+              <div class="width-50">
+                <div class="remaining-days">
+                  <div>目标营业收入</div>
+                  <div><span>200</span> 亿</div>
+                  <div>已完成营业收入</div>
+                  <div><span>161.781</span> 亿</div>
+                </div>
+              </div>
             </section>
           </div>
         </div>
@@ -26,7 +34,10 @@
           </div>
         </div>
       </div>
-      <div class="main"></div>
+      <div class="center">
+        <div class="chart-container">
+        </div>
+      </div>
       <div class="right">
         <div class="chart-container right-top">
           <div class="small-col">
@@ -43,12 +54,6 @@
               <BaseMap></BaseMap>
             </section>
           </div>
-          <div style="height: 100%;">
-            <!-- <header>图谱</header> -->
-            <section>
-              <ProjectTable></ProjectTable>
-            </section>
-          </div>
         </div>
       </div>
     </section>
@@ -58,22 +63,20 @@
 <script>
 import { format } from 'date-fns'
 
-import PieChartSix from './components/PieChartSix'
+import ProgressGauge from './components/ProgressGauge'
 import BaseMap from './components/BaseMap'
 import LineChart from './components/LineChart'
-import FunnelChart from './components/FunnelChart'
 /* import BarChart from './components/BarChart'
 import ChinaMap from './components/ChinaMap'
 import ProjectTable from './components/ProjectTable'
 import CollectionsTable from './components/CollectionsTable' */
 
 export default {
-  name: 'BusinessAnalysis',
+  name: 'FinalcialAnalysis',
   components: {
-    PieChartSix,
+    ProgressGauge,
     BaseMap,
     LineChart,
-    FunnelChart
     /* TenderProject,
     BarChart,
     ChinaMap,
@@ -83,6 +86,7 @@ export default {
   data () {
     return {
       currentDate: format(new Date(), 'yyyy-MM-dd'),
+      currentData: 60
     }
   }
 }

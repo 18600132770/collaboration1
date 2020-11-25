@@ -1,7 +1,7 @@
 @header-height: 80px;
-@chart-title-color: #333;
-@bg-color: #ECF4F7;
-@chart-bg: #fff;
+@chart-title-color: #ffffff;
+@bg-color: #15131A;
+@chart-bg: #26343B;
 
 .container {
   height: 100%;
@@ -68,7 +68,7 @@
       // border: 1px solid #ddd;
     }
     .left {
-      width: 30%;
+      width: 33%;
       // .chart-container {
         // height: 15%;
       // }
@@ -76,15 +76,18 @@
         background-color:@bg-color;
       }
     }
+    .center {
+      width: 33%;
+    }
     .right {
-      width: 70%;
+      width: 33%;
       padding: 8px 16px 8px 8px;
       .chart-container {
         &:first-child {
           flex: 1;
         }
         &:last-child {
-          flex: 2;
+          flex: 1;
         }
       }
       .right-top {
@@ -93,13 +96,10 @@
       .right-bottom {
         display: flex;
         > div {
-          width: calc(50% - 8px);
+          width: 100%;
           background-color: @chart-bg;
           &:first-child {
             margin-right: 8px;
-          }
-          &:last-child {
-            margin-left: 8px;
           }
         }
       }
@@ -119,6 +119,40 @@
     }
     .small-col {
       height: 100%;
+      > section {
+        display: flex;
+      }
+    }
+  }
+}
+
+.width-50 {
+  width: 50% !important;
+}
+
+.remaining-days {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  > div {
+    width: 100%;
+    color: @chart-title-color;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 10px;
+    &:last-child, &:nth-child(2){
+      text-align: right;
+      margin-right: 35px;
+    }
+    span {
+      text-align: center;
+      font-size: 30px;
     }
   }
 }
@@ -137,7 +171,7 @@
             font-size: 16px;
           }
           section {
-            height: calc(100% - 30px);
+            height: calc(33vh - 60px);
           }
         }
       }
