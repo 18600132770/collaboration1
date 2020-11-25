@@ -80,7 +80,7 @@
           </section>
         </div>
         <div class="chart-container">
-          <header>成本分析</header>
+          <header @click="linkTo('/financialanalysis')" style="cursor: pointer;">成本分析</header>
           <section>
             <RadarChart></RadarChart>
           </section>

@@ -346,6 +346,11 @@ const options = {
       path: '/humanresources',
       name: '公司人力资源分析系统',
       component: () => import('@/pages/largeDataScreen/humanResources')
+    },
+    {
+      path: '/financialanalysis',
+      name: '公司财务分析系统',
+      component: () => import('@/pages/largeDataScreen/financialAnalysis')
     }
   ]
 }
