@@ -1,6 +1,6 @@
 
 <template>
-  <div id="line-chart-1" :style="{ height: height, width: width }"></div>
+  <div id="line-chart-2" :style="{ height: height, width: width }"></div>
 </template>
 
 <script>
@@ -74,7 +74,7 @@ export default {
 }
 
 function initBarChart() {
-  this.myChart = echarts.init(document.getElementById('line-chart-1'))
+  this.myChart = echarts.init(document.getElementById('line-chart-2'))
 
   this.updateChart()
 }
@@ -82,7 +82,7 @@ function initBarChart() {
 function updateChart() {
   var data = {
     city: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
-    num: ['40', '60', '22', '85', '50', '40', '60', '22', '85', '50', '40'],
+    num: ['20', '30', '12', '45', '30', '20', '30', '12', '65', '40', '20'],
   }
   let option = {
     tooltip: {
@@ -185,7 +185,7 @@ function updateChart() {
     ],
     series: [
       {
-        name: '新签合同额',
+        name: '营业收入',
         type: 'line',
         symbol: 'circle', // 默认是空心圆（中间是白色的），改成实心圆
         showAllSymbol: true,

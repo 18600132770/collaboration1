@@ -12,7 +12,7 @@
         <div class="chart-container">
           <div class="small-col">
             <!-- <header>每月总应收款</header> -->
-            <section>
+            <section style="height: 100%;">
               <ProgressGauge :percent-data="currentData" class="width-50"></ProgressGauge>
               <div class="width-50">
                 <div class="remaining-days">
@@ -27,31 +27,58 @@
         </div>
         <div class="chart-container left-bottom">
           <div class="small-col">
-            <header>劳动价值分析</header>
+            <header>支出</header>
             <section>
-              <LineChart></LineChart>
+              <SpendingTable></SpendingTable>
             </section>
           </div>
         </div>
       </div>
       <div class="center">
         <div class="chart-container">
+          <header>新签合同额</header>
+          <section>
+            <LineChart></LineChart>
+          </section>
+        </div>
+        <div class="chart-container">
+          <header>营业收入</header>
+          <section>
+            <LineChart2></LineChart2>
+          </section>
+        </div>
+        <div class="chart-container">
+          <header>成本支出</header>
+          <section>
+            <LineChart3></LineChart3>
+          </section>
         </div>
       </div>
       <div class="right">
         <div class="chart-container right-top">
           <div class="small-col">
-            <header>合同额</header>
+            <header>预警</header>
             <section>
-              <PieChartSix></PieChartSix>
+              <InfoAnnouncements style="width: 100%;height: calc(100% - 46px);"></InfoAnnouncements>
             </section>
           </div>
         </div>
         <div class="chart-container right-bottom">
           <div style="height: 100%;">
-            <!-- <header>储备项目</header> -->
-            <section style="height: 100%;">
-              <BaseMap></BaseMap>
+            <header>税务</header>
+            <section style="height: calc(100% - 46px);">
+              <div class="small-col">
+                <!-- <header>每月总应收款</header> -->
+                <section style="height: 100%;">
+                  <div class="width-50">
+                    <div class="remaining-days">
+                      <div>本年度累计缴税</div>
+                      <div><span>20</span> 亿</div>
+                    </div>
+                  </div>
+                  <DashChart class="width-50"></DashChart>
+                </section>
+              </div>
             </section>
           </div>
         </div>
@@ -64,24 +91,23 @@
 import { format } from 'date-fns'
 
 import ProgressGauge from './components/ProgressGauge'
-import BaseMap from './components/BaseMap'
 import LineChart from './components/LineChart'
-/* import BarChart from './components/BarChart'
-import ChinaMap from './components/ChinaMap'
-import ProjectTable from './components/ProjectTable'
-import CollectionsTable from './components/CollectionsTable' */
+import LineChart2 from './components/LineChart2'
+import LineChart3 from './components/LineChart3'
+import InfoAnnouncements from './components/InfoAnnouncements'
+import SpendingTable from './components/SpendingTable'
+import DashChart from './components/DashChart'
 
 export default {
   name: 'FinalcialAnalysis',
   components: {
     ProgressGauge,
-    BaseMap,
     LineChart,
-    /* TenderProject,
-    BarChart,
-    ChinaMap,
-    ProjectTable,
-    CollectionsTable */
+    LineChart2,
+    LineChart3,
+    InfoAnnouncements,
+    SpendingTable,
+    DashChart
   },
   data () {
     return {

@@ -1,6 +1,6 @@
 
 <template>
-  <div id="line-chart-1" :style="{ height: height, width: width }"></div>
+  <div id="line-chart-3" :style="{ height: height, width: width }"></div>
 </template>
 
 <script>
@@ -74,7 +74,7 @@ export default {
 }
 
 function initBarChart() {
-  this.myChart = echarts.init(document.getElementById('line-chart-1'))
+  this.myChart = echarts.init(document.getElementById('line-chart-3'))
 
   this.updateChart()
 }
@@ -185,7 +185,7 @@ function updateChart() {
     ],
     series: [
       {
-        name: '新签合同额',
+        name: '成本支出',
         type: 'line',
         symbol: 'circle', // 默认是空心圆（中间是白色的），改成实心圆
         showAllSymbol: true,

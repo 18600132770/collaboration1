@@ -78,6 +78,24 @@
     }
     .center {
       width: 33%;
+      margin: 0px 8px;
+      .chart-container {
+        height: calc(33.3vh - 48px);
+        background-color: @chart-bg;
+        margin: 16px 0;
+        header {
+          height: 46px;
+          line-height: 46px;
+          color: @chart-title-color;
+          padding: 0 10px;
+          font-weight: 600;
+          font-size: 18px;
+        }
+        section {
+          width: 100%;
+          height: calc(100% - 46px);
+        }
+      }
     }
     .right {
       width: 33%;
@@ -171,14 +189,14 @@
             font-size: 16px;
           }
           section {
-            height: calc(33vh - 60px);
+            height: calc(50vh - 60px);
           }
         }
       }
       .left {
         .chart-container {
           section {
-            height: calc(33vh - 60px);
+            height: calc(50vh - 60px);
           }
         }
       }
