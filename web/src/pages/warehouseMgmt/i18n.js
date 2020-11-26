@@ -20,6 +20,7 @@ module.exports = {
       receiver: '领用人',
       materialsState: '存货状态',
       createTime: '创建时间',
+      remark: '备注',
       add: '添加',
       import: '导入',
       export: '导出',

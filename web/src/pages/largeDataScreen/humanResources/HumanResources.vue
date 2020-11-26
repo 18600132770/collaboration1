@@ -4,12 +4,14 @@
       <div class="head-title">
         <!-- <div class="logo"></div> -->
         <span>公司人力资源分析系统</span>
-        <span class="date"><a-icon type="clock-circle" /> {{currentDate}}</span>
+        <span class="date"
+          ><a-icon type="clock-circle" /> {{ currentDate }}</span
+        >
       </div>
     </header>
     <section class="main">
       <div class="left">
-        <div class="chart-container" style="height: 150px; flex: unset;">
+        <div class="chart-container" style="height: 150px; flex: unset">
           <!-- <header>项目收款总览</header> -->
           <section>
             <div class="main-count">
@@ -49,16 +51,22 @@
           </div>
         </div>
         <div class="chart-container right-bottom">
-          <div style="height: 100%;">
+          <div style="height: 100%">
             <!-- <header>储备项目</header> -->
-            <section style="height: 100%;">
+            <section style="height: 100%">
               <BaseMap></BaseMap>
             </section>
           </div>
-          <div style="height: 100%;">
+          <div style="height: 100%">
             <!-- <header>图谱</header> -->
             <section>
-              <ProjectTable></ProjectTable>
+              <Graph
+                v-if="graphData.nodes.length > 0"
+                :data="graphData"
+                :options="options"
+                @node-click="onNodeClick"
+                @node-dbclick="onNodeDBClick"
+              ></Graph>
             </section>
           </div>
         </div>
@@ -74,6 +82,7 @@ import PieChartSix from './components/PieChartSix'
 import BaseMap from './components/BaseMap'
 import LineChart from './components/LineChart'
 import FunnelChart from './components/FunnelChart'
+import Graph from './components/Graph'
 /* import BarChart from './components/BarChart'
 import ChinaMap from './components/ChinaMap'
 import ProjectTable from './components/ProjectTable'
@@ -85,18 +94,122 @@ export default {
     PieChartSix,
     BaseMap,
     LineChart,
-    FunnelChart
+    FunnelChart,
+    Graph,
     /* TenderProject,
     BarChart,
     ChinaMap,
     ProjectTable,
     CollectionsTable */
   },
-  data () {
+  data() {
     return {
       currentDate: format(new Date(), 'yyyy-MM-dd'),
+
+      // 图谱数据
+      graphData: {
+        nodes: [
+          {
+            inOfficeYear: '38',
+            isRoot: 1,
+            entityType: '1',
+            sex: '男',
+            lastYearOffice: '前210',
+            firstYearOffice: '前247',
+            entryId: 'R2006063350035680',
+            labels: ['数字人文人物', '数字人文'],
+            dynasty: '嬴秦',
+            deathYear: '',
+            birthYear: 'null',
+            entryName: '嬴政',
+            name: '桥梁所',
+            personId: 'null',
+            deathTitle: ';始皇帝;',
+            ethnicityCode: 'null',
+            id: '102123786',
+            householdRegister: 'null',
+            choronymCode: 'null',
+          },
+          {
+            entityType: '1',
+            entryName: '秦朝',
+            name: '马东铁路',
+            startYear: '-221.0',
+            dyType: 'null',
+            sort: '6.2',
+            id: '101987033',
+            endYear: '-206.0',
+            entryId: 'R2008040190000021',
+            dyId: '61.0',
+            labels: ['数字人文朝代', '数字人文'],
+          },
+          {
+            entityType: '1',
+            entryName: '秦朝',
+            name: '李四',
+            startYear: '-221.0',
+            dyType: 'null',
+            sort: '6.2',
+            id: '1019870331',
+            endYear: '-206.0',
+            entryId: 'R2008040190000021',
+            dyId: '61.0',
+            labels: ['数字人文朝代', '数字人文'],
+          },
+          {
+            entityType: '1',
+            entryName: '秦朝',
+            name: '张三',
+            startYear: '-221.0',
+            dyType: 'null',
+            sort: '6.2',
+            id: '1019870333',
+            endYear: '-206.0',
+            entryId: 'R2008040190000021',
+            dyId: '61.0',
+            labels: ['数字人文朝代', '数字人文'],
+          },
+        ],
+        links: [
+          {
+            name: '',
+            id: '244841248',
+            source: '102123786',
+            target: '101987033',
+          },
+          {
+            name: '',
+            id: '2448412481',
+            source: '101987033',
+            target: '1019870331',
+          },
+          {
+            name: '',
+            id: '2448412481',
+            source: '101987033',
+            target: '1019870333',
+          },
+        ],
+      },
+      options: {
+        label: 'name',
+        linkText: 'name',
+        node: true,
+        link: true,
+        showLabel: true,
+        nodeColor: '#9999FF',
+        linkColor: '#727071',
+        nodeFontSize: 13,
+        linkField: 'id',
+        nodeField: 'value',
+        mouseover: false,
+      },
     }
-  }
+  },
+  methods: {
+    onNodeClick() {},
+    onNodeDBClick() {},
+  },
 }
 </script>
 
@@ -116,7 +229,7 @@ export default {
   }
 }
 .main-count {
-  height: 90px
+  height: 90px;
 }
 
 /deep/ .ant-statistic {

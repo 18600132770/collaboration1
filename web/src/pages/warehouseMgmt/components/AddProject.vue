@@ -1,6 +1,6 @@
 <template>
   <span>
-    <a-button @click="addNew" type="primary" icon="plus">{{
+    <a-button @click="addNew" type="link" icon="plus">{{
       $t('add')
     }}</a-button>
     <a-modal v-model="visible" :title="$t('add')" :width="900" :footer="null">

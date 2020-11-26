@@ -4,8 +4,8 @@
       <div class="operator">
         <span>
           <AddProject></AddProject>
-          <a-button @click="addNew" type="primary" icon="plus" style="margin-left: 10px;">{{$t('import')}}</a-button>
-          <a-button @click="addNew" type="primary" icon="plus" style="margin-left: 10px;">{{$t('export')}}</a-button>
+          <a-button @click="addNew" type="link" style="margin-left: 10px;">{{$t('import')}}</a-button>
+          <a-button @click="addNew" type="link" style="margin-left: 10px;">{{$t('export')}}</a-button>
         </span>
         <a-input-search :placeholder="$t('enterKeywords')" style="width: 250px" @search="onSearch" />
       </div>

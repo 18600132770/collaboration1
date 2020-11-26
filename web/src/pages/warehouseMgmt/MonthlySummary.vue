@@ -2,8 +2,10 @@
   <a-card>
     <div>
       <div class="operator">
-        <AddProject></AddProject>
-        <!-- <a-button @click="addNew" type="primary" icon="plus">{{$t('add')}}</a-button> -->
+        <span>
+          <a-date-picker @change="onDateChange" />
+          <a-button @click="addNew" type="link">{{$t('export')}}</a-button>
+        </span>
         <a-input-search :placeholder="$t('enterKeywords')" style="width: 250px" @search="onSearch" />
       </div>
       <standard-table
@@ -34,7 +36,7 @@
 
 <script>
 import StandardTable from '@/components/table/StandardTable'
-import AddProject from './components/AddProject'
+// import AddProject from './components/AddProject'
 
 const dataSource = []
 
@@ -42,70 +44,80 @@ for (let i = 0; i < 100; i++) {
   dataSource.push({
     key: i,
     no: 'NO ' + i,
-    projectName: '项目一',
-    designPhase: '投标阶段',
-    principal: '张三',
-    chiefEngineer: '李四',
-    startTime: '2018-07-26',
-    endTime: '2021-07-26',
-    remainingDays: (Math.random() * 100 + 100).toFixed(0),
-    progress: (Math.random() * 100).toFixed(0),
-    emergencyLevel: '紧急'
+    materialsName: '顶调电位计',
+    materialsType: '5KΩ',
+    materialsUnit: '个',
+    materialsUnitPrice: '3.5',
+    materialsSupplier: '',
+    materialsInputNum: '29',
+    materialsInputDate: '2018-01-19',
+    materialsOutputNum: '',
+    materialsOutputDate: '',
+    materialsStorageLocation: '1号库房1-2',
+    remark: '',
+    createTime: '2018-15-24 14:57:40'
   })
 }
 
 export default {
   name: 'QueryList',
-  components: {StandardTable, AddProject},
+  components: {StandardTable, /* AddProject */},
   i18n: require('./i18n'),
   data () {
     return {
       columns: [
         {
-          title: this.$t('projectNo'),
-          dataIndex: 'no'
+          title: this.$t('materialsName'),
+          dataIndex: 'materialsName'
         },
         {
-          title: this.$t('projectName'),
-          dataIndex: 'projectName'
+          title: this.$t('materialsType'),
+          dataIndex: 'materialsType'
         },
         {
-          title: this.$t('designPhase'),
-          dataIndex: 'designPhase',
+          title: this.$t('materialsUnit'),
+          dataIndex: 'materialsUnit',
         },
         {
-          title: this.$t('principal'),
-          dataIndex:'principal',
+          title: this.$t('materialsUnitPrice'),
+          dataIndex:'materialsUnitPrice',
         },
         {
-          title: this.$t('chiefEngineer'),
-          dataIndex: 'chiefEngineer',
+          title: this.$t('materialsSupplier'),
+          dataIndex: 'materialsSupplier',
         },
         {
-          title: this.$t('startTime'),
-          dataIndex: 'startTime',
+          title: this.$t('materialsInputNum'),
+          dataIndex: 'materialsInputNum',
         },
         {
-          title: this.$t('endTime'),
-          dataIndex: 'endTime',
+          title: this.$t('materialsInputDate'),
+          dataIndex: 'materialsInputDate',
         },
         {
-          title: this.$t('remainingDays'),
-          dataIndex: 'remainingDays',
+          title: this.$t('materialsOutputNum'),
+          dataIndex: 'materialsOutputNum',
         },
         {
-          title: this.$t('progress'),
-          dataIndex: 'progress',
-          scopedSlots: { customRender: 'progress' }
+          title: this.$t('materialsOutputDate'),
+          dataIndex: 'materialsOutputDate',
         },
         {
-          title: this.$t('emergencyLevel'),
-          dataIndex: 'emergencyLevel',
+          title: this.$t('materialsStorageLocation'),
+          dataIndex: 'materialsStorageLocation',
         },
+        {
+          title: this.$t('remark'),
+          dataIndex: 'remark',
+        },
+        {
+          title: this.$t('createTime'),
+          dataIndex: 'createTime',
+        }/* ,
         {
           title: this.$t('operate'),
           scopedSlots: { customRender: 'action' }
-        }
+        } */
       ],
       dataSource: dataSource,
       selectedRows: []
@@ -142,22 +154,26 @@ export default {
       this.dataSource.unshift({
         key: this.dataSource.length,
         no: 'NO ' + this.dataSource.length,
-        projectName: '项目一',
-        designPhase: '投标阶段',
-        principal: '张三',
-        chiefEngineer: '李四',
-        startTime: '2018-07-26',
-        endTime: '2021-07-26',
-        remainingDays: '200',
-        progress: 50,
-        emergencyLevel: '紧急'
+        materialsName: '顶调电位计',
+        materialsType: '5KΩ',
+        materialsUnit: '个',
+        materialsUnitPrice: '3.5',
+        materialsSupplier: '',
+        materialsInputNum: '29',
+        materialsInputDate: '2018-01-19',
+        materialsOutputNum: '',
+        materialsOutputDate: '',
+        materialsStorageLocation: '1号库房1-2',
+        remark: '',
+        createTime: '2018-15-24 14:57:40'
       })
     },
     handleMenuClick (e) {
       if (e.key === 'delete') {
         this.remove()
       }
-    }
+    },
+    onDateChange () {}
   }
 }
 </script>
