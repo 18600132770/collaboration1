@@ -19,8 +19,7 @@ const assetsCDN = {
     clipboard: 'ClipboardJS',
     '@antv/data-set': 'DataSet',
     'js-cookie': 'Cookies',
-    'AMap': 'AMap', // 高德地图配置
-    d3: 'd3'
+    'AMap': 'AMap' // 高德地图配置
   },
   css: [
   ],

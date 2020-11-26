@@ -3,7 +3,7 @@
  * @Author: chenfengtao
  * @Date: 2020-09-15 16:49:09
  * @LastEditors: supercheney
- * @LastEditTime: 2020-11-26 20:49:52
+ * @LastEditTime: 2020-11-26 21:26:52
 -->
 <template>
   <div id="relation-chart">
@@ -535,8 +535,9 @@ function dragended (d) {
   d.fy = null
 }
 
-function zoomed () {
-  d3.selectAll('svg > g.zoom-g').attr('transform', d3.event.transform)
+function zoomed (event) {
+  console.log(event)
+  d3.selectAll('svg > g.zoom-g').attr('transform', event.transform)
 }
 
 function linkPath (d) {
