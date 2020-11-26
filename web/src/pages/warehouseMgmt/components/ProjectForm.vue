@@ -6,67 +6,58 @@
     :label-col="labelCol"
     :wrapper-col="wrapperCol"
   >
-    <a-form-model-item ref="projectNo" :label="$t('projectNo')" prop="projectNo">
+    <a-form-model-item ref="materialsName" :label="$t('materialsName')" prop="materialsName">
       <a-input
-        v-model="form.projectNo"
-        :placeholder="$t('inputNo')"
+        v-model="form.materialsName"
+        :placeholder="$t('inputMaterialsName')"
       />
     </a-form-model-item>
-    <a-form-model-item ref="projectName" :label="$t('projectName')" prop="projectName">
-      <a-input v-model="form.projectName" :placeholder="$t('inputName')"/>
+    <a-form-model-item ref="materialsType" :label="$t('materialsType')" prop="materialsType">
+      <a-input v-model="form.materialsType" :placeholder="`请输入${$t('materialsType')}`"/>
     </a-form-model-item>
-    <a-form-model-item :label="$t('designPhase')" prop="designPhase">
-      <a-select v-model="form.designPhase" :placeholder="$t('selectDesignPhase')">
-        <a-select-option value="shanghai">投标</a-select-option>
-        <a-select-option value="beijing1">前期方案研究</a-select-option>
-        <a-select-option value="beijing2">初步设计</a-select-option>
-        <a-select-option value="beijing3">施工图设计</a-select-option>
-        <a-select-option value="beijing4">施工配合</a-select-option>
-        <a-select-option value="beijing5">结算</a-select-option>
-        <a-select-option value="beijing6">完结</a-select-option>
+    <a-form-model-item ref="materialsUnitPrice" :label="$t('materialsUnitPrice')" prop="materialsUnitPrice">
+      <a-input v-model="form.materialsUnitPrice" :placeholder="`请输入${$t('materialsUnitPrice')}`"/>
+    </a-form-model-item>
+    <a-form-model-item :label="$t('materialsUnit')" prop="materialsUnit">
+      <a-select v-model="form.materialsUnit" :placeholder="$t('selectmaterialsUnit')">
+        <a-select-option value="shanghai">个</a-select-option>
+        <a-select-option value="beijing1">包</a-select-option>
+        <a-select-option value="beijing2">袋</a-select-option>
+        <a-select-option value="beijing3">台</a-select-option>
       </a-select>
     </a-form-model-item>
-    <a-form-model-item :label="$t('startTime')" required prop="startTime">
+    <a-form-model-item ref="materialsPurchaseContract" :label="$t('materialsPurchaseContract')" prop="materialsPurchaseContract">
+      <a-input v-model="form.materialsPurchaseContract" :placeholder="`请输入${$t('materialsPurchaseContract')}`"/>
+    </a-form-model-item>
+    <a-form-model-item ref="materialsSupplier" :label="$t('materialsSupplier')" prop="materialsSupplier">
+      <a-input v-model="form.materialsSupplier" :placeholder="`请输入${$t('materialsSupplier')}`"/>
+    </a-form-model-item>
+    <a-form-model-item :label="$t('materialsInputDate')" required prop="materialsInputDate">
       <a-date-picker
-        v-model="form.startTime"
+        v-model="form.materialsInputDate"
         show-time
         type="date"
         :placeholder="$t('pickDate')"
         style="width: 100%;"
       />
     </a-form-model-item>
-    <a-form-model-item :label="$t('endTime')" required prop="endTime">
-      <a-date-picker
-        v-model="form.endTime"
-        show-time
-        type="date"
-        :placeholder="$t('pickDate')"
-        style="width: 100%;"
-      />
+    <a-form-model-item :label="$t('materialsInputNum')" prop="materialsInputNum">
+      <a-input v-model="form.materialsInputNum" :placeholder="`请输入${$t('materialsInputNum')}`"/>
     </a-form-model-item>
-    <a-form-model-item :label="$t('principal')" prop="principal">
-      <a-select v-model="form.principal" :placeholder="$t('selectPrincipal')">
-        <a-select-option value="shanghai">张三</a-select-option>
-        <a-select-option value="beijing">李四</a-select-option>
-      </a-select>
+    <a-form-model-item :label="$t('materialsInputAmount')" prop="materialsInputAmount">
+      <a-input v-model="form.materialsInputAmount" :placeholder="`请输入${$t('materialsInputAmount')}`"/>
     </a-form-model-item>
-    <a-form-model-item :label="$t('chiefEngineer')" prop="chiefEngineer">
-      <a-select v-model="form.chiefEngineer" :placeholder="$t('selectChiefEngineer')">
-        <a-select-option value="shanghai">张三</a-select-option>
-        <a-select-option value="beijing">李四</a-select-option>
-      </a-select>
-    </a-form-model-item>
-    <a-form-model-item :label="$t('department')" prop="department">
-      <a-select v-model="form.department" :placeholder="$t('selectDepartment')">
-        <a-select-option value="qiaoliang">桥梁所</a-select-option>
-        <a-select-option value="suidao">隧道所</a-select-option>
-        <a-select-option value="luji">路基所</a-select-option>
-        <a-select-option value="dizhi">地质所</a-select-option>
+    <a-form-model-item :label="$t('materialsStorageLocation')" prop="materialsStorageLocation">
+      <a-select v-model="form.materialsStorageLocation" :placeholder="`请选择${$t('materialsStorageLocation')}`">
+        <a-select-option value="qiaoliang">1号库</a-select-option>
+        <a-select-option value="suidao">2号库</a-select-option>
+        <a-select-option value="luji">3号库</a-select-option>
+        <a-select-option value="dizhi">4号库</a-select-option>
       </a-select>
     </a-form-model-item>
     <a-form-model-item :wrapper-col="{ span: 15, offset: 9 }">
       <a-button type="primary" @click="onSubmit">
-        {{$t('nextStep')}}
+        {{$t('submit')}}
       </a-button>
     </a-form-model-item>
   </a-form-model>
@@ -82,24 +73,26 @@ export default {
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
       form: {
-        projectNo: '',
-        projectName: '',
-        designPhase: '',
-        startTime: undefined,
-        endTime: undefined,
-        principal: '',
-        chiefEngineer: '',
-        department: '',
+        materialsName: '',
+        materialsType: '',
+        materialsUnit: '',
+        materialsUnitPrice: '',
+        materialsPurchaseContract: '',
+        materialsSupplier: '',
+        materialsInputDate: undefined,
+        materialsInputNum: '',
+        materialsInputAmount: '',
+        materialsStorageLocation: '',
       },
       rules: {
-        projectNo: [{ required: true, message: this.$t('inputNo'), trigger: 'blur' }],
-        projectName: [{ required: true, message: this.$t('inputName'), trigger: 'blur' }],
-        designPhase: [{ required: true, message: this.$t('selectDesignPhase'), trigger: 'change' }],
+        materialsName: [{ required: true, message: this.$t('inputNo'), trigger: 'blur' }],
+        materialsType: [{ required: true, message: this.$t('inputName'), trigger: 'blur' }],
+        materialsUnit: [{ required: true, message: this.$t('selectmaterialsUnit'), trigger: 'change' }],
         startTime: [{ required: true, message: this.$t('pickDate'), trigger: 'change' }],
-        endTime: [{ required: true, message: this.$t('pickDate'), trigger: 'change' }],
-        principal: [{ required: true, message: this.$t('principal'), trigger: 'change' }],
-        chiefEngineer: [{ required: true, message: this.$t('chiefEngineer'), trigger: 'change' }],
-        department: [{ required: true, message: this.$t('department'), trigger: 'change' }],
+        materialsInputDate: [{ required: true, message: this.$t('pickDate'), trigger: 'change' }],
+        materialsInputNum: [{ required: true, message: this.$t('materialsInputNum'), trigger: 'change' }],
+        materialsInputAmount: [{ required: true, message: this.$t('materialsInputAmount'), trigger: 'change' }],
+        materialsStorageLocation: [{ required: true, message: this.$t('materialsStorageLocation'), trigger: 'change' }],
         
       }
     }

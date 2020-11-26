@@ -1,27 +1,27 @@
 <template>
-  <a-card :bordered="false">
-    <a-steps class="steps" :current="current">
+  <a-card :bordered="false" style="padding: 0">
+    <!-- <a-steps class="steps" :current="current">
       <a-step :title="$t('input')" />
       <a-step :title="$t('confirm')" />
       <a-step :title="$t('complete')" />
-    </a-steps>
+    </a-steps> -->
     <div class="content">
       <ProjectForm v-if="current === 0" @nextStep="nextStep"></ProjectForm>
-      <UploadFile v-if="current === 1" @nextStep="nextStep" @prevStep="prevStep"></UploadFile>
-      <step3 v-if="current === 2" @prevStep="prevStep" @finish="finish"></step3>
+      <!-- <UploadFile v-if="current === 1" @nextStep="nextStep" @prevStep="prevStep"></UploadFile> -->
+      <!-- <step3 v-if="current === 2" @prevStep="prevStep" @finish="finish"></step3> -->
     </div>
   </a-card>
 </template>
 
 <script>
 import ProjectForm from './ProjectForm'
-import UploadFile from './UploadFile'
-import Step3 from './Step3'
+// import UploadFile from './UploadFile'
+// import Step3 from './Step3'
 
 export default {
   name: 'StepForm',
   i18n: require('../i18n'),
-  components: {ProjectForm, UploadFile, Step3},
+  components: {ProjectForm/* , UploadFile, Step3 */},
   data () {
     return {
       current: 0
