@@ -132,7 +132,7 @@ function updateChart () {
         "axisLabel": {
             "color": "#c0c3cd",
             "fontSize": 12,
-            "interval": 1
+            "interval": 0
         },
         "axisTick": {
             "lineStyle": {
@@ -152,7 +152,7 @@ function updateChart () {
             },
             "show": true
         },
-        "data": ["1", "2", "3", "4", "5", "6", "7", "8"],
+        "data": ["1", "2", "3", "4", "5", "6", "7", "8"].map(item => `${item}月`),
         "type": "category"
     },
     "yAxis": {
