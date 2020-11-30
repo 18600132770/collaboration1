@@ -130,7 +130,7 @@ function updateChart() {
         height: '77%',
         left: '4%',
         top: '15%',
-        sort: 'none', // ascending
+        sort: 'ascending', // none
         label: {
           show: true,
           position: 'inside',
@@ -149,7 +149,7 @@ function updateChart() {
         height: '77%',
         left: '28%',
         top: '15%',
-        sort: 'none',
+        sort: 'ascending',
         label: {
           show: true,
           position: 'inside',
@@ -171,7 +171,7 @@ function updateChart() {
         height: '77%',
         left: '52%',
         top: '15%',
-        sort: 'none',
+        sort: 'ascending',
         label: {
           show: true,
           position: 'inside',
@@ -192,7 +192,7 @@ function updateChart() {
         height: '77%',
         left: '76%',
         top: '15%',
-        sort: 'none',
+        sort: 'ascending',
         label: {
           show: true,
           position: 'inside',

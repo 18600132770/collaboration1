@@ -26,7 +26,7 @@
         </div>
         <div class="chart-container">
           <div class="small-col">
-            <!-- <header>每月总应收款</header> -->
+            <header>人员结构分析</header>
             <section>
               <FunnelChart></FunnelChart>
             </section>
@@ -44,7 +44,7 @@
       <div class="right">
         <div class="chart-container right-top">
           <div class="small-col">
-            <header>合同额</header>
+            <header>人员结构比例</header>
             <section>
               <PieChartSix></PieChartSix>
             </section>
@@ -52,13 +52,13 @@
         </div>
         <div class="chart-container right-bottom">
           <div style="height: 100%">
-            <!-- <header>储备项目</header> -->
+            <header>员工居住地点分析</header>
             <section style="height: 100%">
               <BaseMap></BaseMap>
             </section>
           </div>
           <div style="height: 100%">
-            <!-- <header>图谱</header> -->
+            <header>人力资源图谱</header>
             <section>
               <Graph
                 v-if="graphData.nodes.length > 0"
