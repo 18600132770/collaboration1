@@ -9,7 +9,7 @@
     </header>
     <section class="main">
       <div class="left">
-        <div class="chart-container">
+        <div class="chart-container" style="height: 200px">
           <div class="small-col">
             <!-- <header>每月总应收款</header> -->
             <section style="height: 100%;">
@@ -17,9 +17,13 @@
               <div class="width-50">
                 <div class="remaining-days">
                   <div>目标营业收入</div>
-                  <div><span>200</span> 亿</div>
+                  <div class="num"><span>200</span> 亿</div>
                   <div>已完成营业收入</div>
-                  <div><span>161.781</span> 亿</div>
+                  <div class="num"><span>161.781</span> 亿</div>
+                  <div>当月现金流</div>
+                  <div class="num"><span>100</span> 亿</div>
+                  <div>当前带息负债</div>
+                  <div class="num"><span>61.781</span> 亿</div>
                 </div>
               </div>
             </section>
@@ -30,6 +34,25 @@
             <header>支出</header>
             <section>
               <SpendingTable></SpendingTable>
+            </section>
+          </div>
+        </div>
+         <div class="chart-container">
+          <div class="small-col">
+            <header>当月成本</header>
+            <section class="cost">
+              <div class="cost-item">
+                <div class="title">当月工资总额</div>
+                <div class="value">1000万</div>
+              </div>
+              <div class="cost-item">
+                <div class="title">当月企业年金</div>
+                <div class="value">2000万</div>
+              </div>
+              <div class="cost-item">
+                <div class="title">其他</div>
+                <div class="value">3000万</div>
+              </div>
             </section>
           </div>
         </div>
@@ -71,12 +94,19 @@
                 <!-- <header>每月总应收款</header> -->
                 <section style="height: 100%;">
                   <div class="width-50">
-                    <div class="remaining-days">
+                    <div class="sum-shui">
+                      <div>利润目标</div>
+                      <div><span>200</span> 万</div>
+                    </div>
+                    <ProfitDashChart style="height: calc(100% - 47px)"></ProfitDashChart>
+                  </div>
+                  <div class="width-50">
+                    <div class="sum-shui">
                       <div>本年度累计缴税</div>
                       <div><span>20</span> 亿</div>
                     </div>
+                    <DashChart style="height: calc(100% - 47px)"></DashChart>
                   </div>
-                  <DashChart class="width-50"></DashChart>
                 </section>
               </div>
             </section>
@@ -97,6 +127,7 @@ import LineChart3 from './components/LineChart3'
 import InfoAnnouncements from './components/InfoAnnouncements'
 import SpendingTable from './components/SpendingTable'
 import DashChart from './components/DashChart'
+import ProfitDashChart from './components/ProfitDashChart'
 
 export default {
   name: 'FinalcialAnalysis',
@@ -107,7 +138,8 @@ export default {
     LineChart3,
     InfoAnnouncements,
     SpendingTable,
-    DashChart
+    DashChart,
+    ProfitDashChart
   },
   data () {
     return {

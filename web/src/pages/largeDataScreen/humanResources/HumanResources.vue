@@ -46,7 +46,9 @@
           <div class="small-col">
             <header>人员结构比例</header>
             <section>
-              <PieChartSix></PieChartSix>
+              <!-- <PieChartSix></PieChartSix> -->
+              <SexChart style="width: calc(100% / 6); display: inline-block;"></SexChart>
+              <!-- <DegreeChart style="width: calc(100% / 6); display: inline-block;"></DegreeChart> -->
             </section>
           </div>
         </div>
@@ -78,29 +80,24 @@
 <script>
 import { format } from 'date-fns'
 
-import PieChartSix from './components/PieChartSix'
+// import PieChartSix from './components/PieChartSix'
 import BaseMap from './components/BaseMap'
 import LineChart from './components/LineChart'
 import FunnelChart from './components/FunnelChart'
 import Graph from './components/Graph'
-/* import BarChart from './components/BarChart'
-import ChinaMap from './components/ChinaMap'
-import ProjectTable from './components/ProjectTable'
-import CollectionsTable from './components/CollectionsTable' */
+import SexChart from './components/SexChart'
+// import DegreeChart from './components/DegreeChart'
 
 export default {
   name: 'BusinessAnalysis',
   components: {
-    PieChartSix,
+    // PieChartSix,
     BaseMap,
     LineChart,
     FunnelChart,
     Graph,
-    /* TenderProject,
-    BarChart,
-    ChinaMap,
-    ProjectTable,
-    CollectionsTable */
+    SexChart,
+    // DegreeChart
   },
   data() {
     return {

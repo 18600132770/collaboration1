@@ -116,9 +116,9 @@
         > div {
           width: 100%;
           background-color: @chart-bg;
-          &:first-child {
+          /* &:first-child {
             margin-right: 8px;
-          }
+          } */
         }
       }
       .right-bottom.chart-container {
@@ -161,19 +161,44 @@
     width: 100%;
     color: @chart-title-color;
     padding: 0;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 600;
     margin-right: 10px;
-    &:last-child, &:nth-child(2){
-      text-align: right;
-      margin-right: 35px;
-    }
     span {
       text-align: center;
-      font-size: 30px;
+      font-size: 20px;
+    }
+  }
+  .num{
+    text-align: right;
+    margin-right: 35px;
+  }
+}
+.cost {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: #ffffff;
+  .cost-item {
+    text-align: center;
+    .title {
+      font-size: 13px;
+    }
+    .value {
+      font-size: 18px;
+      font-weight: bold;
     }
   }
 }
+.sum-shui {
+  color: #ffffff;
+  text-align: center;
+  span {
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
 
 @media screen and (max-width: 1920px) {
   .container {
@@ -196,7 +221,13 @@
       .left {
         .chart-container {
           section {
-            height: calc(50vh - 60px);
+            height: calc(33vh - 180px);
+          }
+          
+        }
+        .left-bottom {
+          section {
+            height: calc(33vh - 0px);
           }
         }
       }
