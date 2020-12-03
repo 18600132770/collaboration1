@@ -80,6 +80,20 @@ function initBarChart() {
 }
 
 function updateChart() {
+   var colorList = [
+    '#FDB36A',
+    '#73DDFF',
+    '#73ACFF',
+    '#FDD56A',
+    '#9E87FF',
+    '#FD866A',
+    '#58D5FF',
+    '#389af4', '#dfeaff',
+    '#ff8c37', '#ffdcc3',
+    // ['#ffc257', '#ffedcc'],
+    // ['#fd6f97', '#fed4e0'],
+    '#a181fc', '#e3d9fe'
+  ]
   let option = {
     title:[{
       subtext: '职级人数',
@@ -121,7 +135,7 @@ function updateChart() {
       trigger: 'item',
       formatter: '{a} <br/>{b} : {c}',
     },
-
+    color: colorList,
     series: [
       {
         name: '职级人数',

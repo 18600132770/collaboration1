@@ -3,7 +3,7 @@
  * @Author: chenfengtao
  * @Date: 2020-09-15 16:49:09
  * @LastEditors: supercheney
- * @LastEditTime: 2020-11-26 21:26:52
+ * @LastEditTime: 2020-12-03 21:16:56
 -->
 <template>
   <div id="relation-chart">
@@ -69,12 +69,23 @@ import placeCenter from '@/assets/images/relation/light/light-place-center.png'
 import orgCenter from '@/assets/images/relation/light/light-org-center.png'
 import diweiCenter from '@/assets/images/relation/light/light-diwei-center.png' */
 
+import company from '@/assets/img/Human/company.png'
+import department from '@/assets/img/Human/department.png'
+import project from '@/assets/img/Human/project.png'
+import user from '@/assets/img/Human/user.png'
+
 // let height = 680
 
 /* let color = {
   text: '#8fac4a',
   chart3: '#41433d'
 } */
+const icons = {
+  company,
+  department,
+  project,
+  user,
+}
 
 /* const icons = {
   '数字人文人物': people,
@@ -216,13 +227,13 @@ export default {
             return d.id
           })
             .distance(function () {
-              return 120
+              return 60
               // debugger
               // return _this.weightScale(d[_this.networkOptions.linkField])
             })
         )
         // 引力
-        .force('charge', d3.forceManyBody().strength(-350).distanceMin(20)/* .strength(d => d.weight * -30).distanceMin(60) */)
+        .force('charge', d3.forceManyBody().strength(-150).distanceMin(15)/* .strength(d => d.weight * -30).distanceMin(60) */)
         // 实例中心
         .force('center', d3.forceCenter(this.width / 2, this.height / 2))
         // 碰撞力 防止节点重叠
@@ -296,12 +307,12 @@ function draw (graph) {
   simulation.nodes(graph.nodes)
   simulation.force('link').links(links)
 
+  // 画节点
+  let nodeEnter = this.drawNode(graph.nodes)
   // 画边
   let linkEnter = this.drawLink(links)
   // 边上的文字
   let linkTextEnter = this.drawLinkText(links)
-  // 画节点
-  let nodeEnter = this.drawNode(graph.nodes)
   // tick事件
   // simulation/* .alphaTarget(0.3).alphaDecay(0.05).alpha(1) */.on('tick', function () {
   //   _this.ticked(linkEnter, nodeEnter, linkTextEnter)
@@ -415,16 +426,16 @@ function drawNode (nodes) {
   //   .attr('width', function (d) { return d.bbox.width })
   //   .attr('height', function (d) { return d.bbox.height })
   // .style('fill', 'red')
-  nodeEnter.append('circle')
-    .attr('class', 'node')
-    .attr('stroke', '#fff')
-    .attr('r', d => +d.isRoot === 1 ? 15 : 10.5)
-    .merge(nodeUpdate.select('circle'))
-    .attr('fill', () => _this.networkOptions.nodeColor)
-  // .attr('fill-opacity', d => (_this.currentNodeId === d.id || _this.currentNodeId === null || _this.linkedNode.indexOf(d.id) > -1) ? 1 : 0.2)
-    .append('title', d => d[_this.networkOptions.label])
+  // nodeEnter.append('circle')
+  //   .attr('class', 'node')
+  //   .attr('stroke', '#fff')
+  //   .attr('r', d => +d.isRoot === 1 ? 15 : 10.5)
+  //   .merge(nodeUpdate.select('circle'))
+  //   .attr('fill', () => _this.networkOptions.nodeColor)
+  // // .attr('fill-opacity', d => (_this.currentNodeId === d.id || _this.currentNodeId === null || _this.linkedNode.indexOf(d.id) > -1) ? 1 : 0.2)
+  //   .append('title', d => d[_this.networkOptions.label])
 
-  /* nodeEnter.append('image')
+  nodeEnter.append('image')
     .merge(nodeUpdate.select('image'))
     .attr('class', d => +d.isRoot === 1
       ? (_this.selectedNodeId === d.id ? 'node-icon-big-hl' : 'node-icon-big')
@@ -432,14 +443,14 @@ function drawNode (nodes) {
     )
     .attr('xlink:href', function (d) {
       if (+d.isRoot === 1) {
-        return (iconsCenter[d.labels[0]] || iconsCenter[d.labels[1]])
+        return (icons[d.type])
       }
       return _this.selectedNodeId === d.id
-        ? (iconsHl[d.labels[0]] || iconsHl[d.labels[1]])
-        : (icons[d.labels[0]] || icons[d.labels[1]])
+        ? (icons[d.type])
+        : (icons[d.type])
     })
-    .attr('x', d => +d.isRoot === 1 ? -47 : -35)
-    .attr('y', d => +d.isRoot === 1 ? -47 : -35) */
+    .attr('x', d => +d.isRoot === 1 ? -27 : -15)
+    .attr('y', d => +d.isRoot === 1 ? -27 : -15)
     // .attr('width', d => +d.isRoot === 1 ? (_this.selectedNodeId === d.id ? 94 : 60) : (_this.selectedNodeId === d.id ? 69 : 44))
     // .attr('height', d => +d.isRoot === 1 ? (_this.selectedNodeId === d.id ? 94 : 60) : (_this.selectedNodeId === d.id ? 69 : 44))
 
@@ -518,19 +529,20 @@ function ticked (link, node, linkText) {
   })
 }
 
-function dragstarted (d) {
-  if (!d3.event || !d3.event.active) simulation.alphaTarget(0.3).restart()
+function dragstarted (e, d) {
+  console.log(e, d)
+  if (!e || !e.active) simulation.alphaTarget(0.3).restart()
   d.fx = d.x
   d.fy = d.y
 }
 
-function dragged (d) {
-  d.fx = d3.event.x
-  d.fy = d3.event.y
+function dragged (e, d) {
+  d.fx = e.x
+  d.fy = e.y
 }
 
-function dragended (d) {
-  if (!d3.event.active) simulation.alphaTarget(0)
+function dragended (e, d) {
+  if (!e.active) simulation.alphaTarget(0)
   d.fx = null
   d.fy = null
 }
@@ -871,16 +883,16 @@ function createArrow (svg, type, size = 10) {
   fill-opacity: 0.1;
 }
 image.node-icon {
-  width: 70px;
-  height: 70px;
+  width: 30px;
+  height: 30px;
 }
 image.node-icon-hl {
   width: 70px;
   height: 70px;
 }
 image.node-icon-big {
-  width: 94px;
-  height: 94px;
+  width: 54px;
+  height: 54px;
 }
 image.node-icon-big-hl {
   width: 94px;

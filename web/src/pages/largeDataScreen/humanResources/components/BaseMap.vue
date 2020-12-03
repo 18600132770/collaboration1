@@ -4,7 +4,7 @@
  * @Author: chenfengtao
  * @Date: 2020-08-17 14:44:34
  * @LastEditors: supercheney
- * @LastEditTime: 2020-11-24 22:13:03
+ * @LastEditTime: 2020-12-03 20:17:13
 -->
 <template>
   <div id="map-container"></div>
@@ -47,7 +47,10 @@ export default {
     // 初始化信息框
     initInfoWindow,
 
-    initCircle
+    initCircle,
+
+    addComMarker,
+    initCircleMarker
   },
   beforeDestroy () {
     // 销毁地图
@@ -103,6 +106,9 @@ function initMap () {
       _this.initCircle(4000)
       _this.initCircle(3000)
       _this.initCircle(2000)
+
+      _this.addComMarker([108.93, 34.27])
+      _this.initCircleMarker()
     })
     .catch((e) => {
       console.log(e)
@@ -136,6 +142,19 @@ function addMarker (data) {
   this.map.add(marker)
 
   return marker
+}
+
+function addComMarker (lnglat) {
+  var marker = new window.AMap.Marker({
+    position: lnglat,
+    // icon: markerIcon, // type === '事件' ? event : place,
+    // offset: new window.AMap.Pixel(-20, -35),
+    /* label: {
+      content: `<div class="marker-label">${name}</div>`,
+      offset: new window.AMap.Pixel(16, 1)
+    } */
+  })
+  this.map.add(marker)
 }
 
 function onMarkerClick (e) {
@@ -183,7 +202,7 @@ function initCircle (radius) {
     strokeColor: "#FF33FF", 
     strokeWeight: 6,
     strokeOpacity: 0.2,
-    fillOpacity: 0.4,
+    fillOpacity: 0.2,
     strokeStyle: 'dashed',
     strokeDasharray: [10, 10], 
     // 线样式还支持 'dashed'
@@ -195,6 +214,48 @@ function initCircle (radius) {
 
   // 缩放地图到合适的视野级别
   radius === 4000 && this.map.setFitView([ circle ])
+}
+
+function initCircleMarker () {
+  let data = [
+    [108.936872,34.271727],
+    [108.937559,34.283926],
+    [108.979101,34.274564],
+    [108.929319,34.254135],
+    [108.953008,34.257824],
+    [108.961591,34.294705],
+    [109.01103,34.255554],
+    [108.908033,34.291301],
+    [108.983907,34.265769],
+    [108.898763,34.300377],
+    [108.971548,34.25981],
+    [108.954725,34.230011],
+    [108.99558,34.257256],
+    [108.951292,34.300093],
+    [108.952665,34.212694],
+    [108.955755,34.243634],
+    [108.906316,34.252432],
+    [108.920049,34.239093],
+    [108.902196,34.257256],
+    [108.89842,34.224901],
+    [108.882284,34.24108],
+  ]
+  data.forEach(item => {
+    var circleMarker = new window.AMap.CircleMarker({
+      center:item,
+      radius:10,//3D视图下，CircleMarker半径不要超过64px
+      strokeColor:'white',
+      strokeWeight:2,
+      strokeOpacity:0.5,
+      fillColor:'rgba(0,0,255,1)',
+      fillOpacity:0.5,
+      zIndex:10,
+      bubble:true,
+      cursor:'pointer',
+      clickable: true
+    })
+    circleMarker.setMap(this.map)
+  })
 }
 </script>
 

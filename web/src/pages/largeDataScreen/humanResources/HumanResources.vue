@@ -46,8 +46,8 @@
           <div class="small-col">
             <header>人员结构比例</header>
             <section>
-              <!-- <PieChartSix></PieChartSix> -->
-              <SexChart style="width: calc(100% / 6); display: inline-block;"></SexChart>
+              <PieChartSix></PieChartSix>
+              <!-- <SexChart style="width: calc(100% / 6); display: inline-block;"></SexChart> -->
               <!-- <DegreeChart style="width: calc(100% / 6); display: inline-block;"></DegreeChart> -->
             </section>
           </div>
@@ -80,23 +80,23 @@
 <script>
 import { format } from 'date-fns'
 
-// import PieChartSix from './components/PieChartSix'
+import PieChartSix from './components/PieChartSix'
 import BaseMap from './components/BaseMap'
 import LineChart from './components/LineChart'
 import FunnelChart from './components/FunnelChart'
 import Graph from './components/Graph'
-import SexChart from './components/SexChart'
+// import SexChart from './components/SexChart'
 // import DegreeChart from './components/DegreeChart'
 
 export default {
   name: 'BusinessAnalysis',
   components: {
-    // PieChartSix,
+    PieChartSix,
     BaseMap,
     LineChart,
     FunnelChart,
     Graph,
-    SexChart,
+    // SexChart,
     // DegreeChart
   },
   data() {
@@ -105,88 +105,8 @@ export default {
 
       // 图谱数据
       graphData: {
-        nodes: [
-          {
-            inOfficeYear: '38',
-            isRoot: 1,
-            entityType: '1',
-            sex: '男',
-            lastYearOffice: '前210',
-            firstYearOffice: '前247',
-            entryId: 'R2006063350035680',
-            labels: ['数字人文人物', '数字人文'],
-            dynasty: '嬴秦',
-            deathYear: '',
-            birthYear: 'null',
-            entryName: '嬴政',
-            name: '桥梁所',
-            personId: 'null',
-            deathTitle: ';始皇帝;',
-            ethnicityCode: 'null',
-            id: '102123786',
-            householdRegister: 'null',
-            choronymCode: 'null',
-          },
-          {
-            entityType: '1',
-            entryName: '秦朝',
-            name: '马东铁路',
-            startYear: '-221.0',
-            dyType: 'null',
-            sort: '6.2',
-            id: '101987033',
-            endYear: '-206.0',
-            entryId: 'R2008040190000021',
-            dyId: '61.0',
-            labels: ['数字人文朝代', '数字人文'],
-          },
-          {
-            entityType: '1',
-            entryName: '秦朝',
-            name: '李四',
-            startYear: '-221.0',
-            dyType: 'null',
-            sort: '6.2',
-            id: '1019870331',
-            endYear: '-206.0',
-            entryId: 'R2008040190000021',
-            dyId: '61.0',
-            labels: ['数字人文朝代', '数字人文'],
-          },
-          {
-            entityType: '1',
-            entryName: '秦朝',
-            name: '张三',
-            startYear: '-221.0',
-            dyType: 'null',
-            sort: '6.2',
-            id: '1019870333',
-            endYear: '-206.0',
-            entryId: 'R2008040190000021',
-            dyId: '61.0',
-            labels: ['数字人文朝代', '数字人文'],
-          },
-        ],
-        links: [
-          {
-            name: '',
-            id: '244841248',
-            source: '102123786',
-            target: '101987033',
-          },
-          {
-            name: '',
-            id: '2448412481',
-            source: '101987033',
-            target: '1019870331',
-          },
-          {
-            name: '',
-            id: '2448412481',
-            source: '101987033',
-            target: '1019870333',
-          },
-        ],
+        nodes: [],
+        links: [],
       },
       options: {
         label: 'name',
@@ -203,9 +123,93 @@ export default {
       },
     }
   },
+  mounted () {
+    this.mockData()
+  },
   methods: {
     onNodeClick() {},
     onNodeDBClick() {},
+    mockData () {
+      let com = [{
+        isRoot: 1,
+        name: '公司',
+        id: '102123787',
+        type: 'company'
+      }]
+      let department = ['桥梁所', '路基所', '隧道所', '地质所']
+      let project = ['京广高速', '渤海大桥', '央视二号楼', '雄安城轨']
+      let name1 = ['杨朝来','蒋平','唐灿','华马达','赵小雪','薛文泉','丁建']
+      let name2 = ['彭万里','高大山','谢大海','马宏宇','林莽','黄强辉']
+      let name3 = ['甘铁生','张伍绍祖','马继祖','程孝先','宗敬先','年广嗣','汤绍箕']
+      let name4 = ['王德茂','李书诚','杨勇','高尚德','刁富贵']
+
+      let departmentData = department.map((item, index) => {
+        return {
+          id: 'd-' + index,
+          name: item,
+          type: 'department'
+        }
+      })
+      let projectData = project.map((item, index) => {
+        return {
+          id: 'p-' + index,
+          name: item,
+          type: 'project'
+        }
+      })
+      let name1Data = this.formatUser(name1, 'u1')
+      let name2Data = this.formatUser(name2, 'u2')
+      let name3Data = this.formatUser(name3, 'u3')
+      let name4Data = this.formatUser(name4, 'u4')
+
+      let nodes = [...com, ...departmentData, ...projectData, ...name1Data, ...name2Data, ...name3Data, ...name4Data]
+      console.log(nodes)
+      let links = []
+      departmentData.forEach((item) => {
+        links.push({
+          source: com[0].id,
+          target: item.id,
+        })
+      })
+      departmentData.forEach((item, index) => {
+        links.push({
+          source: item.id,
+          target: projectData[index].id,
+        })
+      })
+      
+      let ul1 = this.userLink(name1Data, projectData[0])
+      let ul2 = this.userLink(name2Data, projectData[1])
+      let ul3 = this.userLink(name3Data, projectData[2])
+      let ul4 = this.userLink(name4Data, projectData[3])
+      let ul5= this.userLink(name3Data, projectData[3])
+      links = [...links, ...ul1, ...ul2, ...ul3, ...ul4, ...ul5]
+      console.log(links)
+      links = links.map((item, index) => {
+        item.id = 'link' + index
+        return item
+      })
+
+      this.graphData.nodes = nodes
+      this.graphData.links = links
+    },
+    formatUser (data, prefix) {
+      return data.map((item, index) => {
+        return {
+          id: prefix +'-' + index,
+          name: item,
+          type: 'user'
+        }
+      })
+    },
+    userLink (data, projectData) {
+      return data.map(item => {
+        return {
+          source: projectData.id,
+          target: item.id
+        }
+      })
+    }
   },
 }
 </script>

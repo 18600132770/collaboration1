@@ -68,7 +68,7 @@ const options = {
             component: () => import('@/pages/dashboard/datascreen'),
           }]
         },
-        {
+        /* {
           path: 'projectmgmt',
           name: '项目管理',
           meta: {
@@ -87,10 +87,10 @@ const options = {
               component: () => import('@/pages/projectMgmt'),
             }
           ]
-        },
+        }, */
         {
           path: 'collaboration',
-          name: '专业协同',
+          name: '协同管理',
           meta: {
             icon: 'reconciliation'
           },
@@ -98,31 +98,41 @@ const options = {
           component: PageView,
           children: [
             {
+              path: 'list',
+              name: '项目列表',
+              meta: {
+                icon: 'project',
+                // invisible: true
+              },
+              component: () => import('@/pages/projectMgmt'),
+            }
+            ,
+            {
               path: 'taskmgmt',
               name: '任务管理',
               meta: {
                 icon: 'reconciliation',
-                invisible: true
+                // invisible: true
               },
               component: () => import('@/pages/collaboration'),
+            },
+            {
+              path: 'staffworkinfo',
+              name: '人员工作信息',
+              meta: {
+                icon: 'solution'
+              },
+              component: PageView
+            },
+            {
+              path: 'personnelmgmt',
+              name: '人员管理',
+              meta: {
+                icon: 'team'
+              },
+              component: PageView
             }
           ]
-        },
-        {
-          path: 'staffworkinfo',
-          name: '人员工作信息',
-          meta: {
-            icon: 'solution'
-          },
-          component: PageView
-        },
-        {
-          path: 'personnelmgmt',
-          name: '人员管理',
-          meta: {
-            icon: 'team'
-          },
-          component: PageView
         },
         {
           path: 'warehousemgmt',
