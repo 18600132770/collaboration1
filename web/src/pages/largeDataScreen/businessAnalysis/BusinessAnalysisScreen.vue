@@ -24,11 +24,19 @@
           </div>
           <div class="small-col">
             <!-- <section> -->
-              <ChinaMap></ChinaMap>
+              <!-- <ChinaMap></ChinaMap> -->
             <!-- </section> -->
-            <!-- <a-carousel>
-
-            </a-carousel> -->
+            <a-carousel autoplay>
+              <CarouselItem title="储备项目合同额">
+                <ChinaMap></ChinaMap>
+              </CarouselItem>
+               <CarouselItem title="进行中项目合同额">
+                <ChinaMap1></ChinaMap1>
+              </CarouselItem>
+               <CarouselItem title="本年营业收入">
+                <ChinaMap2></ChinaMap2>
+              </CarouselItem>
+            </a-carousel>
           </div>
         </div>
       </div>
@@ -64,8 +72,12 @@ import TenderProject from './components/TenderProject'
 import BarChart from './components/BarChart'
 import PieChartThree from './components/PieChartThree'
 import ChinaMap from './components/ChinaMap'
+import ChinaMap1 from './components/ChinaMap1'
+import ChinaMap2 from './components/ChinaMap2'
 import ProjectTable from './components/ProjectTable'
 import CollectionsTable from './components/CollectionsTable'
+
+import CarouselItem from './components/CarouselItem'
 
 export default {
   name: 'BusinessAnalysis',
@@ -74,8 +86,11 @@ export default {
     BarChart,
     PieChartThree,
     ChinaMap,
+    ChinaMap1,
+    ChinaMap2,
     ProjectTable,
-    CollectionsTable
+    CollectionsTable,
+    CarouselItem
   },
   data () {
     return {

@@ -1,6 +1,6 @@
 
 <template>
-  <div id="b-china-map" :style="{ height: height, width: width }"></div>
+  <div id="b-china-map1" :style="{ height: height, width: width }"></div>
 </template>
 
 <script>
@@ -9,7 +9,7 @@ import echarts from 'echarts'
 import 'echarts/map/js/china.js'
 
 export default {
-  name: 'ChinaMap',
+  name: 'ChinaMap1',
   props: {
     percentData: {
       type: Object,
@@ -76,7 +76,7 @@ export default {
 }
 
 function initBarChart() {
-  this.myChart = echarts.init(document.getElementById('b-china-map'))
+  this.myChart = echarts.init(document.getElementById('b-china-map1'))
 
   this.updateChart()
 }
@@ -93,7 +93,7 @@ function updateChart() {
     },
     {
       name: '天津',
-      value: 113,
+      value: 13,
     },
     {
       name: '上海',
@@ -109,7 +109,7 @@ function updateChart() {
     },
     {
       name: '河南',
-      value: 183,
+      value: 83,
     },
     {
       name: '云南',
@@ -121,7 +121,7 @@ function updateChart() {
     },
     {
       name: '黑龙江',
-      value: 115,
+      value: 15,
     },
     {
       name: '湖南',
@@ -149,7 +149,7 @@ function updateChart() {
     },
     {
       name: '江西',
-      value: 136,
+      value: 36,
     },
     {
       name: '湖北',
@@ -157,15 +157,15 @@ function updateChart() {
     },
     {
       name: '广西',
-      value: 330,
+      value: 133,
     },
     {
       name: '甘肃',
-      value: 70,
+      value: 7,
     },
     {
       name: '山西',
-      value: 9,
+      value: 19,
     },
     {
       name: '内蒙古',
