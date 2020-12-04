@@ -55,12 +55,14 @@
         <div class="chart-container right-bottom">
           <div style="height: 100%">
             <header>员工居住地点分析</header>
-            <section style="height: 100%">
+            <section>
               <BaseMap></BaseMap>
             </section>
           </div>
           <div style="height: 100%">
-            <header>人力资源图谱</header>
+            <header>人力资源图谱
+              <a-input-search style="display: inline-block; width: 150px; float: right;" placeholder="请输入关键字" size="mini"></a-input-search>
+            </header>
             <section>
               <Graph
                 v-if="graphData.nodes.length > 0"
