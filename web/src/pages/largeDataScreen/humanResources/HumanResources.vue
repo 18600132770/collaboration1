@@ -119,7 +119,7 @@ export default {
         nodeFontSize: 13,
         linkField: 'id',
         nodeField: 'value',
-        mouseover: false,
+        mouseover: true,
       },
     }
   },

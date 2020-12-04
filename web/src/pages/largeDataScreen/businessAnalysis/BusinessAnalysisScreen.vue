@@ -26,6 +26,9 @@
             <!-- <section> -->
               <ChinaMap></ChinaMap>
             <!-- </section> -->
+            <!-- <a-carousel>
+
+            </a-carousel> -->
           </div>
         </div>
       </div>

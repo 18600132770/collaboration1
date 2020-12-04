@@ -3,7 +3,7 @@
  * @Author: chenfengtao
  * @Date: 2020-09-15 16:49:09
  * @LastEditors: supercheney
- * @LastEditTime: 2020-12-03 21:16:56
+ * @LastEditTime: 2020-12-03 21:28:19
 -->
 <template>
   <div id="relation-chart">
@@ -467,7 +467,7 @@ function drawNode (nodes) {
         .on('drag', this.dragged)
         .on('end', this.dragended)
     )
-    .on('mouseenter', function (d) {
+    .on('mouseenter', function (e, d) {
       if (!_this.networkOptions.mouseover) return
       _this.nodeHover(d)
     })
