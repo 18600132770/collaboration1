@@ -1,6 +1,6 @@
 
 <template>
-  <div id="degree-chart" :style="{ height: height, width: width }"></div>
+  <div id="degree-chart-1" :style="{ height: height, width: width }"></div>
 </template>
 
 <script>
@@ -74,7 +74,7 @@ export default {
 }
 
 function initBarChart() {
-  this.myChart = echarts.init(document.getElementById('degree-chart'))
+  this.myChart = echarts.init(document.getElementById('degree-chart-1'))
 
   this.updateChart()
 }
@@ -82,20 +82,12 @@ function initBarChart() {
 function updateChart() {
   let data = [
     {
-      name: '本科',
+      name: '国内',
       value: 754
     },
     {
-      name: '硕士',
+      name: '国外',
       value: 611
-    },
-    {
-      name: '大专',
-      value: 400
-    },
-    {
-      name: '博士',
-      value: 200
     }
   ]
   // let arrName = getArrayValue(data, 'name')
@@ -294,8 +286,8 @@ function updateChart() {
       }
     ],
     grid: {
-      top: '6%',
-      bottom: '58%',
+      top: '5%',
+      bottom: '74%',
       left: '50%',
       containLabel: false
     },

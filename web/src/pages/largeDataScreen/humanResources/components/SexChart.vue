@@ -135,8 +135,8 @@ function updateChart() {
   let option = {
     title:[{
       subtext: '性别',
-      left: '46%',
-      top: '80%',
+      left: '50%',
+      top: '70%',
       textAlign: 'center',
       subtextStyle:{
         color: '#333'
@@ -154,7 +154,7 @@ function updateChart() {
             height: 100
           },
           left: 'center',
-          top: 'center',
+          top: '14%',
           position: [100, 100]
         },
         {
@@ -165,8 +165,8 @@ function updateChart() {
             width: 25,
             height: 40
           },
-          left: '30%',
-          top: 'center'
+          left: '28%',
+          top: '30%'
         },
         {
           type: 'image',
@@ -176,8 +176,8 @@ function updateChart() {
             width: 25,
             height: 40
           },
-          right: '30%',
-          top: 'center'
+          right: '28%',
+          top: '30%'
         }
       ]
     },
@@ -193,12 +193,27 @@ function updateChart() {
         type: 'pie',
         clockWise: false,
         radius: [57, 57],
-        hoverAnimation: false,
+        center: ['50%', '43%'],
+        // hoverAnimation: false,
+        avoidLabelOverlap: false,
+        hoverOffset: 2,
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '12',
+            fontWeight: 'bold'
+          }
+        },
+        label: {
+          show: false,
+          position: 'center'
+        },
         itemStyle: {
           normal: {
             label: {
               show: false,
-              fontSize: 14,
+              fontSize: 12,
+              position: 'center',
               formatter(params) {
                 return params.name
                   ? params.name + '\n' + params.value + '人'
@@ -207,9 +222,9 @@ function updateChart() {
             },
             labelLine: {
               width: 4,
-              length: 30,
-              length2: 50,
-              show: true,
+              length: 0,
+              length2: 0,
+              show: false,
               color: '#00ffff'
             }
           }
@@ -220,6 +235,29 @@ function updateChart() {
   }
   // this.myChart && this.myChart.clear()
   this.myChart.setOption(option, false)
+
+  const _this = this
+  let dataIndex = 0
+  let timer = setInterval(function () {
+    /* if (dataIndex > legendData.length - 1) {
+      dataIndex = 0
+    } */
+    _this.myChart.dispatchAction({
+      type: 'downplay', // 触发的行为
+      dataIndex: dataIndex
+    })
+
+    dataIndex = (dataIndex + 1) % data.length;
+
+    _this.myChart.dispatchAction({
+      type: 'highlight', // 触发的行为
+      dataIndex: dataIndex
+    })
+  }, 3000)
+
+  this.$once('hook:beforeDestroy', () => {            
+    clearInterval(timer);                                    
+  })
 }
 
 function onResize() {

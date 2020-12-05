@@ -46,9 +46,27 @@
           <div class="small-col">
             <header>人员结构比例</header>
             <section>
-              <PieChartSix></PieChartSix>
+              <!-- <PieChartSix></PieChartSix> -->
               <!-- <SexChart style="width: calc(100% / 6); display: inline-block;"></SexChart> -->
               <!-- <DegreeChart style="width: calc(100% / 6); display: inline-block;"></DegreeChart> -->
+              <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
+                <DegreeChart></DegreeChart>
+              </div>
+              <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
+                <DegreeChart1></DegreeChart1>
+              </div>
+              <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
+                <SexChart></SexChart>
+              </div>
+              <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
+                <PieChartSixNational></PieChartSixNational>
+              </div>
+              <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
+                <PieChartTitle></PieChartTitle>
+              </div>
+              <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
+                <PieChartPoliticalIdentity></PieChartPoliticalIdentity>
+              </div>
             </section>
           </div>
         </div>
@@ -61,7 +79,7 @@
           </div>
           <div style="height: 100%">
             <header>人力资源图谱
-              <a-input-search style="display: inline-block; width: 150px; float: right;" placeholder="请输入关键字" size="mini"></a-input-search>
+              <a-input-search style="display: inline-block; width: 150px; float: right;" placeholder="请输入关键字"></a-input-search>
             </header>
             <section>
               <Graph
@@ -82,24 +100,32 @@
 <script>
 import { format } from 'date-fns'
 
-import PieChartSix from './components/PieChartSix'
+// import PieChartSix from './components/PieChartSix'
 import BaseMap from './components/BaseMap'
 import LineChart from './components/LineChart'
 import FunnelChart from './components/FunnelChart'
 import Graph from './components/Graph'
-// import SexChart from './components/SexChart'
-// import DegreeChart from './components/DegreeChart'
+import SexChart from './components/SexChart'
+import DegreeChart from './components/DegreeChart'
+import DegreeChart1 from './components/DegreeChart1'
+import PieChartSixNational from './components/PieChartSixNational'
+import PieChartTitle from './components/PieChartTitle'
+import PieChartPoliticalIdentity from './components/PieChartPoliticalIdentity'
 
 export default {
   name: 'BusinessAnalysis',
   components: {
-    PieChartSix,
+    // PieChartSix,
     BaseMap,
     LineChart,
     FunnelChart,
     Graph,
-    // SexChart,
-    // DegreeChart
+    SexChart,
+    DegreeChart,
+    DegreeChart1,
+    PieChartSixNational,
+    PieChartTitle,
+    PieChartPoliticalIdentity
   },
   data() {
     return {
