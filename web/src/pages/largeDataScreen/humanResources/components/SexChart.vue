@@ -136,7 +136,7 @@ function updateChart() {
     title:[{
       subtext: '性别',
       left: '50%',
-      top: '70%',
+      top: '80%',
       textAlign: 'center',
       subtextStyle:{
         color: '#333'
@@ -154,8 +154,8 @@ function updateChart() {
             height: 100
           },
           left: 'center',
-          top: '14%',
-          position: [100, 100]
+          top: 'center',
+          position: [100, 50]
         },
         {
           type: 'image',
@@ -166,7 +166,7 @@ function updateChart() {
             height: 40
           },
           left: '28%',
-          top: '30%'
+          top: 'center'
         },
         {
           type: 'image',
@@ -177,7 +177,7 @@ function updateChart() {
             height: 40
           },
           right: '28%',
-          top: '30%'
+          top: 'center'
         }
       ]
     },
@@ -193,7 +193,7 @@ function updateChart() {
         type: 'pie',
         clockWise: false,
         radius: [57, 57],
-        center: ['50%', '43%'],
+        center: ['50%', '50%'],
         // hoverAnimation: false,
         avoidLabelOverlap: false,
         hoverOffset: 2,

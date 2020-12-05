@@ -56,7 +56,7 @@
                 <DegreeChart1></DegreeChart1>
               </div>
               <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
-                <SexChart></SexChart>
+                <SexChart style=" position: relative; top: -18px;"></SexChart>
               </div>
               <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
                 <PieChartSixNational></PieChartSixNational>
