@@ -80,7 +80,7 @@ function initBarChart() {
 }
 
 function updateChart() {
-  let bgColor = '#fff'
+  let bgColor = 'transparent'
   let color = ['#0090FF', '#36CE9E', '#FFC005', '#FF515A', '#8B5CFF', '#00CA69']
   let echartData = [
     {
@@ -123,9 +123,12 @@ function updateChart() {
     legend: {
       right: 10,
       top: 10,
+      textStyle: {
+        color: '#ddd'
+      }
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: 'none',
       formatter: function (params) {
         let html = ''
         params.forEach((v) => {
@@ -166,12 +169,12 @@ function updateChart() {
         axisLabel: {
           formatter: '{value}',
           textStyle: {
-            color: '#333',
+            color: '#ddd',
           },
         },
         axisLine: {
           lineStyle: {
-            color: '#D9D9D9',
+            color: '#333',
           },
         },
         data: xAxisData,
@@ -183,18 +186,18 @@ function updateChart() {
         name: '单位：万元',
         axisLabel: {
           textStyle: {
-            color: '#666',
+            color: '#ddd',
           },
         },
         nameTextStyle: {
-          color: '#666',
+          color: '#ddd',
           fontSize: 12,
           lineHeight: 40,
         },
         splitLine: {
           lineStyle: {
             type: 'dashed',
-            color: '#E9E9E9',
+            color: '#333',
           },
         },
         axisLine: {

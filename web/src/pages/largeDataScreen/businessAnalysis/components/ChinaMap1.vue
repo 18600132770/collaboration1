@@ -244,25 +244,25 @@ function updateChart() {
         {
           gt: 100,
           label: '> 100 亿',
-          color: '#035cf5',
+          color: '#7f1100',
         },
         {
           gte: 10,
           lte: 100,
           label: '10 - 100 亿',
-          color: '#6797ef',
+          color: '#ff5428',
         },
         {
           gte: 1,
           lt: 10,
           label: '1 - 9 亿',
-          color: '#96b5ef',
+          color: '#ff8c71',
         },
         {
           gte: 0,
           lt: 1,
           label: '< 1 亿',
-          color: '#d1d4da',
+          color: '#ffd768',
         }
       ],
       itemWidth: 10,

@@ -83,99 +83,99 @@ function updateChart() {
   var seriesData = [
     {
       name: '桥隧院',
-      value: '40000',
+      value: '400',
     },
     {
       name: '总包部',
-      value: '40000',
+      value: '400',
     },
     {
       name: '海外部',
-      value: '53000',
+      value: '530',
     },
     {
       name: '城交部',
-      value: '40000',
+      value: '400',
     },
     {
       name: '公路部',
-      value: '60000',
+      value: '308',
     },
     {
       name: '铁路院',
-      value: '10000',
+      value: '100',
     },
     {
       name: '建筑院',
-      value: '20000',
+      value: '200',
     },
     {
       name: '设备院',
-      value: '20000',
+      value: '200',
     },
     {
       name: '经营中心',
-      value: '20000',
+      value: '200',
     },
     {
       name: '机关',
-      value: '20000',
+      value: '20',
     },
   ]
   var seriesData1 = [
     {
       name: '东北',
-      value: '30000',
+      value: '300',
     },
     {
       name: '华北',
-      value: '20000',
+      value: '200',
     },
     {
       name: '西南',
-      value: '20000',
+      value: '200',
     },
     {
       name: '华中',
-      value: '33000',
+      value: '330',
     },
     {
       name: '华南',
-      value: '20000',
+      value: '200',
     },
     {
       name: '西北',
-      value: '10000',
+      value: '100',
     }
   ]
    var seriesData2 = [
     {
       name: '铁路',
-      value: '30000',
+      value: '300',
     },
     {
       name: '轨道交通',
-      value: '20000',
+      value: '200',
     },
     {
       name: '市政',
-      value: '20000',
+      value: '200',
     },
     {
       name: '路桥',
-      value: '33000',
+      value: '330',
     },
     {
       name: '房建',
-      value: '20000',
+      value: '200',
     },
     {
       name: '环保',
-      value: '10000',
+      value: '100',
     },
     {
       name: '水运',
-      value: '10000',
+      value: '1000',
     }
   ]
   seriesData = seriesData.sort(function (a, b) {
@@ -239,7 +239,7 @@ function updateChart() {
           '</br>' +
           '合同额：' +
           parms.data.value +
-          '万元</br>' +
+          '亿</br>' +
           '占比：' +
           parms.percent +
           '%'
@@ -283,7 +283,7 @@ function updateChart() {
               '\n' +
               // '合同额：' +
               parms.data.value +
-              '万元\n' +
+              '亿\n' +
               // '占比：' +
               parms.percent +
               '%'
@@ -326,7 +326,7 @@ function updateChart() {
               '\n' +
               // '合同额：' +
               parms.data.value +
-              '万元\n' +
+              '亿\n' +
               // '占比：' +
               parms.percent +
               '%'
@@ -371,7 +371,7 @@ function updateChart() {
               '\n' +
               // '合同额：' +
               parms.data.value +
-              '万元\n' +
+              '亿\n' +
               // '占比：' +
               parms.percent +
               '%'

@@ -4,8 +4,8 @@
       <li class="list-item">
         <a-row>
           <!-- <a-col :span="4">类型</a-col> -->
-          <a-col :span="16">公告</a-col>
-          <a-col :span="8">时间</a-col>
+          <a-col :span="20">公告</a-col>
+          <a-col :span="4">时间</a-col>
         </a-row>
       </li>
     </ul>
@@ -18,8 +18,8 @@
         <li class="list-item" v-for="(item, index) in listData" :key="index">
           <a-row>
             <!-- <a-col :span="4" class="num-color">{{item.topic}}</a-col> -->
-            <a-col :span="16" class="num-color" :class="{'danger': item.type === 'danger', 'blue': item.type === 'blue'}">{{item.content}}</a-col>
-            <a-col :span="8">{{item.date}}</a-col>
+            <a-col :span="20" class="num-color" :class="{'danger': item.type === 'danger', 'blue': item.type === 'blue'}">{{item.content}}</a-col>
+            <a-col :span="4">{{item.date}}</a-col>
           </a-row>
         </li>
       </ul>

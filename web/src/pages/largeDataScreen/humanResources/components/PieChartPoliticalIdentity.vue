@@ -119,7 +119,7 @@ function updateChart() {
       top: '70%',
       textAlign: 'center',
       subtextStyle:{
-        color: '#333'
+        color: '#ddd'
       }
     }],
     tooltip: {
@@ -151,7 +151,7 @@ function updateChart() {
       itemWidth: 10,
       itemHeight: 10,
       textStyle: {
-        color: '#fff',
+        color: '#ddd',
         fontSize: 12
       },
       data: legendData,
@@ -161,7 +161,7 @@ function updateChart() {
         type: 'pie',
         z: 3,
         center: ['50%', '40%'],
-        radius: ['50%', '62%'],
+        radius: ['54%', '62%'],
         clockwise: true,
         avoidLabelOverlap: false,
         hoverOffset: 5,
@@ -201,52 +201,7 @@ function updateChart() {
         data: seriesData.sort(function (a, b) {
           return a.value - b.value
         }),
-      }/*,
-      {
-        type: 'pie',
-        z: 3,
-        center: ['88%', '40%'],
-        radius: ['38%', '50%'],
-        clockwise: true,
-        avoidLabelOverlap: false,
-        hoverOffset: 5,
-        itemStyle: {
-          normal: {
-            color: function (params) {
-              return colorList[params.dataIndex]
-            },
-          },
-        },
-        label: {
-          show: false,
-          position: 'center',
-          formatter: function (parms) {
-            var str =
-              parms.data.name +
-              '\n' +
-              // '合同额：' +
-              parms.data.value +
-              '人\n' +
-              // '占比：' +
-              parms.percent +
-              '%'
-            return str
-          },
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: '10',
-            fontWeight: 'bold'
-          }
-        },
-        labelLine: {
-          show: false,
-        },
-        data: seriesData5.sort(function (a, b) {
-          return a.value - b.value
-        }),
-      } */
+      }
     ],
   }
   // this.myChart && this.myChart.clear()

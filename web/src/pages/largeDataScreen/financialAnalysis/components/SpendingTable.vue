@@ -26,42 +26,75 @@ const columns = [
     align: 'center'
   },
   {
-    title: '百分比',
+    title: '预算金额',
+    dataIndex: 'yusuan',
+    align: 'center'
+  },
+  {
+    title: '占用额度',
+    dataIndex: 'zhanyong',
+    align: 'center'
+  },
+  {
+    title: '实际占比',
     dataIndex: 'percentage',
     align: 'center'
-  }
+  },
+  {
+    title: '预算占比',
+    dataIndex: 'percentage1',
+    align: 'center'
+  },
 ]
 
 const data = [
   {
     class: '人工',
     spending: '42亿',
-    percentage: '27.6%'
+    percentage: '27.6%',
+    yusuan: '44亿',
+    zhanyong: '95.2%',
+    percentage1: '26.2%'
   },
   {
     class: '材料',
     spending: '51亿',
-    percentage: '33.5%'
+    percentage: '33.5%',
+    yusuan: '61亿',
+    zhanyong: '83.6%',
+    percentage1: '33.4%'
   },
   {
     class: '机械',
     spending: '50亿',
-    percentage: '32.8%'
+    percentage: '32.8%',
+    yusuan: '54亿',
+    zhanyong: '92.6%',
+    percentage1: '32.1%'
   },
   {
     class: '管理',
     spending: '3亿',
-    percentage: '2%'
+    percentage: '2%',
+    yusuan: '2亿',
+    zhanyong: '136.3%',
+    percentage1: '1.2%'
   },
   {
     class: '其他成本',
     spending: '6.3亿',
-    percentage: '4.1%'
+    percentage: '4.1%',
+    yusuan: '7亿',
+    zhanyong: '90%',
+    percentage1: '4.2%'
   },
   {
     class: '总计',
-    spending: '152.3亿',
-    percentage: '100%'
+    spending: '152.3',
+    percentage: '100%',
+    yusuan: '168亿',
+    zhanyong: '-',
+    percentage1: '100%'
   },
 ]
 /* for (let i = 0; i < 50; i++) {

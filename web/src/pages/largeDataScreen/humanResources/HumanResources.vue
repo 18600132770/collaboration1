@@ -50,16 +50,16 @@
               <!-- <SexChart style="width: calc(100% / 6); display: inline-block;"></SexChart> -->
               <!-- <DegreeChart style="width: calc(100% / 6); display: inline-block;"></DegreeChart> -->
               <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
-                <DegreeChart></DegreeChart>
+                <DegreeChart style=" position: relative; top: -18px;"></DegreeChart>
               </div>
               <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
-                <DegreeChart1></DegreeChart1>
+                <DegreeChart1 style=" position: relative; top: -18px;"></DegreeChart1>
               </div>
               <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
                 <SexChart style=" position: relative; top: -18px;"></SexChart>
               </div>
               <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
-                <PieChartSixNational></PieChartSixNational>
+                <PieChartSixNational style=" position: relative; top: -18px;"></PieChartSixNational>
               </div>
               <div style="width: calc(100% / 6); display: inline-block; height: 100%;">
                 <PieChartTitle></PieChartTitle>
@@ -249,6 +249,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  color: #ddd;
   div {
     font-size: 12px;
     font-weight: bold;
@@ -267,11 +268,12 @@ export default {
   .ant-statistic-title {
     font-size: 13px;
     font-weight: bold;
-    color: #333;
+    color: #ddd;
   }
   .ant-statistic-content-value {
     font-weight: bold;
     font-size: 30px;
+    color: #ddd;
   }
 }
 </style>

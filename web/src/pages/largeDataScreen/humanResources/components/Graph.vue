@@ -3,7 +3,7 @@
  * @Author: chenfengtao
  * @Date: 2020-09-15 16:49:09
  * @LastEditors: supercheney
- * @LastEditTime: 2020-12-03 21:28:19
+ * @LastEditTime: 2020-12-09 23:29:37
 -->
 <template>
   <div id="relation-chart">
@@ -877,7 +877,7 @@ function createArrow (svg, type, size = 10) {
 }
 .text {
   cursor: default;
-  fill: #333;
+  fill: #ddd;
 }
 .opacity textPath {
   fill-opacity: 0.1;

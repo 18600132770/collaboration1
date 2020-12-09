@@ -118,7 +118,7 @@ function updateChart() {
       top: '70%',
       textAlign: 'center',
       subtextStyle:{
-        color: '#333'
+        color: '#ddd'
       }
     }],
     tooltip: {
@@ -150,7 +150,7 @@ function updateChart() {
       itemWidth: 10,
       itemHeight: 10,
       textStyle: {
-        color: '#fff',
+        color: '#ddd',
         fontSize: 12
       },
       data: legendData,
@@ -160,7 +160,7 @@ function updateChart() {
         type: 'pie',
         z: 3,
         center: ['50%', '40%'],
-        radius: ['50%', '62%'],
+        radius: ['54%', '62%'],
         clockwise: true,
         avoidLabelOverlap: false,
         hoverOffset: 5,

@@ -147,6 +147,12 @@
 .width-50 {
   width: 50% !important;
 }
+.width-60 {
+  width: 60% !important;
+}
+.width-40 {
+  width: 40% !important;
+}
 
 .remaining-days {
   width: 100%;
@@ -155,7 +161,7 @@
   flex-direction: column;
   color: #ffffff;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   padding: 15px;
   > div {
     width: 100%;
@@ -166,12 +172,14 @@
     margin-right: 10px;
     span {
       text-align: center;
-      font-size: 20px;
+      font-size: 15px;
     }
   }
   .num{
+    display: inline;
     text-align: right;
     margin-right: 35px;
+    float: right;
   }
 }
 .cost {

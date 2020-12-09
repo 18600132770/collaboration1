@@ -1,6 +1,6 @@
 
 <template>
-  <div id="b-china-map-2" :style="{ height: height, width: width }"></div>
+  <div id="b-china-map2" :style="{ height: height, width: width }"></div>
 </template>
 
 <script>
@@ -76,7 +76,7 @@ export default {
 }
 
 function initBarChart() {
-  this.myChart = echarts.init(document.getElementById('b-china-map-2'))
+  this.myChart = echarts.init(document.getElementById('b-china-map2'))
 
   this.updateChart()
 }

@@ -101,7 +101,7 @@ function updateChart() {
       top: '85%',
       textAlign: 'center',
       subtextStyle:{
-        color: '#333'
+        color: '#ddd'
       }
     },
     {
@@ -110,7 +110,7 @@ function updateChart() {
       top: '85%',
       textAlign: 'center',
       subtextStyle:{
-        color: '#333'
+        color: '#ddd'
       }
     },
     {
@@ -119,7 +119,7 @@ function updateChart() {
       top: '85%',
       textAlign: 'center',
       subtextStyle:{
-        color: '#333'
+        color: '#ddd'
       }
     },
     {
@@ -128,7 +128,7 @@ function updateChart() {
       top: '85%',
       textAlign: 'center',
       subtextStyle:{
-        color: '#333'
+        color: '#ddd'
       }
     }],
     tooltip: {
@@ -145,6 +145,8 @@ function updateChart() {
         left: '4%',
         top: '15%',
         sort: 'ascending', // none
+        minSize: '0%',
+        maxSize: '100%',
         label: {
           show: true,
           position: 'inside',

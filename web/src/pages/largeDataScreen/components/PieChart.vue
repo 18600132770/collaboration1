@@ -87,61 +87,61 @@ function updateChart() {
   var seriesData = [
     {
       name: '铁路',
-      value: '40000',
+      value: '400',
     },
     {
       name: '轨道交通',
-      value: '40000',
+      value: '400',
     },
     {
       name: '市政',
-      value: '53000',
+      value: '53',
     },
     {
       name: '路桥',
-      value: '40000',
+      value: '40',
     },
     {
       name: '房建',
-      value: '60000',
+      value: '60',
     },
     {
       name: '环保',
-      value: '10000',
+      value: '100',
     },
     {
       name: '水运',
-      value: '20000',
+      value: '200',
     },
   ]
   var seriesData1 = [
     {
       name: '房建',
-      value: '30000',
+      value: '30',
     },
     {
       name: '铁路',
-      value: '20000',
+      value: '20',
     },
     {
       name: '轨道交通',
-      value: '20000',
+      value: '20',
     },
     {
       name: '市政',
-      value: '33000',
+      value: '33',
     },
     {
       name: '路桥',
-      value: '20000',
+      value: '20',
     },
     {
       name: '水运',
-      value: '10000',
+      value: '10',
     },
     {
       name: '环保',
-      value: '5000',
+      value: '5',
     }
   ]
   seriesData = seriesData.sort(function (a, b) {
@@ -190,7 +190,7 @@ function updateChart() {
           '</br>' +
           '合同额：' +
           parms.data.value +
-          '万元</br>' +
+          '亿</br>' +
           '占比：' +
           parms.percent +
           '%'
@@ -214,10 +214,10 @@ function updateChart() {
         type: 'pie',
         z: 3,
         center: ['25%', '50%'],
-        radius: ['28%', '45%'],
+        radius: ['42%', '52%'],
         clockwise: true,
         avoidLabelOverlap: false,
-        hoverOffset: 10,
+        hoverOffset: 5,
         itemStyle: {
           normal: {
             color: function (params) {
@@ -234,7 +234,7 @@ function updateChart() {
               '\n' +
               // '合同额：' +
               parms.data.value +
-              '万元\n' +
+              '亿\n' +
               // '占比：' +
               parms.percent +
               '%'
@@ -257,10 +257,10 @@ function updateChart() {
         type: 'pie',
         z: 3,
         center: ['75%', '50%'],
-        radius: ['28%', '45%'],
+        radius: ['42%', '52%'],
         clockwise: true,
         avoidLabelOverlap: false,
-        hoverOffset: 10,
+        hoverOffset: 5,
         itemStyle: {
           normal: {
             color: function (params) {
@@ -277,7 +277,7 @@ function updateChart() {
               '\n' +
               // '合同额：' +
               parms.data.value +
-              '万元\n' +
+              '亿\n' +
               // '占比：' +
               parms.percent +
               '%'

@@ -4,7 +4,7 @@
  * @Author: chenfengtao
  * @Date: 2020-08-17 14:44:34
  * @LastEditors: supercheney
- * @LastEditTime: 2020-12-03 20:17:13
+ * @LastEditTime: 2020-12-05 16:27:26
 -->
 <template>
   <div id="map-container"></div>
@@ -79,7 +79,7 @@ function initMap () {
       _this.map = new AMap.Map('map-container', {
         zoom: 5,
         center: [108.93, 34.27],
-        // mapStyle: 'amap://styles/blue', //设置地图的显示样式 https://lbs.amap.com/api/javascript-api/example/personalized-map/set-theme-style/?sug_index=0
+        mapStyle: 'amap://styles/darkblue', //设置地图的显示样式 https://lbs.amap.com/api/javascript-api/example/personalized-map/set-theme-style/?sug_index=0
       })
 
       // 缩放组件

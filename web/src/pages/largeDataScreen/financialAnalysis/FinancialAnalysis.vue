@@ -13,17 +13,25 @@
           <div class="small-col">
             <!-- <header>每月总应收款</header> -->
             <section style="height: 100%;">
-              <ProgressGauge :percent-data="currentData" class="width-50"></ProgressGauge>
-              <div class="width-50">
+              <ProgressGauge :percent-data="currentData" class="width-40"></ProgressGauge>
+              <div class="width-60">
                 <div class="remaining-days">
-                  <div>目标营业收入</div>
-                  <div class="num"><span>200</span> 亿</div>
-                  <div>已完成营业收入</div>
-                  <div class="num"><span>161.781</span> 亿</div>
-                  <div>当月现金流</div>
-                  <div class="num"><span>100</span> 亿</div>
-                  <div>当前带息负债</div>
-                  <div class="num"><span>61.781</span> 亿</div>
+                  <div>目标营业收入
+                    <div class="num"><span>200</span> 亿</div>
+                  </div>
+                  
+                  <div>已完成营业收入
+                    <div class="num"><span>161.781</span> 亿</div>
+                  </div>
+                  
+                  <div>当月现金流
+                    <div class="num"><span>100</span> 亿</div>
+                  </div>
+                  
+                  <div>当前带息负债
+                     <div class="num"><span>61.781</span> 亿</div>
+                  </div>
+                 
                 </div>
               </div>
             </section>

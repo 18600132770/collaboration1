@@ -139,7 +139,7 @@ function updateChart() {
       top: '80%',
       textAlign: 'center',
       subtextStyle:{
-        color: '#333'
+        color: '#ddd'
       }
     }],
     color,
@@ -150,8 +150,8 @@ function updateChart() {
           z: 3,
           style: {
             image: border,
-            width: 100,
-            height: 100
+            width: 90,
+            height: 90
           },
           left: 'center',
           top: 'center',
@@ -162,8 +162,8 @@ function updateChart() {
           z: 3,
           style: {
             image: man,
-            width: 25,
-            height: 40
+            width: 22,
+            height: 37
           },
           left: '28%',
           top: 'center'
@@ -173,8 +173,8 @@ function updateChart() {
           z: 3,
           style: {
             image: woman,
-            width: 25,
-            height: 40
+            width: 22,
+            height: 37
           },
           right: '28%',
           top: 'center'
@@ -192,7 +192,7 @@ function updateChart() {
         name: '',
         type: 'pie',
         clockWise: false,
-        radius: [57, 57],
+        radius: [53, 53],
         center: ['50%', '50%'],
         // hoverAnimation: false,
         avoidLabelOverlap: false,
