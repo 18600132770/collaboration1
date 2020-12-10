@@ -179,10 +179,10 @@ function updateChart() {
               parms.data.name +
               '\n' +
               // '合同额：' +
-              parms.data.value +
-              '人\n' +
+              // parms.data.value +
+              // '人\n' +
               // '占比：' +
-              parms.percent +
+              parms.percent.toFixed(1) +
               '%'
             return str
           },
@@ -190,7 +190,7 @@ function updateChart() {
         emphasis: {
           label: {
             show: true,
-            fontSize: '10',
+            fontSize: '12',
             fontWeight: 'bold'
           }
         },

@@ -215,7 +215,6 @@ export default {
       let name4Data = this.formatUser(name4, 'u4')
 
       let nodes = [...com, ...departmentData, ...projectData, ...name1Data, ...name2Data, ...name3Data, ...name4Data]
-      console.log(nodes)
       let links = []
       departmentData.forEach((item) => {
         links.push({
@@ -236,7 +235,6 @@ export default {
       let ul4 = this.userLink(name4Data, projectData[3])
       let ul5= this.userLink(name3Data, projectData[3])
       links = [...links, ...ul1, ...ul2, ...ul3, ...ul4, ...ul5]
-      console.log(links)
       links = links.map((item, index) => {
         item.id = 'link' + index
         return item
