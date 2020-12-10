@@ -28,7 +28,17 @@
           <div class="small-col">
             <header>人员结构分析</header>
             <section>
-              <FunnelChart></FunnelChart>
+              <!-- <FunnelChart></FunnelChart> -->
+              <a-carousel :autoplay="false" >
+                <div style="height: calc(33vh - 60px);">
+                  <FunnelBarChart1 style="height: 50%;"></FunnelBarChart1>
+                  <FunnelBarChart2 style="height: 50%;"></FunnelBarChart2>
+                </div>
+                <div style="height: calc(33vh - 60px);">
+                  <FunnelBarChart3 style="height: 50%;"></FunnelBarChart3>
+                  <FunnelBarChart4 style="height: 50%;"></FunnelBarChart4>
+                </div>
+              </a-carousel>
             </section>
           </div>
         </div>
@@ -103,7 +113,7 @@ import { format } from 'date-fns'
 // import PieChartSix from './components/PieChartSix'
 import BaseMap from './components/BaseMap'
 import LineChart from './components/LineChart'
-import FunnelChart from './components/FunnelChart'
+// import FunnelChart from './components/FunnelChart'
 import Graph from './components/Graph'
 import SexChart from './components/SexChart'
 import DegreeChart from './components/DegreeChart'
@@ -112,20 +122,34 @@ import PieChartSixNational from './components/PieChartSixNational'
 import PieChartTitle from './components/PieChartTitle'
 import PieChartPoliticalIdentity from './components/PieChartPoliticalIdentity'
 
+// import FunnelChart1 from './components/FunnelChart1'
+// import FunnelChart2 from './components/FunnelChart2'
+import FunnelBarChart1 from './components/FunnelBarChart1'
+import FunnelBarChart2 from './components/FunnelBarChart2'
+import FunnelBarChart3 from './components/FunnelBarChart3'
+import FunnelBarChart4 from './components/FunnelBarChart4'
+
 export default {
   name: 'BusinessAnalysis',
   components: {
     // PieChartSix,
     BaseMap,
     LineChart,
-    FunnelChart,
+    // FunnelChart,
     Graph,
     SexChart,
     DegreeChart,
     DegreeChart1,
     PieChartSixNational,
     PieChartTitle,
-    PieChartPoliticalIdentity
+    PieChartPoliticalIdentity,
+
+    // FunnelChart1,
+    // FunnelChart2
+    FunnelBarChart1,
+    FunnelBarChart2,
+    FunnelBarChart3,
+    FunnelBarChart4
   },
   data() {
     return {

@@ -76,7 +76,7 @@ export default {
 }
 
 function initBarChart() {
-  this.myChart = echarts.init(document.getElementById('b-china-map1'))
+  this.myChart = echarts.init(this.$el)
 
   this.updateChart()
 }

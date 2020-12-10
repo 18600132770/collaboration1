@@ -76,7 +76,7 @@ export default {
 }
 
 function initBarChart() {
-  this.myChart = echarts.init(document.getElementById('b-china-map2'))
+  this.myChart = echarts.init(this.$el)
 
   this.updateChart()
 }
@@ -244,25 +244,25 @@ function updateChart() {
         {
           gt: 100,
           label: '> 100 亿',
-          color: '#035cf5',
+          color: '#BD430A',
         },
         {
           gte: 10,
           lte: 100,
           label: '10 - 100 亿',
-          color: '#6797ef',
+          color: '#E08150',
         },
         {
           gte: 1,
           lt: 10,
           label: '1 - 9 亿',
-          color: '#96b5ef',
+          color: '#E9B090',
         },
         {
           gte: 0,
           lt: 1,
           label: '< 1 亿',
-          color: '#d1d4da',
+          color: '#F2DDD2',
         }
       ],
       itemWidth: 10,
